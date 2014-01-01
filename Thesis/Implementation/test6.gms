@@ -34,6 +34,12 @@ display y;
 $set d 20
 display 'hi';
 set i /i1*i%d%/;
+variable x4;
+set i54(*);
+set tre /1*9/;
+equation q9;
+q9.. x4 =e= sum(tre $(tre.val < 6), 1);
+
 display i;
 equation eq1,eq2,eq3;
 p.up = 100;
@@ -50,5 +56,5 @@ eq2.. x2 =l= 110;
 eq3.. x1 =e= x2;
 eq1.. u  =e=  sum(j , a1(j));
 Model er /all/;
-solve er using mip maximizing x2;
+solve er using mip maximizing x4;
 display x1.l;

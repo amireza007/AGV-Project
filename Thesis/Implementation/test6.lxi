@@ -1,31 +1,35 @@
 B 3 C o m p i l a t i o n
-B 67 E x e c u t i o n
-I 69 "this is tt..."
-I 70 tt
-I 72 y
-I 73 t5
-I 89 y
-I 91 "hi..."
-I 92 i
-I 97 jh
-B 108 Equation Listing    SOLVE er Using MIP From line 53
-D 111 eq1
-D 116 eq2
-D 121 eq3
-B 127 Column Listing      SOLVE er Using MIP From line 53
-E 130 u
-E 137 a1
-E 152 x1
-E 160 x2
-B 170 Range Statistics    SOLVE er Using MIP From line 53
-B 181 Model Statistics    SOLVE er Using MIP From line 53
-B 194 Solution Report     SOLVE er Using MIP From line 53
-F 239 eq1
-F 240 eq2
-F 241 eq3
-G 245 u
-G 247 a1
-G 257 x1
-G 258 x2
-B 266 E x e c u t i o n
-I 268 x1
+B 73 E x e c u t i o n
+I 75 "this is tt..."
+I 76 tt
+I 78 y
+I 79 t5
+I 95 y
+I 97 "hi..."
+I 98 i
+I 103 jh
+B 114 Equation Listing    SOLVE er Using MIP From line 59
+D 117 q9
+D 122 eq1
+D 127 eq2
+D 132 eq3
+B 138 Column Listing      SOLVE er Using MIP From line 59
+E 141 u
+E 148 a1
+E 163 x4
+E 170 x1
+E 178 x2
+B 188 Range Statistics    SOLVE er Using MIP From line 59
+B 199 Model Statistics    SOLVE er Using MIP From line 59
+B 212 Solution Report     SOLVE er Using MIP From line 59
+F 257 q9
+F 258 eq1
+F 259 eq2
+F 260 eq3
+G 264 u
+G 266 a1
+G 276 x4
+G 277 x1
+G 278 x2
+B 286 E x e c u t i o n
+I 288 x1
