@@ -29,6 +29,7 @@ display 'hi';
 equation eq1;
 p.up = 100;
 p.lo = 0;
+a1('1') = a1('2');
 eq1.. u  =e=  sum(j , a1(j));
 Model er /all/;
 solve er using mip maximizing u;
