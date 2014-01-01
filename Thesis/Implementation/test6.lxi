@@ -1,37 +1,41 @@
 B 3 C o m p i l a t i o n
-B 76 E x e c u t i o n
-I 78 "this is tt..."
-I 79 tt
-I 81 y
-I 82 t5
-I 98 y
-I 100 "hi..."
-I 101 i
-I 106 jh
-I 115 x2
-B 119 Equation Listing    SOLVE er Using MINLP From line 62
-D 122 q9
-D 127 eq1
-D 132 eq2
-D 137 eq3
-B 143 Column Listing      SOLVE er Using MINLP From line 62
-E 146 u
-E 153 a1
-E 168 x4
-E 175 x1
-E 183 x2
-B 193 Range Statistics    SOLVE er Using MINLP From line 62
-B 204 Model Statistics    SOLVE er Using MINLP From line 62
-B 218 Solution Report     SOLVE er Using MINLP From line 62
-F 274 q9
-F 275 eq1
-F 276 eq2
-F 277 eq3
-G 281 u
-G 283 a1
-G 293 x4
-G 294 x1
-G 295 x2
-B 304 E x e c u t i o n
-I 306 x1
-I 307 x2
+B 100 E x e c u t i o n
+I 102 "this is tt..."
+I 103 tt
+I 105 y
+I 106 t5
+I 122 y
+I 124 "hi..."
+I 125 i
+I 130 jh
+I 139 x2
+B 143 Equation Listing    SOLVE er Using MINLP From line 69
+D 146 q9
+D 151 eq1
+D 156 eq2
+D 161 eq3
+D 166 eq5
+B 176 Column Listing      SOLVE er Using MINLP From line 69
+E 179 u
+E 186 a1
+E 201 x4
+E 208 x1
+E 216 x2
+E 225 test
+B 235 Range Statistics    SOLVE er Using MINLP From line 69
+B 246 Model Statistics    SOLVE er Using MINLP From line 69
+B 260 Solution Report     SOLVE er Using MINLP From line 69
+F 316 q9
+F 317 eq1
+F 318 eq2
+F 319 eq3
+F 321 eq5
+G 331 u
+G 333 a1
+G 343 x4
+G 344 x1
+G 345 x2
+G 346 test
+B 355 E x e c u t i o n
+I 357 x1
+I 358 x2

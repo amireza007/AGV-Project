@@ -58,6 +58,30 @@ display x2.l;
 eq2.. x2*x2 =l= 1100;
 eq3..  x1 - 1 =e= x2 $(x2.l < 10) + 9 ;
 eq1.. u  =e=  sum(j , a1(j));
+
+set t55 /1*8/;
+set t66(t55) /4*6/;
+equation eq5(t55);
+variable test;
+eq5(t66).. test =e= 1;
+
 Model er /all/;
 solve er using minlp maximizing x1;
 display x1.l, x2.l;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

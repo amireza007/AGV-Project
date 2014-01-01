@@ -1,5 +1,6 @@
 $Title  A branch and bound problem
 $onEolCom
+$ONEMPTY
 *cnstr_15 and cnstr_19 are infeasible and I hypothesize it's due to not setting initial virtual positions!
 
 !!longest qc operation (or job in the problem)
@@ -35,8 +36,8 @@ Sets
         C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d%/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job" /m3.i%d%/
 *       C_prime(i) "The set of containers to be assigned"
-        
-        li "AGV index" /l1*l3/
+*       CHANGING THE NUMBER OF AGVS CAUSE DIFFERENT INFEASIBILITY. BAAAAADDDDDDDDDD!
+        li "AGV index" /l1*l5/
         Bs(li) "set of all agvs" /#li/
         
 *       0 in a is a virtual starting point
@@ -57,11 +58,10 @@ Sets
         o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.19, m3.i2.17, m3.i%d%.21/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
 *TODO 1
 !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
-        A_L_set(XR) /1,7,14,21/
-        A_R_set(XR) /5,12,19,26/
+        A_L_set(XR) /1,7,13,19/
+        A_R_set(XR) /5,11,17,23/
         A_L(m,i,XR) /#C.#A_L_set/  
         A_R(m,i,XR) /#C.#A_R_set/
-
 
 !! these are written according to Fig 5. of base article
         WT(m,i,a) "set of total actions" /#C.a0,    #C.a2,    #D.(a1,a3,a4),#L.(a1,a3,a4)/
@@ -72,10 +72,13 @@ Sets
 *       or psi_1(m,i,m,i)?
 *very challenging set!
 !!this needs fixing!
-        psi_1(m,i,m,i)   "sequence of Container jobs for QC" / / !!This is in data file. This identifies the container job sequence,
-        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i1.m2.i1P/ !!This is in data file. 
+        psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m1.i1.m1.i2, m2.i1.m2.i2, m3.i1.m3.i2, m3.i2.m3.i3 / !!This is in data file. This identifies the container job sequence,
+        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" / / !!This is in data file. 
         ;
-
+        
+set testSet(*,*);
+testSet(n,j) $(c(n,j) and (not sameas(n,'m1') and (not sameas(j, 'i2')) )) = Yes;
+display testset;
 *O(YR) $(C(m,i)) = yes;
 alias (XR, XR1);
 alias (XR, XR_1);
@@ -85,8 +88,8 @@ alias (a,a2);
 alias (a2,a2_1);
 alias (a1,a1_1);
 alias (i,i1);
-set h(n)/#m/;  !! for cnstr_3
-set k(j) /#i/;
+set h(m)/#m/;  !! for cnstr_3
+set k(i) /#i/;
 set s(YR);
 set XR2(XR) /#XR/;
 set x_t(XR) /#XR/;
@@ -122,9 +125,8 @@ Positive Variables
         t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
         X_position(m,i,a)   "X_position(WT)"
         Y_position(m,i,a)   "Y_position(WT)"
-        abs_xPOS(m,i,a,m,i,a)
-        abs_yPOS(m,i,a,m,i,a)
         ;
+
 variable obj "objective function";
 
 *binary variables initial values
@@ -134,7 +136,7 @@ U_AGV.up(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 1;
 U_AGV.lo(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 0;
 U_QC.up(m,i,n,j,a) $(c(m,i) and wh(n,j,a)) = 1;
 U_QC.lo(m,i,n,j,a) $(c(m,i) and wh(n,j,a)) = 0; 
-                 
+*                 
 P_X.up(m,i,a,XR) $(c(m,i)) =1;
 P_X.lo(m,i,a,XR) $(c(m,i))=0;
 P_Y.up(m,i,a,YR) $(c(m,i))=1;
@@ -151,13 +153,13 @@ T_Y.up(m,i) $(c(m,i)) = 400000;
 T_Y.lo(m,i) $(c(m,i)) = 0;
 T_start.up(m,i,a) $(wt(m,i,a)) = 400000;
 T_start.lo(m,i,a) $(wt(m,i,a)) = 0;
-
+*
 t_AGV.up(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 400000;
-
+*
 t_AGV.lo(m,i,a1,n,j,a2)$(wt(m,i,a1) and wt(n,j,a2)) = 0; 
-X_position.up(m,i,a) $(wt(m,i,a)) = 14 ;
+X_position.up(m,i,a) $(wt(m,i,a)) = 24 ;
 X_position.lo(m,i,a) $(wt(m,i,a)) = 1;
-Y_position.up(m,i,a) $(wt(m,i,a)) = 14;
+Y_position.up(m,i,a) $(wt(m,i,a)) = 24;
 Y_position.lo(m,i,a) $(wt(m,i,a)) = 1;
 
 
@@ -233,9 +235,9 @@ ADRP2.. obj =g= T_Y('m3','i%d%') + G_Y('m3','i%d%') ;
 **Job assinment constraints
 *as soon as you include conditional $(C(m,i)), you ignore virtual node!
 *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
-cnstr_2(m,i) $(C(m,i) and (not sameas(m,'m0')) and (not sameas(i,'i0'))).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1;
+cnstr_2(m,i) $(C(m,i) and (not sameas(m,'m0')) and (not sameas(i,'i0')) ).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1;
 
-cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') or sameas(k,'i0'))), z(m,i,h,k,li));
+cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li));
 
 cnstr_4(li).. sum((m,i) $(C(m,i) and (not sameas(m,'m0'))and (not sameas(i,'i0'))), z('m0', 'i0', m, i, li)) =e= 1;
 cnstr_5(li).. sum((m,i) $(C(m,i) and (not sameas(m,'m0'))and (not sameas(i,'i0'))), z(m, i, 'm0', 'i0', li)) =e= 1;
@@ -275,7 +277,7 @@ cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. 
 !! absolute value is not considered in this constraint! what an stupid language, not letting to use abs in mip! WHY????
 cnstr_26_1(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + (sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)) $(sum(XR $(XR.val <= o1(m,i)), P_x.l(n,j,a2,XR)) >= sum(XR $(XR.val > o1(m,i)), P_X.l(n,j,a2_1,XR)) ))) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
 cnstr_26_2(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + (- sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) + sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)) $(sum(XR $(XR.val <= o1(m,i)), P_x.l(n,j,a2,XR)) <= sum(XR $(XR.val > o1(m,i)), P_X.l(n,j,a2_1,XR))))) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
-
+*
 cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
 cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
 
@@ -292,19 +294,19 @@ cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,
 
 cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
 cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
-cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1)).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1)).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
 
 cnstr_39(m,i,a,XR) $(C(m,i))..  x_position(m,i,a)  =e= XR.val $(P_x.l(m,i,a,XR) = 1); !! this and cnstr_40 are not really constraints, but only `.l` relations!
-
+*
 cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
-
+*
 
 cnstr_41_1(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) >= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (x_position(m,i,a1) - x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;
 cnstr_41_2(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) <= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) - Y_position(m,i,a1) + y_position(n,j,a2)) )/v;
 cnstr_41_3(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) >= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) <= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (x_position(m,i,a1) - x_position(n,j,a2) - Y_position(m,i,a1) + y_position(n,j,a2)) )/v;
 cnstr_41_4(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;
 
-
+*Option MIP = COPT; 
 
 Model ConflictFreeSch /all/ ;
 Solve ConflictFreeSch using mip minimizing obj;
