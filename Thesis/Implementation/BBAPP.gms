@@ -39,7 +39,7 @@ Sets
 *       0 in a is a virtual starting point
         a   "AGV actions" /a0*a4/
 
-        XR(*)  "Vertical Operational Area" /1*29/
+        XR (*)  "Vertical Operational Area" /1*29/
         YR (*) "Horizontal Operational Area" /1*29/
         YS(YR)  "Horizontal Seaside Operation Area" /15*29/
         YL(YR)  "Horizontal Path" /1*14/
@@ -187,7 +187,7 @@ Equations
 *
 **Conflict Free Constraints
         cnstr_22(m,i,n,j)           "C,C"
-        cnstr_23(m,i,a,n,j,a,YR,XR) "WH,WH,YR,XR"
+        cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR"
         cnstr_24(m,i,n,j,a)         "C, WH"
         cnstr_25(m,i,n,j,a,a)       "C, WH"
         cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
@@ -253,10 +253,12 @@ cnstr_18(m,i,XR) $(L(m,i) and o_set(m,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) 
    
 cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
 cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
-*
+
+
 **Conflict Free Constraints
 cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
-cnstr_23(m,i,a1,n,j,a2,YR,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and (ord(a1_1) = ord(a1)-1) and (ord(a2_1) = ord(a2)-1)), P_X(m,i,a1_1,XR_1) + P_X(n,j,a2,XR_1) - P_X(m,i,a1,XR_1) - P_X(n,j,a2_1,XR_1)) =g= 0;
+* wt(a1_1) and wt(a2_1) are computed here!            
+cnstr_23(m,i,a1,n,j,a2,YR,XR , a1_1, a2_1) $((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - (sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
 cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a) and not sameas(a,'a0')).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
 cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
 cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)) ) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
