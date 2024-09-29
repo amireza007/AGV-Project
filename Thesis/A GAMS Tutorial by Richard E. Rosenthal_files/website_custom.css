@@ -1,0 +1,56 @@
+html #doc-page{
+   --note-color-dark: #f4961a; /* orange note color */
+   --link-color: var(--primary-color); /* no orange link color, only on hover */
+   --toc-height: 85vh; /* TOC height is 95vh in repo. 85vh takes into account the website header height */
+   --toc-active-font-weight: 500; /* no need for bigger text with orange text color in TOC */
+}
+
+@media (prefers-color-scheme: dark) {
+    html:not(.light-mode) #doc-page {
+        --note-color-dark: #f4961a;
+        --link-color: var(--primary-color);
+    }
+}
+
+html.dark-mode #doc-page {
+    --note-color-dark: #f4961a;
+    --link-color: var(--primary-color);
+}
+
+
+/* links on website: underline, orange on hover. */
+
+#doc-page.doc-page > [class$="content-page"] #doc-content a:link:not(.functionitem a):not(.toc a):not(th a):not(:hover), 
+#doc-page.doc-page > [class$="content-page"] a:visited, 
+#doc-page.doc-page > [class$="content-page"] a:focus, 
+#doc-page.doc-page > [class$="content-page"] a:active,
+#doc-page.doc-page .menu  {
+    color: var(--link-color) !important;
+}
+#doc-page.doc-page > [class$="content-page"] a.el,
+#doc-page.doc-page > [class$="content-page"] a:not(.toc a):not(.functionitem a):not(#nav-tree a) {
+    font-weight: 400;
+    -webkit-text-decoration: underline var(--note-color-dark) 0.1em;
+    text-decoration: underline var(--note-color-dark) 0.1em;
+    text-decoration-line: underline;
+    text-decoration-color: var(--primary-color);
+    text-decoration-thickness: 0.1em;
+    -webkit-text-decoration-line: underline;
+    -webkit-text-decoration-color: var(--primary-color);
+    -webkit-text-decoration-thickness: 0.1em;
+}
+#doc-page.doc-page > [class$="content-page"] th a:not(.toc a):not(.functionitem a):not(#nav-tree a) {
+    text-decoration-color: white;
+    -webkit-text-decoration-color: white;
+}
+#doc-page.doc-page > [class$="content-page"] a:link:not(.functionitem a):not(.toc a):not(th a):not(:hover),
+#doc-page.doc-page > [class$="content-page"] a:link:not(.functionitem a):not(.toc a):not(th a) {
+    font-weight: 400;
+}
+
+#doc-page.doc-page > [class$="content-page"] a.el:hover,
+#doc-page.doc-page > [class$="content-page"] a:not(.toc a):hover {
+    color: var(--note-color-dark) !important;
+    text-decoration-color: var(--note-color-dark) !important;
+    -webkit-text-decoration-color: var(--note-color-dark) !important;
+}

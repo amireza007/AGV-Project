@@ -1,0 +1,68 @@
+% 
+% قالب پایان نامه های دانشگاه علامه طباطبائئ (ره)
+
+
+% اگر قصد نوشتن رساله دکتری را دارید، در خط زیر، گزینه msc را پاک کنید. کلیه تنظیمات لازم به طور خودکار اعمال می‌شود.
+% در صورت استفاده از گزینه withpage  شماره صفحات حاوی نمادها در جلوی آن‌ها در فهرست نمادها چاپ می‌شود و در صورت 
+% استفاده از گزینه printonlyused  فقط نمادهایی که در متن استفاده شده‌اند، در فهرست نمادها چاپ می‌شوند.
+\documentclass[msc,withpage,printonlyused]{allameh-thesis}
+
+\usepackage{xepersian}
+\settextfont[Scale=1.3]{B Nazanin}
+\defpersianfont\minutesfont[Scale=1.2]{B Nazanin}
+\setlatintextfont{Times New Roman} 
+\setdigitfont[Scale=1]{Times New Roman}
+
+
+%\PersianMathsDigits
+\SepMark{-}
+\def\addsymbol #1:#2#3{$#1$ \> \parbox{5in}{#2 \dotfill \pageref{#3}}\\} 
+\def\symboldisplay#1{\label{#1}} 
+%For compatibility with Miktex 2.8
+%\makeatletter
+%\@ifundefined{Umathcode}{\let\Umathcode\XeTeXmathcode}{}
+%\@ifundefined{Umathchardef}{\let\Umathchardef\XeTeXmathchardef}{}
+%\makeatother 
+%End Of Compatibility
+
+\newtheorem{observation}{مشاهده}[section]
+
+\begin{document}
+\baselineskip=1cm
+%\pagenumbering{alph}
+%
+\input{fainfo}
+\thispagestyle{plain}
+\include{faabstract}
+\tableofcontents
+
+\listoftables%\clearpage
+\pagenumbering{alph}
+\listoffigures%\clearpage
+%\include{symbols}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\include{chapter1}
+\include{chapter2}
+\include{chapter3}
+\include{chapter4}
+\include{chapter5}
+\appendix
+\include{appendix1}
+\include{dicfa2en}
+\include{dicen2fa}
+\bibliographystyle{acm-fa}
+\bibliography{MyReferences}
+\printindex
+\input{eninfo}
+\end{document}
+
+
+
+
+%%%%%%%%%%
+%گردآوری مهدی شفیعی
+% shafiee@atu.ac.ir
+%بهار 96
+%%%
