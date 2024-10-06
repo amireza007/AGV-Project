@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage{pdflscape}
+
+\begin{document}
+	%\[[\text{ADRP model}]\,\,\, \text{Min} :\max_m \left\{ T_{(m,i_d)}^Q + G_{(m,i_d)}^Q , T_{(m,i_d)}^Y + G_{(m,i_d)}^Y \right\-}
+%\]
+\begin{landscape}
+	
+	% ۱. $m$:
+	% اندیس \lr{QC} ها
+	
+	% ۲.  $(m,i)$: اندیس \lr{i}-امین کار کانتینری \lr{QC} \lr{m}
+	
+	% ۳.  $W^H$: مجموعه ی اعمال در راستای افق = $\{(m,i,\alpha) | \alpha \in \{2\}\}$
+	
+	% ۴.  $W^T = w^H \bigcup W^V$
+	
+	% ۵.  $C = D \bigcup L$ مجموعه ی تمام کانتینر ها
+	
+	% ۶. $l ,\,\,\ AGVs $ تعداد 
+	
+	% ۷. مسیر های مسئله:
+	
+	% الف: $X^R$
+	
+	% ب: $Y^R$
+	
+	% ج: $Y^S$
+	
+	% د: $Y^L$
+	
+	% ۸: سرعت $AGV$ ها یکنواخت و ثابت است
+	
+	% %- $G_{(m,i_d)}^Q$: زمان مورد نیاز \lr{QC} برای آخرین کار کانتینری
+	
+	% %- $T_{(m,i_d)}^Y$: زمان شروع برای \lr{AGV} 
+	% %جهت قرار دادن (برداشتن) آخرین کانتینر بر روی (از) \lr{AGV-Support}
+	% %
+	% %- $G_{(m,i_d)}^Y$: زمان مورد نیاز برای \lr{AGV} 
+	% %جهت قرار دادن (برداشتن) آخرین کانتینر بر روی (از) \lr{AGV-Support}
+	\[
+	\sum_{l\in B} \sum_{(n,j)\in C\bigcup \{0\}} Z_{(m,i)(n,j),l} = 1, \forall(m,i)\in C
+	\]
+\end{landscape}
+
+\end{document}
