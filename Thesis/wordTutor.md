@@ -1,0 +1,1 @@
+- `ctrl+alt+shift+s` for selecting **headings**
