@@ -1,15 +1,17 @@
 \documentclass{article}
 \usepackage{graphicx} % Required for inserting images
-\usepackage{amsmath}
+\usepackage{amsmath, amssymb}
 \usepackage{pdflscape}
 \usepackage{nopageno}
 \usepackage[margin=1in]{geometry} % Sets all margins (left, right, top, bottom) to 1 inch
+\usepackage{bidi}       % Provides RTL text support
 
 \begin{document}
-	%\[[\text{ADRP model}]\,\,\, \text{Min} :\max_m \left\{ T_{(m,i_d)}^Q + G_{(m,i_d)}^Q , T_{(m,i_d)}^Y + G_{(m,i_d)}^Y \right\-}
-%\]
+
 \begin{landscape}
-	
+%		\[[\text{ADRP model}]\,\,\, \text{Min} :\max_m \left\{ T_{(m,i_d)}^Q + G_{(m,i_d)}^Q , T_{(m,i_d)}^Y + G_{(m,i_d)}^Y \right\}
+%	\]
+
 	% ۱. $m$:
 	% اندیس \lr{QC} ها
 	
@@ -42,11 +44,98 @@
 	% %
 	% %- $G_{(m,i_d)}^Y$: زمان مورد نیاز برای \lr{AGV} 
 	% %جهت قرار دادن (برداشتن) آخرین کانتینر بر روی (از) \lr{AGV-Support}
-	\begin{equation}
-			\sum_{l\in B} \sum_{(n,j)\in C\bigcup \{0\}} Z_{(m,i)(n,j),l} = 1, \forall(m,i)\in C \tag{4}
-	\end{equation}
 
 	
+%\[
+%	\sum_{(n,j)\in C\cup\{0\}} Z_{(n,j)(m,i),l} = \sum_{(h,k)\in C\cup\{0\}} Z_{(m,i)(h,k),l}\quad \forall(m,i)\in C, \, \forall l\in B
+%\]
+%\[
+%	\sum_{(m,i)\in C} Z_{(m,i),0,l} = 1,\forall l \in B
+%\]
+
+%\[
+%	\sum_{(m,i)\in C} Z_{0,(m,i),l} = 1, \forall l\in B
+%\]
+
+%\[
+%	\sum_{l \in B} \sum_{(n,j) \in D\cup \{0\}} Z_{(m,i)(n,j),l} = 1, \forall(m,i)\in L
+%\]
+%\[
+%	\sum_{l\in B}\sum_{(n,j)\in L\cup\{0\}} Z_{(m,i)(n,j),l} = 1, \forall (m,i)\in D
+%\]
+%	
+%\[
+%	P^X_{(m,i,4),x} = P^X_{(n,j,0),x} , \sum_{l\in B} Z_{(m,i)(n,j),l} = 1, \forall (m,i),(n,j)\in C, \forall x\in X^\mathbb{R}
+%\]
+%
+
+%\[
+%	\sum_{x\in X^\text{R}} P^X_{(m,i,\alpha),x} = 1, \forall (m,i)\in C, \forall \alpha \in \{0,1,2,3,4\}
+%\]
+
+%\[
+%	P^X_{(m,i,0),O_{(m,i)}}=1, \forall (m,i)\in D
+%\]
+
+%\[
+%	\sum_{y \in Y^L} P^Y_{(m,i,0),y} = 1, \forall (m,i)\in L
+%\]
+
+%\[
+%\sum_{y \in Y^S} P^Y_{(m,i,0),y} = 1, \forall (m,i)\in D
+%\]
+
+%\[
+%	\sum_{x=A^L_{(m,i)}}^{A^\text{R}_{(m,i)}} P^{X}_{(m,i,0),x} = 1, \forall (m,i)\in L
+%\]
+
+%\[
+%\sum_{y\in Y^L} P^Y_{(m,i,3),y}=1, \forall(m,i)\in D
+%\]
+
+%\[
+%\sum_{y\in Y^S} P^Y_{(m,i,3),y}=1, \forall(m,i)\in L
+%\]
+
+%\[
+%P^X_{(m,i,3),O_{(m,i)}} =1, \forall (m,i) \in L
+%\]
+
+%\[
+%	\sum_{x=A^L_{(m,i)}}^{A^\text{R}_{(m,i)}} P^{X}_{(m,i,3),x} = 1, \forall (m,i)\in D
+%\]
+
+%\[
+%P^Y_{(m,i,\alpha),y} = P^Y_{(m,i,\alpha -1 ),y} , \forall (m,i,\alpha)\in W^H,\forall y\in Y^{\text{R}}
+%\]
+
+%\[
+%P^X_{(m,i,\alpha),x} = P^X_{(m,i,\alpha -1 ),x} , \forall (m,i,\alpha)\in W^V,\forall y\in X^{\text{R}}
+%\]
+
+%\[
+%	U^{\text{AGV}}_{(m,i,4)(n,j,1)}\ge \sum_{l\in B}Z_{(m,i)(m,j),l} \quad , \forall (m,i),(n,j)\in C
+%\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\[
+U^{\text{AGV}}_{(m,i,\alpha_1)(n,j,\alpha_2)} + U^{\text{AGV}}_{(n,j,\alpha_2)(m,i,\alpha_1)} + 3
+- P^Y_{(m,i,\alpha_1),y} -P^Y_{(n,j,\alpha_2),y} -
+\sum_{x=1}^{x'}\left(P^X_{(m,i,\alpha_1 -1),x} + P^X_{(n,j,\alpha_2),x} - P^X_{(m,i,\alpha_1),x} - P^X_{(n,j,\alpha_2 -1),x} \right)\ge 0,
+\]
+\begin{RTL}
+	\hspace{1cm}		
+$	\raggedright
+\forall (m,i,\alpha_1), (n,j,\alpha_2)\in W^H \, \forall y \in Y^{\text{R}}, \,\forall x'\in X^{\text{R}}$
+
+\end{RTL}
+
+%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
 \end{landscape}
 
 \end{document}
