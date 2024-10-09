@@ -204,12 +204,64 @@
 
 
 %\[
-%T^Q_{(n,j)} + M \Big(
-%1- \sum_{l\in B} \ge T^{\text{Start}} + t^{\text{AGV}}_{(m,i,3)(m,i,4)}\Big), \forall(m,i)\in D, \forall (n,j)\in D
+%T^Y_{(n,j)} + M \Big(
+%1- \sum_{l\in B} Z_{(m,i)(n,j),l} \Big) \ge T^{\text{Start}} + t^{\text{AGV}}_{(m,i,3)(m,i,4)}, \forall(m,i)\in D, \forall (n,j)\in L
+%\]
+%
+%
+%\[
+%T^{\text{Start}}_{(m,i,\alpha)} \ge T^Y_{(m,i)} + G^Y_{(m,i)}, \,\, \forall(m,i)\in D, \alpha \in \{4\} \, \, \, \, or \,\,\, \forall(m,i)\in L, \,\, \alpha \in \{1\}
 %\]
 
 
+%\[
+%T^{\text{Start}}_{(m,i,\alpha)} \ge T^Q_{(m,i)} + G^Q_{(m,i)}, \,\, \forall(m,i)\in D, \alpha \in \{1\} \, \, \, \, or \,\,\, \forall(m,i)\in L, \,\, \alpha \in \{4\}
+%\]
+%
+%
 
+%\[
+%X^{\text{position}}_{(m,i,\alpha)} = x, P^X_{(m,i,\alpha),x} = 1, \forall (m,i)\in C, \forall \alpha \in \{0,1,2,3,4\} , \forall x \in X^R
+%\]
+
+%\[
+%Y^{\text{position}}_{(m,i,\alpha)} = y, P^Y_{(m,i,\alpha),y} = 1, \forall (m,i)\in C, \forall \alpha \in \{0,1,2,3,4\} , \forall y \in Y^R
+%\]
+
+%\[
+%t^{\text{AGV}}_{(m,i,\alpha_1)(n,j,\alpha_2)} = \Big(
+%\Big| 
+%X^{\text{position}}_{(m,i,\alpha_1)} - X^{\text{position}}_{(n,j,\alpha_2)}
+%\Big|
+%+
+%\Big| 
+%Y^{\text{position}}_{(m,i,\alpha_1)} - Y^{\text{position}}_{(n,j,\alpha_2)}
+%\Big|
+%\Big)
+%\Big/v^{\text{AGV}}, \forall(m,i),(n,j)\in C, \forall \alpha_1, \alpha_2\in \{0,1,2,3,4\}
+%\]
+
+%\[
+%Z_{(m,i)(n,j),l}\in \{0,1\},\forall(m,i),(n,j)\in C, \forall l \in B
+%\]
+%
+
+%\[
+%U^{\text{AGV}}_{(m,i,\alpha_1)(n,j,\alpha_2)} \in \{0,1\}, \forall(m,i,\alpha_1)(n,j,\alpha_2)\in W^T
+%\]
+
+%\[
+%U^{\text{QC}}_{(m,i)(n,j,\alpha)} \in \{0,1\}, \forall(m,i)\in C, (n,j,\alpha)\in W^H
+%\]
+
+%\[
+%P^X_{(m,i,\alpha),x},P^Y_{(m,i,\alpha),y}\in \{0,1\}, \forall(m,i)\in C,\forall \alpha \in \{0,1,2,3,4\},\forall x\in X^R ,\forall y\in Y^R
+%\]
+%
+
+\[
+T^Q_{(m,i)}, T^Y_{(m,i)},T^{\text{Start}}_{(m,i,\alpha)} \ge 0, \forall(m,i)\in C, \forall \alpha \in \{1,2,3,4\}
+\]
 
 
 
