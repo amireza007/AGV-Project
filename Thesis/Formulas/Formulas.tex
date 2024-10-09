@@ -118,19 +118,147 @@
 %\]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\[
-U^{\text{AGV}}_{(m,i,\alpha_1)(n,j,\alpha_2)} + U^{\text{AGV}}_{(n,j,\alpha_2)(m,i,\alpha_1)} + 3
-- P^Y_{(m,i,\alpha_1),y} -P^Y_{(n,j,\alpha_2),y} -
-\sum_{x=1}^{x'}\left(P^X_{(m,i,\alpha_1 -1),x} + P^X_{(n,j,\alpha_2),x} - P^X_{(m,i,\alpha_1),x} - P^X_{(n,j,\alpha_2 -1),x} \right)\ge 0,
-\]
-\begin{RTL}
-	\hspace{1cm}		
-$	\raggedright
-\forall (m,i,\alpha_1), (n,j,\alpha_2)\in W^H \, \forall y \in Y^{\text{R}}, \,\forall x'\in X^{\text{R}}$
-
-\end{RTL}
+%\[
+%U^{\text{AGV}}_{(m,i,\alpha_1)(n,j,\alpha_2)} + U^{\text{AGV}}_{(n,j,\alpha_2)(m,i,\alpha_1)} + 3
+%- P^Y_{(m,i,\alpha_1),y} -P^Y_{(n,j,\alpha_2),y} -
+%\sum_{x=1}^{x'}\left(P^X_{(m,i,\alpha_1 -1),x} + P^X_{(n,j,\alpha_2),x} - P^X_{(m,i,\alpha_1),x} - P^X_{(n,j,\alpha_2 -1),x} \right)\ge 0,
+%\]
+%\begin{RTL}
+%	\hspace{1cm}		
+%$	\raggedright
+%\forall (m,i,\alpha_1), (n,j,\alpha_2)\in W^H \, \forall y \in Y^{\text{R}}, \,\forall x'\in X^{\text{R}}$
+%
+%\end{RTL}
 
 %%%%%%%%%%%%%%%%%%%%%
+
+%C26
+%\[
+%\left( 3- U^{\text{QC}}_{(m,i)(n,j,\alpha_2)}
+%- P^Y_{(m,i,\alpha_1),y} - 
+%P^Y_{(n,j,\alpha_2),y}
+%+ \Bigg|\sum_{x=1}^{O_{(m,i)}} P^X_{(n,j,\alpha_2),x} - \sum_{x=O_{(m,i) +1}}^{X_R} P^X_{(n,j,\alpha_2 - 1),x} \Bigg|
+%\right)M + T^{\text{Start}}_{(n,j,\alpha_2)} +
+%t^{\text{AGV}}_{(n,j,\alpha_2 -1)(m,i,\alpha_1)}
+%\ge T^Q_{(m,i)} + G^Q_{(m,i)},
+%\]
+%\begin{RTL}
+%\hspace{0.5cm}
+%$	\raggedright
+%\forall (n,j,\alpha_2)\in W^H,\forall y\in Y^S , \forall (m,i)\in D, \forall \alpha_1\in \{0\} or \forall(m,i) \in L, \forall \alpha_1 \in \{3\}$
+%
+%\end{RTL}
+%%%%%%%%
+
+%\[
+%T^Q_{(m,i)} +G^Q_{(m,i)} +M \big(1-U^{\text{QC}}_{(m,i)(n,j,\alpha)}\big) \ge T^{\text{Start}}_{(n,j,\alpha)}, 
+%	\forall (m,i)\in C, \forall (n,j,\alpha)\in W^H
+%\]
+
+%\[
+%T^{\text{Start}}_{(n,j,\alpha)} + t^{\text{AGV}}_{(n,j,\alpha-1)(n,j,\alpha)} +
+% M \big(1-U^{\text{QC}}_{(m,i)(n,j,\alpha)}\big) \ge T^{Q}_{(m,i)}, \,\, \forall (m,i)\in C, \forall (n,j,\alpha)\in W^H
+%\]
+
+%\[
+%	U^{\text{AGV}}_{(m,i,\alpha_1)(n,j,\alpha_2)} + U^{\text{AGV}}_{(n,j,\alpha_2)(m,i,\alpha_1)} \ge 
+%	P^X_{(m,i,\alpha_1),x} + P^X_{(n,j,\alpha_2),x} - 1,\, \forall(m,i,\alpha_1),(n,j,\alpha_2)\in W^V, \forall x\in X^R
+%\]
+
+%\[
+%U^{\text{AGV}}_{(m,i,\alpha-1)}=1 , \,\, \forall (m,i)\in C, \forall\alpha\in \{2,3,4\}
+%\]
+%
+%\[
+%	T^{\text{Start}}_{(n,j,\alpha_2)} + M \Big(1 -  U^{\text{AGV}}_{(m,i,\alpha_1)(n,j,\alpha_2)}
+%	\Big) \ge
+%	T^{\text{Start}}_{(m,i,\alpha_1)} +t^{\text{AGV}}_{(m,i,\alpha_1 - 1)(m,i,\alpha_1)}, \,\, \forall (m,i,\alpha_1),(n,j,\alpha_2)\in W^T
+%\]
+
+%
+
+%\[
+%	T^Q_{(m,i+1)} \ge T^Q_{(m,i)} + G^Q_{(m,i)} + S^Q_{(m,i)(m,i+1)}, \forall (m,i),(m,i+1)\in C
+%\]
+
+%\[
+%T^Q_{(n,j)} \ge T^Q_{(m,i)} + G^Q_{(m,i)} , \forall (m,i,n,j)\in \psi_1
+%\]
+
+%\[
+%T^Y_{(n,j)} \ge T^Y_{(m,i)} + G^Y_{(m,i)} , \forall (m,i,n,j)\in \psi_2
+%\]
+
+%\[
+%T^Y_{(m,i)} \ge T^{\text{Start}}_{(m,i,3)} + t^{\text{AGV}}_{(m,i,2)(m,i,3)}, \forall (m,i) \in D
+%\]
+
+%\[
+%T^Q_{(m,i)} \ge T^{\text{Start}}_{(m,i,3)} + t^{\text{AGV}}_{(m,i,2)(m,i,3)}, \forall (m,i) \in L
+%\]
+
+%\[
+%T^Y_{(n,j)} + M \Big(
+%1- \sum_{l\in B} \ge T^{\text{Start}} + t^{\text{AGV}}_{(m,i,3)(m,i,4)}\Big), \forall(m,i)\in D, \forall (n,j)\in L
+%\]
+
+
+%\[
+%T^Q_{(n,j)} + M \Big(
+%1- \sum_{l\in B} \ge T^{\text{Start}} + t^{\text{AGV}}_{(m,i,3)(m,i,4)}\Big), \forall(m,i)\in D, \forall (n,j)\in D
+%\]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
