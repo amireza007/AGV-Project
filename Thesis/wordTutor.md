@@ -2,3 +2,4 @@
 - Be careful about numbers of chapters being in `B Nazanin` font, and not `Times`.Keep updating Heading 2!
 - ‍ctr+enter` for page break
 - there is a selection menu in the Home tab of word, showing graphical objects. **USE IT TO MOVE IT!!**
+- `ctrl+*` to hide inner character thingy
