@@ -1,10 +1,11 @@
-\documentclass{article}
+\documentclass[fleqn]{article}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{amsmath, amssymb}
 \usepackage{pdflscape}
 \usepackage{nopageno}
 \usepackage[margin=1in]{geometry} % Sets all margins (left, right, top, bottom) to 1 inch
-\usepackage{bidi}       % Provides RTL text support
+%\usepackage{bidi}       % Provides RTL text support
+
 
 \begin{document}
 
@@ -137,19 +138,15 @@
 %\left( 3- U^{\text{QC}}_{(m,i)(n,j,\alpha_2)}
 %- P^Y_{(m,i,\alpha_1),y} - 
 %P^Y_{(n,j,\alpha_2),y}
-%+ \Bigg|\sum_{x=1}^{O_{(m,i)}} P^X_{(n,j,\alpha_2),x} - \sum_{x=O_{(m,i) +1}}^{X_R} P^X_{(n,j,\alpha_2 - 1),x} \Bigg|
+%+ \big| \sum_{x=1}^{O_{(m,i)}} P^X_{(n,j,\alpha_2),x} - \sum_{x=O_{(m,i)}+1}^{x_R} P^X_{(n,j,\alpha_2 - 1),x} \big|
 %\right)M + T^{\text{Start}}_{(n,j,\alpha_2)} +
 %t^{\text{AGV}}_{(n,j,\alpha_2 -1)(m,i,\alpha_1)}
-%\ge T^Q_{(m,i)} + G^Q_{(m,i)},
+%\ge T^Q_{(m,i)} + G^Q_{(m,i)}
 %\]
-%\begin{RTL}
-%\hspace{0.5cm}
-%$	\raggedright
-%\forall (n,j,\alpha_2)\in W^H,\forall y\in Y^S , \forall (m,i)\in D, \forall \alpha_1\in \{0\} or \forall(m,i) \in L, \forall \alpha_1 \in \{3\}$
-%
-%\end{RTL}
-%%%%%%%%
-
+%\begin{flalign*}	
+%	&&,\forall (n,j,\alpha_2)\in W^H,\forall y\in Y^S , \forall (m,i)\in D, \forall \alpha_1\in \{0\} or \forall(m,i) \in L, \forall \alpha_1 \in \{3\} 
+%%	\hspace{0.3cm}
+%\end{flalign*}
 %\[
 %T^Q_{(m,i)} +G^Q_{(m,i)} +M \big(1-U^{\text{QC}}_{(m,i)(n,j,\alpha)}\big) \ge T^{\text{Start}}_{(n,j,\alpha)}, 
 %	\forall (m,i)\in C, \forall (n,j,\alpha)\in W^H
@@ -259,10 +256,10 @@
 %\]
 %
 
-\[
-T^Q_{(m,i)}, T^Y_{(m,i)},T^{\text{Start}}_{(m,i,\alpha)} \ge 0, \forall(m,i)\in C, \forall \alpha \in \{1,2,3,4\}
-\]
-
+%\[
+%T^Q_{(m,i)}, T^Y_{(m,i)},T^{\text{Start}}_{(m,i,\alpha)} \ge 0, \forall(m,i)\in C, \forall \alpha \in \{1,2,3,4\}
+%\]
+%
 
 
 
