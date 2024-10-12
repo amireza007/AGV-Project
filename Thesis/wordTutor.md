@@ -25,3 +25,5 @@
 
 
 - remember that **it's all about anchors when inserting captions!!!!**
+- use `en hyphen` for including chapters when inserting figure caption for not messing up the alignement (1-3 not 3-1)
+
