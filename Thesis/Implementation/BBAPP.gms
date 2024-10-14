@@ -9,7 +9,7 @@ $Title  A branch and bound problem (TRNSPORT,SEQ=1)
         a   AGV actions /0*4/
         WV(a)  Vertical Actions /2/
         WH(a)  Horizontal Actions /1,3,4/
-        l   AGV index
+        l   AGV index /1*3/
         B(l)    All AGVs /1,2,3/
         XR  Vertical Operational Area /1*10/
         YR  Horizontal Operational Area /1*14/
@@ -30,6 +30,7 @@ $Title  A branch and bound problem (TRNSPORT,SEQ=1)
               chicago     300
               topeka      275  / ;
 
+$hidden Data
   Table d(i,j)  distance in thousands of miles
                     new-yorksdafasdf       chicago      topeka
       seattle          2.5           1.7          100.8
