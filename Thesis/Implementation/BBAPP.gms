@@ -5,18 +5,20 @@ $Title  A branch and bound problem (TRNSPORT,SEQ=1)
         m   QC index /1,2/
         L(i)   Loading Containers  / 1,2 /
         D(i)   Unloading Containers  / 3,4 /
-        C   All  Containers /L+D/
+        C   All  Containers /L+D/ $ "this is in data file"
+        C_prime The set of containers to be assigned $ "This is in data file"
         a   AGV actions /0*4/
-        WV(a)  Vertical Actions /2/
-        WH(a)  Horizontal Actions /1,3,4/
+        WV(m,i,a)  Vertical Actions /2/
+        WH(m,i,a)  Horizontal Actions /1,3,4/
         l   AGV index /1*3/
-        B(l)    All AGVs /1,2,3/
+        B(l)    All AGVs /1,2,3/ $ "This is in data file"
+        
         XR  Vertical Operational Area /1*10/
         YR  Horizontal Operational Area /1*14/
         YS  Horizontal Seaside Operation Area /11*14/
         YL  Horizontal Path /1*10/
-        psi_1()   Sequence of Container jobs for QC //
-        psi_2()   Sequence of Container jobs for ASC //
+        psi_1()   Sequence of Container jobs for QC // $ "This is in data file"
+        psi_2()   Sequence of Container jobs for ASC // $ "This is in data file"
         ;
 
   Parameters
