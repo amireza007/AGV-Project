@@ -27,4 +27,6 @@
 - remember that **it's all about anchors when inserting captions!!!!**
 - use `en hyphen` for including chapters when inserting figure caption for not messing up the alignement (1-3 not 3-1)
 
-- for a boxy caption. remember layout of the figure
+- for a boxy caption. remember layout of the figures.
+
+- `ctrl+A` then `F9` to update the whole document
