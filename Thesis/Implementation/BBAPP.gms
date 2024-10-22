@@ -22,7 +22,12 @@ $Title  A branch and bound problem (TRNSPORT,SEQ=1)
         ;
 
   Parameters
-
+        O(m,i)
+        A_L(m,i)
+        A_R(m,i)
+        G_Q(m,i)
+        G_Y(m,i)
+        
        a(i)  capacity of plant i in cases
          /    seattle     350
               san-diego   0  /
@@ -39,19 +44,37 @@ $hidden Data
       san-diego        2.5           1.8          1.4  ;
 
   Scalars
+        S_Q switch time for qc between two containers /2/ $ "This is temporarily assumed constants"
         x_R /10/
         y_R /14/
         y_r /10/
         v AGV speed /1/
         ;
 
-  Parameter c(i,j)  transport cost in thousands of dollars per case ;
-
-            c(i,j) = f * d(i,j) / 1000 ;
 
   Variables
-       x(i,j)  shipment quantities in cases
-       z       total transportation costs in thousands of dollars ;
+        Z(m,i,n,j,l) QC double cycling
+        U_AGV(m,i,a_1,n,j,a_2)
+        U_QC(m,i,n,j,a)
+        
+        $ "Path related variables"
+        P_X(m,i,a,x)
+        P_Y(m,i,a,y)
+        P_X(m,i,0,x)
+        P_Y(m,i,0,y)
+        
+        $ "Time related variables"
+        T_Q(m,i)
+        T_Y(m,i)
+        T_start(m,i,a)
+        
+
+        $ "Auxiliary Variables"
+        t_AGV(m,i,a1,n,j,a2)
+        X_position(m,i,a)
+        Y_position(m,i,a)
+        ;
+
 
   Positive Variable x ;
 
