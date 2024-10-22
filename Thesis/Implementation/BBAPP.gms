@@ -1,27 +1,38 @@
 $Title  A branch and bound problem (TRNSPORT,SEQ=1)
 
-  Sets
-        i   containter jobs /1*4/
-        m   QC index /1,2/
-        L(i)   Loading Containers  / 1,2 / $ "L is a subset of index i"
-        D(i)   Unloading Containers  / 3,4 / $ "U is a subset of index i"
-        C   All  Containers /L+D/ $ "this is in data file"
-        C_prime The set of containers to be assigned $ "This is in data file"
-        a   AGV actions /0*4/
-        WV(m,i,a)  Vertical Actions /2/ $ "This is a multi dimensional set"
-        WH(m,i,a)  Horizontal Actions /1,3,4/
-        l   AGV index /1*3/
-        B(l)    All AGVs /1,2,3/ $ "This is in data file"
-        
-        XR  Vertical Operational Area /1*x_R/
-        YR  Horizontal Operational Area /1*y_R/
-        YS  Horizontal Seaside Operation Area /11*14/
-        YL  Horizontal Path /1*10/
-        psi_1()   Sequence of Container jobs for QC // $ "This is in data file"
-        psi_2()   Sequence of Container jobs for ASC // $ "This is in data file"
+Scalars
+        S_Q "switch time for qc between two containers" /2/ $ "This is temporarily assumed constants"
+        x /1/
+        y /1/
+        x_R /10/
+        y_R /14/
+        y_r /10/
+        v "AGV speed" /1/
+        ;
+Sets
+        i   "containter jobs" /1*4/
+        m   "QC index" /1,2/
+        l   "AGV index" /1*3/
+        a   "AGV actions" /0*4/
+        XR  "Vertical Operational Area" /1*x_R/
+        YR  "Horizontal Operational Area" /1*y_R/
+        YS  "Horizontal Seaside Operation Area" /11*14/
+        YL  "Horizontal Path" /1*10/
         ;
 
-  Parameters
+Parameters
+
+        L(i)   "Loading Containers"  / 1,2 / $ "L is a subset of index i"
+        D(i)   "Unloading Containers"  / 3,4 / $ "U is a subset of index i"
+        C(i)   "All  Containers" /L+D/ $ "this is in data file"
+*        C_prime(i) "The set of containers to be assigned" $ "This is in data file" 
+        WV(m,i,a)  "Vertical Actions" /2/ $ "This is a multi dimensional set"
+        WH(m,i,a)  "Horizontal Actions" /1,3,4/
+        psi_1(m,i,n,j)   "Sequence of Container jobs for QC" // $ "This is in data file"
+        psi_2(m,i,n,j)   "Sequence of Container jobs for ASC" // $ "This is in data file"
+
+        
+        B(l)    "All AGVs" /1,2,3/ $ "This is in data file"
         O(m,i) //
         A_L(m,i) //
         A_R(m,i) //
@@ -30,37 +41,29 @@ $Title  A branch and bound problem (TRNSPORT,SEQ=1)
         ;
 
 $hidden Data
-
-  Table d(i,j)  distance in thousands of miles
+$ontext
+Table d(i,j)  distance in thousands of miles
                     new-yorksdafasdf       chicago      topeka
       seattle          2.5           1.7          100.8
       san-diego        2.5           1.8          1.4  ;
+$offtext
+  
 
-  Scalars
-        S_Q switch time for qc between two containers /2/ $ "This is temporarily assumed constants"
-        x /1/
-        y /1/
-        x_R /10/
-        y_R /14/
-        y_r /10/
-        v AGV speed /1/
-        ;
-
-  Variables
-        Z(m,i,n,j,l)           QC double cycling
-        U_AGV(m,i,a_1,n,j,a_2) conducted before
-        U_QC(m,i,n,j,a)        conducted before
+Variables
+        Z(m,i,n,j,l)           "QC double cycling"
+        U_AGV(m,i,a_1,n,j,a_2) "conducted before"
+        U_QC(m,i,n,j,a)        "conducted before"
         
         $ "Path related variables"
-        P_X(m,i,a,x) finish V loc
-        P_Y(m,i,a,y) finish H loc
-        P_X(m,i,0,x) Start H loc
-        P_Y(m,i,0,y) Start H loc
+        P_X(m,i,a,x) "finish V loc"
+        P_Y(m,i,a,y) "finish H loc"
+        P_X(m,i,0,x) "Start H loc"
+        P_Y(m,i,0,y) "Start H loc"
         
         $ "Time related variables"
-        T_Q(m,i) start time of QC
-        T_Y(m,i) Start time of agv putting cont on ASC
-        T_start(m,i,a) Start of agv for action (m,i,a)
+        T_Q(m,i) "start time of QC"
+        T_Y(m,i) "Start time of agv putting cont on ASC"
+        T_start(m,i,a) "Start of agv for action (m,i,a)"
         
 
         $ "Auxiliary Variables"
@@ -70,9 +73,9 @@ $hidden Data
         ;
 
 
-  Positive Variable x ;
+*  Positive Variable x ;
 
-  Equations
+Equations
        cost        define objective function
        supply(i)   observe supply limit at plant i
        demand(j)   satisfy demand at market j ;
@@ -83,9 +86,9 @@ $hidden Data
 
   demand(j) ..   sum(i, x(i,j))  =g=  b(j) ;
 
-  Model transport /all/ ;
+Model transport /all/ ;
 
-  Solve transport using lp minimizing z ;
+Solve transport using lp minimizing z ;
 
-  Display x.l, x.m ;
+Display x.l, x.m ;
 
