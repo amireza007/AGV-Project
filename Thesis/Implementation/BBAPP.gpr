@@ -1,0 +1,16 @@
+[PROJECT]
+
+[RP:TESTINGGAMS]
+1=
+
+[MRUFILES]
+1=C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\TestingGAMS.lst
+
+[OPENWINDOW_1]
+FILE0=C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\TestingGAMS.gms
+FILE1=C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\TestingGAMS.gms
+MAXIM=0
+TOP=50
+LEFT=50
+HEIGHT=693
+WIDTH=944

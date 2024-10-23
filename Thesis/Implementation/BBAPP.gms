@@ -1,5 +1,22 @@
 $Title  A branch and bound problem (TRNSPORT,SEQ=1)
 
+$ontext
+Sets
+       i   "canning plants"   / seattle, san-diego /
+       j   "markets"          / new-york, chicago, topeka / ;
+
+  Parameters
+
+       a(i)  "capacity of plant i in cases"
+         /    seattle     350
+              san-diego   600  /
+
+       b(j)  "demand at market j in cases"
+         /    new-york    325
+              chicago     300
+              topeka      275  / ;
+$offtext
+
 Scalars
         S_Q "switch time for qc between two containers" /2/ $ "This is temporarily assumed constants"
         x /1/
@@ -11,33 +28,52 @@ Scalars
         ;
 Sets
         i   "containter jobs" /1*4/
+        j "a duplicate of i" /1*4/
         m   "QC index" /1,2/
+        n "A duplicate of m" /1,2/
+        
         l   "AGV index" /1*3/
+        B(l)    "set of All AGVs" /l/ $ "This is in data file"
+
         a   "AGV actions" /0*4/
+        a_1(a) "A duplicate of a" /0*4/
+        a_2(a) "A duplicate of a" /0*4/
+
         XR  "Vertical Operational Area" /1*x_R/
         YR  "Horizontal Operational Area" /1*y_R/
         YS  "Horizontal Seaside Operation Area" /11*14/
         YL  "Horizontal Path" /1*10/
-        ;
-
-Parameters
-
-        L(i)   "Loading Containers"  / 1,2 / $ "L is a subset of index i"
-        D(i)   "Unloading Containers"  / 3,4 / $ "U is a subset of index i"
-        C(i)   "All  Containers" /L+D/ $ "this is in data file"
-*        C_prime(i) "The set of containers to be assigned" $ "This is in data file" 
-        WV(m,i,a)  "Vertical Actions" /2/ $ "This is a multi dimensional set"
-        WH(m,i,a)  "Horizontal Actions" /1,3,4/
-        psi_1(m,i,n,j)   "Sequence of Container jobs for QC" // $ "This is in data file"
-        psi_2(m,i,n,j)   "Sequence of Container jobs for ASC" // $ "This is in data file"
 
         
-        B(l)    "All AGVs" /1,2,3/ $ "This is in data file"
-        O(m,i) //
-        A_L(m,i) //
-        A_R(m,i) //
-        G_Q(m,i) //
-        G_Y(m,i) //
+        L(i)   "Loading Containers. L is a subset of index i" /1, 2/
+        D(i) "Unloading Containers. U is a subset of index i" /3, 4/ 
+        C(i)   "All  Containers" /L+D/ $ "this is in data file"
+*        C_prime(i) "The set of containers to be assigned" $ "This is in data file" 
+
+        $ "I suppose j_1 and j_2 could be written by alias"
+        j "set of all container jobs and qc" /#m.#i/
+        
+        j_1(j) "set of container jobs and qc"
+        j_2(j) "Another set of container jobs and QC"
+
+        WT(m,i,a) "set of total actions" /#m.#i.#a/
+        WV(WT)  "Vertical Actions" //
+        WH(WT)  "Horizontal Actions" //
+
+        psi_1(j_1,j_2)   "Sequence of Container jobs for QC" // $ "This is in data file"
+        psi_2(j_1,j_2)   "Sequence of Container jobs for ASC" // $ "This is in data file"
+        ;
+        
+j_1(j)=YES;
+j_2(j) = YES;
+
+Parameters
+        
+        O() //
+        A_L(j) //
+        A_R(j) //
+        G_Q(j) //
+        G_Y(j) //
         ;
 
 $hidden Data
@@ -46,13 +82,12 @@ Table d(i,j)  distance in thousands of miles
                     new-yorksdafasdf       chicago      topeka
       seattle          2.5           1.7          100.8
       san-diego        2.5           1.8          1.4  ;
-$offtext
-  
+$offtext  
 
 Variables
-        Z(m,i,n,j,l)           "QC double cycling"
-        U_AGV(m,i,a_1,n,j,a_2) "conducted before"
-        U_QC(m,i,n,j,a)        "conducted before"
+        Z(j_1,j_2,l)           "QC double cycling"
+        U_AGV(j_1,j-2) "conducted before" 
+        U_QC(j,WT)        "conducted before"
         
         $ "Path related variables"
         P_X(m,i,a,x) "finish V loc"
@@ -67,24 +102,23 @@ Variables
         
 
         $ "Auxiliary Variables"
-        t_AGV(m,i,a1,n,j,a2)
+        t_AGV(m,i,a_1,n,j,a_2)
         X_position(m,i,a)
         Y_position(m,i,a)
         ;
 
-
 *  Positive Variable x ;
 
 Equations
-       cost        define objective function
-       supply(i)   observe supply limit at plant i
-       demand(j)   satisfy demand at market j ;
+        cost        define objective function
+        supply(i)   observe supply limit at plant i
+        demand(j)   satisfy demand at market j ;
 
-  cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
+cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
 
-  supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;
+supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;
 
-  demand(j) ..   sum(i, x(i,j))  =g=  b(j) ;
+demand(j) ..   sum(i, x(i,j))  =g=  b(j) ;
 
 Model transport /all/ ;
 
