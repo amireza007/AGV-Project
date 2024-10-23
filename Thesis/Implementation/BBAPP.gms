@@ -35,6 +35,7 @@ Sets
         l   "AGV index" /1*3/
         B(l)    "set of All AGVs" /l/ $ "This is in data file"
 
+        $ "0 is a virtual starting point"
         a   "AGV actions" /0*4/
         a_1(a) "A duplicate of a" /0*4/
         a_2(a) "A duplicate of a" /0*4/
@@ -69,7 +70,7 @@ j_2(j) = YES;
 
 Parameters
         
-        O() //
+        O(j) //
         A_L(j) //
         A_R(j) //
         G_Q(j) //
@@ -90,7 +91,7 @@ Variables
         U_QC(j,WT)        "conducted before"
         
         $ "Path related variables"
-        P_X(m,i,a,x) "finish V loc"
+        P_X(WV,x) "finish V loc"
         P_Y(m,i,a,y) "finish H loc"
         P_X(m,i,0,x) "Start H loc"
         P_Y(m,i,0,y) "Start H loc"
