@@ -1,0 +1,73 @@
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/26/24 16:35:06 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   2  scalar r /10/;
+   3  set i "set of all" / i1*i12 /;
+   4  alias(i,i_1);
+   5  set c(i,i) /i1.i2/;
+   6  set j /j1,j2/;
+   7  set k;
+   8  k(i) = yes;
+   9  k(j) = yes;
+  10  display k;
+  11  parameter
+  12      f(i) "hi" / i1 1 /
+  13      g(i_1) / i1 1 /;
+  14  loop(i$(ord(i)>=2),
+  15    f(i) = f(i-2) + f(i-1);
+  16  );
+  17  scalar d;
+  18  d=2;
+  19  display d;
+  20  !! trying to display set
+  21  g(i)$(ord(i)>=2) = 3; !! what an stupid language, eh??
+  22  display f,g;
+      Set       i     / i1*i5 /;
+      Parameter s(i)  / i1 3, i2 5, i4 8 /
+                t(i)  / i1*i4 13 /
+                u(i)  / i2 1 /
+                v(i)  / i1 7, i3 2, i5 29 /;
+       
+      u(i) $ (not s(i))               = v(i);
+      *display u;
+      u(i) $ (s(i) and u(i) and t(i)) = s(i);
+      u(i) $ (s(i) or v(i) or t(i))   = 4;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/26/24 16:35:06 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     10 SET k  
+
+i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12,    j1 ,    j2 
+
+
+----     19 PARAMETER d                    =        2.000  
+
+----     22 PARAMETER f  hi
+
+i1    1.000,    i2    1.000,    i3    2.000,    i4    3.000,    i5    5.000,    i6    8.000,    i7   13.000,    i8   21.000,    i9   34.000,    i10  55.000,    i11  89.000,    i12 144.000
+
+
+----     22 PARAMETER g  
+
+i1  1.000,    i2  3.000,    i3  3.000,    i4  3.000,    i5  3.000,    i6  3.000,    i7  3.000,    i8  3.000,    i9  3.000,    i10 3.000,    i11 3.000,    i12 3.000
+
+
+
+EXECUTION TIME       =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+
+
+USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
+      Free Demo, +1 202-342-0180, support@gams.com, www.gams.com DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.gms
+Output     C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.lst
