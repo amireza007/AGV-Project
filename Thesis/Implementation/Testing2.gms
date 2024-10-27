@@ -6,7 +6,7 @@ set j /j1/;
 set c(i,j) /#i.#j/;
 set a /1,2,3,4/;
 set o "llasdjfl" /#c.#a/; !!another way is by writing /(set.c).(set.a)/
-
+set z /z63*z49/;
 c('i1','j1') = no;
 set q(i,j,a);
 alias(i,i_1);
@@ -14,7 +14,7 @@ sets
     p /1/ !!alaskdkjflsdf /3fasdfsdaaaaaasdfdsfi/lk;jasjddfkljsdhf
     v /3/
     ;
-display o;
+display z;
 set l /j1,j2/; !!this is /s/
 set k;
 k(i) = yes;

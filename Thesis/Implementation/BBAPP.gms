@@ -27,20 +27,22 @@ Scalars
         v "AGV speed" /1/
         ;
 Sets
-*       
+       
         i "container index" /i1*i4*/
         j "a duplicate of i" /j1*j4/ !!this is temporary, a better is to write /#i/
+
         m  "QC index" /m1,m2/
         n "A duplicate of j" /n1,n2/ !!this is temporary, a better is to write /#m/
+
         l "AGV index" /l1*l3/
 
 *       0 in a is a virtual starting point
         a   "AGV actions" /a0*a4/
 
         XR  "Vertical Operational Area" /x1*x10/
-        YR  "Horizontal Operational Area" /y1*yR/
-        YS  "Horizontal Seaside Operation Area" /11*14/
-        YL  "Horizontal Path" /1*10/
+        YR  "Horizontal Operational Area" /y1*y14/
+        YS  "Horizontal Seaside Operation Area" /y11*y14/
+        YL  "Horizontal Path" /y1*y10/
 
         
         L(m,i)  "Loading Containers. L is a subset of index i" //

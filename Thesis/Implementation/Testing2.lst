@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/27/24 10:47:54 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/27/24 14:48:41 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -10,7 +10,7 @@ C o m p i l a t i o n
    6  set c(i,j) /#i.#j/;
    7  set a /1,2,3,4/;
    8  set o "llasdjfl" /#c.#a/; !!another way is by writing /(set.c).(set.a)/
-   9   
+   9  set z /z63*z49/;
   10  c('i1','j1') = no;
   11  set q(i,j,a);
   12  alias(i,i_1);
@@ -18,7 +18,7 @@ C o m p i l a t i o n
   14      p /1/ !!alaskdkjflsdf /3fasdfsdaaaaaasdfdsfi/lk;jasjddfkljsdhf
   15      v /3/
   16      ;
-  17  display o;
+  17  display z;
   18  set l /j1,j2/; !!this is /s/
   19  set k;
   20  k(i) = yes;
@@ -49,27 +49,14 @@ C o m p i l a t i o n
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/27/24 10:47:54 Page 2
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/27/24 14:48:41 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-----     17 SET o  llasdjfl
+----     17 SET z  
 
-                 1           2           3           4
-
-i1 .j1         YES         YES         YES         YES
-i2 .j1         YES         YES         YES         YES
-i3 .j1         YES         YES         YES         YES
-i4 .j1         YES         YES         YES         YES
-i5 .j1         YES         YES         YES         YES
-i6 .j1         YES         YES         YES         YES
-i7 .j1         YES         YES         YES         YES
-i8 .j1         YES         YES         YES         YES
-i9 .j1         YES         YES         YES         YES
-i10.j1         YES         YES         YES         YES
-i11.j1         YES         YES         YES         YES
-i12.j1         YES         YES         YES         YES
+z63,    z62,    z61,    z60,    z59,    z58,    z57,    z56,    z55,    z54,    z53,    z52,    z51,    z50,    z49
 
 
 ----     22 SET k  
