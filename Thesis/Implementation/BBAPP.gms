@@ -16,27 +16,29 @@ Sets
               chicago     300
               topeka      275  / ;
 $offtext
-
+*you need to set x_R, y_R, and y_r
 Scalars
         S_Q "switch time for qc between two containers" /2/ !!This is temporarily assumed constants
         x /1/
         y /1/
-        R /10/
-        R /14/
+        x_R /10/
+        y_R /14/
         y_r /10/
         v "AGV speed" /1/
         ;
 Sets
-        i /i1*i4*/
-        m   "QC index" /m1,m2/
+*       
+        i "container index" /i1*i4*/
+        j "a duplicate of i" /j1*j4/ !!this is temporary, a better is to write /#i/
+        m  "QC index" /m1,m2/
+        n "A duplicate of j" /n1,n2/ !!this is temporary, a better is to write /#m/
         l "AGV index" /l1*l3/
-        j(m,i) "set of all container jobs and qc" /#m.#i/
 
 *       0 in a is a virtual starting point
         a   "AGV actions" /a0*a4/
 
-        XR  "Vertical Operational Area" /x1*xR/
-        YR  "Horizontal Operational Area" /x1*yR/
+        XR  "Vertical Operational Area" /x1*x10/
+        YR  "Horizontal Operational Area" /y1*yR/
         YS  "Horizontal Seaside Operation Area" /11*14/
         YL  "Horizontal Path" /1*10/
 
@@ -48,12 +50,13 @@ Sets
 
         
         
-        WT(m,i,a) "set of total actions" /#m.#i.#a/
+        WT(m,i,a) "set of total actions" /#C.#a/
         WV(m,i,a)  "Vertical Actions" //
         WH(m,i,a)  "Horizontal Actions" //
 
 *       or psi_1(m,i,m,i)?
-        psi_1(j,j)   "Sequence of Container jobs for QC" // !!This is in data file
+*very challenging set!
+        psi_1(m,i,m,i)   "Sequence of Container jobs for QC" // !!This is in data file
         psi_2(j,j)   "Sequence of Container jobs for ASC" // !!This is in data file 
         ;
         

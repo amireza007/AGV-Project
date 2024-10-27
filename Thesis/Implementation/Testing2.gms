@@ -1,9 +1,21 @@
+
 $onEolCom
 scalar r /10/;
 set i "set of all" / i1*i12 /;
+set j /j1/;
+set c(i,j) /#i.#j/;
+set a /1,2,3,4/;
+set o "llasdjfl" /#c.#a/; !!another way is by writing /(set.c).(set.a)/
+
+c('i1','j1') = no;
+set q(i,j,a);
 alias(i,i_1);
-set c(i,i) /i1.i2/;
-set j /j1,j2/;
+sets
+    p /1/ !!alaskdkjflsdf /3fasdfsdaaaaaasdfdsfi/lk;jasjddfkljsdhf
+    v /3/
+    ;
+display o;
+set l /j1,j2/; !!this is /s/
 set k;
 k(i) = yes;
 k(j) = yes;
