@@ -78,7 +78,7 @@ Parameters
         O(j) //
         A_L(j) //
         A_R(j) //
-        G_Q(j) //
+        G_Q(j) // !!seems to be constant for all container jobs, bc of const 24
         G_Y(j) //
         ;
 
@@ -92,7 +92,7 @@ $offtext
 
 Binary Variables
 
-        Z(j_1,j_2,l)        "QC double cycling"
+        Z(j_1,j_2,l)        "used mainly for handling QC double cycling"
         U_AGV(j_1,j_2)      "conducted before" 
         U_QC(j,WT)          "conducted before"
         
