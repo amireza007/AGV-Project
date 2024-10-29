@@ -31,8 +31,8 @@ Sets
         i "container index" /i1*i4*/
         j "a duplicate of i" /j1*j4/ !!this is temporary, a better is to write /#i/
 
-        m  "QC index" /m1,m2/
-        n "A duplicate of j" /n1,n2/ !!this is temporary, a better is to write /#m/
+        m   "QC index" /m1,m2/
+        n   "A duplicate of j" /n1,n2/ !!this is temporary, a better is to write /#m/
 
         l "AGV index" /l1*l3/
 
@@ -58,8 +58,8 @@ Sets
 
 *       or psi_1(m,i,m,i)?
 *very challenging set!
-        psi_1(m,i,m,i)   "Sequence of Container jobs for QC" // !!This is in data file
-        psi_2(j,j)   "Sequence of Container jobs for ASC" // !!This is in data file 
+        psi_1(m,i,n,j)   "Sequence of Container jobs for QC" // !!This is in data file. This identifies the container job sequence, (in a form of 2d graph?)
+        psi_2(m,i,n,j)   "Sequence of Container jobs for ASC" // !!This is in data file. 
         ;
         
 alias(l,B); !!set of All AGVs, merely a duplicate of l
