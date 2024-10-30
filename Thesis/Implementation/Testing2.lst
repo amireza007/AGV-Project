@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/27/24 14:48:41 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/30/24 15:20:41 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -9,7 +9,10 @@ C o m p i l a t i o n
    5  set j /j1/;
    6  set c(i,j) /#i.#j/;
    7  set a /1,2,3,4/;
-   8  set o "llasdjfl" /#c.#a/; !!another way is by writing /(set.c).(set.a)/
+   8  set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
+****                     $508
+**** 508  Blank needed between element and text
+****        (-or- illegal character in element)
    9  set z /z63*z49/;
   10  c('i1','j1') = no;
   11  set q(i,j,a);
@@ -47,37 +50,10 @@ C o m p i l a t i o n
       u(i) $ (s(i) and u(i) and t(i)) = s(i);
       u(i) $ (s(i) or v(i) or t(i))   = 4;
 
+**** 1 ERROR(S)   0 WARNING(S)
+
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/27/24 14:48:41 Page 2
-G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-E x e c u t i o n
-
-
-----     17 SET z  
-
-z63,    z62,    z61,    z60,    z59,    z58,    z57,    z56,    z55,    z54,    z53,    z52,    z51,    z50,    z49
-
-
-----     22 SET k  
-
-i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12,    j1 
-
-
-----     31 PARAMETER d                    =        2.000  
-
-----     34 PARAMETER f  hi
-
-i1    1.000,    i2    1.000,    i3    2.000,    i4    3.000,    i5    5.000,    i6    8.000,    i7   13.000,    i8   21.000,    i9   34.000,    i10  55.000,    i11  89.000,    i12 144.000
-
-
-----     34 PARAMETER g  
-
-i1  1.000,    i2  3.000,    i3  3.000,    i4  3.000,    i5  3.000,    i6  3.000,    i7  3.000,    i8  3.000,    i9  3.000,    i10 3.000,    i11 3.000,    i12 3.000
-
-
-
-EXECUTION TIME       =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
 
 
 USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
@@ -88,3 +64,5 @@ USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
 
 Input      C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.gms
 Output     C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.lst
+
+**** USER ERROR(S) ENCOUNTERED

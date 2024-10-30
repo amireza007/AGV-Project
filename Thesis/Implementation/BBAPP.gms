@@ -18,7 +18,7 @@ Sets
 $offtext
 *you need to set x_R, y_R, and y_r
 Scalars
-        S_Q "switch time for qc between two containers" /2/ !!This is temporarily assumed constants
+        S_Q "switch time for qc between two containers" /2/ !!This is temporarily assumed constant
         x /1/
         y /1/
         x_R /10/
@@ -44,7 +44,6 @@ Sets
         YS  "Horizontal Seaside Operation Area" /y11*y14/
         YL  "Horizontal Path" /y1*y10/
 
-        
         L(m,i)  "Loading Containers. L is a subset of index i" //
         D(m,i) "Unloading Containers. U is a subset of index i" // 
         C   "All  Containers" /C+D/ $ "this is in data file"
@@ -58,7 +57,7 @@ Sets
 
 *       or psi_1(m,i,m,i)?
 *very challenging set!
-        psi_1(m,i,n,j)   "Sequence of Container jobs for QC" // !!This is in data file. This identifies the container job sequence, (in a form of 2d graph?)
+        psi_1(m,i,n,j)   "Sequence of Container jobs for QC" // !!This is in data file. This identifies the container job sequence, (in a form of 2d graph?)idk
         psi_2(m,i,n,j)   "Sequence of Container jobs for ASC" // !!This is in data file. 
         ;
         
@@ -102,7 +101,7 @@ Binary Variables
         P_X(WV,x) "Start H loc"
         P_Y(WH,y) "Start H loc";
 
-Variables
+Positive Variables:
 
 *       Time related variables
         T_Q(m,i) "start time of QC"
@@ -119,9 +118,54 @@ Variables
 *  Positive Variable x ;
 
 Equations
-        cost        define objective function
-        supply(i)   observe supply limit at plant i
-        demand(j)   satisfy demand at market j ;
+        ADRP        1st equation, AGV Dispatching and Routing Problem
+
+*       Job assignment constraints
+        eq_2(C)     Equation 2
+        eq_3(C,B)
+        eq_4(B)
+        eq_4(L)
+        eq_5(D)
+        eq_6(L)
+        eq_7(D)
+        eq_8(C,C,XR)
+        eq_9(C,C,YR)
+        eq_10(C,a)
+        eq_11(C,a)
+        eq_12(L)
+        eq_13(D)
+        eq_14(D)
+        eq_15(L)
+        eq_16(D)
+        eq_17(L)
+        eq_18(L)
+        eq_19(D)
+        eq_20(WH,YR)
+        eq_21(WV,XR)
+        eq_22(C,C)
+        eq_23(WH,YR,XR)
+        eq_24(C, WH)
+        eq_25(C, WH)
+        eq_26(WH,YS,D)  !!for alpha = 0
+        eq_26_prime(L)  !!for alpha = 3, try the actual definintin of the equation with conditions and ord(I)
+        eq_27(WV, XR)
+        eq_28(C,a)      !!alpha>2
+        eq_29(C,C)      !! two consecutive containers, i and i+1
+        eq_30(psi_1)
+        eq_31(psi_2)
+        eq_32(D)
+        eq_33(L)
+        eq_34(D,L)
+        eq_35(L,D)
+        eq_36(D,a)      !!alpha=4
+        eq_36_prime(L,a)!!alpha=1
+        eq_37(D,a)      !!alpha=1
+        eq_37_prime(L,a)!!alpha=4
+        eq_38(WT,WT)
+        eq_39(C,a,XR)
+        eq_40(C,a,YR)
+        eq_41(C,C,a,a)
+        
 
 cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
 

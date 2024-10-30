@@ -5,7 +5,7 @@ set i "set of all" / i1*i12 /;
 set j /j1/;
 set c(i,j) /#i.#j/;
 set a /1,2,3,4/;
-set o "llasdjfl" /#c.#a/; !!another way is by writing /(set.c).(set.a)/
+set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
 set z /z63*z49/;
 c('i1','j1') = no;
 set q(i,j,a);
