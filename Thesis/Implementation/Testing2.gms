@@ -5,13 +5,13 @@ set i "set of all" / i1*i12 /;
 set j /j1/;
 set c(i,j) /#i.#j/;
 set a /1,2,3,4/;
-set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
+*set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
 set z /z63*z49/;
 c('i1','j1') = no;
 set q(i,j,a);
 alias(i,i_1);
 sets
-    p /1/ !!alaskdkjflsdf /3fasdfsdaaaaaasdfdsfi/lk;jasjddfkljsdhf
+    p /1/ !!alaskdkjflsdf /3fasdfsdaaaaaasdfdsfi/
     v /3/
     ;
 display z;
@@ -32,6 +32,16 @@ display d;
 !! trying to display set
 g(i)$(ord(i)>=2) = 3; !! what an stupid language, eh??
 display f,g;
+variable n;
+set t /t1/;
+set u(i,j) /i1.j1, i2.j1/;
+$ontext
+Equations
+    cnst(ij);
+alias(t,y);
+cnst(ij)..      n =e= sum((i,j) ,1);
+$offtext
+
 $ontext
 Set       i     / i1*i5 /;
 Parameter s(i)  / i1 3, i2 5, i4 8 /

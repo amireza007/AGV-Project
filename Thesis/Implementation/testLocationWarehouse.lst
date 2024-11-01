@@ -1,0 +1,424 @@
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 18:26:13 Page 1
+Location - Simple Warehouse Location Model
+C o m p i l a t i o n
+
+
+   2   
+      There are two supply locations, two markets and three possible warehouse
+      locations. Only one warehouse may be built. The aim is to find the optimal
+      location for the warehouse given the building cost, capacity and projected
+      life for each warehouse and the transportation costs between the supply
+      locations, the warehouses and the markets. The total cost of building
+      the warehouse and transportation is minimized.
+      This model was adapted from Bruce McCarl's model called "model".
+  12   
+  13  Sets
+  14    sl                      'supply locations'               /s1, s2/
+  15    wh                      'warehouse locations'            /a, b, c/
+  16    m                       'demand markets'                 /d1, d2/
+  17    cat                     'categories for warehouse data'  /cost, capacity, life/;
+  18   
+  19  Parameters
+  20    supply(sl)              'quantity available at each supply location (units)'
+  21      /s1 50, s2 75/
+  22    demand(m)               'quantity required at demand market (units)'
+  23      /d1 75, d2 50/ ;
+  24   
+  25  Table
+  26    cost_sm(sl,m)           'transportation cost for supply location to market (dollars per unit)'
+  27               d1      d2
+  28       s1      4       8
+  29       s2      7       6   ;
+  30   
+  31  Table
+  32    cost_sw(sl,wh)          'transportation cost for supply location to warehouse (dollars per unit)'
+  33               a       b      c
+  34       s1      1       2      8
+  35       s2      6       3      1    ;
+  36   
+  37  Table
+  38    cost_wm(wh,m)           'transportation cost for warehouse to market (dollars per unit)'
+  39               d1      d2
+  40       a       4       6
+  41       b       3       4
+  42       c       5       3     ;
+  43   
+  44  Table
+  45    data(wh,cat)            'data for warehouses, cost in dollars, capacity in units, life in years'
+  46                cost   capacity   life
+  47       a        500     999        10
+  48       b        720      60        12
+  49       c        680      70        10    ;
+  50   
+  51  Variables
+  52    tcost                   'total cost of shipping over all routes (dollars)';
+  53  Binary Variables
+  54    build(wh)               'warehouse construction yes or no';
+  55  Positive Variables
+  56    ship_sw(sl,wh)          'amount shipped to warehouse (units)'
+  57      /s1.a.l 5/
+  58    ship_wm(wh,m)           'amount shipped from warehouse (units)';
+  59  Nonnegative Variables
+  60    ship_sm(sl,m)           'amount shipped directly to market (units)';
+  61   
+  62  Equations
+  63    tcost_eq                'total cost accounting equation (dollars)'
+  64    supply_eq(sl)           'limit on available supply at supply location'
+  65    demand_eq(m)            'minimum requirement at demand market'
+  66    balance_eq(wh)          'warehouse supply demand balance'
+  67    capacity_eq(wh)         'warehouse capacity'
+  68      /a.scale 50, a.l 10, b.m 20/
+  69    configure_eq            'only one warehouse';
+  70   
+  71  ship_sw.up(sl,wh)= 1000;
+  72  ship_wm.scale(wh,m)= 50;
+  73  ship_sm.lo(sl,m)$(ord(sl) eq 1 and ord(m) eq 1) = 1;
+  74   
+  75   
+  76  tcost_eq..
+  77    tcost =e=
+  78      sum(wh, data(wh,"cost")/data(wh,"life")*build(wh))
+  79      + sum((sl,m), ship_sm(sl,m)*cost_sm(sl,m))
+  80      + sum((sl,wh), ship_sw(sl,wh)*cost_sw(sl,wh))
+  81      + sum((wh,m), ship_wm(wh,m)*cost_wm(wh,m));
+  82   
+  83  supply_eq(sl)..
+  84    sum(m, ship_sm(sl,m)) + sum(wh, ship_sw(sl,wh)) =l= supply(sl);
+  85   
+  86  demand_eq(m)..
+  87    sum(sl, ship_sm(sl,m)) + sum(wh,ship_wm(wh,m)) =g= demand(m);
+  88   
+  89  balance_eq(wh)..
+  90    sum(m, ship_wm(wh,m)) - sum(sl, ship_sw(sl,wh)) =l= 0;
+  91   
+  92  capacity_eq(wh)..
+  93    sum(m, ship_wm(wh,m))  =l= build(wh)*data(wh,"capacity") ;
+  94   
+  95  configure_eq..  sum(wh, build(wh)) =l= 1;
+  96   
+  97  Model warehouse 'warehouse location model'  /all/;
+  98   
+  99  solve warehouse using mip min tcost;
+ 100   
+ 101  display build.l;
+ 102   
+ 103  display supply_eq.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 18:26:13 Page 2
+Location - Simple Warehouse Location Model
+Equation Listing    SOLVE warehouse Using MIP From line 99
+
+
+---- tcost_eq  =E=  total cost accounting equation (dollars)
+
+tcost_eq..  tcost - 50*build(a) - 60*build(b) - 68*build(c) - ship_sw(s1,a) - 2*ship_sw(s1,b) - 8*ship_sw(s1,c) - 6*ship_sw(s2,a) - 3*ship_sw(s2,b) - ship_sw(s2,c) - 4*ship_wm(a,d1) - 6*ship_wm(a,d2) - 3*ship_wm(b,d1) - 4*ship_wm(b,d2) - 5*ship_wm(c,d1)
+     
+      - 3*ship_wm(c,d2) - 4*ship_sm(s1,d1) - 8*ship_sm(s1,d2) - 7*ship_sm(s2,d1) - 6*ship_sm(s2,d2) =E= 0 ; (LHS = -9, INFES = 9 ****)
+     
+
+---- supply_eq  =L=  limit on available supply at supply location
+
+supply_eq(s1)..  ship_sw(s1,a) + ship_sw(s1,b) + ship_sw(s1,c) + ship_sm(s1,d1) + ship_sm(s1,d2) =L= 50 ; (LHS = 6)
+     
+supply_eq(s2)..  ship_sw(s2,a) + ship_sw(s2,b) + ship_sw(s2,c) + ship_sm(s2,d1) + ship_sm(s2,d2) =L= 75 ; (LHS = 0)
+     
+
+---- demand_eq  =G=  minimum requirement at demand market
+
+demand_eq(d1)..  ship_wm(a,d1) + ship_wm(b,d1) + ship_wm(c,d1) + ship_sm(s1,d1) + ship_sm(s2,d1) =G= 75 ; (LHS = 1, INFES = 74 ****)
+     
+demand_eq(d2)..  ship_wm(a,d2) + ship_wm(b,d2) + ship_wm(c,d2) + ship_sm(s1,d2) + ship_sm(s2,d2) =G= 50 ; (LHS = 0, INFES = 50 ****)
+     
+
+---- balance_eq  =L=  warehouse supply demand balance
+
+balance_eq(a)..  - ship_sw(s1,a) - ship_sw(s2,a) + ship_wm(a,d1) + ship_wm(a,d2) =L= 0 ; (LHS = -5)
+     
+balance_eq(b)..  - ship_sw(s1,b) - ship_sw(s2,b) + ship_wm(b,d1) + ship_wm(b,d2) =L= 0 ; (LHS = 0)
+     
+balance_eq(c)..  - ship_sw(s1,c) - ship_sw(s2,c) + ship_wm(c,d1) + ship_wm(c,d2) =L= 0 ; (LHS = 0)
+     
+
+---- capacity_eq  =L=  warehouse capacity
+
+capacity_eq(a)..  - 999*build(a) + ship_wm(a,d1) + ship_wm(a,d2) =L= 0 ; (LHS = 0)
+     
+capacity_eq(b)..  - 60*build(b) + ship_wm(b,d1) + ship_wm(b,d2) =L= 0 ; (LHS = 0)
+     
+capacity_eq(c)..  - 70*build(c) + ship_wm(c,d1) + ship_wm(c,d2) =L= 0 ; (LHS = 0)
+     
+
+---- configure_eq  =L=  only one warehouse
+
+configure_eq..  build(a) + build(b) + build(c) =L= 1 ; (LHS = 0)
+     
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 18:26:13 Page 3
+Location - Simple Warehouse Location Model
+Column Listing      SOLVE warehouse Using MIP From line 99
+
+
+---- tcost  total cost of shipping over all routes (dollars)
+
+tcost
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       tcost_eq
+
+
+---- build  warehouse construction yes or no
+
+build(a)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+      -50       tcost_eq
+     -999       capacity_eq(a)
+        1       configure_eq
+
+build(b)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+      -60       tcost_eq
+      -60       capacity_eq(b)
+        1       configure_eq
+
+build(c)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+      -68       tcost_eq
+      -70       capacity_eq(c)
+        1       configure_eq
+
+
+---- ship_sw  amount shipped to warehouse (units)
+
+ship_sw(s1,a)
+                (.LO, .L, .UP, .M = 0, 5, 1000, 0)
+       -1       tcost_eq
+        1       supply_eq(s1)
+       -1       balance_eq(a)
+
+ship_sw(s1,b)
+                (.LO, .L, .UP, .M = 0, 0, 1000, 0)
+       -2       tcost_eq
+        1       supply_eq(s1)
+       -1       balance_eq(b)
+
+ship_sw(s1,c)
+                (.LO, .L, .UP, .M = 0, 0, 1000, 0)
+       -8       tcost_eq
+        1       supply_eq(s1)
+       -1       balance_eq(c)
+
+REMAINING 3 ENTRIES SKIPPED
+
+---- ship_wm  amount shipped from warehouse (units)
+
+ship_wm(a,d1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -4       tcost_eq
+        1       demand_eq(d1)
+        1       balance_eq(a)
+        1       capacity_eq(a)
+
+ship_wm(a,d2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -6       tcost_eq
+        1       demand_eq(d2)
+        1       balance_eq(a)
+        1       capacity_eq(a)
+
+ship_wm(b,d1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -3       tcost_eq
+        1       demand_eq(d1)
+        1       balance_eq(b)
+        1       capacity_eq(b)
+
+REMAINING 3 ENTRIES SKIPPED
+
+---- ship_sm  amount shipped directly to market (units)
+
+ship_sm(s1,d1)
+                (.LO, .L, .UP, .M = 1, 1, +INF, 0)
+       -4       tcost_eq
+        1       supply_eq(s1)
+        1       demand_eq(d1)
+        0       (OLD LEVEL ****)
+
+ship_sm(s1,d2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -8       tcost_eq
+        1       supply_eq(s1)
+        1       demand_eq(d2)
+
+ship_sm(s2,d1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -7       tcost_eq
+        1       supply_eq(s2)
+        1       demand_eq(d1)
+
+REMAINING ENTRY SKIPPED
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 18:26:13 Page 4
+Location - Simple Warehouse Location Model
+Model Statistics    SOLVE warehouse Using MIP From line 99
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           6     SINGLE EQUATIONS           12
+BLOCKS OF VARIABLES           5     SINGLE VARIABLES           20  1 projected
+NON ZERO ELEMENTS            64     DISCRETE VARIABLES          3
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+
+
+EXECUTION TIME       =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 18:26:13 Page 5
+Location - Simple Warehouse Location Model
+Solution Report     SOLVE warehouse Using MIP From line 99
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   warehouse           OBJECTIVE  tcost
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  XPRESS              FROM LINE  99
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE              623.0000
+
+ RESOURCE USAGE, LIMIT          8.406      1000.000
+ ITERATION COUNT, LIMIT        12    2000000000
+
+FICO-Xpress      25.1.2 r67420 Released Jul 31, 2018 WEI x86 64bit/MS Windows 
+
+Xpress Optimizer 32.01
+Xpress Solver 64bit v8.4.7 Apr  4 2018
+fixing discrete vars and re-solving as an LP.
+fixed LP solved successfully, objective = 623.
+Integer solution proven optimal.
+MIP solution  :        623.000000
+Best possible :        623.000000
+Absolute gap  :          0.000000     optca :          0.000000
+Relative gap  :          0.000000     optcr :          0.100000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU tcost_eq            .              .              .             1.0000      
+
+  tcost_eq  total cost accounting equation (dollars)
+
+---- EQU supply_eq  limit on available supply at supply location
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+s1        -INF           50.0000        50.0000        -3.0000      
+s2        -INF           75.0000        75.0000          .          
+
+---- EQU demand_eq  minimum requirement at demand market
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+d1        75.0000        75.0000        +INF            7.0000      
+d2        50.0000        50.0000        +INF            5.0000      
+
+---- EQU balance_eq  warehouse supply demand balance
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+a        -INF             .              .              .          
+b        -INF             .              .              .          
+c        -INF             .              .            -1.0000      
+
+---- EQU capacity_eq  warehouse capacity
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+a        -INF             .              .            -3.0000      
+b        -INF             .              .            -4.0000      
+c        -INF             .              .            -1.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU configure~        -INF            1.0000         1.0000          .          
+
+  configure_eq  only one warehouse
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR tcost             -INF          623.0000        +INF             .          
+
+  tcost  total cost of shipping over all routes (dollars)
+
+---- VAR build  warehouse construction yes or no
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+a          .              .             1.0000     -2947.0000      
+b          .              .             1.0000      -180.0000      
+c          .             1.0000         1.0000        -2.0000      
+
+---- VAR ship_sw  amount shipped to warehouse (units)
+
+            LOWER          LEVEL          UPPER         MARGINAL
+
+s1.a          .              .          1000.0000         4.0000      
+s1.b          .              .          1000.0000         5.0000      
+s1.c          .              .          1000.0000        10.0000      
+s2.a          .              .          1000.0000         6.0000      
+s2.b          .              .          1000.0000         3.0000      
+s2.c          .            70.0000      1000.0000          .          
+
+---- VAR ship_wm  amount shipped from warehouse (units)
+
+            LOWER          LEVEL          UPPER         MARGINAL
+
+a.d1          .              .            +INF             .          
+a.d2          .              .            +INF            4.0000      
+b.d1          .              .            +INF             .          
+b.d2          .              .            +INF            3.0000      
+c.d1          .            20.0000        +INF             .          
+c.d2          .            50.0000        +INF             .          
+
+---- VAR ship_sm  amount shipped directly to market (units)
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+s1.d1         1.0000        50.0000        +INF             .          
+s1.d2          .              .            +INF            6.0000      
+s2.d1          .             5.0000        +INF             .          
+s2.d2          .              .            +INF            1.0000      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 18:26:13 Page 6
+Location - Simple Warehouse Location Model
+E x e c u t i o n
+
+
+----    101 VARIABLE build.L  warehouse construction yes or no
+
+c 1.000
+
+
+----    103 EQUATION supply_eq.L  limit on available supply at supply location
+
+s1 50.000,    s2 75.000
+
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+
+
+USER: EWEPA 2015 Eval License                        S150430/0001AO-GEN
+      The 14th European Workshop on Efficiency and Productivity DC11746
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\testLocationWarehouse.gms
+Output     C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\testLocationWarehouse.lst

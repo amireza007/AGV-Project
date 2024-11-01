@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/30/24 15:20:41 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/31/24 14:07:02 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -9,16 +9,13 @@ C o m p i l a t i o n
    5  set j /j1/;
    6  set c(i,j) /#i.#j/;
    7  set a /1,2,3,4/;
-   8  set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
-****                     $508
-**** 508  Blank needed between element and text
-****        (-or- illegal character in element)
+   8  *set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
    9  set z /z63*z49/;
   10  c('i1','j1') = no;
   11  set q(i,j,a);
   12  alias(i,i_1);
   13  sets
-  14      p /1/ !!alaskdkjflsdf /3fasdfsdaaaaaasdfdsfi/lk;jasjddfkljsdhf
+  14      p /1/ !!alaskdkjflsdf /3fasdfsdaaaaaasdfdsfi/
   15      v /3/
   16      ;
   17  display z;
@@ -39,6 +36,36 @@ C o m p i l a t i o n
   32  !! trying to display set
   33  g(i)$(ord(i)>=2) = 3; !! what an stupid language, eh??
   34  display f,g;
+  35  variable n;
+  36  set t /t1/;
+  37  Set
+  38      ij /i1.j1, i2.j1/;
+  39   
+  40  Parameter
+  41      a(ij) /i1.j1 10, i2.j1 20/;
+****      $195,122,318,409
+**** 122  One dimensional set expected
+**** 195  Symbol redefined with a different type
+**** 318  Domain list redefined - no previous domain list - * assumed
+****         when data was associated with this symbol
+**** 409  Unrecognizable item - skip to find a new statement
+****        looking for a ';' or a key word to get started again
+  42   
+  43  Variable
+  44      x(ij);
+****         $122
+**** 122  One dimensional set expected
+  45   
+  46  Equation
+  47      eq(ij);
+****          $122
+**** 122  One dimensional set expected
+  48   
+  49  eq(ij).. x(ij) =e= a(ij);
+****       $148    $148      $148,654
+**** 148  Dimension different - The symbol is referenced with more/less
+****         indices as declared
+**** 654  The right side of an equation cannot be a set expression
       Set       i     / i1*i5 /;
       Parameter s(i)  / i1 3, i2 5, i4 8 /
                 t(i)  / i1*i4 13 /
@@ -50,7 +77,7 @@ C o m p i l a t i o n
       u(i) $ (s(i) and u(i) and t(i)) = s(i);
       u(i) $ (s(i) or v(i) or t(i))   = 4;
 
-**** 1 ERROR(S)   0 WARNING(S)
+**** 10 ERROR(S)   0 WARNING(S)
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI

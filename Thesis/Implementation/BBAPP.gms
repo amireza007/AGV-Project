@@ -165,14 +165,8 @@ Equations
         eq_39(C,a,XR)
         eq_40(C,a,YR)
         eq_41(C,C,a,a)
-        
-
-cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
-
-supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;
-
-demand(j) ..   sum(i, x(i,j))  =g=  b(j) ;
-
+        ;
+eq_2(C).. 
 Model transport /all/ ;
 
 Solve transport using lp minimizing z ;

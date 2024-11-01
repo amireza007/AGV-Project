@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 02:54:30 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/31/24 13:34:47 Page 1
 A Transportation Problem (TRNSPORT,SEQ=1)
 C o m p i l a t i o n
 
@@ -56,7 +56,7 @@ C o m p i l a t i o n
   54    Equations
   55         cost        define objective function
   56         supply(i)   observe supply limit at plant i
-  57         demand(j)   satisfy demand at market j ;
+  57         demand(j)   satisfy demand at market  ;
   58   
   59    cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
   60   
@@ -72,8 +72,8 @@ C o m p i l a t i o n
   70   
 
 
-COMPILATION TIME     =        0.016 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 02:54:30 Page 2
+COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/31/24 13:34:47 Page 2
 A Transportation Problem (TRNSPORT,SEQ=1)
 Equation Listing    SOLVE transport Using LP From line 67
 
@@ -90,7 +90,7 @@ supply(seattle)..  x(seattle,new-york) + x(seattle,chicago) + x(seattle,topeka) 
 supply(san-diego)..  x(san-diego,new-york) + x(san-diego,chicago) + x(san-diego,topeka) + x(san-diego,Tehran) =L= 69 ; (LHS = 0)
      
 
----- demand  =G=  satisfy demand at market j
+---- demand  =G=  satisfy demand at market
 
 demand(new-york)..  x(seattle,new-york) + x(san-diego,new-york) =G= 325 ; (LHS = 0, INFES = 325 ****)
      
@@ -100,7 +100,7 @@ demand(topeka)..  x(seattle,topeka) + x(san-diego,topeka) =G= 275 ; (LHS = 0, IN
      
 REMAINING ENTRY SKIPPED
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 02:54:30 Page 3
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/31/24 13:34:47 Page 3
 A Transportation Problem (TRNSPORT,SEQ=1)
 Column Listing      SOLVE transport Using LP From line 67
 
@@ -133,7 +133,7 @@ z
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       cost
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 02:54:30 Page 4
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/31/24 13:34:47 Page 4
 A Transportation Problem (TRNSPORT,SEQ=1)
 Model Statistics    SOLVE transport Using LP From line 67
 
@@ -149,7 +149,7 @@ GENERATION TIME      =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
 
 
 EXECUTION TIME       =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 02:54:30 Page 5
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/31/24 13:34:47 Page 5
 A Transportation Problem (TRNSPORT,SEQ=1)
 Solution Report     SOLVE transport Using LP From line 67
 
@@ -176,7 +176,7 @@ No solution will be returned
 LP is infeasible
 
 No solution returned
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 02:54:30 Page 6
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/31/24 13:34:47 Page 6
 A Transportation Problem (TRNSPORT,SEQ=1)
 E x e c u t i o n
 
@@ -195,9 +195,8 @@ E x e c u t i o n
 EXECUTION TIME       =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
 
 
-USER: EWEPA 2015 Eval License                        S150430/0001AO-GEN
-      The 14th European Workshop on Efficiency and Productivity DC11746
-      License for teaching and research at degree granting institutions
+USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
+      Free Demo, +1 202-342-0180, support@gams.com, www.gams.com DC0000
 
 
 **** FILE SUMMARY
