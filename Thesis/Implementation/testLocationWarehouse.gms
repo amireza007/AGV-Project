@@ -54,7 +54,7 @@ Binary Variables
   build(wh)               'warehouse construction yes or no';
 Positive Variables
   ship_sw(sl,wh)          'amount shipped to warehouse (units)'
-    /s1.a.l 5/
+    /s1.a.l 1/
   ship_wm(wh,m)           'amount shipped from warehouse (units)';
 Nonnegative Variables
   ship_sm(sl,m)           'amount shipped directly to market (units)';
