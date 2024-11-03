@@ -91,7 +91,7 @@ $offtext
 
 Binary Variables
 
-        Z(j_1,j_2,l)        "used mainly for handling QC double cycling"
+        Z(m,i,l)        "used mainly for handling QC double cycling"
         U_AGV(j_1,j_2)      "conducted before" 
         U_QC(j,WT)          "conducted before"
         
@@ -121,52 +121,53 @@ Equations
         ADRP        1st equation, AGV Dispatching and Routing Problem
 
 *       Job assignment constraints
-        eq_2(C)     Equation 2
-        eq_3(C,B)
-        eq_4(B)
-        eq_4(L)
-        eq_5(D)
-        eq_6(L)
-        eq_7(D)
-        eq_8(C,C,XR)
-        eq_9(C,C,YR)
-        eq_10(C,a)
-        eq_11(C,a)
-        eq_12(L)
-        eq_13(D)
-        eq_14(D)
-        eq_15(L)
-        eq_16(D)
-        eq_17(L)
-        eq_18(L)
-        eq_19(D)
-        eq_20(WH,YR)
-        eq_21(WV,XR)
-        eq_22(C,C)
-        eq_23(WH,YR,XR)
-        eq_24(C, WH)
-        eq_25(C, WH)
-        eq_26(WH,YS,D)  !!for alpha = 0
-        eq_26_prime(L)  !!for alpha = 3, try the actual definintin of the equation with conditions and ord(I)
-        eq_27(WV, XR)
-        eq_28(C,a)      !!alpha>2
-        eq_29(C,C)      !! two consecutive containers, i and i+1
-        eq_30(psi_1)
-        eq_31(psi_2)
-        eq_32(D)
-        eq_33(L)
-        eq_34(D,L)
-        eq_35(L,D)
-        eq_36(D,a)      !!alpha=4
-        eq_36_prime(L,a)!!alpha=1
-        eq_37(D,a)      !!alpha=1
-        eq_37_prime(L,a)!!alpha=4
-        eq_38(WT,WT)
-        eq_39(C,a,XR)
-        eq_40(C,a,YR)
-        eq_41(C,C,a,a)
+        eq_2               C            Equation 2(C)
+        eq_3               C,B      
+        eq_4               B         
+        eq_4               L         
+        eq_5               D         
+        eq_6               L         
+        eq_7               D         
+        eq_8               C,C,XR        
+        eq_9               C,C,YR    
+        eq_10              C,a     
+        eq_11              C,a      
+        eq_12              L        
+        eq_13              D        
+        eq_14              D        
+        eq_15              L
+        eq_16              D
+        eq_17              L
+        eq_18              L
+        eq_19              D
+        eq_20              WH,YR
+        eq_21              WV,XR
+        eq_22              C,C
+        eq_23              WH,YR,XR
+        eq_24              C, WH
+        eq_25              C, WH
+        eq_26              WH,YS,D  !!for alpha = 0
+        eq_26_prime        L  !!for alpha = 3, try the actual definintin of the equation with conditions and ord(I)
+        eq_27              WV, XR
+        eq_28              C,a      !!alpha>2
+        eq_29              C,C      !! two consecutive containers, i and i+1
+        eq_30              psi_1
+        eq_31              psi_2
+        eq_32              D
+        eq_33              L
+        eq_34              D,L
+        eq_35              L,D
+        eq_36              D,a      !!alpha=4
+        eq_36_prime        L,a     !!alpha=1
+        eq_37              D,a      !!alpha=1
+        eq_37_prime        L,a     !!alpha=4
+        eq_38              WT,WT
+        eq_39              C,a,XR
+        eq_40              C,a,YR
+        eq_41              C,C,a,a
         ;
-eq_2(C).. 
+
+eq_2.. sum((m,i) $(C(m,i)), 
 Model transport /all/ ;
 
 Solve transport using lp minimizing z ;

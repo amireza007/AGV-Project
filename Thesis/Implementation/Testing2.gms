@@ -26,31 +26,14 @@ parameter
 loop(i$(ord(i)>=2),
   f(i) = f(i-2) + f(i-1);
 );
-scalar d;
-d=2;
-display d;
-!! trying to display set
-g(i)$(ord(i)>=2) = 3; !! what an stupid language, eh??
-display f,g;
-variable n;
-set t /t1/;
-set u(i,j) /i1.j1, i2.j1/;
-$ontext
-Equations
-    cnst(ij);
-alias(t,y);
-cnst(ij)..      n =e= sum((i,j) ,1);
-$offtext
 
-$ontext
-Set       i     / i1*i5 /;
-Parameter s(i)  / i1 3, i2 5, i4 8 /
-          t(i)  / i1*i4 13 /
-          u(i)  / i2 1 /
-          v(i)  / i1 7, i3 2, i5 29 /;
+set y(i,j) /i1.j1, i2.j1/;
+variable x;
+set oi /1/;
+equation eq_2(i,j);
+eq_2(i,j) $(y(i,j)).. x $(y(i,j))  =e= sum(oi, 10);
 
-u(i) $ (not s(i))               = v(i);
-*display u;
-u(i) $ (s(i) and u(i) and t(i)) = s(i);
-u(i) $ (s(i) or v(i) or t(i))   = 4;
-$offtext
+equation eq_1;
+eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
+Model ww /all/;
+solve ww using lp minimizing x;

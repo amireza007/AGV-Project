@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 10/31/24 14:07:02 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/03/24 14:26:38 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -30,57 +30,109 @@ C o m p i l a t i o n
   26  loop(i$(ord(i)>=2),
   27    f(i) = f(i-2) + f(i-1);
   28  );
-  29  scalar d;
-  30  d=2;
-  31  display d;
-  32  !! trying to display set
-  33  g(i)$(ord(i)>=2) = 3; !! what an stupid language, eh??
-  34  display f,g;
-  35  variable n;
-  36  set t /t1/;
-  37  Set
-  38      ij /i1.j1, i2.j1/;
-  39   
-  40  Parameter
-  41      a(ij) /i1.j1 10, i2.j1 20/;
-****      $195,122,318,409
-**** 122  One dimensional set expected
-**** 195  Symbol redefined with a different type
-**** 318  Domain list redefined - no previous domain list - * assumed
-****         when data was associated with this symbol
-**** 409  Unrecognizable item - skip to find a new statement
-****        looking for a ';' or a key word to get started again
-  42   
-  43  Variable
-  44      x(ij);
-****         $122
-**** 122  One dimensional set expected
-  45   
-  46  Equation
-  47      eq(ij);
-****          $122
-**** 122  One dimensional set expected
-  48   
-  49  eq(ij).. x(ij) =e= a(ij);
-****       $148    $148      $148,654
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
-**** 654  The right side of an equation cannot be a set expression
-      Set       i     / i1*i5 /;
-      Parameter s(i)  / i1 3, i2 5, i4 8 /
-                t(i)  / i1*i4 13 /
-                u(i)  / i2 1 /
-                v(i)  / i1 7, i3 2, i5 29 /;
-       
-      u(i) $ (not s(i))               = v(i);
-      *display u;
-      u(i) $ (s(i) and u(i) and t(i)) = s(i);
-      u(i) $ (s(i) or v(i) or t(i))   = 4;
-
-**** 10 ERROR(S)   0 WARNING(S)
+  29   
+  30  set y(i,j) /i1.j1, i2.j1/;
+  31  variable x;
+  32  set oi /1/;
+  33  equation eq_2(i,j);
+  34  eq_2(i,j) $(y(i,j)).. x $(y(i,j))  =e= sum(oi, 10);
+  35   
+  36  equation eq_1;
+  37  eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
+  38  Model ww /all/;
+  39  solve ww using lp minimizing x;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/03/24 14:26:38 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     17 SET z  
+
+z63,    z62,    z61,    z60,    z59,    z58,    z57,    z56,    z55,    z54,    z53,    z52,    z51,    z50,    z49
+
+
+----     22 SET k  
+
+i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12,    j1 
+
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/03/24 14:26:38 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE ww Using LP From line 39
+
+
+---- eq_2  =E=  
+
+eq_2(i1,j1)..  x =E= 10 ; (LHS = 0, INFES = 10 ****)
+     
+eq_2(i2,j1)..  x =E= 10 ; (LHS = 0, INFES = 10 ****)
+     
+
+---- eq_1  =E=  
+
+eq_1..  x =E= 2 ; (LHS = 0, INFES = 2 ****)
+     
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/03/24 14:26:38 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE ww Using LP From line 39
+
+
+---- x  
+
+x
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       eq_2(i1,j1)
+        1       eq_2(i2,j1)
+        1       eq_1
+
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/03/24 14:26:38 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE ww Using LP From line 39
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            3
+BLOCKS OF VARIABLES           1     SINGLE VARIABLES            1
+NON ZERO ELEMENTS             3
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+
+
+EXECUTION TIME       =        0.016 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/03/24 14:26:38 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE ww Using LP From line 39
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   ww                  OBJECTIVE  x
+     TYPE    LP                  DIRECTION  MINIMIZE
+     SOLVER  XPRESS              FROM LINE  39
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      19 Infeasible - No Solution 
+**** OBJECTIVE VALUE                0.0000
+
+ RESOURCE USAGE, LIMIT         NA          1000.000
+ ITERATION COUNT, LIMIT        NA    2000000000
+
+FICO-Xpress      25.1.2 r67420 Released Jul 31, 2018 WEI x86 64bit/MS Windows 
+
+Xpress Optimizer 32.01
+Xpress Solver 64bit v8.4.7 Apr  4 2018
+Presolved LP is infeasible
+No solution will be returned
+LP is infeasible
+
+No solution returned
+
+
+EXECUTION TIME       =        0.000 SECONDS      2 MB  25.1.2 r67455 WEX-WEI
 
 
 USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
@@ -91,5 +143,3 @@ USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
 
 Input      C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.gms
 Output     C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.lst
-
-**** USER ERROR(S) ENCOUNTERED
