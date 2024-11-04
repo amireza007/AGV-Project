@@ -1,11 +1,13 @@
 B 2 C o m p i l a t i o n
-B 48 E x e c u t i o n
-I 49 z
-I 55 k
-B 62 Equation Listing    SOLVE ww Using LP From line 39
-D 63 eq_2
-D 71 eq_1
-B 78 Column Listing      SOLVE ww Using LP From line 39
-E 79 x
-B 91 Model Statistics    SOLVE ww Using LP From line 39
-B 107 Solution Report     SOLVE ww Using LP From line 39
+B 46 Include File Summary
+B 58 E x e c u t i o n
+I 59 k
+I 65 z
+I 70 z1
+B 81 Equation Listing    SOLVE ww Using LP From line 40
+D 82 eq_2
+D 90 eq_1
+B 97 Column Listing      SOLVE ww Using LP From line 40
+E 98 x
+B 110 Model Statistics    SOLVE ww Using LP From line 40
+B 126 Solution Report     SOLVE ww Using LP From line 40

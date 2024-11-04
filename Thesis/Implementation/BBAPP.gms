@@ -1,4 +1,5 @@
 $Title  A branch and bound problem (TRNSPORT,SEQ=1)
+
 $onEolCom
 $ontext
 Sets
@@ -30,12 +31,15 @@ Sets
        
         i "container index" /i1*i4*/
         j "a duplicate of i" /j1*j4/ !!this is temporary, a better is to write /#i/
-
+        j_0 "a duplicate of i with virtual node " /#j, 0/
+        
         m   "QC index" /m1,m2/
         n   "A duplicate of j" /n1,n2/ !!this is temporary, a better is to write /#m/
+        n_0 "QC index with 0 virtual node"/#m, 0/
 
         l "AGV index" /l1*l3/
-
+        B "set of all agvs" /#l/
+        
 *       0 in a is a virtual starting point
         a   "AGV actions" /a0*a4/
 
@@ -46,7 +50,8 @@ Sets
 
         L(m,i)  "Loading Containers. L is a subset of index i" //
         D(m,i) "Unloading Containers. U is a subset of index i" // 
-        C   "All  Containers" /C+D/ $ "this is in data file"
+        C   "All  Containers" /L + D/ $ "this is in data file"
+        C_0 "all container with initial virtual location 0" /#C, 0.0/
 *        C_prime(i) "The set of containers to be assigned" $ "This is in data file" 
 
         
@@ -91,7 +96,7 @@ $offtext
 
 Binary Variables
 
-        Z(m,i,l)        "used mainly for handling QC double cycling"
+        Z(m,i,n,j,l)        "used mainly for handling QC double cycling"
         U_AGV(j_1,j_2)      "conducted before" 
         U_QC(j,WT)          "conducted before"
         
@@ -166,8 +171,16 @@ Equations
         eq_40              C,a,YR
         eq_41              C,C,a,a
         ;
+alias(n_0,h);
+alias(j_0,k);
+ADRP.. ;
+eq_2 $(C(m,i)).. sum((l,n_0,j_0), z(m,i,n_0,j_0,l)) =e= 1;
+eq_3 $(C(m,i)and B(l)).. sum((n_0,j_0), z(m,i,n_0,j_0,l)) =e= sum((h,k),z(m,i,h,k,l));
+eq_4 $(B(l)).. sum(
 
-eq_2.. sum((m,i) $(C(m,i)), 
+
+
+ 
 Model transport /all/ ;
 
 Solve transport using lp minimizing z ;
