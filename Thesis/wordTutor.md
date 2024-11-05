@@ -30,3 +30,16 @@
 - for a boxy caption. remember layout of the figures.
 
 - `ctrl+A` then `F9` to update the whole document
+  
+
+
+- To align the footnote separator to the right in Microsoft Word, follow these steps:
+
+  1. Go to the **View** tab and select **Draft** mode.
+  2. Navigate to the **References** tab and click on **Show Notes**.
+  3. In the window that opens, choose **Footnotes** from the dropdown menu.
+  4. Once the footnote area appears at the bottom of the page, select **Footnote Separator** from the dropdown menu on the left.
+  5. The separator line will now be displayed. Select it and use the formatting tools to align it to the right:
+     - To right-align, press **Ctrl + Shift + Right** or select **Align Right** from the toolbar.
+
+  This will make the footnote separator appear right-aligned.
