@@ -32,8 +32,8 @@ display z1;
 variable x;
 set oi /1/;
 equation eq_2(i,j);
-eq_2(i,j) $(y(i,j)).. x $(y(i,j))  =e= sum(oi, 10);
-
+eq_2(i,j) $(not sameas(i,'i1')).. x =e= sum(oi, 10);
+*display set.i;
 equation eq_1;
 eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
 Model ww /all/;

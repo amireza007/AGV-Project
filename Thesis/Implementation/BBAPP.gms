@@ -30,12 +30,14 @@ Scalars
 Sets
        
         i "container index" /i1*i4*/
+        i_0 "i with virtual node " /#i, 0/
         j "a duplicate of i" /j1*j4/ !!this is temporary, a better is to write /#i/
-        j_0 "a duplicate of i with virtual node " /#j, 0/
+        j_0 "a duplicate of i with virtual node " /#i, 0/
         
-        m   "QC index" /m1,m2/
+        m   "QC index" /m0,m1,m2/
+        m_0 "Qc with 0 virtual node" /0, #m/
         n   "A duplicate of j" /n1,n2/ !!this is temporary, a better is to write /#m/
-        n_0 "QC index with 0 virtual node"/#m, 0/
+        n_0 "QC index duplicate with 0 virtual node"/#m, 0/ !!Not sure what the difference between n_0 and m_0 would be at this ppoint!
 
         l "AGV index" /l1*l3/
         B "set of all agvs" /#l/
@@ -96,7 +98,7 @@ $offtext
 
 Binary Variables
 
-        Z(m,i,n,j,l)        "used mainly for handling QC double cycling"
+        Z(m_0,i,n,j,l)        "used mainly for handling QC double cycling, it consists of 0 virtual point!"
         U_AGV(j_1,j_2)      "conducted before" 
         U_QC(j,WT)          "conducted before"
         
@@ -129,8 +131,7 @@ Equations
         eq_2               C            Equation 2(C)
         eq_3               C,B      
         eq_4               B         
-        eq_4               L         
-        eq_5               D         
+        eq_5               ‌B         
         eq_6               L         
         eq_7               D         
         eq_8               C,C,XR        
@@ -152,7 +153,7 @@ Equations
         eq_24              C, WH
         eq_25              C, WH
         eq_26              WH,YS,D  !!for alpha = 0
-        eq_26_prime        L  !!for alpha = 3, try the actual definintin of the equation with conditions and ord(I)
+        eq_26_prime        L  !!for alpha = 3, try the actual definition of the equation with conditions and ord(I)
         eq_27              WV, XR
         eq_28              C,a      !!alpha>2
         eq_29              C,C      !! two consecutive containers, i and i+1
@@ -174,16 +175,17 @@ Equations
 alias(n_0,h);
 alias(j_0,k);
 ADRP.. ;
+
 eq_2 $(C(m,i)).. sum((l,n_0,j_0), z(m,i,n_0,j_0,l)) =e= 1;
 eq_3 $(C(m,i)and B(l)).. sum((n_0,j_0), z(m,i,n_0,j_0,l)) =e= sum((h,k),z(m,i,h,k,l));
-eq_4 $(B(l)).. sum(
+eq_4 $(B(l)).. sum((m,i)$(C(m,i)), z(0,
 
 
 
  
-Model transport /all/ ;
+*Model transport /all/ ;
 
-Solve transport using lp minimizing z ;
+*Solve transport using lp minimizing z ;
 
-Display x.l, x.m ;
+*Display x.l, x.m ;
 

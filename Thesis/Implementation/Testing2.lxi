@@ -6,8 +6,8 @@ I 65 z
 I 70 z1
 B 81 Equation Listing    SOLVE ww Using LP From line 40
 D 82 eq_2
-D 90 eq_1
-B 97 Column Listing      SOLVE ww Using LP From line 40
-E 98 x
-B 110 Model Statistics    SOLVE ww Using LP From line 40
-B 126 Solution Report     SOLVE ww Using LP From line 40
+D 94 eq_1
+B 101 Column Listing      SOLVE ww Using LP From line 40
+E 102 x
+B 123 Model Statistics    SOLVE ww Using LP From line 40
+B 139 Solution Report     SOLVE ww Using LP From line 40
