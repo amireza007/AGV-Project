@@ -1,0 +1,1013 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
+ xmlns:link="http://purl.org/rss/1.0/modules/link/"
+ xmlns:vcard="http://nwalsh.com/rdf/vCard#">
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S0305054823003696">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:03050548"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kong</foaf:surname>
+                        <foaf:givenName>Lingrui</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ji</foaf:surname>
+                        <foaf:givenName>Mingjun</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yu</foaf:surname>
+                        <foaf:givenName>Anxu</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gao</foaf:surname>
+                        <foaf:givenName>Zhendi</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Scheduling of automated guided vehicles for tandem quay cranes in automated container terminals</dc:title>
+        <dc:date>03/2024</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S0305054823003696</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-10-14 10:54:25</dcterms:dateSubmitted>
+        <bib:pages>106505</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:03050548">
+        <prism:volume>163</prism:volume>
+        <dc:title>Computers &amp; Operations Research</dc:title>
+        <dc:identifier>DOI 10.1016/j.cor.2023.106505</dc:identifier>
+        <dcterms:alternative>Computers &amp; Operations Research</dcterms:alternative>
+        <dc:identifier>ISSN 03050548</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="https://www.tandfonline.com/doi/full/10.1080/00207543.2023.2230489">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0020-7543,%201366-588X"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ahmadi-Javid</foaf:surname>
+                        <foaf:givenName>Amir</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Haghi</foaf:surname>
+                        <foaf:givenName>Maryam</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Hooshangi-Tabrizi</foaf:surname>
+                        <foaf:givenName>Pedram</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Integrated job-shop scheduling in an FMS with heterogeneous transporters: MILP formulation, constraint programming, and branch-and-bound</dc:title>
+        <dc:date>2024-05-02</dc:date>
+        <z:language>en</z:language>
+        <z:shortTitle>Integrated job-shop scheduling in an FMS with heterogeneous transporters</z:shortTitle>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.tandfonline.com/doi/full/10.1080/00207543.2023.2230489</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-10-15 10:03:06</dcterms:dateSubmitted>
+        <bib:pages>3288-3304</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0020-7543,%201366-588X">
+        <prism:volume>62</prism:volume>
+        <dc:title>International Journal of Production Research</dc:title>
+        <dc:identifier>DOI 10.1080/00207543.2023.2230489</dc:identifier>
+        <prism:number>9</prism:number>
+        <dcterms:alternative>International Journal of Production Research</dcterms:alternative>
+        <dc:identifier>ISSN 0020-7543, 1366-588X</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S0278612520301382">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:02786125"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yan</foaf:surname>
+                        <foaf:givenName>Rundong</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Jackson</foaf:surname>
+                        <foaf:givenName>Lisa</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Dunnett</foaf:surname>
+                        <foaf:givenName>Sarah</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_43"/>
+        <dc:title>A study for further exploring the advantages of using multi-load automated guided vehicles</dc:title>
+        <dc:date>10/2020</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S0278612520301382</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-05 11:00:45</dcterms:dateSubmitted>
+        <bib:pages>19-30</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:02786125">
+        <prism:volume>57</prism:volume>
+        <dc:title>Journal of Manufacturing Systems</dc:title>
+        <dc:identifier>DOI 10.1016/j.jmsy.2020.08.005</dc:identifier>
+        <dcterms:alternative>Journal of Manufacturing Systems</dcterms:alternative>
+        <dc:identifier>ISSN 02786125</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_43">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/43/Yan et al. - 2020 - A study for further exploring the advantages of using multi-load automated guided vehicles.pdf"/>
+        <dc:title>Full Text</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://nottingham-repository.worktribe.com/preview/22722704/1-s2.0-S0278612520301382-main.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-05 11:00:57</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S0898122110009144">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:08981221"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Rashidi</foaf:surname>
+                        <foaf:givenName>Hassan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Tsang</foaf:surname>
+                        <foaf:givenName>Edward P.K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>A complete and an incomplete algorithm for automated guided vehicle scheduling in container terminals</dc:title>
+        <dc:date>02/2011</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S0898122110009144</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-05 12:09:58</dcterms:dateSubmitted>
+        <dc:rights>https://www.elsevier.com/tdm/userlicense/1.0/</dc:rights>
+        <bib:pages>630-641</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:08981221">
+        <prism:volume>61</prism:volume>
+        <dc:title>Computers &amp; Mathematics with Applications</dc:title>
+        <dc:identifier>DOI 10.1016/j.camwa.2010.12.009</dc:identifier>
+        <prism:number>3</prism:number>
+        <dcterms:alternative>Computers &amp; Mathematics with Applications</dcterms:alternative>
+        <dc:identifier>ISSN 08981221</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S1568494614003482">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:15684946"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Rashidi</foaf:surname>
+                        <foaf:givenName>Hassan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>A dynamic version for the Network Simplex Algorithm</dc:title>
+        <dc:date>11/2014</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S1568494614003482</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-05 12:10:57</dcterms:dateSubmitted>
+        <bib:pages>414-422</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:15684946">
+        <prism:volume>24</prism:volume>
+        <dc:title>Applied Soft Computing</dc:title>
+        <dc:identifier>DOI 10.1016/j.asoc.2014.07.017</dc:identifier>
+        <dcterms:alternative>Applied Soft Computing</dcterms:alternative>
+        <dc:identifier>ISSN 15684946</dc:identifier>
+    </bib:Journal>
+    <rdf:Description rdf:about="#item_47">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+           <bib:Journal></bib:Journal>
+        </dcterms:isPartOf>
+        <dc:publisher>
+            <foaf:Organization>
+                <vcard:adr>
+                    <vcard:Address>
+                       <vcard:locality>UK</vcard:locality>
+                    </vcard:Address>
+                </vcard:adr>
+                <foaf:name>IFS(Publ) Ltd</foaf:name>
+            </foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Broadbent</foaf:surname>
+                        <foaf:givenName>A.J.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Besant</foaf:surname>
+                        <foaf:givenName>C.B.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Premi</foaf:surname>
+                        <foaf:givenName>S.K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Walker</foaf:surname>
+                        <foaf:givenName>S.P.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dcterms:isReferencedBy rdf:resource="#item_48"/>
+        <dc:title>Free ranging AGV Systems: Promises, Problems and Pathways</dc:title>
+        <dc:date>1985</dc:date>
+        <bib:pages>221-237</bib:pages>
+        <bib:presentedAt>
+            <bib:Conference>
+                <dc:title>Proceedings 2nd International Conference on Automated Materials Handling</dc:title>
+            </bib:Conference>
+        </bib:presentedAt>
+    </rdf:Description>
+    <bib:Memo rdf:about="#item_48">
+        <rdf:value>&lt;p&gt;Reprinted in Automated Guided Vehicle Systems, ed R.H. Hollier, IFS(PubL) Ltd, UK, 1987.&lt;/p&gt;</rdf:value>
+    </bib:Memo>
+    <bib:Article rdf:about="http://www.tandfonline.com/doi/abs/10.1080/00207549608904920">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>34</prism:volume>
+                <dc:title>International Journal of Production Research</dc:title>
+                <dc:identifier>DOI 10.1080/00207549608904920</dc:identifier>
+                <prism:number>2</prism:number>
+                <dcterms:alternative>International Journal of Production Research</dcterms:alternative>
+                <dc:identifier>ISSN 0020-7543, 1366-588X</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Akturk</foaf:surname>
+                        <foaf:givenName>M. S.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yilmaz</foaf:surname>
+                        <foaf:givenName>H.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Scheduling of Automated Guided Vehicles in a Decision Making Hierarchy</dc:title>
+        <dc:date>02/1996</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.tandfonline.com/doi/abs/10.1080/00207549608904920</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-05 23:55:44</dcterms:dateSubmitted>
+        <bib:pages>577-591</bib:pages>
+    </bib:Article>
+    <bib:Article rdf:about="https://doi.org/10.22119/ijte.2018.121054.1395">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>7</prism:volume>
+                <dc:title>International Journal of Transportation Engineering</dc:title>
+                <dc:identifier>DOI 10.22119/ijte.2018.121054.1395</dc:identifier>
+                <prism:number>2</prism:number>
+                <dcterms:alternative>IJTE</dcterms:alternative>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Edrissi</foaf:surname>
+                        <foaf:givenName>Ali</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Askari</foaf:surname>
+                        <foaf:givenName>Moein</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Smaniotto Costa</foaf:surname>
+                        <foaf:givenName>Carlos</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Electric-vehicle car-sharing in one-way car-sharing systems considering depreciation costs of vehicles and chargers</dc:title>
+        <dc:date>October 2019</dc:date>
+        <z:language>eng</z:language>
+        <z:libraryCatalog>DOI.org (CSL JSON)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://doi.org/10.22119/ijte.2018.121054.1395</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-05 23:58:03</dcterms:dateSubmitted>
+    </bib:Article>
+    <rdf:Description rdf:about="#item_51">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+           <bib:Journal><prism:volume>3</prism:volume></bib:Journal>
+        </dcterms:isPartOf>
+        <dc:publisher>
+            <foaf:Organization>
+                <vcard:adr>
+                    <vcard:Address>
+                       <vcard:locality>Las Vegas, NV</vcard:locality>
+                    </vcard:Address>
+                </vcard:adr>
+                <foaf:name>CSREA Press</foaf:name>
+            </foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Qiu</foaf:surname>
+                        <foaf:givenName>L.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Hsu</foaf:surname>
+                        <foaf:givenName>W. J.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Routing AGVs by Sorting</dc:title>
+        <dc:date>2000</dc:date>
+        <bib:pages>1465-1470</bib:pages>
+        <bib:presentedAt>
+            <bib:Conference>
+                <dc:title>Proceedings of the International Conference on Parallel and Distributed Processing Techniques and Applications</dc:title>
+            </bib:Conference>
+        </bib:presentedAt>
+    </rdf:Description>
+    <bib:Article rdf:about="#item_52">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>33</prism:volume>
+                <dc:title>Latin American applied research Pesquisa aplicada latino americana = Investigación aplicada latinoamericana</dc:title>
+                <dcterms:alternative>Latin American applied research Pesquisa aplicada latino americana = Investigación aplicada latinoamericana</dcterms:alternative>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Dondo</foaf:surname>
+                        <foaf:givenName>Rodolfo</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Méndez</foaf:surname>
+                        <foaf:givenName>Carlos</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Cerdá</foaf:surname>
+                        <foaf:givenName>Jaime</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>An Optimal Approach to the Multiple-depot Heterogeneous Vehicle Routing Problem with Time Windows and Capacity Constraints</dc:title>
+        <dc:date>2003-04-01</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S095418100100005X">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:09541810"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Tan</foaf:surname>
+                        <foaf:givenName>K.C</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lee</foaf:surname>
+                        <foaf:givenName>L.H</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zhu</foaf:surname>
+                        <foaf:givenName>Q.L</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ou</foaf:surname>
+                        <foaf:givenName>K</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Heuristic methods for vehicle routing problem with time windows</dc:title>
+        <dc:date>7/2001</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S095418100100005X</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-06 00:06:21</dcterms:dateSubmitted>
+        <dc:rights>https://www.elsevier.com/tdm/userlicense/1.0/</dc:rights>
+        <bib:pages>281-295</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:09541810">
+        <prism:volume>15</prism:volume>
+        <dc:title>Artificial Intelligence in Engineering</dc:title>
+        <dc:identifier>DOI 10.1016/S0954-1810(01)00005-X</dc:identifier>
+        <prism:number>3</prism:number>
+        <dcterms:alternative>Artificial Intelligence in Engineering</dcterms:alternative>
+        <dc:identifier>ISSN 09541810</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="#item_54">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+           <bib:Journal></bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gribkovskaia</foaf:surname>
+                        <foaf:givenName>Irina</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Halskau</foaf:surname>
+                        <foaf:givenName>Øyvind</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Myklebost</foaf:surname>
+                        <foaf:givenName>Kim</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Models for Pick-Up and Deliveries from Depots with Lasso Solutions”. Working Paper</dc:title>
+        <dc:date>2001-01-01</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="https://doi.org/10.1023/A:1013342102025">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1573-2967"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Shih</foaf:surname>
+                        <foaf:givenName>Li-Hsing</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Chang</foaf:surname>
+                        <foaf:givenName>Hua-Chi</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>A Routing and Scheduling System for Infectious Waste Collection</dc:title>
+        <dcterms:abstract>Most hospitals and clinics in Taiwan do not have on-site treatment facilities for their infectious waste and must rely on outside agencies for their collection and treatment. The problem of optimally routing and scheduling the collection of medical waste from a disperse group of facilities is recognized as a periodic vehicle routing problem. This study develops a computer system to solve the resulting optimization problem based on a two-phased approach proposed earlier. The first phase solves a standard vehicle routing problem to determine a set of individual routes for the collection vehicles. The second phase uses a mixed integer programming method to assign routes to particular days of the week. The computer system is user-friendly and consists of several Visual Basic programs while the geographical information system is incorporated to facilitate input and output interface and database management. An illustrative example for the infectious waste of 348 hospitals in the Tainan City area demonstrates the effectiveness of the system.</dcterms:abstract>
+        <dc:date>2001-12-01</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://doi.org/10.1023/A:1013342102025</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>261-269</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1573-2967">
+        <prism:volume>6</prism:volume>
+        <dc:title>Environmental Modeling &amp; Assessment</dc:title>
+        <dc:identifier>DOI 10.1023/A:1013342102025</dc:identifier>
+        <prism:number>4</prism:number>
+        <dcterms:alternative>Environmental Modeling &amp; Assessment</dcterms:alternative>
+        <dc:identifier>ISSN 1573-2967</dc:identifier>
+    </bib:Journal>
+    <rdf:Description rdf:about="#item_56">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Proceedings of the Intelligent Vehicles '94 Symposium</dc:title>
+                <dc:identifier>DOI 10.1109/IVS.1994.639565</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Hsu Wen Jing</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Huang Shell Ying</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Route planning of automated guided vehicles</dc:title>
+        <dc:date>24-26 Oct. 1994</dc:date>
+        <dc:description>Journal Abbreviation: Proceedings of the Intelligent Vehicles '94 Symposium</dc:description>
+        <bib:pages>479-484</bib:pages>
+        <bib:presentedAt>
+            <bib:Conference>
+                <dc:title>Proceedings of the Intelligent Vehicles '94 Symposium</dc:title>
+            </bib:Conference>
+        </bib:presentedAt>
+    </rdf:Description>
+    <bib:Article rdf:about="https://www.sciencedirect.com/science/article/pii/S0360835220301054">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0360-8352"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zhong</foaf:surname>
+                        <foaf:givenName>Meisu</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yang</foaf:surname>
+                        <foaf:givenName>Yongsheng</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Dessouky</foaf:surname>
+                        <foaf:givenName>Yasser</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Postolache</foaf:surname>
+                        <foaf:givenName>Octavian</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:subject>Automated container terminal</dc:subject>
+        <dc:subject>Conflict-free</dc:subject>
+        <dc:subject>Hybrid GA-PSO</dc:subject>
+        <dc:subject>Integrated scheduling</dc:subject>
+        <dc:subject>Path planning</dc:subject>
+        <dc:title>Multi-AGV scheduling for conflict-free path planning in automated container terminals</dc:title>
+        <dcterms:abstract>Path planning and integrated scheduling are two important problems to be resolved in the design of any automated container terminal. There has been relatively little research, however, on automated guided vehicles (AGVs) conflict-free path planning with quay cranes (QCs) and rail-mounted gantry (RMG) cranes. This paper combines the two problems to realize the integrated scheduling of multi-AGV with conflict-free path planning. A mixed integer programming model based on path optimization, integrated scheduling, and conflicts and deadlocks is established to minimize AGVs delay time under the condition that the task allocation is known. A series of small-scale and large-scale experiments are conducted to validate the availability of Hybrid Genetic Algorithm-Particle Swarm Optimization (HGA-PSO) with fuzzy logic controller to adaptive auto tuning. Dynamic simulation of the path nodes indicates that the proposed model indeed can resolve the AGV conflict and deadlock problem and may be practically applicable to existing automated container terminals.</dcterms:abstract>
+        <dc:date>2020-04-01</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.sciencedirect.com/science/article/pii/S0360835220301054</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>106371</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0360-8352">
+        <prism:volume>142</prism:volume>
+        <dc:title>Computers &amp; Industrial Engineering</dc:title>
+        <dc:identifier>DOI 10.1016/j.cie.2020.106371</dc:identifier>
+        <dcterms:alternative>Computers &amp; Industrial Engineering</dcterms:alternative>
+        <dc:identifier>ISSN 0360-8352</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S0360835222000389">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:03608352"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wang</foaf:surname>
+                        <foaf:givenName>Zehao</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zeng</foaf:surname>
+                        <foaf:givenName>Qingcheng</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>A branch-and-bound approach for AGV dispatching and routing problems in automated container terminals</dc:title>
+        <dc:date>04/2022</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S0360835222000389</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-06 00:25:58</dcterms:dateSubmitted>
+        <bib:pages>107968</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:03608352">
+        <prism:volume>166</prism:volume>
+        <dc:title>Computers &amp; Industrial Engineering</dc:title>
+        <dc:identifier>DOI 10.1016/j.cie.2022.107968</dc:identifier>
+        <dcterms:alternative>Computers &amp; Industrial Engineering</dcterms:alternative>
+        <dc:identifier>ISSN 03608352</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="https://www.tandfonline.com/doi/full/10.1080/00207543.2021.1998695">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>61</prism:volume>
+                <dc:title>International Journal of Production Research</dc:title>
+                <dc:identifier>DOI 10.1080/00207543.2021.1998695</dc:identifier>
+                <prism:number>1</prism:number>
+                <dcterms:alternative>International Journal of Production Research</dcterms:alternative>
+                <dc:identifier>ISSN 0020-7543, 1366-588X</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Hu</foaf:surname>
+                        <foaf:givenName>Hongtao</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yang</foaf:surname>
+                        <foaf:givenName>Xurui</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Xiao</foaf:surname>
+                        <foaf:givenName>Shichang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wang</foaf:surname>
+                        <foaf:givenName>Feiyang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Anti-conflict AGV path planning in automated container terminals based on multi-agent reinforcement learning</dc:title>
+        <dc:date>2023-01-02</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.tandfonline.com/doi/full/10.1080/00207543.2021.1998695</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-06 00:26:43</dcterms:dateSubmitted>
+        <bib:pages>65-80</bib:pages>
+    </bib:Article>
+    <bib:Article rdf:about="#item_60">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>10</prism:volume>
+                <dc:title>Machines</dc:title>
+                <dc:identifier>DOI 10.3390/machines10030197</dc:identifier>
+                <dcterms:alternative>Machines</dcterms:alternative>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gao</foaf:surname>
+                        <foaf:givenName>Jia</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zheng</foaf:surname>
+                        <foaf:givenName>Xiaojun</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gao</foaf:surname>
+                        <foaf:givenName>Feng</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Tong</foaf:surname>
+                        <foaf:givenName>Xiaoying</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Han</foaf:surname>
+                        <foaf:givenName>Qiaomei</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Heterogeneous Multitype Fleet Green Vehicle Path Planning of Automated Guided Vehicle with Time Windows in Flexible Manufacturing System</dc:title>
+        <dc:date>2022-03-09</dc:date>
+        <bib:pages>197</bib:pages>
+    </bib:Article>
+    <bib:Article rdf:about="https://www.sciencedirect.com/science/article/pii/S0736584522000849">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0736-5845"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lin</foaf:surname>
+                        <foaf:givenName>Yishuai</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Xu</foaf:surname>
+                        <foaf:givenName>Yunlong</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zhu</foaf:surname>
+                        <foaf:givenName>Jiawei</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wang</foaf:surname>
+                        <foaf:givenName>Xuhua</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wang</foaf:surname>
+                        <foaf:givenName>Liang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Hu</foaf:surname>
+                        <foaf:givenName>Gang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:subject>Automated storage and retrieval system</dc:subject>
+        <dc:subject>Multi-load AGV</dc:subject>
+        <dc:subject>Multi-objective optimization</dc:subject>
+        <dc:subject>Task scheduling</dc:subject>
+        <dc:title>MLATSO: A method for task scheduling optimization in multi-load AGVs-based systems</dc:title>
+        <dcterms:abstract>In the context of increasingly competitive intelligent manufacturing, the multi-load Automated guided vehicles (AGVs) based Automated Storage and Retrieval System (AS/RS) has been of particular interest, as reductions in the number of AGVs required can significantly decrease potential congestions and increase the system effectiveness. In comparison with the single-load AGVs system, more difficult and critical issue of scheduling multi-load AGVs to automate storage/retrieval missions and to maximize economic benefits remains unresolved. Therefore, we propose a task scheduling optimization method for multi-load AGVs-based systems, with which, the objectives of least number of occupied AGVs, shortest travel time and minimum conflicts can be met simultaneously. The experiments are conducted in various scenarios, and verify that our work can use fewer AGVs to optimize tasks delivery, which enables the AS/RS stakeholders to reach win-win results for system performance and AGVs investment, thus maximizing economic benefit.</dcterms:abstract>
+        <dc:date>2023-02-01</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.sciencedirect.com/science/article/pii/S0736584522000849</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>102397</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0736-5845">
+        <prism:volume>79</prism:volume>
+        <dc:title>Robotics and Computer-Integrated Manufacturing</dc:title>
+        <dc:identifier>DOI 10.1016/j.rcim.2022.102397</dc:identifier>
+        <dcterms:alternative>Robotics and Computer-Integrated Manufacturing</dcterms:alternative>
+        <dc:identifier>ISSN 0736-5845</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="https://www.tandfonline.com/doi/full/10.1080/00207543.2021.2023777">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>61</prism:volume>
+                <dc:title>International Journal of Production Research</dc:title>
+                <dc:identifier>DOI 10.1080/00207543.2021.2023777</dc:identifier>
+                <prism:number>5</prism:number>
+                <dcterms:alternative>International Journal of Production Research</dcterms:alternative>
+                <dc:identifier>ISSN 0020-7543, 1366-588X</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Cai</foaf:surname>
+                        <foaf:givenName>Lei</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Li</foaf:surname>
+                        <foaf:givenName>Wenfeng</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Luo</foaf:surname>
+                        <foaf:givenName>Yun</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>He</foaf:surname>
+                        <foaf:givenName>Lijun</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Real-time scheduling simulation optimisation of job shop in a production-logistics collaborative environment</dc:title>
+        <dc:date>2023-03-04</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.tandfonline.com/doi/full/10.1080/00207543.2021.2023777</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-06 00:32:18</dcterms:dateSubmitted>
+        <bib:pages>1373-1393</bib:pages>
+    </bib:Article>
+    <bib:Article rdf:about="http://www.growingscience.com/jpm/Vol3/jpm_2017_14.pdf">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:23718366,%2023718374"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Chawla</foaf:surname>
+                        <foaf:givenName>V.K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Chanda</foaf:surname>
+                        <foaf:givenName>Arindam Kumar</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Angra</foaf:surname>
+                        <foaf:givenName>Surjit</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_64"/>
+        <dc:title>Scheduling of multi load AGVs in FMS by modified memetic particle swarm optimization algorithm</dc:title>
+        <dc:date>2018</dc:date>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.growingscience.com/jpm/Vol3/jpm_2017_14.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-06 00:34:02</dcterms:dateSubmitted>
+        <bib:pages>39-54</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:23718366,%2023718374">
+        <dc:title>Journal of Project Management</dc:title>
+        <dc:identifier>DOI 10.5267/j.jpm.2017.10.001</dc:identifier>
+        <dcterms:alternative>10.5267/j.jpm</dcterms:alternative>
+        <dc:identifier>ISSN 23718366, 23718374</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_64">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/64/Chawla et al. - 2018 - Scheduling of multi load AGVs in FMS by modified memetic particle swarm optimization algorithm.pdf"/>
+        <dc:title>Full Text</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.growingscience.com/jpm/Vol3/jpm_2017_14.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-11-06 00:34:05</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="https://www.sciencedirect.com/science/article/pii/S0278612519301177">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0278-6125"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>De Ryck</foaf:surname>
+                        <foaf:givenName>M.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Versteyhe</foaf:surname>
+                        <foaf:givenName>M.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Debrouwere</foaf:surname>
+                        <foaf:givenName>F.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:subject>AGV-systems</dc:subject>
+        <dc:subject>Centralized</dc:subject>
+        <dc:subject>Control Techniques</dc:subject>
+        <dc:subject>Decentralized</dc:subject>
+        <dc:subject>Potential future techniques</dc:subject>
+        <dc:subject>State-of-the-art</dc:subject>
+        <dc:title>Automated guided vehicle systems, state-of-the-art control algorithms and techniques</dc:title>
+        <dcterms:abstract>Automated guided vehicles (AGVs) form a large and important part of the logistic transport systems in today's industry. They are used on a large scale, especially in Europe, for over a decade. Current employed AGV systems and current systems offered by global manufacturers almost all operate under a form of centralized control: one central controller controls the whole fleet of AGVs. The authors do see a trend towards decentralized systems where AGVs make individual decisions favoring flexibility, robustness, and scalability of transportation. Promoted by the paradigm shift of Industry 4.0 and future requirements, more research is conducted towards the decentralization of AGV-systems in academia while global leading manufacturers start to take an active interest. That said, this implementation seems still in infancy. Currently, literature is dominated by central as well as by decentral control techniques and algorithms. For researchers in the field and for AGV developers, it is hard to find structure in the growing amount of algorithms for various types of applications. This paper is, to this purpose, meant to provide a good overview of all AGV-related control algorithms and techniques. Not only those that were used in the early stages of AGVs, but also the algorithms and techniques used in the most recent AGV-systems, as well as the algorithms and techniques with high potential.</dcterms:abstract>
+        <dc:date>2020-01-01</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.sciencedirect.com/science/article/pii/S0278612519301177</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>152-173</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0278-6125">
+        <prism:volume>54</prism:volume>
+        <dc:title>Journal of Manufacturing Systems</dc:title>
+        <dc:identifier>DOI 10.1016/j.jmsy.2019.12.002</dc:identifier>
+        <dcterms:alternative>Journal of Manufacturing Systems</dcterms:alternative>
+        <dc:identifier>ISSN 0278-6125</dc:identifier>
+    </bib:Journal>
+</rdf:RDF>
