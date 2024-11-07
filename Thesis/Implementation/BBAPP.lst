@@ -1,0 +1,206 @@
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 19:18:46 Page 1
+A branch and bound problem (TRNSPORT,SEQ=1)
+C o m p i l a t i o n
+
+
+   2   
+      Sets
+             i   "canning plants"   / seattle, san-diego /
+             j   "markets"          / new-york, chicago, topeka / ;
+       
+        Parameters
+       
+             a(i)  "capacity of plant i in cases"
+               /    seattle     350
+                    san-diego   600  /
+       
+             b(j)  "demand at market j in cases"
+               /    new-york    325
+                    chicago     300
+                    topeka      275  / ;
+  20  *you need to set x_R, y_R, and y_r
+  21  Scalars
+  22          S_Q "switch time for qc between two containers" /2/ !!This is temporarily assumed constant
+  23          x /1/
+  24          y /1/
+  25          x_R /10/
+  26          y_R /14/
+  27          y_r1 /10/
+  28          v "AGV speed" /1/
+  29          ;
+  30  Sets
+  31   
+  32          i "container index" /i0*i4/
+  33          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+  34   
+  35          m   "QC index" /m0,m1,m2,m3,m4/
+  36          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
+  37   
+  38          li "AGV index" /l1*l3/
+  39          Bs(li) "set of all agvs" /#li/
+  40   
+  41  *       0 in a is a virtual starting point
+  42          a   "AGV actions" /a0*a4/
+  43   
+  44          XR  "Vertical Operational Area" /x1*x10/
+  45          YR  "Horizontal Operational Area" /y1*y14/
+  46          YS  "Horizontal Seaside Operation Area" /y11*y14/
+  47          YL  "Horizontal Path" /y1*y10/
+  48   
+  49          L(m,i)   /m1.i1 , m2.i2/
+  50          D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3,m4.i4/
+  51          C(m,i)  "All  Containers" /m1.i1 , m2.i2,m3.i3,m4.i4/ !! this is in data file
+  52  *        C_prime(i) "The set of containers to be assigned" $ "This is in data file"
+  53   
+  54   
+  55   
+  56          WT(m,i,a) "set of total actions" /#C.#a/
+  57          WV(m,i,a)  "Vertical Actions" /m1.i1.a1/
+  58          WH(m,i,a)  "Horizontal Actions" /m1.i2.a2/
+  59   
+  60  *       or psi_1(m,i,m,i)?
+  61  *very challenging set!
+  62          psi_1(m,i,n,j)   "Sequence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job sequence, (in a form of 2d graph?)idk
+  63          psi_2(m,i,n,j)   "Sequence of Container jobs for ASC" /#psi_1/ !!This is in data file.
+  64          ;
+  65   
+  66   
+  67  alias(a,a_2);
+  68  alias(j,j_1); !!set of container jobs and qc
+  69  alias(j,j_2); !!Another set of container jobs and QC
+  70   
+  71  alias (WT, WT_1);
+  72  alias (WT, WT_2);
+  73   
+  74  Parameters
+  75   
+  76          O(j) /i1 1/
+  77          A_L(j) /i1 1/
+  78          A_R(j) /i1 1/
+  79          G_Q(j) /i1 1/ !!seems to be constant for all container jobs, bc of const 24
+  80          G_Y(j) /i1 1/
+  81          ;
+  82   
+      Table d(i,j)  distance in thousands of miles
+                          new-yorksdafasdf       chicago      topeka
+            seattle          2.5           1.7          100.8
+            san-diego        2.5           1.8          1.4  ;
+  90   
+  91  Binary Variables
+  92   
+  93          z(m,i,n,j,li) "used mainly for handling QC double cycling, it consists of 0 virtual point!"
+  94          U_AGV(j_1,j_2) "U_AGV(j_1,j_2) conducted before"
+  95          U_QC(j,m,i,a) "U_QC(j,WT) conducted before"
+  96   
+  97  *       "Path related variables
+  98          P_X(m,i,a,XR) "P_X(WV,x) finish V loc"
+  99          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc"
+ 100          P_X(m,i,a,XR) "P_X(WV,x) Start H loc"
+ 101          P_Y(m,i,a,YR)"P_Y(WH,y) Start H loc"
+ 102          ;
+ 103   
+ 104  Positive Variables
+ 105   
+ 106  *       Time related variables
+ 107          T_Q(m,i) "start time of QC"
+ 108          T_Y(m,i) "Start time of agv putting cont on ASC"
+ 109          T_start(m,i,a) "Start of agv for action (m,i,a)"
+ 110   
+ 111   
+ 112  *       Auxiliary Variables
+ 113          t_AGV(m,i,a) "t_AGV(WT_1,WT_2"
+ 114          X_position(m,i,a) "X_position(WT)"
+ 115          Y_position(m,i,a) "Y_position(WT)"
+ 116          ;
+ 117   
+ 118  *  Positive Variable x ;
+ 119   
+ 120  Equations
+ 121          ADRP        1st equation, AGV Dispatching and Routing Problem
+ 122   
+ 123  *       Job assignment constraints
+ 124          eq_2(m,i)               C            Equation 2(C)
+ 125          eq_3(m,i,li)            "C,B"
+ 126          eq_4(li)                B with 0 virtual node
+ 127          eq_5(li)               ‌ B with 0 virutal node
+ 128          eq_6(m,i)               L
+ 129          eq_7(m,i)               D
+ 130          eq_8(m,i,n,j,XR)               "C,C,XR"
+ 131          eq_9(m,i,n,j,YR)               "C,C,YR"
+ 132          eq_10(m,i,a)              "C,a"
+ 133          eq_11(m,i,a)              "C,a"
+ 134          eq_12(m,i)              "L"
+ 135          eq_13(m,i)              "D"
+ 136          eq_14(m,i)              "D"
+ 137          eq_15(m,i)              "L"
+ 138          eq_16(m,i)              "D"
+ 139          eq_17(m,i)              "L"
+ 140          eq_18(m,i)              "L"
+ 141          eq_19(m,i)              "D"
+ 142          eq_20(m,i,a,YR)              "WH,YR"
+ 143          eq_21(m,i,a,XR)              "WV,XR"
+ 144          eq_22(m,i,n,j)              "C,C"
+ 145          eq_23(m,i,a,n,j,a,YR,XR)              "WH,WH,YR,XR"
+ 146          eq_24(m,i,n,j,a)              "C, WH"
+ 147          eq_25(m,i)              "C, WH"
+ 148          eq_26(n,j,a,YS,m,i)              "WH,YS,D"  !! for alpha = 0
+ 149          eq_26_prime(n,j,a)        "L"  !! for alpha = 3, try the actual definition of the equation with conditions and ord(I)
+ 150          eq_27              "WV, XR"
+ 151          eq_28              "C,a"      !!alpha>2
+ 152          eq_29              "C,C"      !! two consecutive containers, i and i+1
+ 153          eq_30              "psi_1"
+ 154          eq_31              "psi_2"
+ 155          eq_32              "D"
+ 156          eq_33              "L"
+ 157          eq_34              "D,L"
+ 158          eq_35              "L,D"
+ 159          eq_36              "D,a"      !!alpha=4
+ 160          eq_36_prime        "L,a"     !!alpha=1
+ 161          eq_37              "D,a"      !!alpha=1
+ 162          eq_37_prime        "L,a"     !!alpha=4
+ 163          eq_38              "WT,WT"
+ 164          eq_39              "C,a,XR"
+ 165          eq_40              "C,a,YR"
+ 166          eq_41              "C,C,a,a"
+ 167          ;
+ 168   
+ 169  *ADRP.. ;
+ 170  set h(n)/#m/;
+ 171  set k(j) /#i/;
+ 172  eq_2(m,i) $(C(m,i) and not sameas(i,'i0') and not sameas(m,'m0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
+ 173  eq_3(m,i,li) $(C(m,i)).. sum((n,j), z(m,i,n,j,li)) =e= sum((h,k), z(m,i,h,k,li));
+ 174   
+ 175  *eq_4(l) $(Bs(li)).. sum((m,i)$C(m,i), z('m0','i0',m,i,l) =e= 1 ;
+ 176  *eq_5(l) $(Bs(li)).. sum((
+ 177   
+ 178   
+ 179   
+ 180   
+ 181  *Model transport /all/ ;
+ 182   
+ 183  *Solve transport using lp minimizing z ;
+ 184   
+ 185  *Display x.l, x.m ;
+ 186   
+
+**** LIST OF STRAY NAMES - CHECK DECLARATIONS FOR SPURIOUS COMMAS
+**** STRAY NAME AGV OF TYPE EQU  
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 19:18:46 Page 2
+A branch and bound problem (TRNSPORT,SEQ=1)
+E x e c u t i o n
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+
+
+USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
+      Free Demo, +1 202-342-0180, support@gams.com, www.gams.com DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\BBAPP.gms
+Output     C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\BBAPP.lst
