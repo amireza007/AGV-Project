@@ -1,4 +1,4 @@
-$Title  A branch and bound problem (TRNSPORT,SEQ=1)
+$Title  A branch and bound problem (TRNSPORT,Scnstr=1)
 
 $onEolCom
 $ontext
@@ -31,6 +31,7 @@ Sets
        
         i "container index" /i0*i4/
         j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+
         
         m   "QC index" /m0,m1,m2,m3,m4/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
@@ -41,39 +42,37 @@ Sets
 *       0 in a is a virtual starting point
         a   "AGV actions" /a0*a4/
 
-        XR  "Vertical Operational Area" /x1*x10/
-        YR  "Horizontal Operational Area" /y1*y14/
-        YS  "Horizontal Seaside Operation Area" /y11*y14/
-        YL  "Horizontal Path" /y1*y10/
-
+        XR  "Vertical Operational Area" /1*10/
+        YR  "Horizontal Operational Area" /1*14/
+        YS(YR)  "Horizontal Seaside Operation Area" /11*14/
+        YL(YR)  "Horizontal Path" /1*10/
+        
         L(m,i)   /m1.i1 , m2.i2/
         D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3,m4.i4/ 
         C(m,i)  "All  Containers" /m1.i1 , m2.i2,m3.i3,m4.i4/ !! this is in data file
 *        C_prime(i) "The set of containers to be assigned" $ "This is in data file" 
 
-        
-        
         WT(m,i,a) "set of total actions" /#C.#a/
         WV(m,i,a)  "Vertical Actions" /m1.i1.a1/
         WH(m,i,a)  "Horizontal Actions" /m1.i2.a2/
 
 *       or psi_1(m,i,m,i)?
 *very challenging set!
-        psi_1(m,i,n,j)   "Sequence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job sequence, (in a form of 2d graph?)idk
-        psi_2(m,i,n,j)   "Sequence of Container jobs for ASC" /#psi_1/ !!This is in data file. 
+        psi_1(m,i,n,j)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
+        psi_2(m,i,n,j)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file. 
         ;
-        
 
+*O(YR) $(C(m,i)) = yes;
 alias(a,a_2);
 alias(j,j_1); !!set of container jobs and qc
 alias(j,j_2); !!Another set of container jobs and QC
 
 alias (WT, WT_1);
 alias (WT, WT_2);
-
+acronym ;
 Parameters
-        
-        O(j) /i1 1/
+
+        O(m,i) /m1.i1 1/
         A_L(j) /i1 1/
         A_R(j) /i1 1/
         G_Q(j) /i1 1/ !!seems to be constant for all container jobs, bc of const 24
@@ -90,15 +89,15 @@ $offtext
 
 Binary Variables
 
-        z(m,i,n,j,li) "used mainly for handling QC double cycling, it consists of 0 virtual point!"
-        U_AGV(j_1,j_2) "U_AGV(j_1,j_2) conducted before" 
-        U_QC(j,m,i,a) "U_QC(j,WT) conducted before"
+        z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
+        U_AGV(j_1,j_2)  "U_AGV(j_1,j_2) conducted before" 
+        U_QC(j,m,i,a)   "U_QC(j,WT) conducted before"
         
 *       "Path related variables
         P_X(m,i,a,XR) "P_X(WV,x) finish V loc"
         P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc"
-        P_X(m,i,a,XR) "P_X(WV,x) Start H loc"
-        P_Y(m,i,a,YR)"P_Y(WH,y) Start H loc"
+        P_X0(m,i,a,*) "P_X(WV,x) Start H loc"
+        P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc"
         ;
 
 Positive Variables
@@ -110,72 +109,85 @@ Positive Variables
         
 
 *       Auxiliary Variables
-        t_AGV(m,i,a) "t_AGV(WT_1,WT_2"
-        X_position(m,i,a) "X_position(WT)"
-        Y_position(m,i,a) "Y_position(WT)"
+        t_AGV(m,i,a)        "t_AGV(WT_1,WT_2"
+        X_position(m,i,a)   "X_position(WT)"
+        Y_position(m,i,a)   "Y_position(WT)"
         ;
 
 *  Positive Variable x ;
-
 Equations
-        ADRP        1st equation, AGV Dispatching and Routing Problem
+        ADRP        1st cnstruation, AGV Dispatching and Routing Problem
 
 *       Job assignment constraints
-        eq_2(m,i)               C            Equation 2(C)
-        eq_3(m,i,li)            "C,B"      
-        eq_4(li)                B with 0 virtual node         
-        eq_5(li)               ‌ B with 0 virutal node         
-        eq_6(m,i)               L         
-        eq_7(m,i)               D         
-        eq_8(m,i,n,j,XR)               "C,C,XR"        
-        eq_9(m,i,n,j,YR)               "C,C,YR"    
-        eq_10(m,i,a)              "C,a"     
-        eq_11(m,i,a)              "C,a"      
-        eq_12(m,i)              "L"        
-        eq_13(m,i)              "D"        
-        eq_14(m,i)              "D"        
-        eq_15(m,i)              "L"
-        eq_16(m,i)              "D"
-        eq_17(m,i)              "L"
-        eq_18(m,i)              "L"
-        eq_19(m,i)              "D"
-        eq_20(m,i,a,YR)              "WH,YR"
-        eq_21(m,i,a,XR)              "WV,XR"
-        eq_22(m,i,n,j)              "C,C"
-        eq_23(m,i,a,n,j,a,YR,XR)              "WH,WH,YR,XR"
-        eq_24(m,i,n,j,a)              "C, WH"
-        eq_25(m,i)              "C, WH"
-        eq_26(n,j,a,YS,m,i)              "WH,YS,D"  !! for alpha = 0
-        eq_26_prime(n,j,a)        "L"  !! for alpha = 3, try the actual definition of the equation with conditions and ord(I)
-        eq_27              "WV, XR"
-        eq_28              "C,a"      !!alpha>2
-        eq_29              "C,C"      !! two consecutive containers, i and i+1
-        eq_30              "psi_1"
-        eq_31              "psi_2"
-        eq_32              "D"
-        eq_33              "L"
-        eq_34              "D,L"
-        eq_35              "L,D"
-        eq_36              "D,a"      !!alpha=4
-        eq_36_prime        "L,a"     !!alpha=1
-        eq_37              "D,a"      !!alpha=1
-        eq_37_prime        "L,a"     !!alpha=4
-        eq_38              "WT,WT"
-        eq_39              "C,a,XR"
-        eq_40              "C,a,YR"
-        eq_41              "C,C,a,a"
+        cnstr_2(m,i)               
+        cnstr_3(m,i,li)             "C,B"      
+        cnstr_4(li)                 "B with 0 virtual node"         
+        cnstr_5(li)               ‌  "B with 0 virutal node"         
+        cnstr_6(m,i)                "L"         
+        cnstr_7(m,i)                "D"         
+        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
+        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
+        cnstr_10(m,i,a)             "C,a"     
+        cnstr_11(m,i,a)             "C,a"      
+        cnstr_12(m,i)               "L"        
+        cnstr_13(m,i)               "D"        
+        cnstr_14(m,i,XR)               "D"        
+        cnstr_15(m,i)               "L"
+        cnstr_16(m,i)               "D"
+        cnstr_17(m,i)               "L"
+        cnstr_18(m,i)               "L"
+        cnstr_19(m,i)               "D"
+        cnstr_20(m,i,a,YR)          "WH,YR"
+        cnstr_21(m,i,a,XR)          "WV,XR"
+        cnstr_22(m,i,n,j)           "C,C"
+        cnstr_23(m,i,a,n,j,a,YR,XR)              "WH,WH,YR,XR"
+        cnstr_24(m,i,n,j,a)              "C, WH"
+        cnstr_25(m,i)              "C, WH"
+        cnstr_26(n,j,a,YS,m,i)              "WH,YS,D"  !! for alpha = 0
+        cnstr_26_prime(n,j,a)        "L"  !! for alpha = 3, try the actual definition of the cnstruation with conditions and ord(I)
+        cnstr_27              "WV, XR"
+        cnstr_28              "C,a"      !!alpha>2
+        cnstr_29              "C,C"      !! two consecutive containers, i and i+1
+        cnstr_30              "psi_1"
+        cnstr_31              "psi_2"
+        cnstr_32              "D"
+        cnstr_33              "L"
+        cnstr_34              "D,L"
+        cnstr_35              "L,D"
+        cnstr_36              "D,a"      !!alpha=4
+        cnstr_36_prime        "L,a"      !!alpha=1
+        cnstr_37              "D,a"      !!alpha=1
+        cnstr_37_prime        "L,a"      !!alpha=4
+        cnstr_38              "WT,WT"
+        cnstr_39              "C,a,XR"
+        cnstr_40              "C,a,YR"
+        cnstr_41              "C,C,a,a"
         ;
 
+
 *ADRP.. ;
-set h(n)/#m/;
+
+set h(n)/#m/;  !! for cnstr_3
 set k(j) /#i/;
-eq_2(m,i) $(C(m,i) and not sameas(i,'i0') and not sameas(m,'m0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
-eq_3(m,i,li) $(C(m,i)).. sum((n,j), z(m,i,n,j,li)) =e= sum((h,k), z(m,i,h,k,li));
+set s(YR);
+set XR2(XR) /#XR/;
+*Job assinment constraints
+cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
+cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $C(n,j), z(m,i,n,j,li)) =e= sum((h,k) $C(h,k), z(m,i,h,k,li));
+cnstr_4(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z('m0', 'i0', m, i, li)) =e= 1;
+cnstr_5(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z(m, i, 'm0', 'i0', li)) =e= 1;
+cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j)), z(m,i,n,j,li)) =e= 1;
+cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j)), z(m,i,n,j,li)) =e= 1;
 
-*eq_4(l) $(Bs(li)).. sum((m,i)$C(m,i), z('m0','i0',m,i,l) =e= 1 ;
-*eq_5(l) $(Bs(li)).. sum((
-
-
+*LOcation constraints of AGV acitons
+$macro pr(q)
+cnstr_8(m,i,n,j,xr) $(C(m,i) and C(n,j)).. P_X(m,i,'a4',XR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_X(n,j,'a0',XR);
+cnstr_9(m,i,n,j,yr) $(C(m,i) and C(n,j)).. P_Y(m,i,'a4',YR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_Y(n,j,'a0',YR);
+cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y0(m,i,'a0',YS)) =e= 1;
+cnstr_14(m,i) $(C(m,i)).. P_X0(m, i,'a0',o(m,i)) =e= 1;
 
  
 *Model transport /all/ ;
@@ -183,4 +195,3 @@ eq_3(m,i,li) $(C(m,i)).. sum((n,j), z(m,i,n,j,li)) =e= sum((h,k), z(m,i,h,k,li))
 *Solve transport using lp minimizing z ;
 
 *Display x.l, x.m ;
-

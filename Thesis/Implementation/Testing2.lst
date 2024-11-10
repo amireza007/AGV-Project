@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 18:57:16 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -16,95 +16,112 @@ C o m p i l a t i o n
   12      p /1/
   13      v /3/
   14      ;
-  15  set l /j1,j2/; !!this is /s/
-  16  set k;
-  17  k(i) = yes;
-  18  k(j) = yes;
-  19  display k;
-  20  set t1(i) /i6/;
-  21  set gh /h1,h2,h4/;
-  22  set gh2(gh) /h1,h2/;
-  23   
-  24  set gh1(gh,i) /#gh2.#i/;
-  25  t1('i2') = Yes;
-  26  alias(j,t2);
-  27  parameter
-  28      f(i) "hi" / i1 1 /
-  29      g(i_1) / i1 1 /;
-  30  loop(i$(ord(i)>=2),
-  31    f(i) = f(i-2) + f(i-1);
-  32  );
-  33  set z /#i,#j/;
-  34  display z;
-  35  set y(i,j);
-  36  alias (i,iii);
-  37  set ii(i) /i1,i2/;
-  38  y(ii,j) = yes;
-  39  variable oi(iii);
-  40  variable x;
-  41  equation eq_2(ii,i,j);
-  42  eq_2(ii,i,j) $(not sameas(i,'i1') and not sameas(i,'i2') and y(ii,j)).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
-  43  *display set.i;
-  44  equation eq_1;
-  45  eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
-  46  Model ww /all/;
-  47  solve ww using lp minimizing x;
-  48   
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 18:57:16 Page 2
-G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Include File Summary
-
-
-   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
-
-     1        1 INPUT          0       0  C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.gms
-     2       49 GDXOUT         1      49  C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\testing2.gdx
+  15  set kk /2/;
+  16  set o(i,j,kk) /i1.j1.2/;
+  17  *display kk $(1);
+  18   
+  19  set l /j1,j2/; !!this is /s/
+  20  set k;
+  21  k(i) = yes;
+  22  display k;
+  23  set t1(i) /i6/;
+  24  set gh /h1,h2,h4/;
+  25  set gh2(gh) /h1,h2/;
+  26  *set ij(i,j)(i) /i1 /;
+  27  set gh1(gh,i) /#gh2.#i/;
+  28  t1('i2') = Yes;
+  29  alias(j,t2);
+  30  parameter
+  31      f(i) "hi" / i1 1 /
+  32      g(i_1) / i1 1 /;
+  33  loop(i$(ord(i)>=2),
+  34    f(i) = f(i-2) + f(i-1);
+  35  );
+  36  set z /#i,#j/;
+  37  display z;
+  38  set y(i,j);
+  39  alias (i,iii);
+  40  set ii(i) /i1,i2/;
+  41  y(ii,j) = yes;
+  42  Set ll / l1*l5 /;
+  43  display y;
+  44   
+  45  * This will display only the third element
+  46  *k(i) $(ord(i) = o('i1','j1')) = no;
+  47  variable oi(iii);
+  48  variable x;
+  49  equation eq_2(ii,i,j);
+  50  eq_2(ii,i,j).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
+  51  equation eq_1;
+  52  display y;
+  53  eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
+  54  Model ww /all/;
+  55  solve ww using lp minimizing x;
+  56   
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 18:57:16 Page 3
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-----     19 SET k  
+----     22 SET k  
+
+i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12
+
+
+----     37 SET z  
 
 i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12,    j1 
 
 
-----     34 SET z  
+----     43 SET y  
 
-i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12,    j1 
+            j1
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 18:57:16 Page 4
+i1         YES
+i2         YES
+
+
+----     52 SET y  
+
+            j1
+
+i1         YES
+i2         YES
+
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE ww Using LP From line 47
+Equation Listing    SOLVE ww Using LP From line 55
 
 
 ---- eq_2  =E=  
 
+eq_2(i1,i1,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
+     
+eq_2(i1,i2,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
+     
 eq_2(i1,i3,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
      
-eq_2(i1,i4,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
-     
-eq_2(i1,i5,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
-     
-REMAINING 17 ENTRIES SKIPPED
+REMAINING 21 ENTRIES SKIPPED
 
 
 ---- eq_1  =E=  
 
 eq_1..  x =E= 2 ; (LHS = 0, INFES = 2 ****)
      
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 18:57:16 Page 5
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE ww Using LP From line 47
+Column Listing      SOLVE ww Using LP From line 55
 
 
 ---- oi  
 
 oi(i1)
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+       -1       eq_2(i1,i1,j1)
+       -1       eq_2(i1,i2,j1)
        -1       eq_2(i1,i3,j1)
        -1       eq_2(i1,i4,j1)
        -1       eq_2(i1,i5,j1)
@@ -115,6 +132,8 @@ oi(i1)
        -1       eq_2(i1,i10,j1)
        -1       eq_2(i1,i11,j1)
        -1       eq_2(i1,i12,j1)
+       -1       eq_2(i2,i1,j1)
+       -1       eq_2(i2,i2,j1)
        -1       eq_2(i2,i3,j1)
        -1       eq_2(i2,i4,j1)
        -1       eq_2(i2,i5,j1)
@@ -131,6 +150,8 @@ oi(i1)
 
 x
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       eq_2(i1,i1,j1)
+        1       eq_2(i1,i2,j1)
         1       eq_2(i1,i3,j1)
         1       eq_2(i1,i4,j1)
         1       eq_2(i1,i5,j1)
@@ -141,6 +162,8 @@ x
         1       eq_2(i1,i10,j1)
         1       eq_2(i1,i11,j1)
         1       eq_2(i1,i12,j1)
+        1       eq_2(i2,i1,j1)
+        1       eq_2(i2,i2,j1)
         1       eq_2(i2,i3,j1)
         1       eq_2(i2,i4,j1)
         1       eq_2(i2,i5,j1)
@@ -153,38 +176,38 @@ x
         1       eq_2(i2,i12,j1)
         1       eq_1
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 18:57:16 Page 6
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE ww Using LP From line 47
+Model Statistics    SOLVE ww Using LP From line 55
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS           21
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS           25
 BLOCKS OF VARIABLES           2     SINGLE VARIABLES            2
-NON ZERO ELEMENTS            41
+NON ZERO ELEMENTS            49
 
 
-GENERATION TIME      =        0.015 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+GENERATION TIME      =        0.062 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
 
 
-EXECUTION TIME       =        0.015 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/07/24 18:57:16 Page 7
+EXECUTION TIME       =        0.062 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE ww Using LP From line 47
+Solution Report     SOLVE ww Using LP From line 55
 
 
                S O L V E      S U M M A R Y
 
      MODEL   ww                  OBJECTIVE  x
      TYPE    LP                  DIRECTION  MINIMIZE
-     SOLVER  XPRESS              FROM LINE  47
+     SOLVER  XPRESS              FROM LINE  55
 
 **** SOLVER STATUS     1 Normal Completion         
 **** MODEL STATUS      1 Optimal                   
 **** OBJECTIVE VALUE                2.0000
 
- RESOURCE USAGE, LIMIT          0.047      1000.000
+ RESOURCE USAGE, LIMIT          1.031      1000.000
  ITERATION COUNT, LIMIT         0    2000000000
 
 FICO-Xpress      25.1.2 r67420 Released Jul 31, 2018 WEI x86 64bit/MS Windows 
@@ -197,6 +220,8 @@ optimal LP solution found: objective value 2
 
                  LOWER          LEVEL          UPPER         MARGINAL
 
+i1.i1 .j1          .              .              .              .          
+i1.i2 .j1          .              .              .              .          
 i1.i3 .j1          .              .              .              .          
 i1.i4 .j1          .              .              .              .          
 i1.i5 .j1          .              .              .              .          
@@ -207,6 +232,8 @@ i1.i9 .j1          .              .              .              .
 i1.i10.j1          .              .              .              .          
 i1.i11.j1          .              .              .              .          
 i1.i12.j1          .              .              .             EPS         
+i2.i1 .j1          .              .              .              .          
+i2.i2 .j1          .              .              .              .          
 i2.i3 .j1          .              .              .              .          
 i2.i4 .j1          .              .              .              .          
 i2.i5 .j1          .              .              .              .          

@@ -12,15 +12,18 @@ sets
     p /1/ 
     v /3/
     ;
+set kk /2/;
+set o(i,j,kk) /i1.j1.2/;
+*display kk $(1);
+
 set l /j1,j2/; !!this is /s/
 set k;
 k(i) = yes;
-k(j) = yes;
 display k;
 set t1(i) /i6/;
 set gh /h1,h2,h4/;
 set gh2(gh) /h1,h2/;
-
+*set ij(i,j)(i) /i1 /;
 set gh1(gh,i) /#gh2.#i/;
 t1('i2') = Yes;
 alias(j,t2);
@@ -36,17 +39,18 @@ set y(i,j);
 alias (i,iii);
 set ii(i) /i1,i2/;
 y(ii,j) = yes;
+Set ll / l1*l5 /;
+display y;
+
+* This will display only the third element
+*k(i) $(ord(i) = o('i1','j1')) = no;
 variable oi(iii);
 variable x;
 equation eq_2(ii,i,j);
-eq_2(ii,i,j) $(not sameas(i,'i1') and not sameas(i,'i2') and y(ii,j)).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
-*display set.i;
+eq_2(ii,i,j).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
 equation eq_1;
+display y;
 eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
 Model ww /all/;
 solve ww using lp minimizing x;
 
-$gdxout testing2
-$unload i j
-$unload f g eq_2
-$gdxout
