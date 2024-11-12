@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/10/24 15:01:19 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/12/24 13:06:35 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -58,34 +58,40 @@ C o m p i l a t i o n
       eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
       Model ww /all/;
       solve ww using lp minimizing x;
-  59   
-  60  Set   i         / i1*i3 /
-  61        s(i,i,i)  "Set members" / i1.i2.i3, i3.i3.i1/
-  62        pR1(i,i)  "projection right to left with assignment"
-  63        pR2(i,i)  "projection right to left with option statement"
-  64        pL1(i,i)  "projection left to right with assignment"
-  65        pL2(i,i)  "projection left to right with option statement" ;
-  66  Alias (i,ii,iii);
-  67   
-  68  * Right-to-left permutation, two ways
-  69  pR1(i,ii) = sum(s(iii,ii,i),1);
-  70  option pR2 < s;
-  71   
-  72  * Left-to-right permutation, two ways
-  73  pL1(i,ii) = sum(s(i,ii,iii),1);
-  74  option pL2 <= s;
-  75   
-  76  *option s:0:0:1, pR1:0:0:1, pR2:0:0:1, pL1:0:0:1, pL2:0:0:1;
-  77  display s, pR1, pR2, pL1, pL2 ;
+  59  set j /1*10/;
+  60  alias (j,j_1)
+  61  parameter val(j);
+  62  val(j) = ord(j);
+  63  variable x;
+  64  equation eq1(j);
+  65  eq1(j).. sum(j_1 $(ord(j_1) < ord(j)), 1) =e= x;
+  66  Set   i         / i1*i3 /
+  67        s(i,i,i)  "Set members" / i1.i2.i3, i3.i3.i1/
+  68        pR1(i,i)  "projection right to left with assignment"
+  69        pR2(i,i)  "projection right to left with option statement"
+  70        pL1(i,i)  "projection left to right with assignment"
+  71        pL2(i,i)  "projection left to right with option statement" ;
+  72  Alias (i,ii,iii);
+  73   
+  74  * Right-to-left permutation, two ways
+  75  pR1(i,ii) = sum(s(iii,ii,i),1);
+  76  option pR2 < s;
+  77   
+  78  * Left-to-right permutation, two ways
+  79  pL1(i,ii) = sum(s(i,ii,iii),1);
+  80  option pL2 <= s;
+  81   
+  82  *option s:0:0:1, pR1:0:0:1, pR2:0:0:1, pL1:0:0:1, pL2:0:0:1;
+  83  display s, pR1, pR2, pL1, pL2 ;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/10/24 15:01:19 Page 2
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/12/24 13:06:35 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-----     77 SET s  Set members
+----     83 SET s  Set members
 
                i1          i3
 
@@ -93,7 +99,7 @@ i1.i2                     YES
 i3.i3         YES
 
 
-----     77 SET pR1  projection right to left with assignment
+----     83 SET pR1  projection right to left with assignment
 
             i2          i3
 
@@ -101,7 +107,7 @@ i1                     YES
 i3         YES
 
 
-----     77 SET pR2  projection right to left with option statement
+----     83 SET pR2  projection right to left with option statement
 
             i2          i3
 
@@ -109,7 +115,7 @@ i1                     YES
 i3         YES
 
 
-----     77 SET pL1  projection left to right with assignment
+----     83 SET pL1  projection left to right with assignment
 
             i2          i3
 
@@ -117,7 +123,7 @@ i1         YES
 i3                     YES
 
 
-----     77 SET pL2  projection left to right with option statement
+----     83 SET pL2  projection left to right with option statement
 
             i2          i3
 

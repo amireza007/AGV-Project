@@ -56,7 +56,13 @@ eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
 Model ww /all/;
 solve ww using lp minimizing x;
 $offtext
-
+set j /1*10/;
+alias (j,j_1)
+parameter val(j);
+val(j) = ord(j);
+variable x;
+equation eq1(j);
+eq1(j).. sum(j_1 $(ord(j_1) < ord(j)), 1) =e= x;
 Set   i         / i1*i3 /
       s(i,i,i)  "Set members" / i1.i2.i3, i3.i3.i1/
       pR1(i,i)  "projection right to left with assignment"
