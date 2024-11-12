@@ -35,7 +35,8 @@ Sets
         
         m   "QC index" /m0,m1,m2,m3,m4/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
-        
+
+
         li "AGV index" /l1*l3/
         Bs(li) "set of all agvs" /#li/
         
@@ -46,10 +47,16 @@ Sets
         YR  "Horizontal Operational Area" /1*14/
         YS(YR)  "Horizontal Seaside Operation Area" /11*14/
         YL(YR)  "Horizontal Path" /1*10/
+
+
+        o(m,i,XR) /m1.i1.2, m2.i2.3/
+        A_L(m,i,XR) /m1.i1.2, m2.i2.1, m3.i3.4, m4.i4.7/
+        A_R(m,i,XR) /m1.i1.7, m2.i2.9, m3.i3.6, m4.i4.8/
+        
         
         L(m,i)   /m1.i1 , m2.i2/
-        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3,m4.i4/ 
-        C(m,i)  "All  Containers" /m1.i1 , m2.i2,m3.i3,m4.i4/ !! this is in data file
+        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/ 
+        C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file
 *        C_prime(i) "The set of containers to be assigned" $ "This is in data file" 
 
         WT(m,i,a) "set of total actions" /#C.#a/
@@ -61,7 +68,6 @@ Sets
         psi_1(m,i,n,j)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
         psi_2(m,i,n,j)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file. 
         ;
-
 *O(YR) $(C(m,i)) = yes;
 alias(a,a_2);
 alias(j,j_1); !!set of container jobs and qc
@@ -69,12 +75,8 @@ alias(j,j_2); !!Another set of container jobs and QC
 
 alias (WT, WT_1);
 alias (WT, WT_2);
-acronym ;
 Parameters
 
-        O(m,i) /m1.i1 1/
-        A_L(j) /i1 1/
-        A_R(j) /i1 1/
         G_Q(j) /i1 1/ !!seems to be constant for all container jobs, bc of const 24
         G_Y(j) /i1 1/
         ;
@@ -96,7 +98,7 @@ Binary Variables
 *       "Path related variables
         P_X(m,i,a,XR) "P_X(WV,x) finish V loc"
         P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc"
-        P_X0(m,i,a,*) "P_X(WV,x) Start H loc"
+        P_X0(m,i,a,XR) "P_X(WV,x) Start H loc"
         P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc"
         ;
 
@@ -187,7 +189,8 @@ cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
 cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
 cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
 cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y0(m,i,'a0',YS)) =e= 1;
-cnstr_14(m,i) $(C(m,i)).. P_X0(m, i,'a0',o(m,i)) =e= 1;
+cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X0(m, i,'a0',XR) =e= 1;
+cnstr_15(m,i) $(L(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a0',XR)) =e= 1;
 
  
 *Model transport /all/ ;

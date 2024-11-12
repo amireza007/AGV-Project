@@ -1,271 +1,132 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/10/24 15:01:19 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
 
-   2  scalar r /10/; !! alksdfj;lkasdjf
-   3  set i "set of all" / i1*i12 /;
-   4  set j /j1/;
-   5  set c(i,j) /#i.#j/;
-   6  set a /1,2,3,4/;
-   7  *set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
-   8  c('i1','j1') = no;
-   9  set q(i,j,a);
-  10  alias(i,i_1);
-  11  sets
-  12      p /1/
-  13      v /3/
-  14      ;
-  15  set kk /2/;
-  16  set o(i,j,kk) /i1.j1.2/;
-  17  *display kk $(1);
-  18   
-  19  set l /j1,j2/; !!this is /s/
-  20  set k;
-  21  k(i) = yes;
-  22  display k;
-  23  set t1(i) /i6/;
-  24  set gh /h1,h2,h4/;
-  25  set gh2(gh) /h1,h2/;
-  26  *set ij(i,j)(i) /i1 /;
-  27  set gh1(gh,i) /#gh2.#i/;
-  28  t1('i2') = Yes;
-  29  alias(j,t2);
-  30  parameter
-  31      f(i) "hi" / i1 1 /
-  32      g(i_1) / i1 1 /;
-  33  loop(i$(ord(i)>=2),
-  34    f(i) = f(i-2) + f(i-1);
-  35  );
-  36  set z /#i,#j/;
-  37  display z;
-  38  set y(i,j);
-  39  alias (i,iii);
-  40  set ii(i) /i1,i2/;
-  41  y(ii,j) = yes;
-  42  Set ll / l1*l5 /;
-  43  display y;
-  44   
-  45  * This will display only the third element
-  46  *k(i) $(ord(i) = o('i1','j1')) = no;
-  47  variable oi(iii);
-  48  variable x;
-  49  equation eq_2(ii,i,j);
-  50  eq_2(ii,i,j).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
-  51  equation eq_1;
-  52  display y;
-  53  eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
-  54  Model ww /all/;
-  55  solve ww using lp minimizing x;
-  56   
+   2   
+      scalar r /10/; !! alksdfj;lkasdjf
+      set i "set of all" / i1*i12 /;
+      set j /j1/;
+      set c(i,j) /#i.#j/;
+      set a /1,2,3,4/;
+      *set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
+      c('i1','j1') = no;
+      set q(i,j,a);
+      alias(i,i_1);
+      sets
+          p /1/ 
+          v /3/
+          ;
+      set kk /2/;
+      set o(i,j,kk) /i1.j1.2/;
+      *display kk $(1);
+       
+      set l /j1,j2/; !!this is /s/
+      set k;
+      k(i) = yes;
+      display k;
+      set t1(i) /i6/;
+      set gh /h1,h2,h4/;
+      set gh2(gh) /h1,h2/;
+      *set ij(i,j)(i) /i1 /;
+      set gh1(gh,i) /#gh2.#i/;
+      t1('i2') = Yes;
+      alias(j,t2);
+      parameter
+          f(i) "hi" / i1 1 / 
+          g(i_1) / i1 1 /;
+      loop(i$(ord(i)>=2),
+        f(i) = f(i-2) + f(i-1);
+      );
+      set z /#i,#j/;
+      display z;
+      set y(i,j);
+      alias (i,iii);
+      set ii(i) /i1,i2/;
+      y(ii,j) = yes;
+      Set ll / l1*l5 /;
+      display y;
+       
+      * This will display only the third element
+      *k(i) $(ord(i) = o('i1','j1')) = no;
+      variable oi(iii);
+      variable x;
+      equation eq_2(ii,i,j);
+      eq_2(ii,i,j).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
+      equation eq_1;
+      display y;
+      eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
+      Model ww /all/;
+      solve ww using lp minimizing x;
+  59   
+  60  Set   i         / i1*i3 /
+  61        s(i,i,i)  "Set members" / i1.i2.i3, i3.i3.i1/
+  62        pR1(i,i)  "projection right to left with assignment"
+  63        pR2(i,i)  "projection right to left with option statement"
+  64        pL1(i,i)  "projection left to right with assignment"
+  65        pL2(i,i)  "projection left to right with option statement" ;
+  66  Alias (i,ii,iii);
+  67   
+  68  * Right-to-left permutation, two ways
+  69  pR1(i,ii) = sum(s(iii,ii,i),1);
+  70  option pR2 < s;
+  71   
+  72  * Left-to-right permutation, two ways
+  73  pL1(i,ii) = sum(s(i,ii,iii),1);
+  74  option pL2 <= s;
+  75   
+  76  *option s:0:0:1, pR1:0:0:1, pR2:0:0:1, pL1:0:0:1, pL2:0:0:1;
+  77  display s, pR1, pR2, pL1, pL2 ;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 2
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/10/24 15:01:19 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-----     22 SET k  
+----     77 SET s  Set members
 
-i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12
+               i1          i3
 
-
-----     37 SET z  
-
-i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12,    j1 
+i1.i2                     YES
+i3.i3         YES
 
 
-----     43 SET y  
+----     77 SET pR1  projection right to left with assignment
 
-            j1
+            i2          i3
+
+i1                     YES
+i3         YES
+
+
+----     77 SET pR2  projection right to left with option statement
+
+            i2          i3
+
+i1                     YES
+i3         YES
+
+
+----     77 SET pL1  projection left to right with assignment
+
+            i2          i3
 
 i1         YES
-i2         YES
+i3                     YES
 
 
-----     52 SET y  
+----     77 SET pL2  projection left to right with option statement
 
-            j1
+            i2          i3
 
 i1         YES
-i2         YES
-
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 3
-G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE ww Using LP From line 55
+i3                     YES
 
 
----- eq_2  =E=  
 
-eq_2(i1,i1,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
-     
-eq_2(i1,i2,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
-     
-eq_2(i1,i3,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
-     
-REMAINING 21 ENTRIES SKIPPED
-
-
----- eq_1  =E=  
-
-eq_1..  x =E= 2 ; (LHS = 0, INFES = 2 ****)
-     
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 4
-G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE ww Using LP From line 55
-
-
----- oi  
-
-oi(i1)
-                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
-       -1       eq_2(i1,i1,j1)
-       -1       eq_2(i1,i2,j1)
-       -1       eq_2(i1,i3,j1)
-       -1       eq_2(i1,i4,j1)
-       -1       eq_2(i1,i5,j1)
-       -1       eq_2(i1,i6,j1)
-       -1       eq_2(i1,i7,j1)
-       -1       eq_2(i1,i8,j1)
-       -1       eq_2(i1,i9,j1)
-       -1       eq_2(i1,i10,j1)
-       -1       eq_2(i1,i11,j1)
-       -1       eq_2(i1,i12,j1)
-       -1       eq_2(i2,i1,j1)
-       -1       eq_2(i2,i2,j1)
-       -1       eq_2(i2,i3,j1)
-       -1       eq_2(i2,i4,j1)
-       -1       eq_2(i2,i5,j1)
-       -1       eq_2(i2,i6,j1)
-       -1       eq_2(i2,i7,j1)
-       -1       eq_2(i2,i8,j1)
-       -1       eq_2(i2,i9,j1)
-       -1       eq_2(i2,i10,j1)
-       -1       eq_2(i2,i11,j1)
-       -1       eq_2(i2,i12,j1)
-
-
----- x  
-
-x
-                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
-        1       eq_2(i1,i1,j1)
-        1       eq_2(i1,i2,j1)
-        1       eq_2(i1,i3,j1)
-        1       eq_2(i1,i4,j1)
-        1       eq_2(i1,i5,j1)
-        1       eq_2(i1,i6,j1)
-        1       eq_2(i1,i7,j1)
-        1       eq_2(i1,i8,j1)
-        1       eq_2(i1,i9,j1)
-        1       eq_2(i1,i10,j1)
-        1       eq_2(i1,i11,j1)
-        1       eq_2(i1,i12,j1)
-        1       eq_2(i2,i1,j1)
-        1       eq_2(i2,i2,j1)
-        1       eq_2(i2,i3,j1)
-        1       eq_2(i2,i4,j1)
-        1       eq_2(i2,i5,j1)
-        1       eq_2(i2,i6,j1)
-        1       eq_2(i2,i7,j1)
-        1       eq_2(i2,i8,j1)
-        1       eq_2(i2,i9,j1)
-        1       eq_2(i2,i10,j1)
-        1       eq_2(i2,i11,j1)
-        1       eq_2(i2,i12,j1)
-        1       eq_1
-
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 5
-G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE ww Using LP From line 55
-
-
-MODEL STATISTICS
-
-BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS           25
-BLOCKS OF VARIABLES           2     SINGLE VARIABLES            2
-NON ZERO ELEMENTS            49
-
-
-GENERATION TIME      =        0.062 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
-
-
-EXECUTION TIME       =        0.062 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/09/24 16:24:39 Page 6
-G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE ww Using LP From line 55
-
-
-               S O L V E      S U M M A R Y
-
-     MODEL   ww                  OBJECTIVE  x
-     TYPE    LP                  DIRECTION  MINIMIZE
-     SOLVER  XPRESS              FROM LINE  55
-
-**** SOLVER STATUS     1 Normal Completion         
-**** MODEL STATUS      1 Optimal                   
-**** OBJECTIVE VALUE                2.0000
-
- RESOURCE USAGE, LIMIT          1.031      1000.000
- ITERATION COUNT, LIMIT         0    2000000000
-
-FICO-Xpress      25.1.2 r67420 Released Jul 31, 2018 WEI x86 64bit/MS Windows 
-
-Xpress Optimizer 32.01
-Xpress Solver 64bit v8.4.7 Apr  4 2018
-optimal LP solution found: objective value 2
-
----- EQU eq_2  
-
-                 LOWER          LEVEL          UPPER         MARGINAL
-
-i1.i1 .j1          .              .              .              .          
-i1.i2 .j1          .              .              .              .          
-i1.i3 .j1          .              .              .              .          
-i1.i4 .j1          .              .              .              .          
-i1.i5 .j1          .              .              .              .          
-i1.i6 .j1          .              .              .              .          
-i1.i7 .j1          .              .              .              .          
-i1.i8 .j1          .              .              .              .          
-i1.i9 .j1          .              .              .              .          
-i1.i10.j1          .              .              .              .          
-i1.i11.j1          .              .              .              .          
-i1.i12.j1          .              .              .             EPS         
-i2.i1 .j1          .              .              .              .          
-i2.i2 .j1          .              .              .              .          
-i2.i3 .j1          .              .              .              .          
-i2.i4 .j1          .              .              .              .          
-i2.i5 .j1          .              .              .              .          
-i2.i6 .j1          .              .              .              .          
-i2.i7 .j1          .              .              .              .          
-i2.i8 .j1          .              .              .              .          
-i2.i9 .j1          .              .              .              .          
-i2.i10.j1          .              .              .              .          
-i2.i11.j1          .              .              .              .          
-i2.i12.j1          .              .              .              .          
-
-                           LOWER          LEVEL          UPPER         MARGINAL
-
----- EQU eq_1               2.0000         2.0000         2.0000         1.0000      
-
----- VAR oi  
-
-          LOWER          LEVEL          UPPER         MARGINAL
-
-i1        -INF            2.0000        +INF             .          
-
-                           LOWER          LEVEL          UPPER         MARGINAL
-
----- VAR x                 -INF            2.0000        +INF             .          
-
-
-**** REPORT SUMMARY :        0     NONOPT
-                             0 INFEASIBLE
-                             0  UNBOUNDED
-
-
-EXECUTION TIME       =        0.000 SECONDS      2 MB  25.1.2 r67455 WEX-WEI
+EXECUTION TIME       =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
 
 
 USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
@@ -274,5 +135,5 @@ USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
 
 **** FILE SUMMARY
 
-Input      C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.gms
-Output     C:\Users\Asus\Projects\Frequently Used Repos\AGV-Project\Thesis\Implementation\Testing2.lst
+Input      C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\Testing2.gms
+Output     C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\Testing2.lst
