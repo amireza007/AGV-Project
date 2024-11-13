@@ -59,7 +59,7 @@ $offtext
 set j /1*10/;
 alias (j,j_1)
 parameter val(j);
-val(j) = ord(j);
+val(j) = j.val $(j.val > 4);
 variable x;
 equation eq1(j);
 eq1(j).. sum(j_1 $(ord(j_1) < ord(j)), 1) =e= x;

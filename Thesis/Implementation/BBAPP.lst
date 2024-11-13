@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/12/24 14:26:21 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 11:45:16 Page 1
 A branch and bound problem (TRNSPORT,Scnstr=1)
 C o m p i l a t i o n
 
@@ -20,415 +20,224 @@ C o m p i l a t i o n
                     topeka      275  / ;
   20  *you need to set x_R, y_R, and y_r
   21  Scalars
-  22          S_Q "switch time for qc between two containers" /2/ !!This is temporarily assumed constant
+  22          S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
   23          x /1/
   24          y /1/
   25          x_R /10/
   26          y_R /14/
   27          y_r1 /10/
   28          v "AGV speed" /1/
-  29          M "a very large number" /1000000000/
-  30          ;
-  31  Sets
-  32   
-  33          i "container index" /i0*i4/
-  34          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+  29          max "a very large number" /10000000/;
+  30  Sets
+  31   
+  32          i "container index" /i0*i4/
+  33          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+  34   
   35   
-  36   
-  37          m   "QC index" /m0,m1,m2,m3,m4/
-****          $195           $409
-**** 195  Symbol redefined with a different type
-**** 409  Unrecognizable item - skip to find a new statement
-****        looking for a ';' or a key word to get started again
-  38          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
+  36          m   "QC index" /m0,m1,m2,m3,m4/
+  37          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
+  38   
   39   
-  40   
-  41          li "AGV index" /l1*l3/
-  42          Bs(li) "set of all agvs" /#li/
-****                                      $641
-**** 641  Unknown symbol in set.ident or #.ident
-  43   
-  44  *       0 in a is a virtual starting point
-  45          a   "AGV actions" /a0*a4/
-  46   
-  47          XR  "Vertical Operational Area" /1*10/
-  48          YR  "Horizontal Operational Area" /1*14/
-  49          YS(YR)  "Horizontal Seaside Operation Area" /11*14/
-  50          YL(YR)  "Horizontal Path" /1*10/
+  40          li "AGV index" /l1*l3/
+  41          Bs(li) "set of all agvs" /#li/
+  42   
+  43  *       0 in a is a virtual starting point
+  44          a   "AGV actions" /a0*a4/
+  45   
+  46          XR  "Vertical Operational Area" /1*10/
+  47          YR  "Horizontal Operational Area" /1*14/
+  48          YS(YR)  "Horizontal Seaside Operation Area" /11*14/
+  49          YL(YR)  "Horizontal Path" /1*10/
+  50   
   51   
-  52   
-  53          o(m,i,XR) /m1.i1.2, m2.i2.3/
-****            $121
-**** 121  Set expected
-  54          A_L(m,i,XR) /m1.i1.2, m2.i2.1, m3.i3.4, m4.i4.7/
-****              $121
-**** 121  Set expected
-  55          A_R(m,i,XR) /m1.i1.7, m2.i2.9, m3.i3.6, m4.i4.8/
-****              $121
-**** 121  Set expected
+  52          o(m,i,XR) /m1.i1.2, m2.i2.3/
+  53          A_L(m,i,XR) /m1.i1.2, m2.i2.1, m3.i3.4, m4.i4.7/
+  54          A_R(m,i,XR) /m1.i1.7, m2.i2.9, m3.i3.6, m4.i4.8/
+  55   
   56   
-  57   
-  58          L(m,i)   /m1.i1 , m2.i2/
-****            $121
-**** 121  Set expected
-  59          D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/
-****            $121
-**** 121  Set expected
-  60          C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file
-****            $121
-**** 121  Set expected
-  61  *        C_prime(i) "The set of containers to be assigned" $ "This is in data file"
-  62   
-  63          WT(m,i,a) "set of total actions" /#C.#a/
-****             $121
-**** 121  Set expected
-  64          WV(m,i,a)  "Vertical Actions" /m1.i1.a1/
-****             $121
-**** 121  Set expected
-  65          WH(m,i,a)  "Horizontal Actions" /m1.i2.a2/
-****             $121
-**** 121  Set expected
-  66   
-  67  *       or psi_1(m,i,m,i)?
-  68  *very challenging set!
-  69          psi_1(m,i,n,j)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
-****                $121$120
-**** 120  Unknown identifier entered as set
-**** 121  Set expected
-  70          psi_2(m,i,n,j)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file.
-****                $121
-**** 121  Set expected
-  71          ;
-  72  *O(YR) $(C(m,i)) = yes;
-  73  alias(XR, XR_1);
-  74  alias(YR, YR_1);
-  75   
-  76  alias(a,a_2);
-  77  alias(j,j_1); !!set of container jobs and qc
-  78  alias(j,j_2); !!Another set of container jobs and QC
-  79   
-  80  alias (WT, WT_1);
-  81  alias (WT, WT_2);
-  82  Parameters
-  83   
-  84          G_Q(j) /i1 1/ !!seems to be constant for all container jobs, bc of const 24
-  85          G_Y(j) /i1 1/
-  86          ;
-  87   
+  57          L(m,i)   /m1.i1 , m2.i2/
+  58          D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/
+  59          C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file
+  60  *        C_prime(i) "The set of containers to be assigned" $ "This is in data file"
+  61   
+  62          WT(m,i,a) "set of total actions" /#C.#a/
+  63          WV(m,i,a)  "Vertical Actions" /m1.i1.a1/
+  64          WH(m,i,a)  "Horizontal Actions" /m1.i2.a2/
+  65   
+  66  *       or psi_1(m,i,m,i)?
+  67  *very challenging set!
+  68          psi_1(m,i,n,j)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
+  69          psi_2(m,i,n,j)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file.
+  70          ;
+  71  *O(YR) $(C(m,i)) = yes;
+  72  alias(XR, XR_1);
+  73  alias(YR, YR_1);
+  74   
+  75  alias(a,a_2);
+  76  alias(j,j_1); !!set of container jobs and qc
+  77  alias(j,j_2); !!Another set of container jobs and QC
+  78   
+  79  alias (WT, WT_1);
+  80  alias (WT, WT_2);
+  81  Parameters
+  82          o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i2 3/
+  83          G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !!seems to be constant for all container jobs, bc of const 24
+  84          G_Y(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/
+  85          ;
+  86   
       Table d(i,j)  distance in thousands of miles
                           new-yorksdafasdf       chicago      topeka
             seattle          2.5           1.7          100.8
             san-diego        2.5           1.8          1.4  ;
-  95   
-  96  Binary Variables
-  97   
-  98          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
-****            $121  $121   $120
-**** 120  Unknown identifier entered as set
-**** 121  Set expected
-  99          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before"
-****                $121  $121
-**** 121  Set expected
- 100          U_QC(j,m,i,a)   "U_QC(j,WT) conducted before"
-****                 $121
-**** 121  Set expected
- 101   
- 102  *       "Path related variables
- 103          P_X(m,i,a,XR) "P_X(WV,x) finish V loc"
-****              $121
-**** 121  Set expected
- 104          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc"
-****              $121
-**** 121  Set expected
- 105          P_X0(m,i,a,XR) "P_X(WV,x) Start H loc"
-****               $121
-**** 121  Set expected
- 106          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc"
-****               $121
-**** 121  Set expected
- 107          ;
- 108   
- 109  Positive Variables
- 110   
- 111  *       Time related variables
- 112          T_Q(m,i) "start time of QC"
-****              $121
-**** 121  Set expected
- 113          T_Y(m,i) "Start time of agv putting cont on ASC"
-****              $121
-**** 121  Set expected
- 114          T_start(m,i,a) "Start of agv for action (m,i,a)"
-****                  $121
-**** 121  Set expected
+  94   
+  95  Binary Variables
+  96   
+  97          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
+  98          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before"
+  99          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
+ 100   
+ 101  *       "Path related variables
+ 102          P_X(m,i,a,XR) "P_X(WV,x) finish V loc"
+ 103          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc"
+ 104          P_X0(m,i,a,XR) "P_X(WV,x) Start H loc"
+ 105          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc"
+ 106          ;
+ 107   
+ 108  Positive Variables
+ 109   
+ 110  *       Time related variables
+ 111          T_Q(m,i) "start time of QC"
+ 112          T_Y(m,i) "Start time of agv putting cont on ASC"
+ 113          T_start(m,i,a) "Start of agv for action (m,i,a)"
+ 114   
  115   
- 116   
- 117  *       Auxiliary Variables
- 118          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
-****                $121  $121
-**** 121  Set expected
- 119          X_position(m,i,a)   "X_position(WT)"
-****                     $121
-**** 121  Set expected
- 120          Y_position(m,i,a)   "Y_position(WT)"
-****                     $121
-**** 121  Set expected
- 121          ;
- 122   
- 123  *  Positive Variable x ;
- 124  Equations
- 125          ADRP        1st cnstruation, AGV Dispatching and Routing Problem
- 126   
- 127  *       Job assignment constraints
- 128          cnstr_2(m,i)
-****                  $121
-**** 121  Set expected
- 129          cnstr_3(m,i,li)             "C,B"
-****                  $121
-**** 121  Set expected
- 130          cnstr_4(li)                 "B with 0 virtual node"
- 131          cnstr_5(li)               ‌  "B with 0 virutal node"
- 132          cnstr_6(m,i)                "L"
-****                  $121
-**** 121  Set expected
- 133          cnstr_7(m,i)                "D"
-****                  $121
-**** 121  Set expected
- 134   
- 135  *       LOcation constraints of AGV acitons
- 136          cnstr_8(m,i,n,j,XR)         "C,C,XR"
-****                  $121
-**** 121  Set expected
- 137          cnstr_9(m,i,n,j,YR)         "C,C,YR"
-****                  $121
-**** 121  Set expected
- 138          cnstr_10(m,i,a)             "C,a"
-****                   $121
-**** 121  Set expected
- 139          cnstr_11(m,i,a)             "C,a"
-****                   $121
-**** 121  Set expected
- 140          cnstr_12(m,i)               "L"
-****                   $121
-**** 121  Set expected
- 141          cnstr_13(m,i)               "D"
-****                   $121
-**** 121  Set expected
- 142          cnstr_14(m,i,XR)            "D"
-****                   $121
-**** 121  Set expected
- 143          cnstr_15(m,i)               "L"
-****                   $121
-**** 121  Set expected
- 144          cnstr_16(m,i)               "D"
-****                   $121
-**** 121  Set expected
- 145          cnstr_17(m,i)               "L"
-****                   $121
-**** 121  Set expected
- 146          cnstr_18(m,i,XR)            "L"
-****                   $121
-**** 121  Set expected
- 147          cnstr_19(m,i)               "D"
-****                   $121
-**** 121  Set expected
- 148          cnstr_20(m, i, a, a, YR)    "WH,YR"
-****                   $121
-**** 121  Set expected
- 149          cnstr_21(m,i,a,a,XR)          "WV,XR"
-****                   $121
-**** 121  Set expected
- 150   
- 151  *Conflict Free Constraints
- 152          cnstr_22(m,i,n,j)           "C,C"
-****                   $121
-**** 121  Set expected
- 153          cnstr_23(m,i,a,n,j,a,YR,XR)              "WH,WH,YR,XR"
-****                   $121
-**** 121  Set expected
- 154          cnstr_24(m,i,n,j,a,a)              "C, WH"
-****                   $121
-**** 121  Set expected
- 155          cnstr_25(m,i)              "C, WH"
-****                   $121
-**** 121  Set expected
- 156          cnstr_26(n,j,a,YS,m,i)              "WH,YS,D"  !! for alpha = 0
-****                            $121
-**** 121  Set expected
- 157          cnstr_26_prime(n,j,a)        "L"  !! for alpha = 3, try the actual definition of the cnstruation with conditions and ord(I)
- 158          cnstr_27              "WV, XR"
- 159          cnstr_28              "C,a"      !!alpha>2
- 160          cnstr_29              "C,C"      !! two consecutive containers, i and i+1
- 161          cnstr_30              "psi_1"
- 162          cnstr_31              "psi_2"
- 163          cnstr_32              "D"
- 164          cnstr_33              "L"
- 165          cnstr_34              "D,L"
- 166          cnstr_35              "L,D"
- 167          cnstr_36              "D,a"      !!alpha=4
- 168          cnstr_36_prime        "L,a"      !!alpha=1
- 169          cnstr_37              "D,a"      !!alpha=1
- 170          cnstr_37_prime        "L,a"      !!alpha=4
- 171          cnstr_38              "WT,WT"
- 172          cnstr_39              "C,a,XR"
- 173          cnstr_40              "C,a,YR"
- 174          cnstr_41              "C,C,a,a"
- 175          ;
- 176   
- 177   
- 178  *ADRP.. ;
- 179  alias (a,a1);
- 180  alias (a,a2);
- 181  alias (a2,a2_1);
- 182  alias (a1,a1_1);
- 183  set h(n)/#m/;  !! for cnstr_3
-****           $361,642
-**** 361  Values for domain 1 are unknown - no checking possible
-**** 642  set.ident or #.ident not a set
- 184  set k(j) /#i/;
- 185  set s(YR);
- 186  set XR2(XR) /#XR/;
- 187   
- 188  *Job assinment constraints
- 189  cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
-****          $121,148 $121,148            $121  $148                                                 $121      $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 190  cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $C(n,j), z(m,i,n,j,li)) =e= sum((h,k) $C(h,k), z(m,i,h,k,li));
-****          $121  $148  $121,148                     $121      $148                        $121      $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 191  cnstr_4(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z('m0', 'i0', m, i, li)) =e= 1;
-****                     $121     $121,148            $121  $148                                     $121    $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 192  cnstr_5(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z(m, i, 'm0', 'i0', li)) =e= 1;
-****                     $121     $121,148            $121  $148                         $121                $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 193  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j)), z(m,i,n,j,li)) =e= 1;
-****          $121,148 $121,148                          $121      $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 194  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j)), z(m,i,n,j,li)) =e= 1;
-****          $121,148 $121,148                          $121      $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 195   
- 196  *Location constraints of AGV acitons
- 197  cnstr_8(m,i,n,j,xr) $(C(m,i) and C(n,j)).. P_X(m,i,'a4',XR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_X(n,j,'a0',XR);
-****          $121      $148  $121,148               $121       $148           $121      $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 198  cnstr_9(m,i,n,j,yr) $(C(m,i) and C(n,j)).. P_Y(m,i,'a4',YR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_Y(n,j,'a0',YR);
-****          $121      $148  $121,148               $121       $148           $121      $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 199  cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
-****           $121 $148  $121,148            $121    $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 200  cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
-****           $121 $148  $121,148            $121    $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 201  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
-****           $121,148 $121,148            $121       $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 202  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y0(m,i,'a0',YS)) =e= 1;
-****           $121,148 $121,148             $121       $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 203  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X0(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
-****           $121  $148  $121,148   $121  $148      $121        $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 204  cnstr_15(m,i) $(L(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a0',XR)) =e= 1;
-****           $121,148 $121,148             $121  $148      $121  $148     $121       $300
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
-**** 300  Remaining errors not printed for this line
- 205  cnstr_16(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
-****           $121,148 $121,148            $121       $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 206  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
-****           $121,148 $121,148            $121       $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 207  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X0(m, i,'a3',XR) =e= 1;
-****           $121  $148  $121,148   $121  $148      $121        $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 208  cnstr_19(m,i) $(D(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a3',XR)) =e= 1;
-****           $121,148 $121,148             $121  $148      $121  $148     $121       $300
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
-**** 300  Remaining errors not printed for this line
- 209  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
-****           $121              $148   $121  $148                             $121     $148      $121       $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 210  cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
-****           $121              $148   $121  $148                             $121        $148      $121       $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 211   
- 212  *Conflict Free Constraints
- 213  cnstr_22(m,i,n,j) $(C(m,i) and C(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
-****           $121   $148  $121,148                 $121             $148            $121      $148
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
- 214  cnstr_23(m,i,a1,n,j,a2,YR,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1
-****           $121               $148   $121  $148                      $121         $148             $121  $148        $121     $300
+ 116  *       Auxiliary Variables
+ 117          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
+ 118          X_position(m,i,a)   "X_position(WT)"
+ 119          Y_position(m,i,a)   "Y_position(WT)"
+ 120          ;
+ 121   
+ 122  *  Positive Variable x ;
+ 123  Equations
+ 124          ADRP        1st cnstruation, AGV Dispatching and Routing Problem
+ 125   
+ 126  *       Job assignment constraints
+ 127          cnstr_2(m,i)
+ 128          cnstr_3(m,i,li)             "C,B"
+ 129          cnstr_4(li)                 "B with 0 virtual node"
+ 130          cnstr_5(li)               ‌  "B with 0 virutal node"
+ 131          cnstr_6(m,i)                "L"
+ 132          cnstr_7(m,i)                "D"
+ 133   
+ 134  *       LOcation constraints of AGV acitons
+ 135          cnstr_8(m,i,n,j,XR)         "C,C,XR"
+ 136          cnstr_9(m,i,n,j,YR)         "C,C,YR"
+ 137          cnstr_10(m,i,a)             "C,a"
+ 138          cnstr_11(m,i,a)             "C,a"
+ 139          cnstr_12(m,i)               "L"
+ 140          cnstr_13(m,i)               "D"
+ 141          cnstr_14(m,i,XR)            "D"
+ 142          cnstr_15(m,i)               "L"
+ 143          cnstr_16(m,i)               "D"
+ 144          cnstr_17(m,i)               "L"
+ 145          cnstr_18(m,i,XR)            "L"
+ 146          cnstr_19(m,i)               "D"
+ 147          cnstr_20(m, i, a, a, YR)    "WH,YR"
+ 148          cnstr_21(m,i,a,a,XR)        "WV,XR"
+ 149   
+ 150  *Conflict Free Constraints
+ 151          cnstr_22(m,i,n,j)           "C,C"
+ 152          cnstr_23(m,i,a,n,j,a,YR,XR) "WH,WH,YR,XR"
+ 153          cnstr_24(m,i,n,j,a)         "C, WH"
+ 154          cnstr_25(m,i,n,j,a,a)       "C, WH"
+ 155          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
+ 156          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+ 157          cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
+ 158          cnstr_29(m,i,i)           "C,C"      !! two consecutive containers, i and i+1
+ 159          cnstr_30              "psi_1"
+ 160          cnstr_31              "psi_2"
+ 161          cnstr_32              "D"
+ 162          cnstr_33              "L"
+ 163          cnstr_34              "D,L"
+ 164          cnstr_35              "L,D"
+ 165          cnstr_36              "D,a"      !!alpha=4
+ 166          cnstr_36_prime        "L,a"      !!alpha=1
+ 167          cnstr_37              "D,a"      !!alpha=1
+ 168          cnstr_37_prime        "L,a"      !!alpha=4
+ 169          cnstr_38              "WT,WT"
+ 170          cnstr_39              "C,a,XR"
+ 171          cnstr_40              "C,a,YR"
+ 172          cnstr_41              "C,C,a,a"
+ 173          ;
+ 174   
+ 175   
+ 176  *ADRP.. ;
+ 177  alias (a,a1);
+ 178  alias (a,a2);
+ 179  alias (a2,a2_1);
+ 180  alias (a1,a1_1);
+ 181  alias (i,i1);
+ 182  set h(n)/#m/;  !! for cnstr_3
+ 183  set k(j) /#i/;
+ 184  set s(YR);
+ 185  set XR2(XR) /#XR/;
+ 186   
+ 187  *Job assinment constraints
+ 188  cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
+ 189  cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $C(n,j), z(m,i,n,j,li)) =e= sum((h,k) $C(h,k), z(m,i,h,k,li));
+ 190  cnstr_4(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z('m0', 'i0', m, i, li)) =e= 1;
+ 191  cnstr_5(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z(m, i, 'm0', 'i0', li)) =e= 1;
+ 192  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j)), z(m,i,n,j,li)) =e= 1;
+ 193  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j)), z(m,i,n,j,li)) =e= 1;
+ 194   
+ 195  *Location constraints of AGV acitons
+ 196  cnstr_8(m,i,n,j,xr) $(C(m,i) and C(n,j)).. P_X(m,i,'a4',XR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_X(n,j,'a0',XR);
+ 197  cnstr_9(m,i,n,j,yr) $(C(m,i) and C(n,j)).. P_Y(m,i,'a4',YR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_Y(n,j,'a0',YR);
+ 198  cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+ 199  cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+ 200  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+ 201  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y0(m,i,'a0',YS)) =e= 1;
+ 202  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X0(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
+ 203  cnstr_15(m,i) $(L(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a0',XR)) =e= 1;
+ 204  cnstr_16(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 205  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 206  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X0(m, i,'a3',XR) =e= 1;
+ 207  cnstr_19(m,i) $(D(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a3',XR)) =e= 1;
+ 208  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+ 209  cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+ 210   
+ 211  *Conflict Free Constraints
+ 212  cnstr_22(m,i,n,j) $(C(m,i) and C(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 213  cnstr_23(m,i,a1,n,j,a2,YR,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1
       _1,XR_1) + P_X(n,j,a2,XR_1) - P_X(m,i,a1,XR_1) - P_X(n,j,a2_1,XR_1)) =g= 0;
-**** 121  Set expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
-**** 300  Remaining errors not printed for this line
- 215  cnstr_24(m,i,n,j,a1,a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1)..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a)+ M(1-U_QC(m,i,n,j,a1) =g= T_start(n,j,a1);
-****           $121           $148  $121,148                                  $8                                       $149 $145,8 $121
-****   8  ')' expected
-**** 121  Set expected
-**** 145  Set identifier or quoted element expected
-**** 148  Dimension different - The symbol is referenced with more/less
-****         indices as declared
-**** 149  Uncontrolled set entered as constant
- 216   
- 217  *Model transport /all/ ;
- 218   
- 219  *Solve transport using lp minimizing z ;
- 220   
- 221  *Display x.l, x.m ;
+ 214  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + max*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 215  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + max*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 216  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i) ) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3-U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum
+      (XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR))) * max + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 217  cnstr_27(m,i,a1,n,j,a2,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 218  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4') ) and ord(a1_1)<ord(a1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 219   
+ 220  *Time Constraints
+ 221  cnstr_29(m,i,i1) $(c(m,i) and (ord(i)<ord(i1))).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
+ 222   
+ 223   
+ 224  *Model transport /all/ ;
+ 225   
+ 226  *Solve transport using lp minimizing z ;
+ 227   
+ 228  *Display x.l, x.m ;
 
 **** LIST OF STRAY NAMES - CHECK DECLARATIONS FOR SPURIOUS COMMAS
 **** STRAY NAME AGV OF TYPE EQU  
 
-**** 237 ERROR(S)   0 WARNING(S)
-
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 11:45:16 Page 2
+A branch and bound problem (TRNSPORT,Scnstr=1)
+E x e c u t i o n
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
 
 
 USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
@@ -439,5 +248,3 @@ USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
 
 Input      C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
 Output     C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.lst
-
-**** USER ERROR(S) ENCOUNTERED

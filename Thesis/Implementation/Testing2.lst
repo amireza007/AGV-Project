@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/12/24 13:06:35 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 10:34:24 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -61,7 +61,7 @@ C o m p i l a t i o n
   59  set j /1*10/;
   60  alias (j,j_1)
   61  parameter val(j);
-  62  val(j) = ord(j);
+  62  val(j) = j.val $(j.val > 4);
   63  variable x;
   64  equation eq1(j);
   65  eq1(j).. sum(j_1 $(ord(j_1) < ord(j)), 1) =e= x;
@@ -86,7 +86,7 @@ C o m p i l a t i o n
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/12/24 13:06:35 Page 2
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 10:34:24 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
