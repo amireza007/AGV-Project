@@ -1,9 +1,8 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 11:45:16 Page 1
-A branch and bound problem (TRNSPORT,Scnstr=1)
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 20:22:18 Page 1
+A branch and bound problem
 C o m p i l a t i o n
 
 
-   2   
       Sets
              i   "canning plants"   / seattle, san-diego /
              j   "markets"          / new-york, chicago, topeka / ;
@@ -18,222 +17,226 @@ C o m p i l a t i o n
                /    new-york    325
                     chicago     300
                     topeka      275  / ;
-  20  *you need to set x_R, y_R, and y_r
-  21  Scalars
-  22          S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
-  23          x /1/
-  24          y /1/
-  25          x_R /10/
-  26          y_R /14/
-  27          y_r1 /10/
-  28          v "AGV speed" /1/
-  29          max "a very large number" /10000000/;
-  30  Sets
-  31   
-  32          i "container index" /i0*i4/
-  33          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+  19  *you need to set x_R, y_R, and y_r
+  20  Scalars
+  21          S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
+  22          x /1/
+  23          y /1/
+  24          x_R /10/
+  25          y_R /14/
+  26          y_r1 /10/
+  27          v "AGV speed" /4/
+  28          max "a very large number" /10000000/;
+  29  Sets
+  30   
+  31          i "container index" /i0*i4/
+  32          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+  33   
   34   
-  35   
-  36          m   "QC index" /m0,m1,m2,m3,m4/
-  37          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
+  35          m   "QC index" /m0,m1,m2,m3,m4/
+  36          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
+  37   
   38   
-  39   
-  40          li "AGV index" /l1*l3/
-  41          Bs(li) "set of all agvs" /#li/
-  42   
-  43  *       0 in a is a virtual starting point
-  44          a   "AGV actions" /a0*a4/
-  45   
-  46          XR  "Vertical Operational Area" /1*10/
-  47          YR  "Horizontal Operational Area" /1*14/
-  48          YS(YR)  "Horizontal Seaside Operation Area" /11*14/
-  49          YL(YR)  "Horizontal Path" /1*10/
+  39          li "AGV index" /l1*l3/
+  40          Bs(li) "set of all agvs" /#li/
+  41   
+  42  *       0 in a is a virtual starting point
+  43          a   "AGV actions" /a0*a4/
+  44   
+  45          XR  "Vertical Operational Area" /1*10/
+  46          YR  "Horizontal Operational Area" /1*14/
+  47          YS(YR)  "Horizontal Seaside Operation Area" /11*14/
+  48          YL(YR)  "Horizontal Path" /1*10/
+  49   
   50   
-  51   
-  52          o(m,i,XR) /m1.i1.2, m2.i2.3/
-  53          A_L(m,i,XR) /m1.i1.2, m2.i2.1, m3.i3.4, m4.i4.7/
-  54          A_R(m,i,XR) /m1.i1.7, m2.i2.9, m3.i3.6, m4.i4.8/
+  51          o(m,i,XR) /m1.i1.2, m2.i2.3/
+  52          A_L(m,i,XR) /m1.i1.2, m2.i2.1, m3.i3.4, m4.i4.7/
+  53          A_R(m,i,XR) /m1.i1.7, m2.i2.9, m3.i3.6, m4.i4.8/
+  54   
   55   
-  56   
-  57          L(m,i)   /m1.i1 , m2.i2/
-  58          D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/
-  59          C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file
-  60  *        C_prime(i) "The set of containers to be assigned" $ "This is in data file"
-  61   
-  62          WT(m,i,a) "set of total actions" /#C.#a/
-  63          WV(m,i,a)  "Vertical Actions" /m1.i1.a1/
-  64          WH(m,i,a)  "Horizontal Actions" /m1.i2.a2/
-  65   
-  66  *       or psi_1(m,i,m,i)?
-  67  *very challenging set!
-  68          psi_1(m,i,n,j)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
-  69          psi_2(m,i,n,j)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file.
-  70          ;
-  71  *O(YR) $(C(m,i)) = yes;
-  72  alias(XR, XR_1);
-  73  alias(YR, YR_1);
-  74   
-  75  alias(a,a_2);
-  76  alias(j,j_1); !!set of container jobs and qc
-  77  alias(j,j_2); !!Another set of container jobs and QC
-  78   
-  79  alias (WT, WT_1);
-  80  alias (WT, WT_2);
-  81  Parameters
-  82          o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i2 3/
-  83          G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !!seems to be constant for all container jobs, bc of const 24
-  84          G_Y(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/
-  85          ;
-  86   
+  56          L(m,i)   /m1.i1 , m2.i2/
+  57          D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/
+  58          C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file
+  59  *        C_prime(i) "The set of containers to be assigned" $ "This is in data file"
+  60   
+  61          WT(m,i,a) "set of total actions" /#C.#a/
+  62          WV(m,i,a)  "Vertical Actions" /m1.i1.a1/
+  63          WH(m,i,a)  "Horizontal Actions" /m1.i2.a2/
+  64   
+  65  *       or psi_1(m,i,m,i)?
+  66  *very challenging set!
+  67          psi_1(m,i,m,i)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
+  68          psi_2(m,i,m,i)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file.
+  69          ;
+  70  *O(YR) $(C(m,i)) = yes;
+  71  alias(XR, XR_1);
+  72  alias(YR, YR_1);
+  73   
+  74  alias (a,a1);
+  75  alias (a,a2);
+  76  alias (a2,a2_1);
+  77  alias (a1,a1_1);
+  78  alias (i,i1);
+  79  set h(n)/#m/;  !! for cnstr_3
+  80  set k(j) /#i/;
+  81  set s(YR);
+  82  set XR2(XR) /#XR/;
+  83  Parameters
+  84          o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i2 3/
+  85          G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !! seems to be constant for all container jobs, bc of const 24
+  86          G_Y(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/
+  87          ;
+  88   
       Table d(i,j)  distance in thousands of miles
                           new-yorksdafasdf       chicago      topeka
             seattle          2.5           1.7          100.8
             san-diego        2.5           1.8          1.4  ;
-  94   
-  95  Binary Variables
   96   
-  97          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
-  98          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before"
-  99          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
- 100   
- 101  *       "Path related variables
- 102          P_X(m,i,a,XR) "P_X(WV,x) finish V loc"
- 103          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc"
- 104          P_X0(m,i,a,XR) "P_X(WV,x) Start H loc"
- 105          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc"
- 106          ;
- 107   
- 108  Positive Variables
+  97  Binary Variables
+  98   
+  99          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
+ 100          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before"
+ 101          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
+ 102   
+ 103  *       "Path related variables
+ 104          P_X(m,i,a,XR) "P_X(WV,x) finish V loc"
+ 105          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc"
+ 106          P_X0(m,i,a,XR) "P_X(WV,x) Start H loc"
+ 107          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc"
+ 108          ;
  109   
- 110  *       Time related variables
- 111          T_Q(m,i) "start time of QC"
- 112          T_Y(m,i) "Start time of agv putting cont on ASC"
- 113          T_start(m,i,a) "Start of agv for action (m,i,a)"
- 114   
- 115   
- 116  *       Auxiliary Variables
- 117          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
- 118          X_position(m,i,a)   "X_position(WT)"
- 119          Y_position(m,i,a)   "Y_position(WT)"
- 120          ;
- 121   
- 122  *  Positive Variable x ;
- 123  Equations
- 124          ADRP        1st cnstruation, AGV Dispatching and Routing Problem
- 125   
- 126  *       Job assignment constraints
- 127          cnstr_2(m,i)
- 128          cnstr_3(m,i,li)             "C,B"
- 129          cnstr_4(li)                 "B with 0 virtual node"
- 130          cnstr_5(li)               ‌  "B with 0 virutal node"
- 131          cnstr_6(m,i)                "L"
- 132          cnstr_7(m,i)                "D"
- 133   
- 134  *       LOcation constraints of AGV acitons
- 135          cnstr_8(m,i,n,j,XR)         "C,C,XR"
- 136          cnstr_9(m,i,n,j,YR)         "C,C,YR"
- 137          cnstr_10(m,i,a)             "C,a"
- 138          cnstr_11(m,i,a)             "C,a"
- 139          cnstr_12(m,i)               "L"
- 140          cnstr_13(m,i)               "D"
- 141          cnstr_14(m,i,XR)            "D"
- 142          cnstr_15(m,i)               "L"
- 143          cnstr_16(m,i)               "D"
- 144          cnstr_17(m,i)               "L"
- 145          cnstr_18(m,i,XR)            "L"
- 146          cnstr_19(m,i)               "D"
- 147          cnstr_20(m, i, a, a, YR)    "WH,YR"
- 148          cnstr_21(m,i,a,a,XR)        "WV,XR"
- 149   
- 150  *Conflict Free Constraints
- 151          cnstr_22(m,i,n,j)           "C,C"
- 152          cnstr_23(m,i,a,n,j,a,YR,XR) "WH,WH,YR,XR"
- 153          cnstr_24(m,i,n,j,a)         "C, WH"
- 154          cnstr_25(m,i,n,j,a,a)       "C, WH"
- 155          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
- 156          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
- 157          cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
- 158          cnstr_29(m,i,i)           "C,C"      !! two consecutive containers, i and i+1
- 159          cnstr_30              "psi_1"
- 160          cnstr_31              "psi_2"
- 161          cnstr_32              "D"
- 162          cnstr_33              "L"
- 163          cnstr_34              "D,L"
- 164          cnstr_35              "L,D"
- 165          cnstr_36              "D,a"      !!alpha=4
- 166          cnstr_36_prime        "L,a"      !!alpha=1
- 167          cnstr_37              "D,a"      !!alpha=1
- 168          cnstr_37_prime        "L,a"      !!alpha=4
- 169          cnstr_38              "WT,WT"
- 170          cnstr_39              "C,a,XR"
- 171          cnstr_40              "C,a,YR"
- 172          cnstr_41              "C,C,a,a"
+ 110  Positive Variables
+ 111   
+ 112  *       Time related variables
+ 113          T_Q(m,i) "start time of QC"
+ 114          T_Y(m,i) "Start time of agv putting cont on ASC"
+ 115          T_start(m,i,a) "Start of agv for action (m,i,a)"
+ 116   
+ 117   
+ 118  *       Auxiliary Variables
+ 119          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
+ 120          X_position(m,i,a)   "X_position(WT)"
+ 121          Y_position(m,i,a)   "Y_position(WT)"
+ 122          ;
+ 123   
+ 124  *  Positive Variable x ;
+ 125  Equations
+ 126          ADRP        1st cnstruation, AGV Dispatching and Routing Problem
+ 127   
+ 128  *       Job assignment constraints
+ 129          cnstr_2(m,i)
+ 130          cnstr_3(m,i,li)             "C,B"
+ 131          cnstr_4(li)                 "B with 0 virtual node"
+ 132          cnstr_5(li)               ‌  "B with 0 virutal node"
+ 133          cnstr_6(m,i)                "L"
+ 134          cnstr_7(m,i)                "D"
+ 135   
+ 136  *       LOcation constraints of AGV acitons
+ 137          cnstr_8(m,i,n,j,XR)         "C,C,XR"
+ 138          cnstr_9(m,i,n,j,YR)         "C,C,YR"
+ 139          cnstr_10(m,i,a)             "C,a"
+ 140          cnstr_11(m,i,a)             "C,a"
+ 141          cnstr_12(m,i)               "L"
+ 142          cnstr_13(m,i)               "D"
+ 143          cnstr_14(m,i,XR)            "D"
+ 144          cnstr_15(m,i)               "L"
+ 145          cnstr_16(m,i)               "D"
+ 146          cnstr_17(m,i)               "L"
+ 147          cnstr_18(m,i,XR)            "L"
+ 148          cnstr_19(m,i)               "D"
+ 149          cnstr_20(m, i, a, a, YR)    "WH,YR"
+ 150          cnstr_21(m,i,a,a,XR)        "WV,XR"
+ 151   
+ 152  *Conflict Free Constraints
+ 153          cnstr_22(m,i,n,j)           "C,C"
+ 154          cnstr_23(m,i,a,n,j,a,YR,XR) "WH,WH,YR,XR"
+ 155          cnstr_24(m,i,n,j,a)         "C, WH"
+ 156          cnstr_25(m,i,n,j,a,a)       "C, WH"
+ 157          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
+ 158          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+ 159          cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
+ 160          cnstr_29(m,i,i)           "C,C"      !! two consecutive containers, i and i+1
+ 161          cnstr_30(m,i,m,i)              "psi_1"
+ 162          cnstr_31(m,i,m,i)              "psi_2"
+ 163          cnstr_32(m,i)              "D"
+ 164          cnstr_33(m,i)              "L"
+ 165          cnstr_34(m,i,m,i)              "D,L"
+ 166          cnstr_35(m,i,m,i)             "L,D"
+ 167          cnstr_36(m,i,a)              "D,a"      !!alpha=4 and 1
+ 168          cnstr_37(m,i,a)              "D,a"      !!alpha=1 and 1
+ 169          cnstr_38(m,i,a,a,n,j,a)              "WT,WT"
+ 170          cnstr_39(m,i,a,XR)              "C,a,XR"
+ 171          cnstr_40(m,i,a,YR)              "C,a,YR"
+ 172          cnstr_41(m,i,m,i,a,a)              "C,C,a,a"
  173          ;
  174   
  175   
  176  *ADRP.. ;
- 177  alias (a,a1);
- 178  alias (a,a2);
- 179  alias (a2,a2_1);
- 180  alias (a1,a1_1);
- 181  alias (i,i1);
- 182  set h(n)/#m/;  !! for cnstr_3
- 183  set k(j) /#i/;
- 184  set s(YR);
- 185  set XR2(XR) /#XR/;
+ 177   
+ 178   
+ 179  *Job assinment constraints
+ 180  cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
+ 181  cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $C(n,j), z(m,i,n,j,li)) =e= sum((h,k) $C(h,k), z(m,i,h,k,li));
+ 182  cnstr_4(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z('m0', 'i0', m, i, li)) =e= 1;
+ 183  cnstr_5(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z(m, i, 'm0', 'i0', li)) =e= 1;
+ 184  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j)), z(m,i,n,j,li)) =e= 1;
+ 185  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j)), z(m,i,n,j,li)) =e= 1;
  186   
- 187  *Job assinment constraints
- 188  cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
- 189  cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $C(n,j), z(m,i,n,j,li)) =e= sum((h,k) $C(h,k), z(m,i,h,k,li));
- 190  cnstr_4(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z('m0', 'i0', m, i, li)) =e= 1;
- 191  cnstr_5(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z(m, i, 'm0', 'i0', li)) =e= 1;
- 192  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j)), z(m,i,n,j,li)) =e= 1;
- 193  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j)), z(m,i,n,j,li)) =e= 1;
- 194   
- 195  *Location constraints of AGV acitons
- 196  cnstr_8(m,i,n,j,xr) $(C(m,i) and C(n,j)).. P_X(m,i,'a4',XR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_X(n,j,'a0',XR);
- 197  cnstr_9(m,i,n,j,yr) $(C(m,i) and C(n,j)).. P_Y(m,i,'a4',YR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_Y(n,j,'a0',YR);
- 198  cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
- 199  cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
- 200  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
- 201  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y0(m,i,'a0',YS)) =e= 1;
- 202  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X0(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
- 203  cnstr_15(m,i) $(L(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a0',XR)) =e= 1;
- 204  cnstr_16(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 205  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 206  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X0(m, i,'a3',XR) =e= 1;
- 207  cnstr_19(m,i) $(D(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a3',XR)) =e= 1;
- 208  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
- 209  cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
- 210   
- 211  *Conflict Free Constraints
- 212  cnstr_22(m,i,n,j) $(C(m,i) and C(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
- 213  cnstr_23(m,i,a1,n,j,a2,YR,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1
+ 187  *Location constraints of AGV acitons
+ 188  cnstr_8(m,i,n,j,xr) $(C(m,i) and C(n,j)).. P_X(m,i,'a4',XR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_X(n,j,'a0',XR);
+ 189  cnstr_9(m,i,n,j,yr) $(C(m,i) and C(n,j)).. P_Y(m,i,'a4',YR) $( sum(li, z(m,i,n,j,li) ) ) =e= P_Y(n,j,'a0',YR);
+ 190  cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+ 191  cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+ 192  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+ 193  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y0(m,i,'a0',YS)) =e= 1;
+ 194  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X0(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
+ 195  cnstr_15(m,i) $(L(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a0',XR)) =e= 1;
+ 196  cnstr_16(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 197  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 198  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X0(m, i,'a3',XR) =e= 1;
+ 199  cnstr_19(m,i) $(D(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a3',XR)) =e= 1;
+ 200  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+ 201  cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+ 202   
+ 203  *Conflict Free Constraints
+ 204  cnstr_22(m,i,n,j) $(C(m,i) and C(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 205  cnstr_23(m,i,a1,n,j,a2,YR,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1
       _1,XR_1) + P_X(n,j,a2,XR_1) - P_X(m,i,a1,XR_1) - P_X(n,j,a2_1,XR_1)) =g= 0;
- 214  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + max*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
- 215  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + max*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
- 216  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i) ) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3-U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum
-      (XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR))) * max + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
- 217  cnstr_27(m,i,a1,n,j,a2,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
- 218  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4') ) and ord(a1_1)<ord(a1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
- 219   
- 220  *Time Constraints
- 221  cnstr_29(m,i,i1) $(c(m,i) and (ord(i)<ord(i1))).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
- 222   
- 223   
- 224  *Model transport /all/ ;
- 225   
- 226  *Solve transport using lp minimizing z ;
- 227   
- 228  *Display x.l, x.m ;
+ 206  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + max*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 207  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + max*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 208  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i) ) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR))
+       - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR))) ) * max + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 209  cnstr_27(m,i,a1,n,j,a2,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 210  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4') ) and ord(a1_1)<ord(a1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 211   
+ 212  *Time Constraints
+ 213  cnstr_29(m,i,i1) $(c(m,i) and (ord(i)<ord(i1))).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
+ 214  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+ 215  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+ 216  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+ 217  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 218  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + max*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 219  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + max*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 220  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+ 221  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+ 222  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) < ord(a1))).. T_start(n,j,a2) + max*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+ 223  cnstr_39(m,i,a,XR) $(c(m,i)).. x_position(m,i,a) $(P_x(m,i,a,XR) = 1) =e= 1; !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+ 224  cnstr_40(m,i,a,YR) $(c(m,i)).. y_position(m,i,a) $(P_y(m,i,a,YR) = 1) =e= 1; !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+ 225  cnstr_41(m,i,n,j,a1,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) =e= (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v;
+ 226   
+ 227  *Model transport /all/ ;
+ 228   
+ 229  *Solve transport using lp minimizing z ;
+ 230   
+ 231  *Display x.l, x.m ;
 
 **** LIST OF STRAY NAMES - CHECK DECLARATIONS FOR SPURIOUS COMMAS
 **** STRAY NAME AGV OF TYPE EQU  
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 11:45:16 Page 2
-A branch and bound problem (TRNSPORT,Scnstr=1)
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 20:22:18 Page 2
+A branch and bound problem
 E x e c u t i o n
 
 

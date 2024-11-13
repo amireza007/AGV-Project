@@ -1,5 +1,4 @@
-$Title  A branch and bound problem (TRNSPORT,Scnstr=1)
-
+$Title  A branch and bound problem
 $onEolCom
 $ontext
 Sets
@@ -25,7 +24,7 @@ Scalars
         x_R /10/
         y_R /14/
         y_r1 /10/
-        v "AGV speed" /1/
+        v "AGV speed" /4/
         max "a very large number" /10000000/;
 Sets
        
@@ -65,22 +64,25 @@ Sets
 
 *       or psi_1(m,i,m,i)?
 *very challenging set!
-        psi_1(m,i,n,j)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
-        psi_2(m,i,n,j)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file. 
+        psi_1(m,i,m,i)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
+        psi_2(m,i,m,i)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file. 
         ;
 *O(YR) $(C(m,i)) = yes;
 alias(XR, XR_1);
 alias(YR, YR_1);
 
-alias(a,a_2);
-alias(j,j_1); !!set of container jobs and qc
-alias(j,j_2); !!Another set of container jobs and QC
-
-alias (WT, WT_1);
-alias (WT, WT_2);
+alias (a,a1);
+alias (a,a2);
+alias (a2,a2_1);
+alias (a1,a1_1);
+alias (i,i1);
+set h(n)/#m/;  !! for cnstr_3
+set k(j) /#i/;
+set s(YR);
+set XR2(XR) /#XR/;
 Parameters
         o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i2 3/
-        G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !!seems to be constant for all container jobs, bc of const 24
+        G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !! seems to be constant for all container jobs, bc of const 24
         G_Y(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/
         ;
 
@@ -156,33 +158,23 @@ Equations
         cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
         cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
         cnstr_29(m,i,i)           "C,C"      !! two consecutive containers, i and i+1
-        cnstr_30              "psi_1"
-        cnstr_31              "psi_2"
-        cnstr_32              "D"
-        cnstr_33              "L"
-        cnstr_34              "D,L"
-        cnstr_35              "L,D"
-        cnstr_36              "D,a"      !!alpha=4
-        cnstr_36_prime        "L,a"      !!alpha=1
-        cnstr_37              "D,a"      !!alpha=1
-        cnstr_37_prime        "L,a"      !!alpha=4
-        cnstr_38              "WT,WT"
-        cnstr_39              "C,a,XR"
-        cnstr_40              "C,a,YR"
-        cnstr_41              "C,C,a,a"
+        cnstr_30(m,i,m,i)              "psi_1"
+        cnstr_31(m,i,m,i)              "psi_2"
+        cnstr_32(m,i)              "D"
+        cnstr_33(m,i)              "L"
+        cnstr_34(m,i,m,i)              "D,L"
+        cnstr_35(m,i,m,i)             "L,D"
+        cnstr_36(m,i,a)              "D,a"      !!alpha=4 and 1
+        cnstr_37(m,i,a)              "D,a"      !!alpha=1 and 1
+        cnstr_38(m,i,a,a,n,j,a)              "WT,WT"
+        cnstr_39(m,i,a,XR)              "C,a,XR"
+        cnstr_40(m,i,a,YR)              "C,a,YR"
+        cnstr_41(m,i,m,i,a,a)              "C,C,a,a"
         ;
 
 
 *ADRP.. ;
-alias (a,a1);
-alias (a,a2);
-alias (a2,a2_1);
-alias (a1,a1_1);
-alias (i,i1);
-set h(n)/#m/;  !! for cnstr_3
-set k(j) /#i/;
-set s(YR);
-set XR2(XR) /#XR/;
+
 
 *Job assinment constraints
 cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
@@ -213,13 +205,24 @@ cnstr_22(m,i,n,j) $(C(m,i) and C(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(
 cnstr_23(m,i,a1,n,j,a2,YR,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1_1,XR_1) + P_X(n,j,a2,XR_1) - P_X(m,i,a1,XR_1) - P_X(n,j,a2_1,XR_1)) =g= 0;
 cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + max*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
 cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + max*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
-cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i) ) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3-U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR))) * max + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i) ) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR))) ) * max + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
 cnstr_27(m,i,a1,n,j,a2,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
 cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4') ) and ord(a1_1)<ord(a1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
 
 *Time Constraints
 cnstr_29(m,i,i1) $(c(m,i) and (ord(i)<ord(i1))).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
-
+cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + max*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + max*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) < ord(a1))).. T_start(n,j,a2) + max*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+cnstr_39(m,i,a,XR) $(c(m,i)).. x_position(m,i,a) $(P_x(m,i,a,XR) = 1) =e= 1; !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+cnstr_40(m,i,a,YR) $(c(m,i)).. y_position(m,i,a) $(P_y(m,i,a,YR) = 1) =e= 1; !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+cnstr_41(m,i,n,j,a1,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) =e= (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v;
 
 *Model transport /all/ ;
 
