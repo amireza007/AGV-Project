@@ -1,0 +1,145 @@
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/14/24 14:09:33 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1   
+      This test problem locates points in the unit square such that the
+      distance between any two points is maximized. For certain number
+      of points we know optimal arrangements. This knowledge is also
+      used to find a lower bound on the objective by looking for perfect
+      square arrangements (suggested by S Dirkse).
+       
+      Several formulations are presented which serve as good examples to
+      investigate the performance of different solution approaches. The
+      problem was originally proposed by Dick van Hertog and has been implemented
+      by Janos Pinter and used extensively by LGO with 13 and 20 points.
+       
+       
+      E. Stinstra, D. den Hertog, H.P. Stehouwer, A. Vestjens,
+      Constrained Maximin Designs for Computer Experiments,
+      Technometrics, 2002. (under revision)
+       
+      Janos Pinter, LGO - Users Guide, Pinter Consulting Services, Halifax,
+      Canada, 2003.
+       
+      Keywords: nonlinear programming, discontinuous derivatives, mathematics,
+                maximized minimum distance, circle packing in a square
+  25   
+  28   
+  29  Set
+  30     d        'dimension of space' / x, y         /
+  31     n        'number of points'   / p1*p300 /
+  32     low(n,n) 'lower triangle';
+  33   
+  34  Alias (n,nn);
+  35   
+  36  low(n,nn) = ord(n) > ord(nn);
+  37   
+  38  Variable
+  39     point(n,d) 'coordinates of points'
+  40     dist(n,n)  'distance between all points'
+  41     mindist;
+  42   
+  43  Equation
+  44     defdist(n,n)   'distance definitions'
+  45     mindist1(n,n)  'minimum distance formulation 1'
+  46     mindist1a(n,n) 'minimum distance formulation 1 without dist'
+  47     mindist2       'minimum distance formulation 2'
+  48     mindist2a      'minimum distance formulation 2 without dist';
+  49   
+  50  defdist(low(n,nn))..   dist(low) =e= sqrt(sum(d, sqr(point(n,d) - point(nn,d))));
+  51   
+  52  mindist1(low)..        mindist   =l= dist(low);
+  53   
+  54  mindist1a(low(n,nn)).. mindist   =l= sqrt(sum(d, sqr(point(n,d) - point(nn,d))));
+  55   
+  56  mindist2..  mindist =e= smin(low, dist(low));
+  57   
+  58  mindist2a.. mindist =e= smin(low(n,nn), sqrt(sum(d, sqr(point(n,d) - point(nn,d)))));
+  59   
+  60  Model
+  61     maxmin1  / defdist, mindist1  /
+  62     maxmin2  / defdist, mindist2  /
+  63     maxmin1a /          mindist2 /
+  64     maxmin2a /          mindist2a /;
+  65   
+  66  Scalar p;                     // Pinter's
+  67  p = 0;
+  68   
+  69  loop((n,d),                   // original
+  70     p = round(mod(p,10)) + 1;  // nominal
+  71     point.l(n,d) = p/10;       // point  0.1,.2, ... 1.0, 0.1, ...
+  72  );
+  73   
+  74  point.lo(n,d)     = 0;
+  75  point.up(n,d)     = 1;
+  76  point.l (n,d)     = uniform(0,1);
+  77  dist.l(low(n,nn)) = sqrt(sqr(point.l(n,'x') - point.l(nn,'x')) + sqr(point.l(n,'y') - point.l(nn,'y')));
+  78   
+  79  point.fx('p1',d) = 0;   // fix one point
+  80   
+  81  Parameter bnd 'lower bound on objective';
+  82  bnd = 1/max(ceil(sqrt(card(n)))-1,1);
+  83  display bnd;
+  84   
+  85  option limCol = 0, limRow = 0;
+  86  if(card(n) > 9, option solPrint = off;);
+  87   
+  88  * for experimentation we will combine different model version
+  89  * with different bounds and starting points
+  90  *
+  91  * dist.lo(low) = -inf;
+  92  * dist.lo(low) =  0;
+  93  * dist.lo(low) =  0.01;
+  94  * dist.lo(low) =  bnd/2;
+  95  * dist.lo(low) =  bnd;
+  96  *
+  97  * solve maxmin1  max mindist using nlp;
+  98  * solve maxmin1a max mindist using nlp;
+  99  * solve maxmin2  max mindist using dnlp;
+ 100  * solve maxmin2a max mindist using dnlp;
+ 101   
+ 102  * maxmin2 and maxmin2a without bounds are well suited for LGO
+ 103  * maxmin1a with bounds is well suited for conopt3 (bounds 200 point is ok)
+ 104   
+ 105  solve maxmin1a max mindist using dnlp;
+ 106   
+ 107  display bnd,mindist.l, point.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/14/24 14:09:33 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     83 PARAMETER bnd                  =        0.059  lower bound on objective
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/14/24 14:09:33 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE maxmin1a Using DNLP From line 105
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           1     SINGLE EQUATIONS            1
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES       44,851
+NON ZERO ELEMENTS        44,851     NON LINEAR N-Z         44,850
+DERIVATIVE POOL              20     CONSTANT POOL              16
+CODE LENGTH              89,705
+
+
+
+**** THE MODEL EXCEEDS THE DEMO LIMITS
+**** MAX MATRIX ROWS          300
+**** MAX MATRIX COLUMNS       300
+**** MAX NON ZERO ELEMENTS   2000
+**** MAX NON LINEAR N-Z      1000
+**** MAX DISCRETE VARIABLES    50
+**** Terminated due to a licensing error
+
+     GAMS Development Corporation, USA              G871201/0000CA-ANY
+     Free Demo, +1 202-342-0180, support@gams.com, www.gams.com       
+     10547327000S                                                   00
+     01234567000000                                                   
+     DC0000       Ref: Generated by Base            A Demo            

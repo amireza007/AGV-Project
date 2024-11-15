@@ -1,2 +1,60 @@
 B 2 C o m p i l a t i o n
-B 239 E x e c u t i o n
+B 247 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 248
+D 248 ADRP
+D 254 cnstr_2
+D 268 cnstr_3
+D 273 cnstr_4
+D 282 cnstr_5
+D 291 cnstr_6
+D 298 cnstr_7
+D 305 cnstr_8
+D 310 cnstr_9
+D 315 cnstr_10
+D 326 cnstr_11
+D 343 cnstr_12
+D 350 cnstr_13
+D 357 cnstr_14
+D 363 cnstr_15
+D 365 cnstr_15
+D 372 cnstr_16
+D 379 cnstr_17
+D 386 cnstr_18
+D 394 cnstr_19
+D 396 cnstr_19
+D 403 cnstr_20
+D 414 cnstr_21
+D 425 cnstr_22
+D 436 cnstr_23
+D 447 cnstr_24
+D 458 cnstr_25
+D 469 cnstr_27
+D 480 cnstr_28
+D 491 cnstr_29
+D 502 cnstr_30
+D 507 cnstr_31
+D 512 cnstr_32
+D 519 cnstr_33
+D 526 cnstr_34
+D 537 cnstr_35
+D 548 cnstr_36
+D 559 cnstr_37
+D 570 cnstr_38
+D 581 cnstr_39
+D 586 cnstr_40
+D 591 cnstr_41
+B 604 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 248
+E 605 z
+E 622 U_AGV
+E 638 U_QC
+E 660 P_X
+E 676 P_Y
+E 695 P_X0
+E 706 P_Y0
+E 722 T_Q
+E 746 T_Y
+E 767 T_start
+E 955 t_AGV
+E 1011 X_position
+E 1138 Y_position
+E 1265 obj
+B 1274 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 248

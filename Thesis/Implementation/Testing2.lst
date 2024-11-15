@@ -1,138 +1,228 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 10:34:24 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
 
    2   
-      scalar r /10/; !! alksdfj;lkasdjf
-      set i "set of all" / i1*i12 /;
-      set j /j1/;
-      set c(i,j) /#i.#j/;
-      set a /1,2,3,4/;
-      *set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
-      c('i1','j1') = no;
-      set q(i,j,a);
-      alias(i,i_1);
-      sets
-          p /1/ 
-          v /3/
-          ;
-      set kk /2/;
-      set o(i,j,kk) /i1.j1.2/;
-      *display kk $(1);
-       
-      set l /j1,j2/; !!this is /s/
-      set k;
-      k(i) = yes;
-      display k;
-      set t1(i) /i6/;
-      set gh /h1,h2,h4/;
-      set gh2(gh) /h1,h2/;
-      *set ij(i,j)(i) /i1 /;
-      set gh1(gh,i) /#gh2.#i/;
-      t1('i2') = Yes;
-      alias(j,t2);
-      parameter
-          f(i) "hi" / i1 1 / 
-          g(i_1) / i1 1 /;
-      loop(i$(ord(i)>=2),
-        f(i) = f(i-2) + f(i-1);
-      );
-      set z /#i,#j/;
-      display z;
-      set y(i,j);
-      alias (i,iii);
-      set ii(i) /i1,i2/;
-      y(ii,j) = yes;
-      Set ll / l1*l5 /;
-      display y;
-       
-      * This will display only the third element
-      *k(i) $(ord(i) = o('i1','j1')) = no;
-      variable oi(iii);
-      variable x;
-      equation eq_2(ii,i,j);
-      eq_2(ii,i,j).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
-      equation eq_1;
-      display y;
-      eq_1.. x =e= sum((i,j)$(y(i,j)), 1);
-      Model ww /all/;
-      solve ww using lp minimizing x;
-  59  set j /1*10/;
-  60  alias (j,j_1)
-  61  parameter val(j);
-  62  val(j) = j.val $(j.val > 4);
-  63  variable x;
-  64  equation eq1(j);
-  65  eq1(j).. sum(j_1 $(ord(j_1) < ord(j)), 1) =e= x;
-  66  Set   i         / i1*i3 /
-  67        s(i,i,i)  "Set members" / i1.i2.i3, i3.i3.i1/
-  68        pR1(i,i)  "projection right to left with assignment"
-  69        pR2(i,i)  "projection right to left with option statement"
-  70        pL1(i,i)  "projection left to right with assignment"
-  71        pL2(i,i)  "projection left to right with option statement" ;
-  72  Alias (i,ii,iii);
-  73   
-  74  * Right-to-left permutation, two ways
-  75  pR1(i,ii) = sum(s(iii,ii,i),1);
-  76  option pR2 < s;
-  77   
-  78  * Left-to-right permutation, two ways
-  79  pL1(i,ii) = sum(s(i,ii,iii),1);
-  80  option pL2 <= s;
-  81   
-  82  *option s:0:0:1, pR1:0:0:1, pR2:0:0:1, pL1:0:0:1, pL2:0:0:1;
-  83  display s, pR1, pR2, pL1, pL2 ;
+   3  scalar r /10/; !! alksdfj
+   4  set i "set of all" / i1*i12 /;
+   5  set j /j1/;
+   6  set c(i,j) /#i.#j/;
+   7  *set o "llasdjfl" /i\set(i1)/; !!another way is by writing /(set.c).(set.a)/
+   8  c('i1','j1') = no;
+   9  alias(i,i_1);
+  10  sets
+  11      p /1/
+  12      v /3/
+  13      ;
+  14  set kk /2/;
+  15  set o(i,j,kk) /i1.j1.2/;
+  16  *display kk $(1);
+  17   
+  18  set l /j1,j2/; !!this is /s/
+  19  set k;
+  20  k(i) = yes;
+  21  display k;
+  22  set t1(i) /i6/;
+  23  set gh /h1,h2,h4/;
+  24  set gh2(gh) /h1,h2/;
+  25  *set ij(i,j)(i) /i1 /;
+  26  set gh1(gh,i) /#gh2.#i/;
+  27  t1('i2') = Yes;
+  28  alias(j,t2);
+  29  parameter
+  30      f(i) "hi" / i1 1 /
+  31      g(i_1) / i1 1 /;
+  32  loop(i$(ord(i)>=2),
+  33    f(i) = f(i-2) + f(i-1);
+  34  );
+  35  set z /#i,#j/;
+  36  display z;
+  37  set y(i,j);
+  38  alias (i,iii);
+  39  set ii(i) /i1,i2/;
+  40  y(ii,j) = yes;
+  41  Set ll / l1*l5 /;
+  42  display y;
+  43   
+  44  * This will display only the third element
+  45  *k(i) $(ord(i) = o('i1','j1')) = no;
+  46  variable oi(iii);
+  47  set Cc(ii,i,j) /i1.i1.j1/;
+  48  variable x;
+  49  variable yy;
+  50  equation eq_2(ii,i,j);
+  51  eq_2(ii,i,j) $(cc(ii,i,j)).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
+  52  equation eq_1;
+  53  display y;
+  54  eq_1.. yy =e= sum((i,j)$(y(i,j)), 1);
+  55  scalars a b c;
+  56  equation eq3;
+  57  eq3..
+  59  1 =e= 1;
+  61  equation er;
+  62  er.. x =l= 4;
+  63  *x.fx=1;
+  64  Model ww /all/;
+  65  solve ww using mip minimizing x;
+  66   
+  67  *set j /1*10/;
+  68  *alias (j,j_1)
+  69  *parameter val(j);
+  70  *val(j) = j.val $(j.val > 4);
+  71  *variable x;
+  72  *equation eq1(j);
+  73  *eq1(j).. sum(j_1 $(ord(j_1) < ord(j)), 1) =e= x;
+  74  *Set   i         / i1*i3 /
+  75  *      s(i,i,i)  "Set members" / i1.i2.i3, i3.i3.i1/
+  76  *      pR1(i,i)  "projection right to left with assignment"
+  77  *      pR2(i,i)  "projection right to left with option statement"
+  78  *      pL1(i,i)  "projection left to right with assignment"
+  79  *      pL2(i,i)  "projection left to right with option statement" ;
+  80  *Alias (i,ii,iii);
+  81  *scalars t,y;
+  82  *t = 4;
+  83  *y = 5;
+  84  *set j2(j);
+  85  *j2('4') $(max{t,y} >2) = yes;
+  86  *display j2;
+  87  ** Right-to-left permutation, two ways
+  88  *pR1(i,ii) = sum(s(iii,ii,i),1);
+  89  *option pR2 < s;
+  90  *
+  91  ** Left-to-right permutation, two ways
+  92  *pL1(i,ii) = sum(s(i,ii,iii),1);
+  93  *option pL2 <= s;
+  94  *
+  95  **option s:0:0:1, pR1:0:0:1, pR2:0:0:1, pL1:0:0:1, pL2:0:0:1;
+  96  *display s, pR1, pR2, pL1, pL2 ;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/13/24 10:34:24 Page 2
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-----     83 SET s  Set members
+----     21 SET k  
 
-               i1          i3
-
-i1.i2                     YES
-i3.i3         YES
+i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12
 
 
-----     83 SET pR1  projection right to left with assignment
+----     36 SET z  
 
-            i2          i3
-
-i1                     YES
-i3         YES
+i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12,    j1 
 
 
-----     83 SET pR2  projection right to left with option statement
+----     42 SET y  
 
-            i2          i3
-
-i1                     YES
-i3         YES
-
-
-----     83 SET pL1  projection left to right with assignment
-
-            i2          i3
+            j1
 
 i1         YES
-i3                     YES
+i2         YES
 
 
-----     83 SET pL2  projection left to right with option statement
+----     53 SET y  
 
-            i2          i3
+            j1
 
 i1         YES
-i3                     YES
+i2         YES
+
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE ww Using MIP From line 65
 
 
+---- eq_2  =E=  
 
-EXECUTION TIME       =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+eq_2(i1,i1,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
+     
+
+---- eq_1  =E=  
+
+eq_1..  yy =E= 2 ; (LHS = 0, INFES = 2 ****)
+     
+
+---- eq3  =E=  
+
+                NONE
+
+
+---- er  =L=  
+
+er..  x =L= 4 ; (LHS = 0)
+     
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE ww Using MIP From line 65
+
+
+---- oi  
+
+oi(i1)
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+       -1       eq_2(i1,i1,j1)
+
+
+---- x  
+
+x
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       eq_2(i1,i1,j1)
+        1       er
+
+
+---- yy  
+
+yy
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       eq_1
+
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE ww Using MIP From line 65
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS            3
+BLOCKS OF VARIABLES           3     SINGLE VARIABLES            3
+NON ZERO ELEMENTS             4
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+
+
+EXECUTION TIME       =        0.016 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE ww Using MIP From line 65
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   ww                  OBJECTIVE  x
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  XPRESS              FROM LINE  65
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      18 Unbounded - No Solution  
+**** OBJECTIVE VALUE                0.0000
+
+ RESOURCE USAGE, LIMIT          9.515      1000.000
+ ITERATION COUNT, LIMIT         0    2000000000
+
+FICO-Xpress      25.1.2 r67420 Released Jul 31, 2018 WEI x86 64bit/MS Windows 
+
+Xpress Optimizer 32.01
+Xpress Solver 64bit v8.4.7 Apr  4 2018
+MIP is unbounded
+
+No solution returned
+
+
+EXECUTION TIME       =        0.000 SECONDS      2 MB  25.1.2 r67455 WEX-WEI
 
 
 USER: GAMS Development Corporation, USA              G871201/0000CA-ANY

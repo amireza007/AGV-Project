@@ -1,7 +1,17 @@
 B 2 C o m p i l a t i o n
-B 90 E x e c u t i o n
-I 91 s
-I 100 pR1
-I 108 pR2
-I 116 pL1
-I 124 pL2
+B 103 E x e c u t i o n
+I 104 k
+I 110 z
+I 115 y
+I 123 y
+B 133 Equation Listing    SOLVE ww Using MIP From line 65
+D 134 eq_2
+D 140 eq_1
+D 145 eq3
+D 150 er
+B 157 Column Listing      SOLVE ww Using MIP From line 65
+E 158 oi
+E 166 x
+E 174 yy
+B 183 Model Statistics    SOLVE ww Using MIP From line 65
+B 199 Solution Report     SOLVE ww Using MIP From line 65
