@@ -23,9 +23,10 @@ Scalars
         y /1/
         x_R /10/
         y_R /14/
-        y_r1 /10/
+        y_r1 /10/ !! these should be rewritten with $set and %inside sets!
         v "AGV speed" /4/
         Mnum "a very large number" /10000000/;
+
 Sets
        
         i "container index" /i0*i4/
@@ -71,7 +72,6 @@ Sets
 *O(YR) $(C(m,i)) = yes;
 alias(XR, XR_1);
 alias(YR, YR_1);
-
 alias (a,a1);
 alias (a,a2);
 alias (a2,a2_1);
@@ -81,19 +81,12 @@ set h(n)/#m/;  !! for cnstr_3
 set k(j) /#i/;
 set s(YR);
 set XR2(XR) /#XR/;
+
 Parameters
         o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i2 3/
         G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !! seems to be constant for all container jobs, bc of const 24
         G_Y(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/
         ;
-
-$hidden Data
-$ontext
-Table d(i,j)  distance in thousands of miles
-                    new-yorksdafasdf       chicago      topeka
-      seattle          2.5           1.7          100.8
-      san-diego        2.5           1.8          1.4  ;
-$offtext  
 
 Binary Variables
 
@@ -177,7 +170,7 @@ Equations
         ;
 
 
-ADRP.. obj =e= T_Q('m4','i4') + G_Q('m4','i4') + T_Y('m4','i4') + G_Y('m4','i4');
+ADRP.. obj =e= max{T_Q('m4','i4') + G_Q('m4','i4'), T_Y('m4','i4') + G_Y('m4','i4')};
 
 
 **Job assinment constraints
@@ -195,12 +188,14 @@ $ifthen z(m,i,n,j,li) == 1
 $else
 1 =e= 1;
 $endif
+
 cnstr_9(m,i,n,j,yr, li) $(C(m,i) and C(n,j))..
 $ifthen z(m,i,n,j,li) == 1
  P_Y(m,i,'a4',YR) =e= P_Y(n,j,'a0',YR);
 $else
 1 =e= 1;
 $endif
+
 cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
 cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
 cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;

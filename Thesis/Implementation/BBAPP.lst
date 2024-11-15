@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:44:50 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 20:16:03 Page 1
 A branch and bound problem
 C o m p i l a t i o n
 
@@ -175,7 +175,7 @@ C o m p i l a t i o n
  177          ;
  178   
  179   
- 180  ADRP.. obj =e= T_Q('m4','i4') + G_Q('m4','i4') + T_Y('m4','i4') + G_Y('m4','i4');
+ 180  ADRP.. obj =e= max{T_Q('m4','i4') + G_Q('m4','i4'), T_Y('m4','i4') + G_Y('m4','i4')};
  181   
  182   
  183  **Job assinment constraints
@@ -189,68 +189,70 @@ C o m p i l a t i o n
  191  **Location constraints of AGV acitons
  192  cnstr_8(m,i,n,j,xr, li) $(C(m,i) and C(n,j))..
  194  1 =e= 1;
- 196  cnstr_9(m,i,n,j,yr, li) $(C(m,i) and C(n,j))..
- 198  1 =e= 1;
- 200  cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
- 201  cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
- 202  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
- 203  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y0(m,i,'a0',YS)) =e= 1;
- 204  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X0(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
- 205  cnstr_15(m,i) $(L(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a0',XR)) =e= 1;
- 206  cnstr_16(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 207  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 208  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X0(m, i,'a3',XR) =e= 1;
- 209  cnstr_19(m,i) $(D(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a3',XR)) =e= 1;
- 210  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
- 211  cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
- 212  *
- 213  **Conflict Free Constraints
- 214  cnstr_22(m,i,n,j) $(C(m,i) and C(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
- 215  cnstr_23(m,i,a1,n,j,a2,YR,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1
+ 196   
+ 197  cnstr_9(m,i,n,j,yr, li) $(C(m,i) and C(n,j))..
+ 199  1 =e= 1;
+ 201   
+ 202  cnstr_10(m,i,a) $(C(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+ 203  cnstr_11(m,i,a) $(C(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+ 204  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+ 205  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y0(m,i,'a0',YS)) =e= 1;
+ 206  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X0(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
+ 207  cnstr_15(m,i) $(L(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a0',XR)) =e= 1;
+ 208  cnstr_16(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 209  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 210  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X0(m, i,'a3',XR) =e= 1;
+ 211  cnstr_19(m,i) $(D(m,i)).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X0(m,i,'a3',XR)) =e= 1;
+ 212  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+ 213  cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+ 214  *
+ 215  **Conflict Free Constraints
+ 216  cnstr_22(m,i,n,j) $(C(m,i) and C(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 217  cnstr_23(m,i,a1,n,j,a2,YR,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1
       _1,XR_1) + P_X(n,j,a2,XR_1) - P_X(m,i,a1,XR_1) - P_X(n,j,a2_1,XR_1)) =g= 0;
- 216  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
- 217  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
- 218  *cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR))
+ 218  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 219  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 220  *cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR))
        - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR))) ) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
- 219  cnstr_27(m,i,a1,n,j,a2,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
- 220  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4') ) and ord(a1_1)<ord(a1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
- 221   
- 222  *Time Constraints
- 223  cnstr_29(m,i,i1) $(c(m,i) and (ord(i)<ord(i1))).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
- 224  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
- 225  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
- 226  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
- 227  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
- 228  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 229  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 230  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
- 231  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
- 232  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) < ord(a1))).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
- 233   
- 234  cnstr_39(m,i,a,XR) $(c(m,i))..
- 236   1 =e= 1;
- 238   
- 239  cnstr_40(m,i,a,YR) $(c(m,i))..
- 241  1 =e= 1;
- 243   
- 244  cnstr_41(m,i,n,j,a1,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) =e= (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v;
- 245  *
- 246  Model ConflictFreeSch /all/ ;
- 247   
- 248  Solve ConflictFreeSch using minlp minimizing obj;
+ 221  cnstr_27(m,i,a1,n,j,a2,XR) $(WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 222  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4') ) and ord(a1_1)<ord(a1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 223   
+ 224  *Time Constraints
+ 225  cnstr_29(m,i,i1) $(c(m,i) and (ord(i)<ord(i1))).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
+ 226  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+ 227  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+ 228  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+ 229  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 230  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 231  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 232  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+ 233  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+ 234  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) < ord(a1))).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+ 235   
+ 236  cnstr_39(m,i,a,XR) $(c(m,i))..
+ 238   1 =e= 1;
+ 240   
+ 241  cnstr_40(m,i,a,YR) $(c(m,i))..
+ 243  1 =e= 1;
+ 245   
+ 246  cnstr_41(m,i,n,j,a1,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) =e= (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v;
+ 247  *
+ 248  Model ConflictFreeSch /all/ ;
  249   
- 250  *Display x.l, x.m ;
+ 250  Solve ConflictFreeSch using minlp minimizing obj;
+ 251   
+ 252  *Display x.l, x.m ;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:44:50 Page 2
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 20:16:03 Page 2
 A branch and bound problem
-Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 248
+Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 250
 
 
 ---- ADRP  =E=  AGV Dispatching and Routing Problem
 
-ADRP..  - T_Q(m4,i4) - T_Y(m4,i4) + obj =E= 2 ; (LHS = 0, INFES = 2 ****)
+ADRP..  - (1)*T_Q(m4,i4) + (0)*T_Y(m4,i4) + obj =E= 0 ; (LHS = -1, INFES = 1 ****)
      
 
 ---- cnstr_2  =E=  
@@ -360,7 +362,7 @@ cnstr_13(m4,i4)..  P_Y0(m4,i4,a0,11) + P_Y0(m4,i4,a0,12) + P_Y0(m4,i4,a0,13) + P
 
                 NONE
 
-**** Exec Error at line 205: Equation infeasible due to rhs value
+**** Exec Error at line 207: Equation infeasible due to rhs value
 
 **** INFEASIBLE EQUATIONS ...
 
@@ -391,7 +393,7 @@ cnstr_18(m1,i1,2)..  P_X0(m1,i1,a3,2) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 cnstr_18(m2,i2,3)..  P_X0(m2,i2,a3,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-**** Exec Error at line 209: Equation infeasible due to rhs value
+**** Exec Error at line 211: Equation infeasible due to rhs value
 
 **** INFEASIBLE EQUATIONS ...
 
@@ -600,9 +602,9 @@ cnstr_41(m1,i1,m1,i1,a0,a2)..  t_AGV(m1,i1,a0,m1,i1,a2) - (0.25)*X_position(m1,i
      
 REMAINING 397 ENTRIES SKIPPED
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:44:50 Page 3
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 20:16:03 Page 3
 A branch and bound problem
-Column Listing      SOLVE ConflictFreeSch Using MINLP From line 248
+Column Listing      SOLVE ConflictFreeSch Using MINLP From line 250
 
 
 ---- z  used mainly for handling QC double cycling, it consists of 0 virtual point!
@@ -1270,9 +1272,9 @@ obj
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       ADRP
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:44:50 Page 4
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 20:16:03 Page 4
 A branch and bound problem
-Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 248
+Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 250
 
 
 MODEL STATISTICS
@@ -1281,7 +1283,7 @@ BLOCKS OF EQUATIONS          40     SINGLE EQUATIONS        1,559
 BLOCKS OF VARIABLES          14     SINGLE VARIABLES        1,374
 NON ZERO ELEMENTS         6,297     NON LINEAR N-Z              0
 DERIVATIVE POOL              20     CONSTANT POOL              16
-CODE LENGTH               4,180
+CODE LENGTH               4,188
 
 
 
@@ -1295,6 +1297,6 @@ CODE LENGTH               4,180
 
      GAMS Development Corporation, USA              G871201/0000CA-ANY
      Free Demo, +1 202-342-0180, support@gams.com, www.gams.com       
-     10547341000S                                                   00
+     10547342000S                                                   00
      01234567000000                                                   
      DC0000       Ref: Generated by Base            A Demo            
