@@ -1,22 +1,5 @@
 $Title  A branch and bound problem
 $onEolCom
-$ontext
-Sets
-       i   "canning plants"   / seattle, san-diego /
-       j   "markets"          / new-york, chicago, topeka / ;
-
-  Parameters
-
-       a(i)  "capacity of plant i in cases"
-         /    seattle     350
-              san-diego   600  /
-
-       b(j)  "demand at market j in cases"
-         /    new-york    325
-              chicago     300
-              topeka      275  / ;
-$offtext
-*you need to set x_R, y_R, and y_r
 Scalars
         S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
         x /1/
@@ -43,31 +26,31 @@ Sets
 *       0 in a is a virtual starting point
         a   "AGV actions" /a0*a4/
 
-        XR  "Vertical Operational Area" /1*10/
+        XR  "Vertical Operational Area" /1*14/
         YR  "Horizontal Operational Area" /1*14/
         YS(YR)  "Horizontal Seaside Operation Area" /11*14/
         YL(YR)  "Horizontal Path" /1*10/
 
 
-        o(m,i,XR) /m1.i1.2, m2.i2.3/
-        A_L(m,i,XR) /m1.i1.2, m2.i2.1, m3.i3.4, m4.i4.7/
-        A_R(m,i,XR) /m1.i1.7, m2.i2.9, m3.i3.6, m4.i4.8/
+        o(m,i,XR) /m1.i1.1, m2.i2.3, m3.i3.5, m4.i4.8/ !! if m_4 < m_5 (i.e. 4<5), set i_i < i_j (i.e. i<j)
+        A_L(m,i,XR) /m1.i1.2 /
+        A_R(m,i,XR) /m2.i2.8/
         
         
-        L(m,i)   /m1.i1 , m2.i2/
-        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/ 
+        L(m,i)   /m1.i1 , m2.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/ !! these are in the ships, waiting to be taking to ASCs
         C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file
         Cd(m,i) "the last QC container job" /m4.i4/
 *        C_prime(i) "The set of containers to be assigned" $ "This is in data file" 
 
-        WT(m,i,a) "set of total actions" /#C.#a/
-        WV(m,i,a)  "Vertical Actions" /m1.i1.a1/
-        WH(m,i,a)  "Horizontal Actions" /m2.i2.a2/
+        WT(m,i,a) "set of total actions" / m1.i1.a2, m2.i2.a2, m3.i3.a2, m4.i4.a2,       m1.i1.a1, m1.i1.a3, m2.i2.a1, m2.i2.a3, m3.i3.a1, m3.i3.a3, m3.i3.a4, m4.i4.a1, m4.i4.a3, m4.i4.a4/
+        WV(m,i,a)  "Vertical Actions" /m1.i1.a2, m2.i2.a2, m3.i3.a2, m4.i4.a2/ !! those containing a2.
+        WH(m,i,a)  "Horizontal Actions" /m1.i1.a1, m1.i1.a3, m2.i2.a1, m2.i2.a3, m3.i3.a1, m3.i3.a3, m3.i3.a4, m4.i4.a1, m4.i4.a3, m4.i4.a4 / !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
 
 *       or psi_1(m,i,m,i)?
 *very challenging set!
-        psi_1(m,i,m,i)   "Scnstruence of Container jobs for QC" /m1.i1.m2.i3/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
-        psi_2(m,i,m,i)   "Scnstruence of Container jobs for ASC" /#psi_1/ !!This is in data file. 
+        psi_1(m,i,m,i)   "Scnstruence of Container jobs for QC" /m3.i3.m4.i4/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
+        psi_2(m,i,m,i)   "Scnstruence of Container jobs for ASC" /m1.i1.m2.i2/ !!This is in data file. 
         ;
 *O(YR) $(C(m,i)) = yes;
 alias(XR, XR_1);
@@ -95,10 +78,10 @@ Binary Variables
         U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
         
 *       "Path related variables
-        P_X(m,i,a,XR) "P_X(WV,x) finish V loc"
-        P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc"
-        P_X0(m,i,a,XR) "P_X(WV,x) Start H loc"
-        P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc"
+        P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
+        P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
+        P_X0(m,i,a,XR) "P_X(WV,x) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
+        P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
         ;
 
 Positive Variables
@@ -182,16 +165,16 @@ cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j)), z(m,i,n,j,li)) =e= 1;
 cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j)), z(m,i,n,j,li)) =e= 1;
 *
 **Location constraints of AGV acitons
-cnstr_8(m,i,n,j,xr, li) $(C(m,i) and C(n,j))..
+cnstr_8(m,i,n,j,xr, li) $(WV(m,i,'a4') and WH(n,j,)..
 $ifthen z(m,i,n,j,li) == 1
- P_X(m,i,'a4',XR)  =e= P_X(n,j,'a0',XR);  !! a bit different from the article's forumulation
+ P_X(m,i,'a4',XR)  =e= P_X0(n,j,'a0',XR);  !! a bit different from the article's forumulation
 $else
 1 =e= 1;
 $endif
 
-cnstr_9(m,i,n,j,yr, li) $(C(m,i) and C(n,j))..
+cnstr_9(m,i,n,j,yr, li) $(WH(m,i,a) and C(n,j))..
 $ifthen z(m,i,n,j,li) == 1
- P_Y(m,i,'a4',YR) =e= P_Y(n,j,'a0',YR);
+ P_Y(m,i,'a4',YR) =e= P_Y0(n,j,'a0',YR);
 $else
 1 =e= 1;
 $endif
