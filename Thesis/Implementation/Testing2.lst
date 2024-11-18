@@ -1,4 +1,4 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/17/24 14:13:50 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -51,55 +51,63 @@ C o m p i l a t i o n
   47  set Cc(ii,i,j) /i1.i1.j1/;
   48  variable x;
   49  variable yy;
-  50  equation eq_2(ii,i,j);
-  51  eq_2(ii,i,j) $(cc(ii,i,j)).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
+  50  *equation eq_2(ii,i,j);
+  51  *eq_2(ii,i,j) $(cc(ii,i,j)).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
   52  equation eq_1;
   53  display y;
   54  eq_1.. yy =e= sum((i,j)$(y(i,j)), 1);
   55  scalars a b c;
   56  equation eq3;
-  57  eq3..
-  59  1 =e= 1;
-  61  equation er;
-  62  er.. x =l= 4;
-  63  *x.fx=1;
-  64  Model ww /all/;
-  65  solve ww using mip minimizing x;
+  57   
+  58  eq3..
+  60  1 =e= 1;
+  62  equation er;
+  63  er.. x =l= 90;
+  64   
+  65  *x.fx=1;
   66   
-  67  *set j /1*10/;
-  68  *alias (j,j_1)
-  69  *parameter val(j);
-  70  *val(j) = j.val $(j.val > 4);
-  71  *variable x;
-  72  *equation eq1(j);
-  73  *eq1(j).. sum(j_1 $(ord(j_1) < ord(j)), 1) =e= x;
-  74  *Set   i         / i1*i3 /
-  75  *      s(i,i,i)  "Set members" / i1.i2.i3, i3.i3.i1/
-  76  *      pR1(i,i)  "projection right to left with assignment"
-  77  *      pR2(i,i)  "projection right to left with option statement"
-  78  *      pL1(i,i)  "projection left to right with assignment"
-  79  *      pL2(i,i)  "projection left to right with option statement" ;
-  80  *Alias (i,ii,iii);
-  81  *scalars t,y;
-  82  *t = 4;
-  83  *y = 5;
-  84  *set j2(j);
-  85  *j2('4') $(max{t,y} >2) = yes;
-  86  *display j2;
-  87  ** Right-to-left permutation, two ways
-  88  *pR1(i,ii) = sum(s(iii,ii,i),1);
-  89  *option pR2 < s;
-  90  *
-  91  ** Left-to-right permutation, two ways
-  92  *pL1(i,ii) = sum(s(i,ii,iii),1);
-  93  *option pL2 <= s;
-  94  *
-  95  **option s:0:0:1, pR1:0:0:1, pR2:0:0:1, pL1:0:0:1, pL2:0:0:1;
-  96  *display s, pR1, pR2, pL1, pL2 ;
+  67  set i4 /i1*i3/;
+  68  parameter i1(i4) /i1 1, i2 2, i3 3/;
+  69  equation eq5;
+  70  eq5
+  72  .. 1=e=1;
+  74  Model ww /all/;
+  75  solve ww using mip minimizing x;
+  76   
+  77  *set j /1*10/;
+  78  *alias (j,j_1)
+  79  *parameter val(j);
+  80  *val(j) = j.val $(j.val > 4);
+  81  *variable x;
+  82  *equation eq1(j);
+  83  *eq1(j).. sum(j_1 $(ord(j_1) < ord(j)), 1) =e= x;
+  84  *Set   i         / i1*i3 /
+  85  *      s(i,i,i)  "Set members" / i1.i2.i3, i3.i3.i1/
+  86  *      pR1(i,i)  "projection right to left with assignment"
+  87  *      pR2(i,i)  "projection right to left with option statement"
+  88  *      pL1(i,i)  "projection left to right with assignment"
+  89  *      pL2(i,i)  "projection left to right with option statement" ;
+  90  *Alias (i,ii,iii);
+  91  *scalars t,y;
+  92  *t = 4;
+  93  *y = 5;
+  94  *set j2(j);
+  95  *j2('4') $(max{t,y} >2) = yes;
+  96  *display j2;
+  97  ** Right-to-left permutation, two ways
+  98  *pR1(i,ii) = sum(s(iii,ii,i),1);
+  99  *option pR2 < s;
+ 100  *
+ 101  ** Left-to-right permutation, two ways
+ 102  *pL1(i,ii) = sum(s(i,ii,iii),1);
+ 103  *option pL2 <= s;
+ 104  *
+ 105  **option s:0:0:1, pR1:0:0:1, pR2:0:0:1, pL1:0:0:1, pL2:0:0:1;
+ 106  *display s, pR1, pR2, pL1, pL2 ;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 2
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/17/24 14:13:50 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
@@ -129,15 +137,10 @@ i2         YES
 i1         YES
 i2         YES
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 3
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/17/24 14:13:50 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE ww Using MIP From line 65
+Equation Listing    SOLVE ww Using MIP From line 75
 
-
----- eq_2  =E=  
-
-eq_2(i1,i1,j1)..  - oi(i1) + x =E= 0 ; (LHS = 0)
-     
 
 ---- eq_1  =E=  
 
@@ -151,25 +154,22 @@ eq_1..  yy =E= 2 ; (LHS = 0, INFES = 2 ****)
 
 ---- er  =L=  
 
-er..  x =L= 4 ; (LHS = 0)
+er..  x =L= 90 ; (LHS = 0)
      
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 4
+
+---- eq5  =E=  
+
+                NONE
+
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/17/24 14:13:50 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE ww Using MIP From line 65
-
-
----- oi  
-
-oi(i1)
-                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
-       -1       eq_2(i1,i1,j1)
+Column Listing      SOLVE ww Using MIP From line 75
 
 
 ---- x  
 
 x
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
-        1       eq_2(i1,i1,j1)
         1       er
 
 
@@ -179,38 +179,38 @@ yy
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       eq_1
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 5
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/17/24 14:13:50 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE ww Using MIP From line 65
+Model Statistics    SOLVE ww Using MIP From line 75
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS            3
-BLOCKS OF VARIABLES           3     SINGLE VARIABLES            3
-NON ZERO ELEMENTS             4
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS            2
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            2
+NON ZERO ELEMENTS             2
 
 
 GENERATION TIME      =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
 
 
-EXECUTION TIME       =        0.016 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/15/24 18:39:12 Page 6
+EXECUTION TIME       =        0.000 SECONDS      4 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/17/24 14:13:50 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE ww Using MIP From line 65
+Solution Report     SOLVE ww Using MIP From line 75
 
 
                S O L V E      S U M M A R Y
 
      MODEL   ww                  OBJECTIVE  x
      TYPE    MIP                 DIRECTION  MINIMIZE
-     SOLVER  XPRESS              FROM LINE  65
+     SOLVER  XPRESS              FROM LINE  75
 
 **** SOLVER STATUS     1 Normal Completion         
 **** MODEL STATUS      18 Unbounded - No Solution  
 **** OBJECTIVE VALUE                0.0000
 
- RESOURCE USAGE, LIMIT          9.515      1000.000
+ RESOURCE USAGE, LIMIT          0.046      1000.000
  ITERATION COUNT, LIMIT         0    2000000000
 
 FICO-Xpress      25.1.2 r67420 Released Jul 31, 2018 WEI x86 64bit/MS Windows 

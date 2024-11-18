@@ -47,13 +47,14 @@ variable oi(iii);
 set Cc(ii,i,j) /i1.i1.j1/;
 variable x;
 variable yy;
-equation eq_2(ii,i,j);
-eq_2(ii,i,j) $(cc(ii,i,j)).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
+*equation eq_2(ii,i,j);
+*eq_2(ii,i,j) $(cc(ii,i,j)).. x =e= sum(iii $(sameas(iii,'i1')), oi(iii));
 equation eq_1;
 display y;
 eq_1.. yy =e= sum((i,j)$(y(i,j)), 1);
 scalars a b c;
 equation eq3;
+
 eq3..
 $ifthen x == y
  x=e= 1;
@@ -61,8 +62,19 @@ $else
 1 =e= 1;
 $endif
 equation er;
-er.. x =l= 4;
+er.. x =l= 90;
+
 *x.fx=1;
+
+set i4 /i1*i3/;
+parameter i1(i4) /i1 1, i2 2, i3 3/;
+equation eq5;
+eq5
+$ifthen "sum%(i%4,%i%1%(i%4%)%)" == "6"
+..  x  =e= 6;
+$else
+.. 1=e=1;
+$endif
 Model ww /all/;
 solve ww using mip minimizing x;
 

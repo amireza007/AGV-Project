@@ -1,0 +1,17 @@
+B 2 C o m p i l a t i o n
+B 48 E x e c u t i o n
+I 52 tt
+I 54 y
+I 56 y
+B 61 Equation Listing    SOLVE er Using MIP From line 34
+D 62 eq1
+B 70 Column Listing      SOLVE er Using MIP From line 34
+E 71 u
+E 79 a1
+B 96 Model Statistics    SOLVE er Using MIP From line 34
+B 112 Solution Report     SOLVE er Using MIP From line 34
+F 143 eq1
+G 144 u
+G 148 a1
+B 163 E x e c u t i o n
+I 166 x

@@ -1,5 +1,6 @@
 $Title  A branch and bound problem
 $onEolCom
+*cnstr_15 and cnstr_19 are infeasible and I hypothesize it's due to not setting initial virtual positions!
 Scalars
         S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
         x /1/
@@ -33,13 +34,13 @@ Sets
 
 
         o(m,i,XR) /m1.i1.1, m2.i2.3, m3.i3.5, m4.i4.8/ !! if m_4 < m_5 (i.e. 4<5), set i_i < i_j (i.e. i<j)
-        A_L(m,i,XR) /m1.i1.2 /
-        A_R(m,i,XR) /m2.i2.8/
+        A_L(m,i,XR) /m1.i1.2, m2.i2.4, m3.i3.1, m4.i4.5 /
+        A_R(m,i,XR) /m1.i1.8, m2.i2.7, m1.i1.10, m1.i1.6 /
         
         
         L(m,i)   /m1.i1 , m2.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
         D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/ !! these are in the ships, waiting to be taking to ASCs
-        C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file
+        C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job" /m4.i4/
 *        C_prime(i) "The set of containers to be assigned" $ "This is in data file" 
 
@@ -87,7 +88,7 @@ Binary Variables
 Positive Variables
 
 *       Time related variables
-        T_Q(m,i) "start time of QC"
+        T_Q(m,i) "start time of QC" 
         T_Y(m,i) "Start time of agv putting cont on ASC"
         T_start(m,i,a) "Start of agv for action (m,i,a)"
         
@@ -99,6 +100,41 @@ Positive Variables
 
         ;
 variable obj "objective function";
+
+*binary variables initial values
+z.up(m,i,m,i,li) = 1;
+z.lo(m,i,m,i,li) = 0;
+U_AGV.up(m,i,a,m,i,a) = 1;
+U_AGV.lo(m,i,a,m,i,a) = 0;
+U_QC.up(m,i,m,i,a) = 1;
+U_QC.lo(m,i,m,i,a) = 0; 
+                 
+P_X.up(m,i,a,XR) =1;
+P_X.lo(m,i,a,XR) =0;
+P_Y.up(m,i,a,YR) =1;
+P_Y.lo(m,i,a,YR) =0;
+P_X0.up(m,i,a,XR) =1;
+P_X0.lo(m,i,a,XR) =0;
+P_Y0.up(m,i,a,YR) =1;
+P_Y0.lo(m,i,a,YR) =0;
+
+*positive variables initial values
+T_Q.up(m,i) = 400000; 
+T_Q.lo(m,i) = 0; 
+T_Y.up(m,i) = 400000;
+T_Y.lo(m,i) = 0;
+T_start.up(m,i,a) = 400000;
+T_start.lo(m,i,a) = 0;
+
+t_AGV.up(m,i,a,m,i,a) = 400000; 
+t_AGV.lo(m,i,a,m,i,a) = 0; 
+X_position.up(m,i,a) = 400000;
+X_position.lo(m,i,a) = 0;
+Y_position.up(m,i,a) = 400000;
+Y_position.lo(m,i,a) = 0;
+
+
+* set the upper and lower bound of each variable, including binary variable (what a horrible language, eh??)
 
 Equations
         ADRP                        "AGV Dispatching and Routing Problem"
@@ -112,8 +148,8 @@ Equations
         cnstr_7(m,i)                "D"         
 *
 **       LOcation constraints of AGV acitons
-        cnstr_8(m,i,n,j,XR, li)         "C,C,XR"        
-        cnstr_9(m,i,n,j,YR, li)         "C,C,YR"    
+        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
+        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
         cnstr_10(m,i,a)             "C,a"     
         cnstr_11(m,i,a)             "C,a"      
         cnstr_12(m,i)               "L"        
@@ -153,47 +189,36 @@ Equations
         ;
 
 
-ADRP.. obj =e=
-$ifthen "T_Q('m4','i4') + G_Q('m4','i4') > T_Y('m4','i4') + G_Y('m4','i4')"
-T_Q('m4','i4') + G_Q('m4','i4');
-$else
-T_Y('m4','i4') + G_Y('m4','i4');
-$endif
+ADRP.. obj =e= T_Q('m4','i4') + G_Q('m4','i4') + T_Y('m4','i4') + G_Y('m4','i4');
+* > T_Y.l('m4','i4') + G_Y.l('m4','i4')
 
 
 **Job assinment constraints
-cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
-cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $C(n,j), z(m,i,n,j,li)) =e= sum((h,k) $C(h,k), z(m,i,h,k,li));
-cnstr_4(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z('m0', 'i0', m, i, li)) =e= 1;
-cnstr_5(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z(m, i, 'm0', 'i0', li)) =e= 1;
-cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j)), z(m,i,n,j,li)) =e= 1;
-cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j)), z(m,i,n,j,li)) =e= 1;
-*
-**Location constraints of AGV acitons
-cnstr_8(m,i,n,j,xr, li) $(WT(m,i,'a4') and WH(n,j,'a0'))..
-$ifthen "z(m,i,n,j,li) == 1"
- P_X(m,i,'a4',XR)  =e= P_X(n,j,'a0',XR);  !! a bit different from the article's forumulation
-$else
-1 =e= 1;
-$endif
+* as soon as you include conditional $(C(m,i)), you ignore virtual node!
+*all of these don't contain zero virtual node! bad bad!!!!!!!
+cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1;
+cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(m,i,n,j,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') or sameas(k,'i0'))), z(m,i,h,k,li));
+cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li)) =e= 1;
+cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li)) =e= 1;
+cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li)) =e= 1;
+cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li)) =e= 1;
 
-cnstr_9(m,i,n,j,yr, li) $(wt(m,i,'a4') and Wt(n,j,'a0'))..
-$ifthen "z(m,i,n,j,li) == 1"
- P_Y(m,i,'a4',YR) =e= P_Y(n,j,'a0',YR);
-$else
-1 =e= 1;
-$endif
+**Location constraints of AGV acitons
+cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR) $(sum(li,z.l(m,i,n,j,li)) = 1) =e= P_X(n,j,'a0',XR);  !! a bit different from the article's forumulation6
+
+set x_t(XR) /#XR/;
+cnstr_9(m,i,n,j,yr) $(wt(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR) $(sum(li,z.l(m,i,n,j,li)) = 1) =e= P_Y(n,j,'a0',YR);
 
 cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
 cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
 cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
 cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
 cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
-cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0')).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X(m,i,'a0',XR)) =e= 1; !! this is infeasible
+cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0')).. sum(XR $(A_L(m,i,XR) or A_R(m,i,XR)),sum(x_t $(A_L(m,i,XR) and (ord(x_t) >= ord(XR)) or (A_R(m,i,XR) and (ord(x_t)<=ord(XR)))) ,P_X(m,i,'a0',x_t))) =e= 1; !! this is infeasible
 cnstr_16(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
 cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
-cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WV(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;    !!This is infeasible as well!
-cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3')).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X(m,i,'a3',XR)) =e= 1;
+cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WV(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;    
+cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3')).. sum(XR $(A_L(m,i,XR) or A_R(m,i,XR)),sum(x_t $(A_L(m,i,XR) and (ord(x_t) >= ord(XR)) or (A_R(m,i,XR) and (ord(x_t)<=ord(XR)))) ,P_X(m,i,'a3',x_t))) =e= 1; !! this is infeasible
 cnstr_20(m, i, a1, a1_1, YR) $(Wt(m,i,a1) and Wt(m,i,a1_1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
 cnstr_21(m, i, a1, a1_1, XR) $(Wt(m,i,a1) and Wt(m,i,a1_1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
 *
@@ -218,19 +243,10 @@ cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).
 cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
 cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) < ord(a1))).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
 
-cnstr_39(m,i,a,XR) $(Wt(m,i,a))..
-$ifthen P_x(m,i,a,XR) == 1
- x_position(m,i,a)  =e= 1; !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
-$else
- 1 =e= 1;
-$endif
+cnstr_39(m,i,a,XR) $(Wt(m,i,a) and (P_x.l(m,i,a,XR) = 1))..  x_position(m,i,a)  =e= 1;
 
-cnstr_40(m,i,a,YR) $(Wt(m,i,a))..
-$ifthen P_x(m,i,a,XR) == 1
- y_position(m,i,a) =e= 1; !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
-$else
-1 =e= 1;
-$endif
+cnstr_40(m,i,a,YR) $(Wt(m,i,a) and (P_y.l(m,i,a,YR) = 1)).. y_position(m,i,a) =e= 1; !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+
 
 
 cnstr_41(m,i,n,j,a1,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) =e=

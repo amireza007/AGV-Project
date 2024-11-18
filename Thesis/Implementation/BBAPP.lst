@@ -1,264 +1,309 @@
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/16/24 16:23:09 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/18/24 12:04:04 Page 1
 A branch and bound problem
 C o m p i l a t i o n
 
 
-   3  Scalars
-   4          S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
-   5          x /1/
-   6          y /1/
-   7          x_R /10/
-   8          y_R /14/
-   9          y_r1 /10/ !! these should be rewritten with $set and %inside sets!
-  10          v "AGV speed" /4/
-  11          Mnum "a very large number" /10000000/;
-  12   
-  13  Sets
-  14   
-  15          i "container index" /i0*i4/
-  16          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
-  17          id(i) "last container" /i4/
-  18   
-  19          m   "QC index" /m0,m1,m2,m3,m4/
-  20          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
-  21   
+   3  *cnstr_15 and cnstr_19 are infeasible and I hypothesize it's due to not setting initial virtual positions!
+   4  Scalars
+   5          S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
+   6          x /1/
+   7          y /1/
+   8          x_R /10/
+   9          y_R /14/
+  10          y_r1 /10/ !! these should be rewritten with $set and %inside sets!
+  11          v "AGV speed" /4/
+  12          Mnum "a very large number" /10000000/;
+  13   
+  14  Sets
+  15   
+  16          i "container index" /i0*i4/
+  17          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+  18          id(i) "last container" /i4/
+  19   
+  20          m   "QC index" /m0,m1,m2,m3,m4/
+  21          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
   22   
-  23          li "AGV index" /l1*l3/
-  24          Bs(li) "set of all agvs" /#li/
-  25   
-  26  *       0 in a is a virtual starting point
-  27          a   "AGV actions" /a0*a4/
-  28   
-  29          XR  "Vertical Operational Area" /1*14/
-  30          YR  "Horizontal Operational Area" /1*14/
-  31          YS(YR)  "Horizontal Seaside Operation Area" /11*14/
-  32          YL(YR)  "Horizontal Path" /1*10/
-  33   
+  23   
+  24          li "AGV index" /l1*l3/
+  25          Bs(li) "set of all agvs" /#li/
+  26   
+  27  *       0 in a is a virtual starting point
+  28          a   "AGV actions" /a0*a4/
+  29   
+  30          XR  "Vertical Operational Area" /1*14/
+  31          YR  "Horizontal Operational Area" /1*14/
+  32          YS(YR)  "Horizontal Seaside Operation Area" /11*14/
+  33          YL(YR)  "Horizontal Path" /1*10/
   34   
-  35          o(m,i,XR) /m1.i1.1, m2.i2.3, m3.i3.5, m4.i4.8/ !! if m_4 < m_5 (i.e. 4<5), set i_i < i_j (i.e. i<j)
-  36          A_L(m,i,XR) /m1.i1.2 /
-  37          A_R(m,i,XR) /m2.i2.8/
-  38   
+  35   
+  36          o(m,i,XR) /m1.i1.1, m2.i2.3, m3.i3.5, m4.i4.8/ !! if m_4 < m_5 (i.e. 4<5), set i_i < i_j (i.e. i<j)
+  37          A_L(m,i,XR) /m1.i1.2, m2.i2.4, m3.i3.1, m4.i4.5 /
+  38          A_R(m,i,XR) /m1.i1.8, m2.i2.7, m1.i1.10, m1.i1.6 /
   39   
-  40          L(m,i)   /m1.i1 , m2.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
-  41          D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/ !! these are in the ships, waiting to be taking to ASCs
-  42          C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file
-  43          Cd(m,i) "the last QC container job" /m4.i4/
-  44  *        C_prime(i) "The set of containers to be assigned" $ "This is in data file"
-  45   
-  46          WT(m,i,a) "set of total actions" /m1.i1.a0,m2.i2.a0,m3.i3.a0,m4.i4.a0,      m1.i1.a2, m2.i2.a2, m3.i3.a2, m4.i4.a2,     m1.i1.a1, m1.i1.a3, m2.i2.a1, m2.i2.a3, m3.i3.a1, m3.i3.a3, m3.i3.a4, m4.i4.a1, m4.i4.a3, m4.i4.a4/
-  47          WV(m,i,a)  "Vertical Actions" /m1.i1.a2, m2.i2.a2, m3.i3.a2, m4.i4.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
-  48          WH(m,i,a)  "Horizontal Actions" /m1.i1.a0,m2.i2.a0,m3.i3.a0,m4.i4.a0,  m1.i1.a1, m1.i1.a3, m2.i2.a1, m2.i2.a3, m3.i3.a1, m3.i3.a3, m3.i3.a4, m4.i4.a1, m4.i4.a3, m4.i4.a4 / !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
-  49   
-  50  *       or psi_1(m,i,m,i)?
-  51  *very challenging set!
-  52          psi_1(m,i,m,i)   "Scnstruence of Container jobs for QC" /m3.i3.m4.i4/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
-  53          psi_2(m,i,m,i)   "Scnstruence of Container jobs for ASC" /m1.i1.m2.i2/ !!This is in data file.
-  54          ;
-  55  *O(YR) $(C(m,i)) = yes;
-  56  alias(XR, XR_1);
-  57  alias(YR, YR_1);
-  58  alias (a,a1);
-  59  alias (a,a2);
-  60  alias (a2,a2_1);
-  61  alias (a1,a1_1);
-  62  alias (i,i1);
-  63  set h(n)/#m/;  !! for cnstr_3
-  64  set k(j) /#i/;
-  65  set s(YR);
-  66  set XR2(XR) /#XR/;
-  67   
-  68  Parameters
-  69          o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i2 3/
-  70          G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !! seems to be constant for all container jobs, bc of const 24
-  71          G_Y(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/
-  72          ;
-  73   
-  74  Binary Variables
-  75   
-  76          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
-  77          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before"
-  78          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
-  79   
-  80  *       "Path related variables
-  81          P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
-  82          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
-  83          P_X0(m,i,a,XR) "P_X(WV,x) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
-  84          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
-  85          ;
-  86   
-  87  Positive Variables
-  88   
-  89  *       Time related variables
-  90          T_Q(m,i) "start time of QC"
-  91          T_Y(m,i) "Start time of agv putting cont on ASC"
-  92          T_start(m,i,a) "Start of agv for action (m,i,a)"
-  93   
+  40   
+  41          L(m,i)   /m1.i1 , m2.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+  42          D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/ !! these are in the ships, waiting to be taking to ASCs
+  43          C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file, this should contain 0 node, too!
+  44          Cd(m,i) "the last QC container job" /m4.i4/
+  45  *        C_prime(i) "The set of containers to be assigned" $ "This is in data file"
+  46   
+  47          WT(m,i,a) "set of total actions" /m1.i1.a0,m2.i2.a0,m3.i3.a0,m4.i4.a0,      m1.i1.a2, m2.i2.a2, m3.i3.a2, m4.i4.a2,     m1.i1.a1, m1.i1.a3, m2.i2.a1, m2.i2.a3, m3.i3.a1, m3.i3.a3, m3.i3.a4, m4.i4.a1, m4.i4.a3, m4.i4.a4/
+  48          WV(m,i,a)  "Vertical Actions" /m1.i1.a2, m2.i2.a2, m3.i3.a2, m4.i4.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
+  49          WH(m,i,a)  "Horizontal Actions" /m1.i1.a0,m2.i2.a0,m3.i3.a0,m4.i4.a0,  m1.i1.a1, m1.i1.a3, m2.i2.a1, m2.i2.a3, m3.i3.a1, m3.i3.a3, m3.i3.a4, m4.i4.a1, m4.i4.a3, m4.i4.a4 / !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
+  50   
+  51  *       or psi_1(m,i,m,i)?
+  52  *very challenging set!
+  53          psi_1(m,i,m,i)   "Scnstruence of Container jobs for QC" /m3.i3.m4.i4/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
+  54          psi_2(m,i,m,i)   "Scnstruence of Container jobs for ASC" /m1.i1.m2.i2/ !!This is in data file.
+  55          ;
+  56  *O(YR) $(C(m,i)) = yes;
+  57  alias(XR, XR_1);
+  58  alias(YR, YR_1);
+  59  alias (a,a1);
+  60  alias (a,a2);
+  61  alias (a2,a2_1);
+  62  alias (a1,a1_1);
+  63  alias (i,i1);
+  64  set h(n)/#m/;  !! for cnstr_3
+  65  set k(j) /#i/;
+  66  set s(YR);
+  67  set XR2(XR) /#XR/;
+  68   
+  69  Parameters
+  70          o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i2 3/
+  71          G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !! seems to be constant for all container jobs, bc of const 24
+  72          G_Y(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/
+  73          ;
+  74   
+  75  Binary Variables
+  76   
+  77          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
+  78          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before"
+  79          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
+  80   
+  81  *       "Path related variables
+  82          P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
+  83          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
+  84          P_X0(m,i,a,XR) "P_X(WV,x) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
+  85          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
+  86          ;
+  87   
+  88  Positive Variables
+  89   
+  90  *       Time related variables
+  91          T_Q(m,i) "start time of QC"
+  92          T_Y(m,i) "Start time of agv putting cont on ASC"
+  93          T_start(m,i,a) "Start of agv for action (m,i,a)"
   94   
-  95  *       Auxiliary Variables
-  96          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
-  97          X_position(m,i,a)   "X_position(WT)"
-  98          Y_position(m,i,a)   "Y_position(WT)"
-  99   
- 100          ;
- 101  variable obj "objective function";
- 102   
- 103  Equations
- 104          ADRP                        "AGV Dispatching and Routing Problem"
- 105   
- 106  *       Job assignment constraints
- 107          cnstr_2(m,i)
- 108          cnstr_3(m,i,li)             "C,B"
- 109          cnstr_4(li)                 "B with 0 virtual node"
- 110          cnstr_5(li)               ‌  "B with 0 virutal node"
- 111          cnstr_6(m,i)                "L"
- 112          cnstr_7(m,i)                "D"
- 113  *
- 114  **       LOcation constraints of AGV acitons
- 115          cnstr_8(m,i,n,j,XR, li)         "C,C,XR"
- 116          cnstr_9(m,i,n,j,YR, li)         "C,C,YR"
- 117          cnstr_10(m,i,a)             "C,a"
- 118          cnstr_11(m,i,a)             "C,a"
- 119          cnstr_12(m,i)               "L"
- 120          cnstr_13(m,i)               "D"
- 121          cnstr_14(m,i,XR)            "D"
- 122          cnstr_15(m,i)               "L"
- 123          cnstr_16(m,i)               "D"
- 124          cnstr_17(m,i)               "L"
- 125          cnstr_18(m,i,XR)            "L"
- 126          cnstr_19(m,i)               "D"
- 127          cnstr_20(m, i, a, a, YR)    "WH,YR"
- 128          cnstr_21(m,i,a,a,XR)        "WV,XR"
- 129  *
- 130  **Conflict Free Constraints
- 131          cnstr_22(m,i,n,j)           "C,C"
- 132          cnstr_23(m,i,a,n,j,a,YR,XR) "WH,WH,YR,XR"
- 133          cnstr_24(m,i,n,j,a)         "C, WH"
- 134          cnstr_25(m,i,n,j,a,a)       "C, WH"
- 135          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
- 136          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
- 137          cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
+  95   
+  96  *       Auxiliary Variables
+  97          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
+  98          X_position(m,i,a)   "X_position(WT)"
+  99          Y_position(m,i,a)   "Y_position(WT)"
+ 100   
+ 101          ;
+ 102  variable obj "objective function";
+ 103   
+ 104  *binary variables initial values
+ 105  z.up(m,i,m,i,li) = 1;
+ 106  z.lo(m,i,m,i,li) = 0;
+ 107  U_AGV.up(m,i,a,m,i,a) = 1;
+ 108  U_AGV.lo(m,i,a,m,i,a) = 0;
+ 109  U_QC.up(m,i,m,i,a) = 1;
+ 110  U_QC.lo(m,i,m,i,a) = 0;
+ 111   
+ 112  P_X.up(m,i,a,XR) =1;
+ 113  P_X.lo(m,i,a,XR) =0;
+ 114  P_Y.up(m,i,a,YR) =1;
+ 115  P_Y.lo(m,i,a,YR) =0;
+ 116  P_X0.up(m,i,a,XR) =1;
+ 117  P_X0.lo(m,i,a,XR) =0;
+ 118  P_Y0.up(m,i,a,YR) =1;
+ 119  P_Y0.lo(m,i,a,YR) =0;
+ 120   
+ 121  *positive variables initial values
+ 122  T_Q.up(m,i) = 400000;
+ 123  T_Q.lo(m,i) = 0;
+ 124  T_Y.up(m,i) = 400000;
+ 125  T_Y.lo(m,i) = 0;
+ 126  T_start.up(m,i,a) = 400000;
+ 127  T_start.lo(m,i,a) = 0;
+ 128   
+ 129  t_AGV.up(m,i,a,m,i,a) = 400000;
+ 130  t_AGV.lo(m,i,a,m,i,a) = 0;
+ 131  X_position.up(m,i,a) = 400000;
+ 132  X_position.lo(m,i,a) = 0;
+ 133  Y_position.up(m,i,a) = 400000;
+ 134  Y_position.lo(m,i,a) = 0;
+ 135   
+ 136   
+ 137  * set the upper and lower bound of each variable, including binary variable (what a horrible language, eh??)
  138   
- 139  **Time Constraints
- 140          cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
- 141          cnstr_30(m,i,m,i)           "psi_1"
- 142          cnstr_31(m,i,m,i)           "psi_2"
- 143          cnstr_32(m,i)               "D"
- 144          cnstr_33(m,i)               "L"
- 145          cnstr_34(m,i,m,i)           "D,L"
- 146          cnstr_35(m,i,m,i)           "L,D"
- 147          cnstr_36(m,i,a)             "D,a"      !!alpha=4 and 1
- 148          cnstr_37(m,i,a)             "D,a"      !!alpha=1 and 1
- 149          cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
- 150          cnstr_39(m,i,a,XR)          "C,a,XR"
- 151          cnstr_40(m,i,a,YR)          "C,a,YR"
- 152          cnstr_41(m,i,m,i,a,a)       "C,C,a,a"
- 153          ;
- 154   
- 155   
- 156  ADRP.. obj =e=
- 158  T_Y('m4','i4') + G_Y('m4','i4');
- 160   
- 161   
- 162  **Job assinment constraints
- 163  cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $C(n,j),  z(m,i,n,j,li)) =e= 1;
- 164  cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $C(n,j), z(m,i,n,j,li)) =e= sum((h,k) $C(h,k), z(m,i,h,k,li));
- 165  cnstr_4(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z('m0', 'i0', m, i, li)) =e= 1;
- 166  cnstr_5(li).. sum((m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')), z(m, i, 'm0', 'i0', li)) =e= 1;
- 167  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j)), z(m,i,n,j,li)) =e= 1;
- 168  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j)), z(m,i,n,j,li)) =e= 1;
- 169  *
- 170  **Location constraints of AGV acitons
- 171  cnstr_8(m,i,n,j,xr, li) $(WT(m,i,'a4') and WH(n,j,'a0'))..
- 173  1 =e= 1;
- 175   
- 176  cnstr_9(m,i,n,j,yr, li) $(wt(m,i,'a4') and Wt(n,j,'a0'))..
- 178  1 =e= 1;
- 180   
- 181  cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
- 182  cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
- 183  cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
- 184  cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
- 185  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
- 186  cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0')).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X(m,i,'a0',XR)) =e= 1;
- 187  cnstr_16(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 188  cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 189  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WV(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
- 190  cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3')).. sum(XR $(A_L(m,i,XR) and A_R(m,i,XR)), P_X(m,i,'a3',XR)) =e= 1;
- 191  cnstr_20(m, i, a1, a1_1, YR) $(Wt(m,i,a1) and Wt(m,i,a1_1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
- 192  cnstr_21(m, i, a1, a1_1, XR) $(Wt(m,i,a1) and Wt(m,i,a1_1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
- 193  *
- 194  **Conflict Free Constraints
- 195  cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
- 196  cnstr_23(m,i,a1,n,j,a2,YR,XR) $(Wt(m,i,a1) and Wt(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1
+ 139  Equations
+ 140          ADRP                        "AGV Dispatching and Routing Problem"
+ 141   
+ 142  *       Job assignment constraints
+ 143          cnstr_2(m,i)
+ 144          cnstr_3(m,i,li)             "C,B"
+ 145          cnstr_4(li)                 "B with 0 virtual node"
+ 146          cnstr_5(li)               ‌  "B with 0 virutal node"
+ 147          cnstr_6(m,i)                "L"
+ 148          cnstr_7(m,i)                "D"
+ 149  *
+ 150  **       LOcation constraints of AGV acitons
+ 151          cnstr_8(m,i,n,j,XR)         "C,C,XR"
+ 152          cnstr_9(m,i,n,j,YR)         "C,C,YR"
+ 153          cnstr_10(m,i,a)             "C,a"
+ 154          cnstr_11(m,i,a)             "C,a"
+ 155          cnstr_12(m,i)               "L"
+ 156          cnstr_13(m,i)               "D"
+ 157          cnstr_14(m,i,XR)            "D"
+ 158          cnstr_15(m,i)               "L"
+ 159          cnstr_16(m,i)               "D"
+ 160          cnstr_17(m,i)               "L"
+ 161          cnstr_18(m,i,XR)            "L"
+ 162          cnstr_19(m,i)               "D"
+ 163          cnstr_20(m, i, a, a, YR)    "WH,YR"
+ 164          cnstr_21(m,i,a,a,XR)        "WV,XR"
+ 165  *
+ 166  **Conflict Free Constraints
+ 167          cnstr_22(m,i,n,j)           "C,C"
+ 168          cnstr_23(m,i,a,n,j,a,YR,XR) "WH,WH,YR,XR"
+ 169          cnstr_24(m,i,n,j,a)         "C, WH"
+ 170          cnstr_25(m,i,n,j,a,a)       "C, WH"
+ 171          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
+ 172          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+ 173          cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
+ 174   
+ 175  **Time Constraints
+ 176          cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
+ 177          cnstr_30(m,i,m,i)           "psi_1"
+ 178          cnstr_31(m,i,m,i)           "psi_2"
+ 179          cnstr_32(m,i)               "D"
+ 180          cnstr_33(m,i)               "L"
+ 181          cnstr_34(m,i,m,i)           "D,L"
+ 182          cnstr_35(m,i,m,i)           "L,D"
+ 183          cnstr_36(m,i,a)             "D,a"      !!alpha=4 and 1
+ 184          cnstr_37(m,i,a)             "D,a"      !!alpha=1 and 1
+ 185          cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
+ 186          cnstr_39(m,i,a,XR)          "C,a,XR"
+ 187          cnstr_40(m,i,a,YR)          "C,a,YR"
+ 188          cnstr_41(m,i,m,i,a,a)       "C,C,a,a"
+ 189          ;
+ 190   
+ 191   
+ 192  ADRP.. obj =e= T_Q('m4','i4') + G_Q('m4','i4') + T_Y('m4','i4') + G_Y('m4','i4');
+ 193  * > T_Y.l('m4','i4') + G_Y.l('m4','i4')
+ 194   
+ 195   
+ 196  **Job assinment constraints
+ 197  * as soon as you include conditional $(C(m,i)), you ignore virtual node!
+ 198  *all of these don't contain zero virtual node! bad bad!!!!!!!
+ 199  cnstr_2(m,i) $(C(m,i) and not sameas(m,'m0') and not sameas(i,'i0')).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1;
+ 200  cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(m,i,n,j,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') or sameas(k,'i0'))), z(m,i,h,k,li));
+ 201  cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li)) =e= 1;
+ 202  cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li)) =e= 1;
+ 203  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li)) =e= 1;
+ 204  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li)) =e= 1;
+ 205   
+ 206  **Location constraints of AGV acitons
+ 207  cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR) $(sum(li,z.l(m,i,n,j,li)) = 1) =e= P_X(n,j,'a0',XR);  !! a bit different from the article's forumulation6
+ 208   
+ 209  set x_t(XR) /#XR/;
+ 210  cnstr_9(m,i,n,j,yr) $(wt(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR) $(sum(li,z.l(m,i,n,j,li)) = 1) =e= P_Y(n,j,'a0',YR);
+ 211   
+ 212  cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+ 213  cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+ 214  cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+ 215  cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
+ 216  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
+ 217  cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0')).. sum(XR $(A_L(m,i,XR) or A_R(m,i,XR)),sum(x_t $(A_L(m,i,XR) and (ord(x_t) >= ord(XR)) or (A_R(m,i,XR) and (ord(x_t)<=ord(XR)))) ,P_X(m,i,'a0',x_t))) =e= 1; !! this is infeasible
+ 218  cnstr_16(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 219  cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 220  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WV(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
+ 221  cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3')).. sum(XR $(A_L(m,i,XR) or A_R(m,i,XR)),sum(x_t $(A_L(m,i,XR) and (ord(x_t) >= ord(XR)) or (A_R(m,i,XR) and (ord(x_t)<=ord(XR)))) ,P_X(m,i,'a3',x_t))) =e= 1; !! this is infeasible
+ 222  cnstr_20(m, i, a1, a1_1, YR) $(Wt(m,i,a1) and Wt(m,i,a1_1) and ord(a1_1) < ord(a1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+ 223  cnstr_21(m, i, a1, a1_1, XR) $(Wt(m,i,a1) and Wt(m,i,a1_1) and ord(a1_1) < ord(a1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+ 224  *
+ 225  **Conflict Free Constraints
+ 226  cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 227  cnstr_23(m,i,a1,n,j,a2,YR,XR) $(Wt(m,i,a1) and Wt(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum((XR_1, a1_1, a2_1) $(ord(XR_1) <= ord(XR) and ord(a1_1)<ord(a1) and ord(a2_1) <ord(a2)), P_X(m,i,a1
       _1,XR_1) + P_X(n,j,a2,XR_1) - P_X(m,i,a1,XR_1) - P_X(n,j,a2_1,XR_1)) =g= 0;
- 197  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
- 198  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
- 199  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - su
+ 228  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 229  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and ord(a1_1)<ord(a1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 230  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and ord(a2_1)<ord(a2)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - su
       m(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)) ) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
- 200  cnstr_27(m,i,a1,n,j,a2,XR) $(Wt(m,i,a1) and Wt(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
- 201  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4') ) and ord(a1_1)<ord(a1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
- 202   
- 203  *Time Constraints
- 204  cnstr_29(m,i,i1) $(c(m,i) and (ord(i)<ord(i1))).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
- 205  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
- 206  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
- 207  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
- 208  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
- 209  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 210  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 211  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
- 212  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
- 213  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) < ord(a1))).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
- 214   
- 215  cnstr_39(m,i,a,XR) $(Wt(m,i,a))..
- 217   1 =e= 1;
- 219   
- 220  cnstr_40(m,i,a,YR) $(Wt(m,i,a))..
- 222  1 =e= 1;
- 224   
- 225   
- 226  cnstr_41(m,i,n,j,a1,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) =e=
- 228      (- x_position(m,i,a1) + x_position(n,j,a2))/v +
- 230   
- 232   (- Y_position(m,i,a1) + y_position(n,j,a2))/v;
- 234   
- 235  *
- 236  Model ConflictFreeSch /all/ ;
- 237   
- 238  Solve ConflictFreeSch using mip minimizing obj;
- 239   
- 240  *Display x.l, x.m ;
+ 231  cnstr_27(m,i,a1,n,j,a2,XR) $(Wt(m,i,a1) and Wt(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 232  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4') ) and ord(a1_1)<ord(a1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 233   
+ 234  *Time Constraints
+ 235  cnstr_29(m,i,i1) $(c(m,i) and (ord(i)<ord(i1))).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
+ 236  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+ 237  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+ 238  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+ 239  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 240  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 241  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 242  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+ 243  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+ 244  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) < ord(a1))).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+ 245   
+ 246  cnstr_39(m,i,a,XR) $(Wt(m,i,a) and (P_x.l(m,i,a,XR) = 1))..  x_position(m,i,a)  =e= 1;
+ 247   
+ 248  cnstr_40(m,i,a,YR) $(Wt(m,i,a) and (P_y.l(m,i,a,YR) = 1)).. y_position(m,i,a) =e= 1; !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+ 249   
+ 250   
+ 251   
+ 252  cnstr_41(m,i,n,j,a1,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) =e=
+ 254      (- x_position(m,i,a1) + x_position(n,j,a2))/v +
+ 256   
+ 258   (- Y_position(m,i,a1) + y_position(n,j,a2))/v;
+ 260   
+ 261  *
+ 262  Model ConflictFreeSch /all/ ;
+ 263   
+ 264  Solve ConflictFreeSch using mip minimizing obj;
+ 265   
+ 266  *Display x.l, x.m ;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/16/24 16:23:09 Page 2
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/18/24 12:04:04 Page 2
 A branch and bound problem
-Equation Listing    SOLVE ConflictFreeSch Using MIP From line 238
+Equation Listing    SOLVE ConflictFreeSch Using MIP From line 264
 
 
 ---- ADRP  =E=  AGV Dispatching and Routing Problem
 
-ADRP..  - T_Y(m4,i4) + obj =E= 1 ; (LHS = 0, INFES = 1 ****)
+ADRP..  - T_Q(m4,i4) - T_Y(m4,i4) + obj =E= 2 ; (LHS = 0, INFES = 2 ****)
      
 
 ---- cnstr_2  =E=  
 
-cnstr_2(m1,i1)..  z(m1,i1,m1,i1,l1) + z(m1,i1,m1,i1,l2) + z(m1,i1,m1,i1,l3) + z(m1,i1,m2,i2,l1) + z(m1,i1,m2,i2,l2) + z(m1,i1,m2,i2,l3) + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) + z(m1,i1,m4,i4,l1) + z(m1,i1,m4,i4,l2) + z(m1,i1,m4,i4,l3)
-      =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_2(m1,i1)..  z(m1,i1,m0,i0,l1) + z(m1,i1,m0,i0,l2) + z(m1,i1,m0,i0,l3) + z(m1,i1,m1,i1,l1) + z(m1,i1,m1,i1,l2) + z(m1,i1,m1,i1,l3) + z(m1,i1,m2,i2,l1) + z(m1,i1,m2,i2,l2) + z(m1,i1,m2,i2,l3) + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3)
      
-cnstr_2(m2,i2)..  z(m2,i2,m1,i1,l1) + z(m2,i2,m1,i1,l2) + z(m2,i2,m1,i1,l3) + z(m2,i2,m2,i2,l1) + z(m2,i2,m2,i2,l2) + z(m2,i2,m2,i2,l3) + z(m2,i2,m3,i3,l1) + z(m2,i2,m3,i3,l2) + z(m2,i2,m3,i3,l3) + z(m2,i2,m4,i4,l1) + z(m2,i2,m4,i4,l2) + z(m2,i2,m4,i4,l3)
-      =E= 1 ; (LHS = 0, INFES = 1 ****)
+      + z(m1,i1,m4,i4,l1) + z(m1,i1,m4,i4,l2) + z(m1,i1,m4,i4,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_2(m3,i3)..  z(m3,i3,m1,i1,l1) + z(m3,i3,m1,i1,l2) + z(m3,i3,m1,i1,l3) + z(m3,i3,m2,i2,l1) + z(m3,i3,m2,i2,l2) + z(m3,i3,m2,i2,l3) + z(m3,i3,m3,i3,l1) + z(m3,i3,m3,i3,l2) + z(m3,i3,m3,i3,l3) + z(m3,i3,m4,i4,l1) + z(m3,i3,m4,i4,l2) + z(m3,i3,m4,i4,l3)
-      =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_2(m2,i2)..  z(m2,i2,m0,i0,l1) + z(m2,i2,m0,i0,l2) + z(m2,i2,m0,i0,l3) + z(m2,i2,m1,i1,l1) + z(m2,i2,m1,i1,l2) + z(m2,i2,m1,i1,l3) + z(m2,i2,m2,i2,l1) + z(m2,i2,m2,i2,l2) + z(m2,i2,m2,i2,l3) + z(m2,i2,m3,i3,l1) + z(m2,i2,m3,i3,l2) + z(m2,i2,m3,i3,l3)
+     
+      + z(m2,i2,m4,i4,l1) + z(m2,i2,m4,i4,l2) + z(m2,i2,m4,i4,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cnstr_2(m3,i3)..  z(m3,i3,m0,i0,l1) + z(m3,i3,m0,i0,l2) + z(m3,i3,m0,i0,l3) + z(m3,i3,m1,i1,l1) + z(m3,i3,m1,i1,l2) + z(m3,i3,m1,i1,l3) + z(m3,i3,m2,i2,l1) + z(m3,i3,m2,i2,l2) + z(m3,i3,m2,i2,l3) + z(m3,i3,m3,i3,l1) + z(m3,i3,m3,i3,l2) + z(m3,i3,m3,i3,l3)
+     
+      + z(m3,i3,m4,i4,l1) + z(m3,i3,m4,i4,l2) + z(m3,i3,m4,i4,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 REMAINING ENTRY SKIPPED
 
 
 ---- cnstr_3  =E=  C,B
 
-                NONE
+cnstr_3(m1,i1,l1)..  - z(m1,i1,m0,i1,l1) - z(m1,i1,m0,i2,l1) - z(m1,i1,m0,i3,l1) - z(m1,i1,m0,i4,l1) - z(m1,i1,m1,i0,l1) - z(m1,i1,m2,i0,l1) - z(m1,i1,m3,i0,l1) - z(m1,i1,m4,i0,l1) =E= 0 ; (LHS = 0)
+     
+cnstr_3(m1,i1,l2)..  - z(m1,i1,m0,i1,l2) - z(m1,i1,m0,i2,l2) - z(m1,i1,m0,i3,l2) - z(m1,i1,m0,i4,l2) - z(m1,i1,m1,i0,l2) - z(m1,i1,m2,i0,l2) - z(m1,i1,m3,i0,l2) - z(m1,i1,m4,i0,l2) =E= 0 ; (LHS = 0)
+     
+cnstr_3(m1,i1,l3)..  - z(m1,i1,m0,i1,l3) - z(m1,i1,m0,i2,l3) - z(m1,i1,m0,i3,l3) - z(m1,i1,m0,i4,l3) - z(m1,i1,m1,i0,l3) - z(m1,i1,m2,i0,l3) - z(m1,i1,m3,i0,l3) - z(m1,i1,m4,i0,l3) =E= 0 ; (LHS = 0)
+     
+REMAINING 9 ENTRIES SKIPPED
 
 
 ---- cnstr_4  =E=  B with 0 virtual node
@@ -281,26 +326,38 @@ cnstr_5(l3)..  z(m1,i1,m0,i0,l3) + z(m2,i2,m0,i0,l3) + z(m3,i3,m0,i0,l3) + z(m4,
 
 ---- cnstr_6  =E=  L
 
-cnstr_6(m1,i1)..  z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) + z(m1,i1,m4,i4,l1) + z(m1,i1,m4,i4,l2) + z(m1,i1,m4,i4,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_6(m1,i1)..  z(m1,i1,m0,i0,l1) + z(m1,i1,m0,i0,l2) + z(m1,i1,m0,i0,l3) + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) + z(m1,i1,m4,i4,l1) + z(m1,i1,m4,i4,l2) + z(m1,i1,m4,i4,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_6(m2,i2)..  z(m2,i2,m3,i3,l1) + z(m2,i2,m3,i3,l2) + z(m2,i2,m3,i3,l3) + z(m2,i2,m4,i4,l1) + z(m2,i2,m4,i4,l2) + z(m2,i2,m4,i4,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_6(m2,i2)..  z(m2,i2,m0,i0,l1) + z(m2,i2,m0,i0,l2) + z(m2,i2,m0,i0,l3) + z(m2,i2,m3,i3,l1) + z(m2,i2,m3,i3,l2) + z(m2,i2,m3,i3,l3) + z(m2,i2,m4,i4,l1) + z(m2,i2,m4,i4,l2) + z(m2,i2,m4,i4,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 
 ---- cnstr_7  =E=  D
 
-cnstr_7(m3,i3)..  z(m3,i3,m1,i1,l1) + z(m3,i3,m1,i1,l2) + z(m3,i3,m1,i1,l3) + z(m3,i3,m2,i2,l1) + z(m3,i3,m2,i2,l2) + z(m3,i3,m2,i2,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_7(m3,i3)..  z(m3,i3,m0,i0,l1) + z(m3,i3,m0,i0,l2) + z(m3,i3,m0,i0,l3) + z(m3,i3,m1,i1,l1) + z(m3,i3,m1,i1,l2) + z(m3,i3,m1,i1,l3) + z(m3,i3,m2,i2,l1) + z(m3,i3,m2,i2,l2) + z(m3,i3,m2,i2,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_7(m4,i4)..  z(m4,i4,m1,i1,l1) + z(m4,i4,m1,i1,l2) + z(m4,i4,m1,i1,l3) + z(m4,i4,m2,i2,l1) + z(m4,i4,m2,i2,l2) + z(m4,i4,m2,i2,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_7(m4,i4)..  z(m4,i4,m0,i0,l1) + z(m4,i4,m0,i0,l2) + z(m4,i4,m0,i0,l3) + z(m4,i4,m1,i1,l1) + z(m4,i4,m1,i1,l2) + z(m4,i4,m1,i1,l3) + z(m4,i4,m2,i2,l1) + z(m4,i4,m2,i2,l2) + z(m4,i4,m2,i2,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 
 ---- cnstr_8  =E=  C,C,XR
 
-                NONE
+cnstr_8(m3,i3,m1,i1,1)..  - P_X(m1,i1,a0,1) =E= 0 ; (LHS = 0)
+     
+cnstr_8(m3,i3,m1,i1,2)..  - P_X(m1,i1,a0,2) =E= 0 ; (LHS = 0)
+     
+cnstr_8(m3,i3,m1,i1,3)..  - P_X(m1,i1,a0,3) =E= 0 ; (LHS = 0)
+     
+REMAINING 109 ENTRIES SKIPPED
 
 
 ---- cnstr_9  =E=  C,C,YR
 
-                NONE
+cnstr_9(m3,i3,m1,i1,1)..  - P_Y(m1,i1,a0,1) =E= 0 ; (LHS = 0)
+     
+cnstr_9(m3,i3,m1,i1,2)..  - P_Y(m1,i1,a0,2) =E= 0 ; (LHS = 0)
+     
+cnstr_9(m3,i3,m1,i1,3)..  - P_Y(m1,i1,a0,3) =E= 0 ; (LHS = 0)
+     
+REMAINING 109 ENTRIES SKIPPED
 
 
 ---- cnstr_10  =E=  C,a
@@ -357,15 +414,16 @@ cnstr_14(m3,i3,5)..  P_X(m3,i3,a0,5) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 cnstr_14(m4,i4,8)..  P_X(m4,i4,a0,8) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-**** Exec Error at line 186: Equation infeasible due to rhs value
-
-**** INFEASIBLE EQUATIONS ...
 
 ---- cnstr_15  =E=  L
 
-cnstr_15(m1,i1)..  0 =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_15(m1,i1)..  3*P_X(m1,i1,a0,1) + 4*P_X(m1,i1,a0,2) + 4*P_X(m1,i1,a0,3) + 4*P_X(m1,i1,a0,4) + 4*P_X(m1,i1,a0,5) + 4*P_X(m1,i1,a0,6) + 3*P_X(m1,i1,a0,7) + 3*P_X(m1,i1,a0,8) + 2*P_X(m1,i1,a0,9) + 2*P_X(m1,i1,a0,10) + P_X(m1,i1,a0,11) + P_X(m1,i1,a0,12)
      
-cnstr_15(m2,i2)..  0 =E= 1 ; (LHS = 0, INFES = 1 ****)
+      + P_X(m1,i1,a0,13) + P_X(m1,i1,a0,14) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cnstr_15(m2,i2)..  P_X(m2,i2,a0,1) + P_X(m2,i2,a0,2) + P_X(m2,i2,a0,3) + 2*P_X(m2,i2,a0,4) + 2*P_X(m2,i2,a0,5) + 2*P_X(m2,i2,a0,6) + 2*P_X(m2,i2,a0,7) + P_X(m2,i2,a0,8) + P_X(m2,i2,a0,9) + P_X(m2,i2,a0,10) + P_X(m2,i2,a0,11) + P_X(m2,i2,a0,12)
+     
+      + P_X(m2,i2,a0,13) + P_X(m2,i2,a0,14) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 
 ---- cnstr_16  =E=  D
@@ -386,15 +444,14 @@ cnstr_17(m2,i2)..  P_Y(m2,i2,a3,11) + P_Y(m2,i2,a3,12) + P_Y(m2,i2,a3,13) + P_Y(
 
                 NONE
 
-**** Exec Error at line 190: Equation infeasible due to rhs value
-
-**** INFEASIBLE EQUATIONS ...
 
 ---- cnstr_19  =E=  D
 
-cnstr_19(m3,i3)..  0 =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_19(m3,i3)..  P_X(m3,i3,a3,1) + P_X(m3,i3,a3,2) + P_X(m3,i3,a3,3) + P_X(m3,i3,a3,4) + P_X(m3,i3,a3,5) + P_X(m3,i3,a3,6) + P_X(m3,i3,a3,7) + P_X(m3,i3,a3,8) + P_X(m3,i3,a3,9) + P_X(m3,i3,a3,10) + P_X(m3,i3,a3,11) + P_X(m3,i3,a3,12) + P_X(m3,i3,a3,13)
      
-cnstr_19(m4,i4)..  0 =E= 1 ; (LHS = 0, INFES = 1 ****)
+      + P_X(m3,i3,a3,14) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cnstr_19(m4,i4)..  P_X(m4,i4,a3,5) + P_X(m4,i4,a3,6) + P_X(m4,i4,a3,7) + P_X(m4,i4,a3,8) + P_X(m4,i4,a3,9) + P_X(m4,i4,a3,10) + P_X(m4,i4,a3,11) + P_X(m4,i4,a3,12) + P_X(m4,i4,a3,13) + P_X(m4,i4,a3,14) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 
 ---- cnstr_20  =E=  WH,YR
@@ -618,9 +675,9 @@ cnstr_41(m1,i1,m1,i1,a0,a2)..  t_AGV(m1,i1,a0,m1,i1,a2) + 0.25*X_position(m1,i1,
      
 REMAINING 397 ENTRIES SKIPPED
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/16/24 16:23:09 Page 3
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/18/24 12:04:04 Page 3
 A branch and bound problem
-Column Listing      SOLVE ConflictFreeSch Using MIP From line 238
+Column Listing      SOLVE ConflictFreeSch Using MIP From line 264
 
 
 ---- z  used mainly for handling QC double cycling, it consists of 0 virtual point!
@@ -637,7 +694,7 @@ z(m0,i0,m1,i1,l3)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
         1       cnstr_4(l3)
 
-REMAINING 69 ENTRIES SKIPPED
+REMAINING 165 ENTRIES SKIPPED
 
 ---- U_AGV  U_AGV(j_1,j_2) conducted before
 
@@ -1743,7 +1800,10 @@ REMAINING 53 ENTRIES SKIPPED
 
 P_X(m1,i1,a0,1)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_8(m3,i3,m1,i1,1)
+       -1       cnstr_8(m4,i4,m1,i1,1)
         1       cnstr_10(m1,i1,a0)
+        3       cnstr_15(m1,i1)
        -1       cnstr_21(m1,i1,a1,a0,1)
        -1       cnstr_21(m1,i1,a2,a0,1)
        -1       cnstr_21(m1,i1,a3,a0,1)
@@ -15913,7 +15973,10 @@ P_X(m1,i1,a0,1)
 
 P_X(m1,i1,a0,2)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_8(m3,i3,m1,i1,2)
+       -1       cnstr_8(m4,i4,m1,i1,2)
         1       cnstr_10(m1,i1,a0)
+        4       cnstr_15(m1,i1)
        -1       cnstr_21(m1,i1,a1,a0,2)
        -1       cnstr_21(m1,i1,a2,a0,2)
        -1       cnstr_21(m1,i1,a3,a0,2)
@@ -29075,7 +29138,10 @@ P_X(m1,i1,a0,2)
 
 P_X(m1,i1,a0,3)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_8(m3,i3,m1,i1,3)
+       -1       cnstr_8(m4,i4,m1,i1,3)
         1       cnstr_10(m1,i1,a0)
+        4       cnstr_15(m1,i1)
        -1       cnstr_21(m1,i1,a1,a0,3)
        -1       cnstr_21(m1,i1,a2,a0,3)
        -1       cnstr_21(m1,i1,a3,a0,3)
@@ -41241,6 +41307,8 @@ REMAINING 249 ENTRIES SKIPPED
 
 P_Y(m1,i1,a0,1)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_9(m3,i3,m1,i1,1)
+       -1       cnstr_9(m4,i4,m1,i1,1)
         1       cnstr_11(m1,i1,a0)
         1       cnstr_12(m1,i1)
        -1       cnstr_20(m1,i1,a1,a0,1)
@@ -41739,6 +41807,8 @@ P_Y(m1,i1,a0,1)
 
 P_Y(m1,i1,a0,2)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_9(m3,i3,m1,i1,2)
+       -1       cnstr_9(m4,i4,m1,i1,2)
         1       cnstr_11(m1,i1,a0)
         1       cnstr_12(m1,i1)
        -1       cnstr_20(m1,i1,a1,a0,2)
@@ -42237,6 +42307,8 @@ P_Y(m1,i1,a0,2)
 
 P_Y(m1,i1,a0,3)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_9(m3,i3,m1,i1,3)
+       -1       cnstr_9(m4,i4,m1,i1,3)
         1       cnstr_11(m1,i1,a0)
         1       cnstr_12(m1,i1)
        -1       cnstr_20(m1,i1,a1,a0,3)
@@ -42738,7 +42810,7 @@ REMAINING 249 ENTRIES SKIPPED
 ---- T_Q  start time of QC
 
 T_Q(m1,i1)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         1       cnstr_24(m1,i1,m1,i1,a0)
         1       cnstr_24(m1,i1,m1,i1,a1)
         1       cnstr_24(m1,i1,m1,i1,a3)
@@ -42880,11 +42952,11 @@ T_Q(m1,i1)
        -1       cnstr_37(m1,i1,a4)
 
 T_Q(m1,i2)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         1       cnstr_29(m1,i1,i2)
 
 T_Q(m1,i3)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         1       cnstr_29(m1,i1,i3)
 
 REMAINING 7 ENTRIES SKIPPED
@@ -42892,21 +42964,21 @@ REMAINING 7 ENTRIES SKIPPED
 ---- T_Y  Start time of agv putting cont on ASC
 
 T_Y(m1,i1)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
        -1       cnstr_31(m1,i1,m2,i2)
         1       cnstr_34(m3,i3,m1,i1)
         1       cnstr_34(m4,i4,m1,i1)
        -1       cnstr_36(m1,i1,a1)
 
 T_Y(m2,i2)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         1       cnstr_31(m1,i1,m2,i2)
         1       cnstr_34(m3,i3,m2,i2)
         1       cnstr_34(m4,i4,m2,i2)
        -1       cnstr_36(m2,i2,a1)
 
 T_Y(m3,i3)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         1       cnstr_32(m3,i3)
        -1       cnstr_36(m3,i3,a4)
 
@@ -42915,7 +42987,7 @@ REMAINING ENTRY SKIPPED
 ---- T_start  Start of agv for action (m,i,a)
 
 T_start(m1,i1,a0)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
        -1       cnstr_24(m1,i1,m1,i1,a0)
        -1       cnstr_24(m2,i2,m1,i1,a0)
        -1       cnstr_24(m3,i3,m1,i1,a0)
@@ -42954,7 +43026,7 @@ T_start(m1,i1,a0)
         1       cnstr_38(m4,i4,a4,a3,m1,i1,a0)
 
 T_start(m1,i1,a1)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
        -1       cnstr_24(m1,i1,m1,i1,a1)
        -1       cnstr_24(m2,i2,m1,i1,a1)
        -1       cnstr_24(m3,i3,m1,i1,a1)
@@ -43030,7 +43102,7 @@ T_start(m1,i1,a1)
         1       cnstr_38(m4,i4,a4,a3,m1,i1,a1)
 
 T_start(m1,i1,a2)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         1       cnstr_38(m1,i1,a1,a0,m1,i1,a2)
        -1       cnstr_38(m1,i1,a2,a0,m1,i1,a0)
        -1       cnstr_38(m1,i1,a2,a0,m1,i1,a1)
@@ -43101,7 +43173,7 @@ REMAINING 17 ENTRIES SKIPPED
 ---- t_AGV  t_AGV(WT_1,WT_2
 
 t_AGV(m1,i1,a0,m1,i1,a0)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         1       cnstr_41(m1,i1,m1,i1,a0,a0)
 
 t_AGV(m1,i1,a0,m1,i1,a1)
@@ -43157,7 +43229,7 @@ REMAINING 397 ENTRIES SKIPPED
 ---- X_position  X_position(WT)
 
 X_position(m1,i1,a0)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         0.25    cnstr_41(m1,i1,m1,i1,a0,a1)
         0.25    cnstr_41(m1,i1,m1,i1,a0,a2)
         0.25    cnstr_41(m1,i1,m1,i1,a0,a3)
@@ -43198,7 +43270,7 @@ X_position(m1,i1,a0)
        -0.25    cnstr_41(m4,i4,m1,i1,a4,a0)
 
 X_position(m1,i1,a1)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
        -0.25    cnstr_41(m1,i1,m1,i1,a0,a1)
         0.25    cnstr_41(m1,i1,m1,i1,a1,a0)
         0.25    cnstr_41(m1,i1,m1,i1,a1,a2)
@@ -43239,7 +43311,7 @@ X_position(m1,i1,a1)
        -0.25    cnstr_41(m4,i4,m1,i1,a4,a1)
 
 X_position(m1,i1,a2)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
        -0.25    cnstr_41(m1,i1,m1,i1,a0,a2)
        -0.25    cnstr_41(m1,i1,m1,i1,a1,a2)
         0.25    cnstr_41(m1,i1,m1,i1,a2,a0)
@@ -43284,7 +43356,7 @@ REMAINING 17 ENTRIES SKIPPED
 ---- Y_position  Y_position(WT)
 
 Y_position(m1,i1,a0)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
         0.25    cnstr_41(m1,i1,m1,i1,a0,a1)
         0.25    cnstr_41(m1,i1,m1,i1,a0,a2)
         0.25    cnstr_41(m1,i1,m1,i1,a0,a3)
@@ -43325,7 +43397,7 @@ Y_position(m1,i1,a0)
        -0.25    cnstr_41(m4,i4,m1,i1,a4,a0)
 
 Y_position(m1,i1,a1)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
        -0.25    cnstr_41(m1,i1,m1,i1,a0,a1)
         0.25    cnstr_41(m1,i1,m1,i1,a1,a0)
         0.25    cnstr_41(m1,i1,m1,i1,a1,a2)
@@ -43366,7 +43438,7 @@ Y_position(m1,i1,a1)
        -0.25    cnstr_41(m4,i4,m1,i1,a4,a1)
 
 Y_position(m1,i1,a2)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
        -0.25    cnstr_41(m1,i1,m1,i1,a0,a2)
        -0.25    cnstr_41(m1,i1,m1,i1,a1,a2)
         0.25    cnstr_41(m1,i1,m1,i1,a2,a0)
@@ -43414,16 +43486,16 @@ obj
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       ADRP
 
-GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/16/24 16:23:09 Page 4
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 11/18/24 12:04:04 Page 4
 A branch and bound problem
-Model Statistics    SOLVE ConflictFreeSch Using MIP From line 238
+Model Statistics    SOLVE ConflictFreeSch Using MIP From line 264
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS          41     SINGLE EQUATIONS       70,585
-BLOCKS OF VARIABLES          12     SINGLE VARIABLES        1,439
-NON ZERO ELEMENTS     1,902,448
+BLOCKS OF EQUATIONS          41     SINGLE EQUATIONS       70,821
+BLOCKS OF VARIABLES          12     SINGLE VARIABLES        1,535
+NON ZERO ELEMENTS     1,902,845     DISCRETE VARIABLES      1,060
 
 
 
@@ -43437,6 +43509,6 @@ NON ZERO ELEMENTS     1,902,448
 
      GAMS Development Corporation, USA              G871201/0000CA-ANY
      Free Demo, +1 202-342-0180, support@gams.com, www.gams.com       
-     10547352000S                                                   00
+     10547374000S                                                   00
      01234567000000                                                   
      DC0000       Ref: Generated by Base            A Demo            
