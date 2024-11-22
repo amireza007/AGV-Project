@@ -26,11 +26,19 @@ display y;
 
 display 'hi';
 
-equation eq1;
+equation eq1,eq2,eq3;
 p.up = 100;
 p.lo = 0;
-a1('1') = a1('2');
+
+
+variables x1,x2;
+x1.up = 10;
+x1.lo = 2;
+x2.lo = 1;
+x1.l = x2.l + 1  $(x1.l>=0);
+eq2.. x2 =l= 110;
+eq3.. x1 =e= x2;
 eq1.. u  =e=  sum(j , a1(j));
 Model er /all/;
-solve er using mip maximizing u;
-display x.l;
+solve er using mip maximizing x2;
+display x1.l;
