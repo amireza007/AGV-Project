@@ -215,8 +215,8 @@ cnstr_2(m,i) $(C(m,i) and (not sameas(m,'m0')) and (not sameas(i,'i0'))).. sum((
 cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,,m,i,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') or sameas(k,'i0'))), z(m,i,h,k,li));
 cnstr_4(li).. sum((m,i) $(C(m,i) and (not sameas(m,'m0'))and (not sameas(i,'i0'))), z('m0', 'i0', m, i, li)) =e= 1;
 cnstr_5(li).. sum((m,i) $(C(m,i) and (not sameas(m,'m0'))and (not sameas(i,'i0'))), z(m, i, 'm0', 'i0', li)) =e= 1;
-cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li)) =e= 1;
-cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li)) =e= 1;
+cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or ((sameas(n,'m0') and sameas(j,'i0')))), z(m,i,n,j,li)) =e= 1;
+cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or ((sameas(n,'m0') and sameas(j,'i0')))), z(m,i,n,j,li)) =e= 1;
 
 **Location constraints of AGV acitons
 cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR) $(sum(li,z.l(m,i,n,j,li)) = 1) =e= P_X(n,j,'a0',XR);  !! a bit different from the article's forumulation
