@@ -1,4 +1,4 @@
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/21/24 15:28:23 Page 1
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/23/24 16:10:08 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -28,32 +28,33 @@ C o m p i l a t i o n
   23   
   24  y $(x.l = 1) = 20;
   25  display y;
-  26   
   27  display 'hi';
-  28   
-  29  equation eq1,eq2,eq3;
-  30  p.up = 100;
-  31  p.lo = 0;
-  32   
-  33   
-  34  variables x1,x2;
-  35  x1.up = 10;
-  36  x1.lo = 2;
-  37  x2.lo = 1;
-  38  x1.l = x2.l + 1  $(x1.l>=0);
-  39  eq2.. x2 =l= 110;
-  40  eq3.. x1 =e= x2;
-  41  eq1.. u  =e=  sum(j , a1(j));
-  42  Model er /all/;
-  43  solve er using mip maximizing x2;
-  44  display x1.l;
+  28  set i /i1*i20/;
+  29  display i;
+  30  equation eq1,eq2,eq3;
+  31  p.up = 100;
+  32  p.lo = 0;
+  33  set jh(i,*) /i1.56, i2.1, i2.56/;
+  34  jh('i1','hello')= yes;
+  35  display jh;
+  36  variables x1,x2;
+  37  x1.up = 10;
+  38  x1.lo = 2;
+  39  x2.lo = 1;
+  40  x1.l = x2.l + 1  $(x1.l>=0);
+  41  eq2.. x2 =l= 110;
+  42  eq3.. x1 =e= x2;
+  43  eq1.. u  =e=  sum(j , a1(j));
+  44  Model er /all/;
+  45  solve er using mip maximizing x2;
+  46  display x1.l;
 
 **** LIST OF STRAY NAMES - CHECK DECLARATIONS FOR SPURIOUS COMMAS
 **** STRAY NAME b OF TYPE PARAM
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/21/24 15:28:23 Page 2
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/23/24 16:10:08 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
@@ -66,9 +67,22 @@ E x e c u t i o n
 ----     25 PARAMETER y                    =       10.000  
 
 ----     27 hi
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/21/24 15:28:23 Page 3
+
+----     29 SET i  
+
+i1 ,    i2 ,    i3 ,    i4 ,    i5 ,    i6 ,    i7 ,    i8 ,    i9 ,    i10,    i11,    i12,    i13,    i14,    i15,    i16,    i17,    i18,    i19,    i20
+
+
+----     35 SET jh  
+
+             1          56       hello
+
+i1                     YES         YES
+i2         YES         YES
+
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/23/24 16:10:08 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE er Using MIP From line 43
+Equation Listing    SOLVE er Using MIP From line 45
 
 
 ---- eq1  =E=  
@@ -85,9 +99,9 @@ eq2..  x2 =L= 110 ; (LHS = 1)
 
 eq3..  x1 - x2 =E= 0 ; (LHS = 1, INFES = 1 ****)
      
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/21/24 15:28:23 Page 4
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/23/24 16:10:08 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE er Using MIP From line 43
+Column Listing      SOLVE er Using MIP From line 45
 
 
 ---- u  
@@ -128,9 +142,9 @@ x2
        -1       eq3
         0       (OLD LEVEL ****)
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/21/24 15:28:23 Page 5
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/23/24 16:10:08 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Range Statistics    SOLVE er Using MIP From line 43
+Range Statistics    SOLVE er Using MIP From line 45
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
@@ -139,9 +153,9 @@ RHS       [min, max] : [ 1.100E+02, 1.100E+02] - Zero values observed as well
 Bound     [min, max] : [ 1.000E+00, 1.000E+01] - Zero values observed as well
 Matrix    [min, max] : [ 1.000E+00, 1.000E+00]
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/21/24 15:28:23 Page 6
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/23/24 16:10:08 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE er Using MIP From line 43
+Model Statistics    SOLVE er Using MIP From line 45
 
 
 MODEL STATISTICS
@@ -151,17 +165,17 @@ BLOCKS OF VARIABLES           4     SINGLE VARIABLES            6  2 projected
 NON ZERO ELEMENTS             7     DISCRETE VARIABLES          3
 
 
-GENERATION TIME      =        0.016 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/21/24 15:28:23 Page 7
+GENERATION TIME      =        0.000 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/23/24 16:10:08 Page 7
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE er Using MIP From line 43
+Solution Report     SOLVE er Using MIP From line 45
 
 
                S O L V E      S U M M A R Y
 
      MODEL   er                  OBJECTIVE  x2
      TYPE    MIP                 DIRECTION  MAXIMIZE
-     SOLVER  CPLEX               FROM LINE  43
+     SOLVER  CPLEX               FROM LINE  45
 
 **** SOLVER STATUS     1 Normal Completion
 **** MODEL STATUS      1 Optimal
@@ -224,15 +238,15 @@ Relative gap:            0.000000
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/21/24 15:28:23 Page 8
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 11/23/24 16:10:08 Page 8
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-----     44 VARIABLE x1.L                  =       10.000  
+----     46 VARIABLE x1.L                  =       10.000  
 
 
-EXECUTION TIME       =        0.094 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
+EXECUTION TIME       =        0.031 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
 
 
 USER: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN

@@ -1,6 +1,12 @@
 $Title  A branch and bound problem
 $onEolCom
 *cnstr_15 and cnstr_19 are infeasible and I hypothesize it's due to not setting initial virtual positions!
+
+!!longest qc operation (or job in the problem)
+$set d 1
+
+!! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. 
+
 Scalars
 
         S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
@@ -14,9 +20,9 @@ Scalars
 
 Sets
        
-        i "container index" /i0*i4/
+        i "index" /i0*i%d%/
         j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
-        id(i) "last container" /i4/
+        id(i) "last container" /i%d%/
         
         m   "QC index" /m0,m1,m2,m3,m4/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
@@ -34,28 +40,30 @@ Sets
         YL(YR)  "Horizontal Path" /1*10/
 
 
-        o(m,i,XR) /m1.i1.1, m2.i2.3, m3.i3.5, m4.i4.8/ !! if m_4 < m_5 (i.e. 4<5), set i_i < i_j (i.e. i<j)
+!! what o(m,i,XR) basically determines is the vertical position of the QCs.
+        o(m,i,XR) /m1.i1.1, m2.i1.3, m3.i1.5, m4.i%d%.8/ !! for example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
 *TODO 1
-        A_L(m,i,XR) /m1.i1.2, m2.i2.4, m3.i3.1, m4.i4.5 /   !! these two are very problematic! 
-        A_R(m,i,XR) /m1.i1.8, m2.i2.7, m1.i1.10, m1.i1.6 /
+!!these sets refers right and left positions of the blocks in the fig. 4 of the article
+        A_L(m,i,XR) /m1.i1.2, m2.i1.4, m3.i1.1, m4.i%d%.5 /   !! these two are very problematic! 
+        A_R(m,i,XR) /m1.i1.8, m2.i1.7, m1.i1.10, m1.i1.6 /
         
         
-        L(m,i)   /m1.i1 , m2.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
-        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i3, m4.i4/ !! these are in the ships, waiting to be taking to ASCs
-        C(m,i)  "All  Containers" /m1.i1 , m2.i2, m3.i3, m4.i4/ !! this is in data file, this should contain 0 node, too!
-        Cd(m,i) "the last QC container job" /m4.i4/
+        L(m,i)   /m1.i1 , m2.i1/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i1, m4.i%d%/ !! these are in the ships, waiting to be taking to ASCs
+        C(m,i)  "All  Containers" /m1.i1 , m2.i1, m3.i1, m4.i%d%/ !! this is in data file, this should contain 0 node, too!
+        Cd(m,i) "the last QC container job" /m4.i%d%/
 *       C_prime(i) "The set of containers to be assigned"
 
 !! these are written according to Fig 5. of base article
-        WT(m,i,a) "set of total actions" /m1.i1.a0,m2.i2.a0,m3.i3.a0,m4.i4.a0,      m1.i1.a2, m2.i2.a2, m3.i3.a2, m4.i4.a2,     m1.i1.a1, m1.i1.a3, m2.i2.a1, m2.i2.a3, m3.i3.a1, m3.i3.a3, m3.i3.a4, m4.i4.a1, m4.i4.a3, m4.i4.a4/
-        WV(m,i,a)  "Vertical Actions" /m1.i1.a2, m2.i2.a2, m3.i3.a2, m4.i4.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
-        WH(m,i,a)  "Horizontal Actions" /m1.i1.a0,m2.i2.a0,m3.i3.a0,m4.i4.a0,  m1.i1.a1, m1.i1.a3, m2.i2.a1, m2.i2.a3, m3.i3.a1, m3.i3.a3, m3.i3.a4, m4.i4.a1, m4.i4.a3, m4.i4.a4 / !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
+        WT(m,i,a) "set of total actions" /m1.i1.a0,m2.i1.a0,m3.i1.a0,m4.i%d%.a0,      m1.i1.a2, m2.i1.a2, m3.i1.a2, m4.i%d%.a2,     m1.i1.a1, m1.i1.a3, m2.i1.a1, m2.i1.a3, m3.i1.a1, m3.i1.a3, m3.i1.a4, m4.i%d%.a1, m4.i%d%.a3, m4.i%d%.a4/
+        WV(m,i,a)  "Vertical Actions" /m1.i1.a2, m2.i1.a2, m3.i1.a2, m4.i%d%.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
+        WH(m,i,a)  "Horizontal Actions" /m1.i1.a0,m2.i1.a0,m3.i1.a0,m4.i%d%.a0,  m1.i1.a1, m1.i1.a3, m2.i1.a1, m2.i1.a3, m3.i1.a1, m3.i1.a3, m3.i1.a4, m4.i%d%.a1, m4.i%d%.a3, m4.i%d%.a4 / !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
 !!!!!!!!!!!!!!!!!!!!!!!!!!
 
 *       or psi_1(m,i,m,i)?
 *very challenging set!
-        psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m3.i3.m4.i4/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
-        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i1.m2.i2/ !!This is in data file. 
+        psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m3.i1.m4.i%d%/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
+        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i1.m2.i1/ !!This is in data file. 
         ;
 
 *O(YR) $(C(m,i)) = yes;
@@ -73,9 +81,9 @@ set XR2(XR) /#XR/;
 set x_t(XR) /#XR/;
 
 Parameters
-        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i2 3, m3.i3 5, m4.i4 8/
-        G_Q(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/ !! seems to be constant for all container jobs, bc of const 24
-        G_Y(m,i) /m1.i1 1, m2.i2 1, m3.i3 1, m4.i4 1/
+        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i1 3, m3.i1 5, m4.i%d% 8/ 
+        G_Q(m,i) /m1.i1 1, m2.i1 1, m3.i1 1, m4.i%d% 1/ !! seems to be constant for all container jobs, bc of const 24
+        G_Y(m,i) /m1.i1 1, m2.i1 1, m3.i1 1, m4.i%d% 1/
         ;
 
 Binary Variables
@@ -198,21 +206,23 @@ Equations
         cnstr_41_1(m,i,a,m,i,a)
         cnstr_41_2(m,i,a,m,i,a)
         cnstr_41_3(m,i,a,m,i,a)
-        cnstr_41_4(m,i,a,m,i,a)e
+        cnstr_41_4(m,i,a,m,i,a)
         ;
 
 !! God willingly, obj become either one of these :))))
-ADRP1.. obj  =g= T_Q('m4','i4') + G_Q('m4','i4') ;
-ADRP2.. obj =g= T_Y('m4','i4') + G_Y('m4','i4') ;
+ADRP1.. obj  =g= T_Q('m4','i%d%') + G_Q('m4','i%d%') ;
+ADRP2.. obj =g= T_Y('m4','i%d%') + G_Y('m4','i%d%') ;
 
-* > T_Y.l('m4','i4') + G_Y.l('m4','i4')
+* > T_Y.l('m4','i%d%') + G_Y.l('m4','i%d%')
 
 
 **Job assinment constraints
 *as soon as you include conditional $(C(m,i)), you ignore virtual node!
 *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
-cnstr_2(m,i) $(C(m,i) and (not sameas(m,'m0')) and (not sameas(i,'i0'))).. sum((li,n,j) $(C(n,j) or (sameas(n,,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1;
-cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,,m,i,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') or sameas(k,'i0'))), z(m,i,h,k,li));
+cnstr_2(m,i) $(C(m,i) and (not sameas(m,'m0')) and (not sameas(i,'i0'))).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1;
+
+cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') or sameas(k,'i0'))), z(m,i,h,k,li));
+
 cnstr_4(li).. sum((m,i) $(C(m,i) and (not sameas(m,'m0'))and (not sameas(i,'i0'))), z('m0', 'i0', m, i, li)) =e= 1;
 cnstr_5(li).. sum((m,i) $(C(m,i) and (not sameas(m,'m0'))and (not sameas(i,'i0'))), z(m, i, 'm0', 'i0', li)) =e= 1;
 cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or ((sameas(n,'m0') and sameas(j,'i0')))), z(m,i,n,j,li)) =e= 1;

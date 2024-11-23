@@ -23,14 +23,16 @@ x.l = 0;
 
 y $(x.l = 1) = 20;
 display y;
-
+$set d 20
 display 'hi';
-
+set i /i1*i%d%/;
+display i;
 equation eq1,eq2,eq3;
 p.up = 100;
 p.lo = 0;
-
-
+set jh(i,*) /i1.56, i2.1, i2.56/;
+jh('i1','hello')= yes;
+display jh;
 variables x1,x2;
 x1.up = 10;
 x1.lo = 2;
