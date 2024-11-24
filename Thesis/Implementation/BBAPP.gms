@@ -12,9 +12,9 @@ Scalars
         S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
         x /1/
         y /1/
-        x_R /10/
+        x_R /14/
         y_R /14/
-        y_r1 /10/ !! these should be rewritten with $set and %inside sets!
+        y_r1 /10/ !! these should be rewritten with $set and inside sets!
         v "AGV speed" /4/
         Mnum "a very large number" /10000000/;
 
@@ -43,7 +43,7 @@ Sets
 !! what o(m,i,XR) basically determines is the vertical position of the QCs.
         o(m,i,XR) /m1.i1.1, m2.i1.3, m3.i1.5, m4.i%d%.8/ !! for example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
 *TODO 1
-!!these sets refers right and left positions of the blocks in the fig. 4 of the article
+!!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). positions of the block storing (m,i)
         A_L(m,i,XR) /m1.i1.2, m2.i1.4, m3.i1.1, m4.i%d%.5 /   !! these two are very problematic! 
         A_R(m,i,XR) /m1.i1.8, m2.i1.7, m1.i1.10, m1.i1.6 /
         
