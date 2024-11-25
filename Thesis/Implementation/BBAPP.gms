@@ -249,9 +249,10 @@ cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3')).. sum((A_L_set, A_R_set),sum(x_t $(x_t.
 
 cnstr_16(m,i) $(D(m,i) and wt(m,i,'a3')).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
 cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
-cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WV(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;    
-cnstr_20(m, i, a1, a1_1, YR) $(Wt(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
-cnstr_21(m, i, a1, a1_1, XR) $(Wt(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+cnstr_18(m,i,XR) $(L(m,i) and o_set(m,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
+   
+cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
 *
 **Conflict Free Constraints
 cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
