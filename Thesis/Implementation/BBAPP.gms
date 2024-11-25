@@ -40,9 +40,9 @@ Sets
         a   "AGV actions" /a0*a4/
 
         XR  "Vertical Operational Area" /1*29/
-        YR  "Horizontal Operational Area" /1*14/
-        YS(YR)  "Horizontal Seaside Operation Area" /11*14/
-        YL(YR)  "Horizontal Path" /1*10/
+        YR  "Horizontal Operational Area" /1*29/
+        YS(YR)  "Horizontal Seaside Operation Area" /15*29/
+        YL(YR)  "Horizontal Path" /1*14/
 
 
 
@@ -237,6 +237,7 @@ cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR)  =e= P_
 
 cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
 cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+
 cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
 cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
 cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
