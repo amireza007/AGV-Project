@@ -58,14 +58,14 @@ Sets
 
 
 !! these are written according to Fig 5. of base article
-        WT(m,i,a) "set of total actions" /m1.i1.a0,m2.i1.a0,m3.i1.a0,m4.i%d%.a0,      m1.i1.a2, m2.i1.a2, m3.i1.a2, m4.i%d%.a2,     m1.i1.a1, m1.i1.a3, m2.i1.a1, m2.i1.a3, m3.i1.a1, m3.i1.a3, m3.i1.a4, m4.i%d%.a1, m4.i%d%.a3, m4.i%d%.a4/
-        WV(m,i,a)  "Vertical Actions" /m1.i1.a2, m2.i1.a2, m3.i1.a2, m4.i%d%.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
-        WH(m,i,a)  "Horizontal Actions" /m1.i1.a0,m2.i1.a0,m3.i1.a0,m4.i%d%.a0,  m1.i1.a1, m1.i1.a3, m2.i1.a1, m2.i1.a3, m3.i1.a1, m3.i1.a3, m3.i1.a4, m4.i%d%.a1, m4.i%d%.a3, m4.i%d%.a4 / !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
+        WT(m,i,a) "set of total actions" /#C.a0,    #C.a2,    #D.(a1,a3,a4),#L.(a1,a3,a4)/
+        WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
+        WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
 !!!!!!!!!!!!!!!!!!!!!!!!!!
 
 *       or psi_1(m,i,m,i)?
 *very challenging set!
-        psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m3.i1.m4.i%d%/ !!This is in data file. This identifies the container job scnstruence, (in a form of 2d graph?)idk
+        psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m3.i1.m4.i%d%/ !!This is in data file. This identifies the container job sequence,
         psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i1.m2.i1/ !!This is in data file. 
         ;
 
