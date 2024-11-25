@@ -1,5 +1,5 @@
 
---- Job BBAPP.gms Start 11/23/24 16:25:21 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
+--- Job BBAPP.gms Start 11/23/24 16:26:56 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\48\gmsprmNT.txt
 --- GAMS Parameters defined
@@ -32,4 +32,4 @@ GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 --- GDX File ($gdxOut) C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gdx
 --- BBAPP.gms(284) 3 Mb 3 Errors
 *** Status: Compilation error(s)
---- Job BBAPP.gms Stop 11/23/24 16:25:21 elapsed 0:00:00.005
+--- Job BBAPP.gms Stop 11/23/24 16:26:56 elapsed 0:00:00.005

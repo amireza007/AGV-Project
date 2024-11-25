@@ -232,9 +232,8 @@ cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or ((sameas(n,'m0') and sameas(j,
 cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or ((sameas(n,'m0') and sameas(j,'i0')))), z(m,i,n,j,li)) =e= 1;
 
 **Location constraints of AGV acitons
-cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR) $(sum(li,z.l(m,i,n,j,li)) = 1) =e= P_X(n,j,'a0',XR);  !! a bit different from the article's forumulation
-
-cnstr_9(m,i,n,j,yr) $(wt(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR) $(sum(li,z.l(m,i,n,j,li)) = 1) =e= P_Y(n,j,'a0',YR);
+cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR)  =e= P_X(n,j,'a0',XR) $(sum(li,z.l(m,i,n,j,li)) = 1);  !! a bit different from the article's forumulation
+cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR)  =e= P_Y(n,j,'a0',YR) $(sum(li,z.l(m,i,n,j,li)) = 1);
 
 cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
 cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
