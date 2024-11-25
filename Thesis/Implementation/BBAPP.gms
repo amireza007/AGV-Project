@@ -5,11 +5,11 @@ $onEolCom
 !!longest qc operation (or job in the problem)
 $set d 1
 
-!! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. 
-
+!! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. I think the capacity of each block is 5 (bc of number of HPs)
+!! However, for the first experiment, number of blocks is 4.
 Scalars
 
-        S_Q "switch time for qc between two containers" /2/ !! This is temporarily assumed constant
+        S_Q "switch time for qc between two containers" /2/ !! temporarily assumed constant (take look at 6.1 and qc_double_cycle.svg)
         x /1/
         y /1/
         x_R /14/
@@ -27,32 +27,35 @@ Sets
         m   "QC index" /m0,m1,m2,m3,m4/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
 
-
+        L(m,i)   /m1.i1 , m2.i1/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i1, m4.i%d%/ !! these are in the ships, waiting to be taking to ASCs
+        C(m,i)  "All  Containers" /m1.i1 , m2.i1, m3.i1, m4.i%d%/ !! this is in data file, this should contain 0 node, too!
+        Cd(m,i) "the last QC container job" /m4.i%d%/
+*       C_prime(i) "The set of containers to be assigned"
+        
         li "AGV index" /l1*l2/
         Bs(li) "set of all agvs" /#li/
         
 *       0 in a is a virtual starting point
         a   "AGV actions" /a0*a4/
 
-        XR  "Vertical Operational Area" /1*14/
+        XR  "Vertical Operational Area" /1*29/
         YR  "Horizontal Operational Area" /1*14/
         YS(YR)  "Horizontal Seaside Operation Area" /11*14/
         YL(YR)  "Horizontal Path" /1*10/
 
 
+
 !! what o(m,i,XR) basically determines is the vertical position of the QCs.
-        o(m,i,XR) /m1.i1.1, m2.i1.3, m3.i1.5, m4.i%d%.8/ !! for example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
+        o_set(m,XR) "The set of vertical paths of m-th QC" /m1.(3,5,7), m2.(11,13,15), m3.(17,19,21), m4.(23,25,27)/
+        o(m,i,XR) /m1.i1.1, m2.i1.3, m3.i1.5, m4.i%d%.8/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
 *TODO 1
-!!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). positions of the block storing (m,i)
-        A_L(m,i,XR) /m1.i1.2, m2.i1.4, m3.i1.1, m4.i%d%.5 /   !! these two are very problematic! 
-        A_R(m,i,XR) /m1.i1.8, m2.i1.7, m1.i1.10, m1.i1.6 /
-        
-        
-        L(m,i)   /m1.i1 , m2.i1/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
-        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i1, m4.i%d%/ !! these are in the ships, waiting to be taking to ASCs
-        C(m,i)  "All  Containers" /m1.i1 , m2.i1, m3.i1, m4.i%d%/ !! this is in data file, this should contain 0 node, too!
-        Cd(m,i) "the last QC container job" /m4.i%d%/
-*       C_prime(i) "The set of containers to be assigned"
+!!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
+        A_L_set(XR) /1,7,14,21/
+        A_R_set(XR) /5,12,19,26/
+        A_L(m,i,XR) /#C.#A_L_set/  
+        A_R(m,i,XR) /#C.#A_R_set/
+
 
 !! these are written according to Fig 5. of base article
         WT(m,i,a) "set of total actions" /m1.i1.a0,m2.i1.a0,m3.i1.a0,m4.i%d%.a0,      m1.i1.a2, m2.i1.a2, m3.i1.a2, m4.i%d%.a2,     m1.i1.a1, m1.i1.a3, m2.i1.a1, m2.i1.a3, m3.i1.a1, m3.i1.a3, m3.i1.a4, m4.i%d%.a1, m4.i%d%.a3, m4.i%d%.a4/
