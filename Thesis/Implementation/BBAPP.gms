@@ -240,7 +240,8 @@ cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
 
 cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
 cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
-cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
+
+cnstr_14(m,i,XR) $(D(m,i) and o_set(m,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the variable to be fixed!)
 cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0')).. sum(XR $(A_L(m,i,XR) or A_R(m,i,XR)),sum(x_t $(A_L(m,i,XR) and (ord(x_t) >= ord(XR)) or (A_R(m,i,XR) and (ord(x_t)<=ord(XR)))) ,P_X(m,i,'a0',x_t))) =e= 1; !! this is infeasible
 cnstr_16(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
 cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
