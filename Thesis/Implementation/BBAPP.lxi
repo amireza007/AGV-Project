@@ -24,13 +24,40 @@ D 505 cnstr_20
 D 516 cnstr_21
 D 527 cnstr_22
 D 538 cnstr_23
-D 550 cnstr_24
-B 556 Column Listing      SOLVE ConflictFreeSch Using MIP From line 305
-E 559 z
-E 578 U_AGV
-E 4796 P_X
-E 116874 P_Y
-E 116896 T_Q
-E 116903 T_Y
-E 116910 obj
-B 116919 Model Statistics    SOLVE ConflictFreeSch Using MIP From line 305
+D 549 cnstr_24
+D 560 cnstr_25
+D 571 cnstr_26_1
+D 582 cnstr_26_2
+D 593 cnstr_27
+D 604 cnstr_28
+D 615 cnstr_29
+D 626 cnstr_30
+D 631 cnstr_31
+D 636 cnstr_32
+D 647 cnstr_33
+D 656 cnstr_34
+D 667 cnstr_35
+D 678 cnstr_36
+D 689 cnstr_37
+D 700 cnstr_38
+D 711 cnstr_39
+D 722 cnstr_40
+D 733 cnstr_41_1
+D 744 cnstr_41_2
+D 755 cnstr_41_3
+D 766 cnstr_41_4
+B 778 Column Listing      SOLVE ConflictFreeSch Using MIP From line 305
+E 781 z
+E 800 U_AGV
+E 1658 U_QC
+E 1767 P_X
+E 113845 P_Y
+E 113867 T_Q
+E 116197 T_Y
+E 116222 T_start
+E 116664 t_AGV
+E 116737 X_position
+E 117776 Y_position
+E 118815 obj
+B 118824 Range Statistics    SOLVE ConflictFreeSch Using MIP From line 305
+B 118835 Model Statistics    SOLVE ConflictFreeSch Using MIP From line 305

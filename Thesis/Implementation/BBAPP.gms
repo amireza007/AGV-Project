@@ -31,7 +31,7 @@ Sets
         L(m,i)   /m1.i1 , m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
         D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i%d%, m4.i1/ !! these are in the ships, waiting to be taking to ASCs
         C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d%, m4.i1/ !! this is in data file, this should contain 0 node, too!
-        Cd(m,i) "the last QC container job" /m4.i%d%/
+        Cd(m,i) "the last QC container job" /m3.i%d%/
 *       C_prime(i) "The set of containers to be assigned"
         
         li "AGV index" /l1*l2/
@@ -281,17 +281,20 @@ cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or samea
 cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
 cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
 cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+
 cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
 cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+
 cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
-cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)p).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+
 cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
 cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
 cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1)).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= t_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
 
-cnstr_39(m,i,a,XR) $(Wt(m,i,a))..  x_position(m,i,a)  =e= ord(XR) $((P_x.l(m,i,a,XR) = 1) and (not sameas(a,'a0'))); !! this and cnstr_40 are not really constraints, but only `.l` relations!
+cnstr_39(m,i,a,XR) $(C(m,i))..  x_position(m,i,a)  =e= XR.val $(P_x.l(m,i,a,XR) = 1); !! this and cnstr_40 are not really constraints, but only `.l` relations!
 
-cnstr_40(m,i,a,YR) $(Wt(m,i,a)).. y_position(m,i,a) =e= ord(YR)  $((P_y.l(m,i,a,YR) = 1) and (not sameas(a,'a0'))); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
 
 
 cnstr_41_1(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) >= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (x_position(m,i,a1) - x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;
