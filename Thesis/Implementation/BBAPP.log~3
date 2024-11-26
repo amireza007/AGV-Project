@@ -1,5 +1,5 @@
 
---- Job BBAPP.gms Start 11/26/24 14:09:52 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
+--- Job BBAPP.gms Start 11/26/24 14:12:03 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\48\gmsprmNT.txt
     C:\Users\Asus\Documents\GAMS\gamsconfig.yaml
@@ -29,17 +29,12 @@ GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 *** Error 409 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
     Unrecognizable item - skip to find a new statement
       looking for a ';' or a key word to get started again
---- BBAPP.gms(275) 3 Mb 6 Errors
+--- BBAPP.gms(275) 3 Mb 4 Errors
 *** Error   8 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
     ')' expected
-*** Error  37 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    '=l=' or '=e=' or '=g=' operator expected
-*** Error 409 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    Unrecognizable item - skip to find a new statement
-      looking for a ';' or a key word to get started again
---- BBAPP.gms(304) 3 Mb 7 Errors
+--- BBAPP.gms(304) 3 Mb 5 Errors
 *** Error 257 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
     Solve statement not checked because of previous errors
---- BBAPP.gms(309) 3 Mb 7 Errors
+--- BBAPP.gms(309) 3 Mb 5 Errors
 *** Status: Compilation error(s)
---- Job BBAPP.gms Stop 11/26/24 14:09:52 elapsed 0:00:00.006
+--- Job BBAPP.gms Stop 11/26/24 14:12:03 elapsed 0:00:00.005
