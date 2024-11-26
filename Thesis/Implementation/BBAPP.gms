@@ -3,7 +3,7 @@ $onEolCom
 *cnstr_15 and cnstr_19 are infeasible and I hypothesize it's due to not setting initial virtual positions!
 
 !!longest qc operation (or job in the problem)
-$set d 1
+$set d 3
 
 !! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. I think the capacity of each block is 5 (bc of number of HPs)
 !! However, for the first experiment, number of blocks is 4.
@@ -22,14 +22,15 @@ Sets
        
         i "index" /i0*i%d%/
         j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+    
         id(i) "last container" /i%d%/
         
         m   "QC index" /m0,m1,m2,m3,m4/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
 
-        L(m,i)   /m1.i1 , m2.i1/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
-        D(m,i) "Unloading Containers. U is a subset of index i" /m3.i1, m4.i%d%/ !! these are in the ships, waiting to be taking to ASCs
-        C(m,i)  "All  Containers" /m1.i1 , m2.i1, m3.i1, m4.i%d%/ !! this is in data file, this should contain 0 node, too!
+        L(m,i)   /m1.i1 , m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+        D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i%d%, m4.i1/ !! these are in the ships, waiting to be taking to ASCs
+        C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d%, m4.i1/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job" /m4.i%d%/
 *       C_prime(i) "The set of containers to be assigned"
         
@@ -48,9 +49,10 @@ Sets
 
 !! what o(m,i,XR) basically determines is the vertical position of the QCs.
 
-!! this is still wrong bc this set is just for D(m,i), L(m,i) is not paid any attention!!
-        o_set(m,XR) "The set of vertical paths of m-th QC" /m1.(3,5,7), m2.(11,13,15), m3.(17,19,21), m4.(23,25,27)/
-        o(m,i,XR) /m1.i1.1, m2.i1.3, m3.i1.5, m4.i%d%.8/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
+!! O_set(m,i,XR) below shows the allowed position for QC to be able to place its i-th container
+*       o_set(m,i,XR) /m1.(i1*i%d%).(3,5,7), m2.(i1*i%d%).(11,13,15), m3.(i1*i%d%).(17,19,21), m4.(i1*i%d%).(23,25,27)/
+        
+        o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.19, m3.i2.17, m3.i%d%.19, m4.i1.25/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
 *TODO 1
 !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
         A_L_set(XR) /1,7,14,21/
@@ -67,6 +69,7 @@ Sets
 
 *       or psi_1(m,i,m,i)?
 *very challenging set!
+!!this needs fixing!
         psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m3.i1.m4.i%d%/ !!This is in data file. This identifies the container job sequence,
         psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i1.m2.i1/ !!This is in data file. 
         ;
@@ -87,9 +90,9 @@ set XR2(XR) /#XR/;
 set x_t(XR) /#XR/;
 
 Parameters
-        o1(m) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 2, m2.i1 3, m3.i1 5, m4.i%d% 8/ 
-        G_Q(m,i) /m1.i1 1, m2.i1 1, m3.i1 1, m4.i%d% 1/ !! seems to be constant for all container jobs, bc of const 24
-        G_Y(m,i) /m1.i1 1, m2.i1 1, m3.i1 1, m4.i%d% 1/
+        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2,i2 13, m3.i1 19, m3.i2 17, m3.i%d% 19, m4.i1 25/ 
+        G_Q(m,i) /#C 1/ !! seems to be constant for all container jobs, bc of const 24
+        G_Y(m,i) /#C 1/
         ;
 
 Binary Variables
@@ -244,14 +247,14 @@ cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
 cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
 cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
 
-cnstr_14(m,i,XR) $(D(m,i) and o_set(m,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the "variable" to be fixed!)
+cnstr_14(m,i,XR) $(D(m,i) and o_set(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the "variable" to be fixed!)
 
 cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0')).. sum((A_L_set, A_R_set),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !! this is infeasible
 cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3')).. sum((A_L_set, A_R_set),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1; !! this is infeasible
 
 cnstr_16(m,i) $(D(m,i) and wt(m,i,'a3')).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
 cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
-cnstr_18(m,i,XR) $(L(m,i) and o_set(m,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
+cnstr_18(m,i,XR) $(L(m,i) and o_set(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
    
 cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
 cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
@@ -260,7 +263,7 @@ cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(
 **Conflict Free Constraints
 cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
 * wt(a1_1) and wt(a2_1) are computed here!            
-cnstr_23(m,i,a1,n,j,a2,YR,XR , a1_1, a2_1) $((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - (sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
+cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1) $((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - (sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
 cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
 cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
 
