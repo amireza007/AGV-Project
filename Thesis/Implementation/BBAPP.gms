@@ -6,7 +6,8 @@ $onEolCom
 $set d 3
 
 !! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. I think the capacity of each block is 5 (bc of number of HPs)
-!! However, for the first experiment, number of blocks is 4.
+!! However, for the first experiment:
+!! blcoks = 4, QC = 3, AGVs = 3, containers = 7, ships = 3
 Scalars
 
         S_Q "switch time for qc between two containers" /2/ !! temporarily assumed constant (take look at 6.1 and qc_double_cycle.svg)
@@ -25,25 +26,26 @@ Sets
     
         id(i) "last container" /i%d%/
         
-        m   "QC index" /m0,m1,m2,m3,m4/        
+        m   "QC index" /m0,m1,m2,m3/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
 
         L(m,i)   /m1.i1 , m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
-        D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i%d%, m4.i1/ !! these are in the ships, waiting to be taking to ASCs
-        C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d%, m4.i1/ !! this is in data file, this should contain 0 node, too!
+        D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i%d%/ !! these are in the ships, waiting to be taking to ASCs
+        
+        C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d%/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job" /m3.i%d%/
 *       C_prime(i) "The set of containers to be assigned"
         
-        li "AGV index" /l1*l2/
+        li "AGV index" /l1*l3/
         Bs(li) "set of all agvs" /#li/
         
 *       0 in a is a virtual starting point
         a   "AGV actions" /a0*a4/
 
-        XR (*)  "Vertical Operational Area" /1*29/
-        YR (*) "Horizontal Operational Area" /1*29/
-        YS(YR)  "Horizontal Seaside Operation Area" /15*29/
-        YL(YR)  "Horizontal Path" /1*14/
+        XR (*)  "Vertical Operational Area" /1*23/
+        YR (*) "Horizontal Operational Area" /1*23/
+        YS(YR)  "Horizontal Seaside Operation Area" /12*23/
+        YL(YR)  "Horizontal Path" /1*11/
 
 
 
@@ -52,7 +54,7 @@ Sets
 !! O_set(m,i,XR) below shows the allowed position for QC to be able to place its i-th container
 *       o_set(m,i,XR) /m1.(i1*i%d%).(3,5,7), m2.(i1*i%d%).(11,13,15), m3.(i1*i%d%).(17,19,21), m4.(i1*i%d%).(23,25,27)/
         
-        o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.19, m3.i2.17, m3.i%d%.19, m4.i1.25/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
+        o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.19, m3.i2.17, m3.i%d%.21/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
 *TODO 1
 !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
         A_L_set(XR) /1,7,14,21/
@@ -70,8 +72,8 @@ Sets
 *       or psi_1(m,i,m,i)?
 *very challenging set!
 !!this needs fixing!
-        psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m3.i1.m4.i%d%/ !!This is in data file. This identifies the container job sequence,
-        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i1.m2.i1/ !!This is in data file. 
+        psi_1(m,i,m,i)   "sequence of Container jobs for QC" / / !!This is in data file. This identifies the container job sequence,
+        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i1.m2.i1P/ !!This is in data file. 
         ;
 
 *O(YR) $(C(m,i)) = yes;
@@ -90,7 +92,7 @@ set XR2(XR) /#XR/;
 set x_t(XR) /#XR/;
 
 Parameters
-        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2.i2 13, m3.i1 19, m3.i2 17, m3.i%d% 19, m4.i1 25/ 
+        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2.i2 13, m3.i1 19, m3.i2 17, m3.i%d% 21/ 
         G_Q(m,i) /#C 1/ !! seems to be constant for all container jobs, bc of const 24
         G_Y(m,i) /#C 1/
         ;
