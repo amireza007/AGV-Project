@@ -1,65 +1,36 @@
 B 3 C o m p i l a t i o n
-B 324 E x e c u t i o n
-I 324 testSet
-B 336 Equation Listing    SOLVE ConflictFreeSch Using MIP From line 312
-D 339 ADRP1
-D 344 ADRP2
-D 349 cnstr_2
-D 360 cnstr_3
-D 371 cnstr_4
-D 382 cnstr_5
-D 393 cnstr_6
-D 402 cnstr_7
-D 413 cnstr_8
-D 418 cnstr_9
-D 429 cnstr_10
-D 440 cnstr_11
-D 451 cnstr_12
-D 460 cnstr_13
-D 471 cnstr_14
-D 482 cnstr_15
-D 491 cnstr_16
-D 502 cnstr_17
-D 511 cnstr_18
-D 520 cnstr_19
-D 531 cnstr_20
-D 542 cnstr_21
-D 553 cnstr_22
-D 564 cnstr_23
-D 575 cnstr_24
-D 586 cnstr_25
-D 597 cnstr_26_1
-D 608 cnstr_26_2
-D 619 cnstr_27
-D 630 cnstr_28
-D 641 cnstr_29
-D 652 cnstr_30
-D 663 cnstr_31
-D 668 cnstr_32
-D 679 cnstr_33
-D 688 cnstr_34
-D 699 cnstr_35
-D 710 cnstr_36
-D 721 cnstr_37
-D 732 cnstr_38
-D 743 cnstr_39
-D 754 cnstr_40
-D 765 cnstr_41_1
-D 776 cnstr_41_2
-D 787 cnstr_41_3
-D 798 cnstr_41_4
-B 810 Column Listing      SOLVE ConflictFreeSch Using MIP From line 312
-E 813 z
-E 832 U_AGV
-E 1378 U_QC
-E 1469 P_X
-E 62211 P_Y
-E 62233 T_Q
-E 63900 T_Y
-E 63922 T_start
-E 64268 t_AGV
-E 64335 X_position
-E 65236 Y_position
-E 66137 obj
-B 66146 Range Statistics    SOLVE ConflictFreeSch Using MIP From line 312
-B 66157 Model Statistics    SOLVE ConflictFreeSch Using MIP From line 312
+B 328 Equation Listing    SOLVE ConflictFreeSch Using MIP From line 316
+D 331 ADRP1
+D 336 ADRP2
+D 341 cnstr_2
+D 352 cnstr_3
+D 363 cnstr_4
+D 374 cnstr_5
+D 385 cnstr_6
+D 394 cnstr_7
+D 405 cnstr_8
+D 410 cnstr_9
+D 415 cnstr_10
+D 426 cnstr_11
+D 437 cnstr_12
+D 442 cnstr_13
+D 447 cnstr_14
+D 452 cnstr_15
+D 457 cnstr_16
+D 468 cnstr_17
+D 477 cnstr_18
+D 486 cnstr_19
+D 497 cnstr_20
+D 508 cnstr_21
+D 519 cnstr_22
+D 530 cnstr_23
+D 542 cnstr_24
+B 548 Column Listing      SOLVE ConflictFreeSch Using MIP From line 316
+E 551 z
+E 570 U_AGV
+E 3228 P_X
+E 63961 P_Y
+E 66806 T_Q
+E 66813 T_Y
+E 66820 obj
+B 66829 Model Statistics    SOLVE ConflictFreeSch Using MIP From line 316

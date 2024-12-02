@@ -64,7 +64,8 @@ Sets
         A_R(m,i,XR) /#C.#A_R_set/
 
 !! these are written according to Fig 5. of base article
-        WT(m,i,a) "set of total actions" /#C.a0,    #C.a2,    #D.(a1,a3,a4),#L.(a1,a3,a4)/
+        WTotal(m,i,a) "set of total actions with virtual node" /#C.#a/
+        WT(m,i,a) "set of total actions without virtual node. More precisely, just WH\cupWV " / #C.(a1*a4)/
         WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
         WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
 !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -76,9 +77,9 @@ Sets
         psi_2(m,i,m,i)   "sequence of Container jobs for ASC" / / !!This is in data file. 
         ;
         
-set testSet(*,*);
-testSet(n,j) $(c(n,j) and (not sameas(n,'m1') and (not sameas(j, 'i2')) )) = Yes;
-display testset;
+*set testSet(*,*);
+*testSet(n,j) $(c(n,j) and (not sameas(n,'m1') and (not sameas(j, 'i2')) )) = Yes;
+*display testset;
 *O(YR) $(C(m,i)) = yes;
 alias (XR, XR1);
 alias (XR, XR_1);
@@ -235,18 +236,20 @@ ADRP2.. obj =g= T_Y('m3','i%d%') + G_Y('m3','i%d%') ;
 **Job assinment constraints
 *as soon as you include conditional $(C(m,i)), you ignore virtual node!
 *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
-cnstr_2(m,i) $(C(m,i) and (not sameas(m,'m0')) and (not sameas(i,'i0')) ).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1;
+cnstr_2(m,i) $(C(m,i) ).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1;
 
 cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li));
 
-cnstr_4(li).. sum((m,i) $(C(m,i) and (not sameas(m,'m0'))and (not sameas(i,'i0'))), z('m0', 'i0', m, i, li)) =e= 1;
-cnstr_5(li).. sum((m,i) $(C(m,i) and (not sameas(m,'m0'))and (not sameas(i,'i0'))), z(m, i, 'm0', 'i0', li)) =e= 1;
-cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or ((sameas(n,'m0') and sameas(j,'i0')))), z(m,i,n,j,li)) =e= 1;
-cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or ((sameas(n,'m0') and sameas(j,'i0')))), z(m,i,n,j,li)) =e= 1;
+cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li)) =e= 1;
+cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li)) =e= 1;
 
+cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li)) =e= 1;
+cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li)) =e= 1;
+
+*****************************************************************************************************************************************************************************************
 **Location constraints of AGV acitons
-cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR)  =e= P_X(n,j,'a0',XR) $(sum(li,z.l(m,i,n,j,li)) = 1);  !! a bit different from the article's forumulation
-cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR)  =e= P_Y(n,j,'a0',YR) $(sum(li,z.l(m,i,n,j,li)) = 1);
+cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR)  =e= P_X(n,j,'a0',XR) $(sum(li, z.l(m,i,n,j,li)) = 1);  
+cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR)  =e= P_Y(n,j,'a0',YR) $(sum(li, z.l(m,i,n,j,li)) = 1);
 
 cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
 cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
@@ -266,7 +269,7 @@ cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e
 cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
 cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
 
-
+*****************************************************************************************************************************************************************************************
 **Conflict Free Constraints
 cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
 * wt(a1_1) and wt(a2_1) are computed here!            
@@ -281,6 +284,7 @@ cnstr_26_2(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(
 cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
 cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
 
+*****************************************************************************************************************************************************************************************
 *Time Constraints
 cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
 cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
