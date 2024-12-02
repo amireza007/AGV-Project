@@ -1,5 +1,5 @@
 
---- Job BBAPP.gms Start 12/02/24 13:01:52 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
+--- Job BBAPP.gms Start 12/02/24 14:04:19 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\48\gmsprmNT.txt
     C:\Users\Asus\Documents\GAMS\gamsconfig.yaml
@@ -22,15 +22,15 @@ Processor information: 1 socket(s), 14 core(s), and 20 thread(s) available
 GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 --- Starting compilation
 --- BBAPP.gms(321) 3 Mb
---- Starting execution: elapsed 0:00:00.005
+--- Starting execution: elapsed 0:00:00.004
 --- BBAPP.gms(163) 4 Mb
 --- Generating MIP model ConflictFreeSch
 --- BBAPP.gms(316) 4 Mb
----   62 rows  319 columns  1,059 non-zeroes
----   315 discrete-columns
+---   42 rows  190 columns  598 non-zeroes
+---   189 discrete-columns
 --- Range statistics (absolute non-zero finite values)
 --- RHS       [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
---- Bound     [min, max] : [ 1.000E+00, 4.000E+05] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
 --- Matrix    [min, max] : [ 1.000E+00, 1.000E+00]
 --- Executing XPRESS (Solvelink=2): elapsed 0:00:00.009
 
@@ -46,13 +46,13 @@ Licensed for use by: GAMS Development Corp. for GAMS
  
 Reading Problem ConflictFreeSch
 Problem Statistics
-          62 (      0 spare) rows
-         319 (      0 spare) structural columns
-        1059 (      0 spare) non-zero elements
+          42 (      0 spare) rows
+         190 (      0 spare) structural columns
+         598 (      0 spare) non-zero elements
 MIP Entity Statistics
-         315 entities        0 sets        0 set members
-FICO Xpress v9.4.0, Hyper, solve started 13:01:53, Dec 2, 2024
-Heap usage: 184KB (peak 184KB, 70KB system)
+         189 entities        0 sets        0 set members
+FICO Xpress v9.4.0, Hyper, solve started 14:04:19, Dec 2, 2024
+Heap usage: 162KB (peak 162KB, 70KB system)
 Minimizing MILP ConflictFreeSch using up to 20 threads and up to 15GB memory, with these control settings:
 LPITERLIMIT = 2147483647
 MIPADDCUTOFF = 0
@@ -60,36 +60,37 @@ MIPRELCUTOFF = 0
 MIPABSSTOP = 0
 MIPRELSTOP = .0001
 Original problem has:
-        62 rows          319 cols         1059 elements       315 entities
+        42 rows          190 cols          598 elements       189 entities
 Presolved problem has:
-        47 rows          245 cols          645 elements       245 entities
+        34 rows          114 cols          321 elements       114 entities
+LP relaxation tightened
 Presolve finished in 0 seconds
-Heap usage: 276KB (peak 380KB, 70KB system)
+Heap usage: 235KB (peak 292KB, 70KB system)
 
 Coefficient range                    original                 solved        
   Coefficients   [min,max] : [ 1.00e+00,  1.00e+00] / [ 1.00e+00,  1.00e+00]
-  RHS and bounds [min,max] : [ 1.00e+00,  4.00e+05] / [ 1.00e+00,  1.00e+00]
+  RHS and bounds [min,max] : [ 1.00e+00,  1.00e+00] / [ 1.00e+00,  1.00e+00]
   Objective      [min,max] : [ 1.00e+00,  1.00e+00] / [      0.0,       0.0]
 Autoscaling applied standard scaling
 
-Symmetric problem: generators: 8, support set: 245
- Number of orbits: 6, largest orbit: 60
- Row orbits: 5, row support: 47
+Symmetric problem: generators: 6, support set: 114
+ Number of orbits: 6, largest orbit: 36
+ Row orbits: 6, row support: 34
 Will try to keep branch and bound tree memory usage below 9.3GB
- *** Solution found:      .000000   Time:   0.01    Heuristic: T ***
+ *** Solution found:      .000000   Time:   0.01    Heuristic: e ***
 STOPPING - MIPRELSTOP target reached (MIPRELSTOP=0.0001  gap=0).
  *** Search completed ***
 Uncrunching matrix
 Final MIP objective                   : 0.000000000000000e-01
 Final MIP bound                       : 0.000000000000000e-01
-  Solution time / primaldual integral :      0.01s/ 97.559919%
+  Solution time / primaldual integral :      0.01s/ 97.250695%
   Number of solutions found / nodes   :         1 /         0
   Max primal violation      (abs/rel) :       0.0 /       0.0
   Max integer violation     (abs    ) :       0.0
 
 fixing discrete vars and re-solving as an LP.
-FICO Xpress v9.4.0, Hyper, solve started 13:01:53, Dec 2, 2024
-Heap usage: 2432KB (peak 2543KB, 72KB system)
+FICO Xpress v9.4.0, Hyper, solve started 14:04:19, Dec 2, 2024
+Heap usage: 2406KB (peak 2483KB, 72KB system)
 Minimizing LP ConflictFreeSch using up to 20 threads and up to 15GB memory, with these control settings:
 LPITERLIMIT = 2147483647
 MIPADDCUTOFF = 0
@@ -97,11 +98,11 @@ MIPRELCUTOFF = 0
 MIPABSSTOP = 0
 MIPRELSTOP = .0001
 Original problem has:
-        62 rows          319 cols         1059 elements
+        42 rows          190 cols          598 elements
 Presolved problem has:
          0 rows            0 cols            0 elements
 Presolve finished in 0 seconds
-Heap usage: 2428KB (peak 2591KB, 72KB system)
+Heap usage: 2403KB (peak 2505KB, 72KB system)
  
    Its         Obj Value      S   Ninf  Nneg   Sum Dual Inf  Time
      0           .000000      D      0     0        .000000     0
@@ -125,7 +126,7 @@ Absolute gap  :          0.000000     optca :          0.000000
 Relative gap  :          0.000000     optcr :          0.000100
 
 --- Reading solution for model ConflictFreeSch
---- Executing after solve: elapsed 0:00:00.066
+--- Executing after solve: elapsed 0:00:00.060
 --- BBAPP.gms(317) 4 Mb
 *** Status: Normal completion
---- Job BBAPP.gms Stop 12/02/24 13:01:53 elapsed 0:00:00.066
+--- Job BBAPP.gms Stop 12/02/24 14:04:19 elapsed 0:00:00.060

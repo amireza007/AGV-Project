@@ -1,36 +1,51 @@
 B 3 C o m p i l a t i o n
-B 328 Equation Listing    SOLVE ConflictFreeSch Using MIP From line 316
-D 331 ADRP1
-D 336 ADRP2
-D 341 ADRP3
-D 346 cnstr_2
-D 357 cnstr_3
-D 368 cnstr_4
-D 379 cnstr_5
-D 390 cnstr_6
-D 399 cnstr_7
-B 411 Column Listing      SOLVE ConflictFreeSch Using MIP From line 316
-E 414 z
-E 433 T_Q
-E 440 T_Y
-E 447 obj
-E 455 slack1
-B 463 Range Statistics    SOLVE ConflictFreeSch Using MIP From line 316
-B 474 Model Statistics    SOLVE ConflictFreeSch Using MIP From line 316
-B 487 Solution Report     SOLVE ConflictFreeSch Using MIP From line 316
-F 521 ADRP1
-F 522 ADRP2
-F 523 ADRP3
-F 528 cnstr_2
-F 540 cnstr_3
-F 580 cnstr_4
-F 590 cnstr_5
-F 600 cnstr_6
-F 608 cnstr_7
-G 617 z
-G 937 T_Q
-G 943 T_Y
-G 951 obj
-G 952 slack1
-B 962 E x e c u t i o n
-I 962 z
+B 330 Equation Listing    SOLVE ConflictFreeSch Using MIP From line 316
+D 333 ADRP3
+D 338 cnstr_2
+D 349 cnstr_3
+D 360 cnstr_4
+D 369 cnstr_5
+D 378 cnstr_6
+D 387 cnstr_7
+B 399 Column Listing      SOLVE ConflictFreeSch Using MIP From line 316
+E 402 z
+E 421 slack1
+B 429 Range Statistics    SOLVE ConflictFreeSch Using MIP From line 316
+B 440 Model Statistics    SOLVE ConflictFreeSch Using MIP From line 316
+B 453 Solution Report     SOLVE ConflictFreeSch Using MIP From line 316
+F 487 ADRP3
+F 489 cnstr_2
+F 501 cnstr_3
+F 527 cnstr_4
+F 535 cnstr_5
+F 543 cnstr_6
+F 551 cnstr_7
+G 560 z
+G 756 slack1
+B 764 E x e c u t i o n
+I 764 z
+B 821 Equation Listing    SOLVE ConflictFreeSch Using MIP From line 318
+D 824 ADRP3
+D 829 cnstr_2
+D 840 cnstr_3
+D 851 cnstr_4
+D 860 cnstr_5
+D 869 cnstr_6
+D 878 cnstr_7
+B 890 Column Listing      SOLVE ConflictFreeSch Using MIP From line 318
+E 893 z
+E 912 slack1
+B 920 Range Statistics    SOLVE ConflictFreeSch Using MIP From line 318
+B 931 Model Statistics    SOLVE ConflictFreeSch Using MIP From line 318
+B 944 Solution Report     SOLVE ConflictFreeSch Using MIP From line 318
+F 978 ADRP3
+F 980 cnstr_2
+F 992 cnstr_3
+F 1018 cnstr_4
+F 1026 cnstr_5
+F 1034 cnstr_6
+F 1042 cnstr_7
+G 1051 z
+G 1247 slack1
+B 1255 E x e c u t i o n
+I 1255 z

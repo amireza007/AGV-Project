@@ -37,7 +37,7 @@ Sets
         Cd(m,i) "the last QC container job" /m3.i%d%/
 *       C_prime(i) "The set of containers to be assigned"
 *       CHANGING THE NUMBER OF AGVS CAUSE DIFFERENT INFEASIBILITY. BAAAAADDDDDDDDDD!
-        li "AGV index" /l1*l5/
+        li "AGV index" /l1*l3/
         Bs(li) "set of all agvs" /#li/
         
 *       0 in a is a virtual starting point
@@ -312,7 +312,9 @@ cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'
 *cnstr_41_4(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;
 
 *Option MIP = COPT; 
-Model ConflictFreeSch /all/ ;
+Model ConflictFreeSch /adrp3, cnstr_2, cnstr_3, cnstr_4, cnstr_5, cnstr_6, cnstr_7/ ;
+Solve ConflictFreeSch using mip minimizing slack1;
+display z.l;
 Solve ConflictFreeSch using mip minimizing slack1;
 display z.l;
 *$gdxout BBAPP
