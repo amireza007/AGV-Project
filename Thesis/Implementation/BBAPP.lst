@@ -1,4 +1,4 @@
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 1
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/10/24 16:38:05 Page 1
 A branch and bound problem
 C o m p i l a t i o n
 
@@ -180,155 +180,173 @@ C o m p i l a t i o n
  179          cnstr_7(m,i)                "D"
  180  *
  181  **       LOcation constraints of AGV acitons
- 182  *        cnstr_8(m,i,n,j,XR)         "C,C,XR"
- 183  *        cnstr_9(m,i,n,j,YR)         "C,C,YR"
- 184  *        cnstr_10(m,i,a)             "C,a"
- 185  *        cnstr_11(m,i,a)             "C,a"
- 186  *        cnstr_12(m,i)               "L"
- 187  *        cnstr_13(m,i)               "D"
- 188  *        cnstr_14(m,i,XR)            "D"
- 189  *        cnstr_15(m,i)               "L"
- 190  *        cnstr_16(m,i)               "D"
- 191  *        cnstr_17(m,i)               "L"
- 192  *        cnstr_18(m,i,XR)            "L"
- 193  *        cnstr_19(m,i)               "D"
- 194  *        cnstr_20(m, i, a, a, YR)    "WH,YR"
- 195  *        cnstr_21(m,i,a,a,XR)        "WV,XR"
- 196  **
- 197  ***Conflict Free Constraints
- 198  *        cnstr_22(m,i,n,j)           "C,C"
- 199  *        cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR"
- 200  *        cnstr_24(m,i,n,j,a)         "C, WH"
- 201  *        cnstr_25(m,i,n,j,a,a)       "C, WH"
- 202  *
- 203  **cnstr_26 need abs! So we need two separate constraints for dealing with abs in mip.
- 204  *        cnstr_26_1(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
- 205  *        cnstr_26_2(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
- 206  *        cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
- 207  *        cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
- 208  *
- 209  ***Time Constraints
- 210  *        cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
- 211  *        cnstr_30(m,i,m,i)           "psi_1"
- 212  *        cnstr_31(m,i,m,i)           "psi_2"
- 213  *        cnstr_32(m,i)               "D"
- 214  *        cnstr_33(m,i)               "L"
- 215  *        cnstr_34(m,i,m,i)           "D,L"
- 216  *        cnstr_35(m,i,m,i)           "L,D"
- 217  *        cnstr_36(m,i,a)             "D,a"      !!alpha=4 and 1
- 218  *        cnstr_37(m,i,a)             "D,a"      !!alpha=1 and 1
- 219  *        cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
- 220  *        cnstr_39(m,i,a,XR)          "C,a,XR"
- 221  *        cnstr_40(m,i,a,YR)          "C,a,YR"
- 222  *        cnstr_41_1(m,i,a,m,i,a)
- 223  *        cnstr_41_2(m,i,a,m,i,a)
- 224  *        cnstr_41_3(m,i,a,m,i,a)
- 225  *        cnstr_41_4(m,i,a,m,i,a)
- 226          ;
- 227   
- 228  !! God willingly, obj become either one of these :))))
- 229  ADRP1.. obj  =g= T_Q('m3','i3') + G_Q('m3','i3') ;
- 230  ADRP2.. obj =g= T_Y('m3','i3') + G_Y('m3','i3') ;
- 231   
- 232  variable obj1;
- 233  ADRP3.. slack1 =g= 0;
- 234  * > T_Y.l('m4','i%d%') + G_Y.l('m4','i%d%')
- 235   
+ 182          cnstr_8(m,i,n,j,XR)         "C,C,XR"
+ 183          cnstr_8_1(m,i,n,j,XR)         "C,C,XR"
+ 184  *        cnstr_9(m,i,n,j,YR)         "C,C,YR"
+ 185  *        cnstr_10(m,i,a)             "C,a"
+ 186  *        cnstr_11(m,i,a)             "C,a"
+ 187  *        cnstr_12(m,i)               "L"
+ 188  *        cnstr_13(m,i)               "D"
+ 189  *        cnstr_14(m,i,XR)            "D"
+ 190  *        cnstr_15(m,i)               "L"
+ 191  *        cnstr_16(m,i)               "D"
+ 192  *        cnstr_17(m,i)               "L"
+ 193  *        cnstr_18(m,i,XR)            "L"
+ 194  *        cnstr_19(m,i)               "D"
+ 195  *        cnstr_20(m, i, a, a, YR)    "WH,YR"
+ 196  *        cnstr_21(m,i,a,a,XR)        "WV,XR"
+ 197  **
+ 198  ***Conflict Free Constraints
+ 199  *        cnstr_22(m,i,n,j)           "C,C"
+ 200  *        cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR"
+ 201  *        cnstr_24(m,i,n,j,a)         "C, WH"
+ 202  *        cnstr_25(m,i,n,j,a,a)       "C, WH"
+ 203  *
+ 204  **cnstr_26 need abs! So we need two separate constraints for dealing with abs in mip.
+ 205  *        cnstr_26_1(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
+ 206  *        cnstr_26_2(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
+ 207  *        cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+ 208  *        cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
+ 209  *
+ 210  ***Time Constraints
+ 211  *        cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
+ 212  *        cnstr_30(m,i,m,i)           "psi_1"
+ 213  *        cnstr_31(m,i,m,i)           "psi_2"
+ 214  *        cnstr_32(m,i)               "D"
+ 215  *        cnstr_33(m,i)               "L"
+ 216  *        cnstr_34(m,i,m,i)           "D,L"
+ 217  *        cnstr_35(m,i,m,i)           "L,D"
+ 218  *        cnstr_36(m,i,a)             "D,a"      !!alpha=4 and 1
+ 219  *        cnstr_37(m,i,a)             "D,a"      !!alpha=1 and 1
+ 220  *        cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
+ 221  *        cnstr_39(m,i,a,XR)          "C,a,XR"
+ 222  *        cnstr_40(m,i,a,YR)          "C,a,YR"
+ 223  *        cnstr_41_1(m,i,a,m,i,a)
+ 224  *        cnstr_41_2(m,i,a,m,i,a)
+ 225  *        cnstr_41_3(m,i,a,m,i,a)
+ 226  *        cnstr_41_4(m,i,a,m,i,a)
+ 227          ;
+ 228   
+ 229  !! God willingly, obj become either one of these :))))
+ 230  ADRP1.. obj  =g= T_Q('m3','i3') + G_Q('m3','i3') ;
+ 231  ADRP2.. obj =g= T_Y('m3','i3') + G_Y('m3','i3') ;
+ 232   
+ 233  variable obj1;
+ 234  ADRP3.. slack1 =g= 0;
+ 235  * > T_Y.l('m4','i%d%') + G_Y.l('m4','i%d%')
  236   
- 237  **Job assinment constraints
- 238  *as soon as you include conditional $(C(m,i)), you ignore virtual node!
- 239  *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
- 240  cnstr_2(m,i) $(C(m,i) ).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
- 241   
- 242  cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) ;
- 243   
- 244  cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
- 245  cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
- 246   
- 247  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
- 248  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
- 249   
- 250  *****************************************************************************************************************************************************************************************
- 251  ***Location constraints of AGV acitons
- 252  *cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR)  =e= P_X(n,j,'a0',XR) $(sum(li, z.l(m,i,n,j,li)) = 1);
- 253  *cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR)  =e= P_Y(n,j,'a0',YR) $(sum(li, z.l(m,i,n,j,li)) = 1);
- 254  *
- 255  *cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
- 256  *cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
- 257  *
- 258  *cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
- 259  *cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
- 260  *
- 261  *cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the "variable" to be fixed!)
+ 237   
+ 238  **Job assinment constraints
+ 239  *as soon as you include conditional $(C(m,i)), you ignore virtual node!
+ 240  *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
+ 241  cnstr_2(m,i) $(C(m,i) ).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
+ 242   
+ 243  cnstr_3(m,i,li) $(C(m,i)).. sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) =e= sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) ;
+ 244   
+ 245  cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
+ 246  cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
+ 247   
+ 248  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 249  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 250   
+ 251  *****************************************************************************************************************************************************************************************
+ 252  ***Location constraints of AGV acitons
+ 253  cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;
+ 254  cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WH(n,j,'a0'))..  P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0 ;
+ 255  *cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and Wt(n,j,'a0'))..  P_Y(m,i,'a4',YR)  =e= P_Y(n,j,'a0',YR) $(sum(li, z.l(m,i,n,j,li)) = 1);
+ 256  *
+ 257  *cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+ 258  *cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+ 259  *
+ 260  *cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+ 261  *cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
  262  *
- 263  *cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0')).. sum((A_L_set, A_R_set),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !! this is infeasible
- 264  *cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3')).. sum((A_L_set, A_R_set),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1; !! this is infeasible
- 265  *
- 266  *cnstr_16(m,i) $(D(m,i) and wt(m,i,'a3')).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
- 267  *cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 268  *cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
- 269  *
- 270  *cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
- 271  *cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
- 272  *
- 273  ******************************************************************************************************************************************************************************************
- 274  ***Conflict Free Constraints
- 275  *cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
- 276  ** wt(a1_1) and wt(a2_1) are computed here!
- 277  *cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1) $((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - (sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
- 278  *cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
- 279  *cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
- 280  *
- 281  *!! absolute value is not considered in this constraint! what an stupid language, not letting to use abs in mip! WHY????
- 282  *cnstr_26_1(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + (sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)) $(sum(XR $(XR.val <= o1(m,i)), P_x.l(n,j,a2,XR)) >= sum(XR $(XR.val > o1(m,i)), P_X.l(n,j,a2_1,XR)) ))) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
- 283  *cnstr_26_2(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + (- sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) + sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)) $(sum(XR $(XR.val <= o1(m,i)), P_x.l(n,j,a2,XR)) <= sum(XR $(XR.val > o1(m,i)), P_X.l(n,j,a2_1,XR))))) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
- 284  **
- 285  *cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
- 286  *cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
- 287  *
- 288  ******************************************************************************************************************************************************************************************
- 289  **Time Constraints
- 290  *cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
- 291  *cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
- 292  *cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
- 293  *
- 294  *cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
- 295  *cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
- 296  *
- 297  *cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 298  *cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 299  *
- 300  *cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
- 301  *cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
- 302  *cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1)).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
- 303  *
- 304  *cnstr_39(m,i,a,XR) $(C(m,i))..  x_position(m,i,a)  =e= XR.val $(P_x.l(m,i,a,XR) = 1); !! this and cnstr_40 are not really constraints, but only `.l` relations!
- 305  **
- 306  *cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+ 263  *cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the "variable" to be fixed!)
+ 264  *
+ 265  *cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0')).. sum((A_L_set, A_R_set),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !! this is infeasible
+ 266  *cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3')).. sum((A_L_set, A_R_set),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1; !! this is infeasible
+ 267  *
+ 268  *cnstr_16(m,i) $(D(m,i) and wt(m,i,'a3')).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
+ 269  *cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 270  *cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
+ 271  *
+ 272  *cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+ 273  *cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1)).. P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+ 274  *
+ 275  ******************************************************************************************************************************************************************************************
+ 276  ***Conflict Free Constraints
+ 277  *cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 278  ** wt(a1_1) and wt(a2_1) are computed here!
+ 279  *cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1) $((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - (sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
+ 280  *cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 281  *cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1))..  T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 282  *
+ 283  *!! absolute value is not considered in this constraint! what an stupid language, not letting to use abs in mip! WHY????
+ 284  *cnstr_26_1(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + (sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)) $(sum(XR $(XR.val <= o1(m,i)), P_x.l(n,j,a2,XR)) >= sum(XR $(XR.val > o1(m,i)), P_X.l(n,j,a2_1,XR)) ))) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 285  *cnstr_26_2(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1)).. (3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) + (- sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) + sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)) $(sum(XR $(XR.val <= o1(m,i)), P_x.l(n,j,a2,XR)) <= sum(XR $(XR.val > o1(m,i)), P_X.l(n,j,a2_1,XR))))) * Mnum + T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 286  **
+ 287  *cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 288  *cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 289  *
+ 290  ******************************************************************************************************************************************************************************************
+ 291  **Time Constraints
+ 292  *cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
+ 293  *cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+ 294  *cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+ 295  *
+ 296  *cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+ 297  *cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 298  *
+ 299  *cnstr_34(m,i,n,j) $(D(m,i) and L(n,j)).. T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 300  *cnstr_35(m,i,n,j) $(L(m,i) and D(n,j)).. T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 301  *
+ 302  *cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) ).. T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+ 303  *cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).. T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+ 304  *cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1)).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+ 305  *
+ 306  *cnstr_39(m,i,a,XR) $(C(m,i))..  x_position(m,i,a)  =e= XR.val $(P_x.l(m,i,a,XR) = 1); !! this and cnstr_40 are not really constraints, but only `.l` relations!
  307  **
- 308  *
- 309  *cnstr_41_1(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) >= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (x_position(m,i,a1) - x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;
- 310  *cnstr_41_2(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) <= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) - Y_position(m,i,a1) + y_position(n,j,a2)) )/v;
- 311  *cnstr_41_3(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) >= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) <= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (x_position(m,i,a1) - x_position(n,j,a2) - Y_position(m,i,a1) + y_position(n,j,a2)) )/v;
- 312  *cnstr_41_4(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;
- 313   
- 314  *Option MIP = COPT;
- 315  Model ConflictFreeSch /adrp3, cnstr_2, cnstr_3, cnstr_4, cnstr_5, cnstr_6, cnstr_7/ ;
- 316  Solve ConflictFreeSch using mip minimizing slack1;
- 317  display z.l;
- 318  Solve ConflictFreeSch using mip minimizing slack1;
- 319  display z.l;
- 320  *$gdxout BBAPP
- 321  *$unload
- 322  *$gdxout
- 323  *Display x.l, x.m ;
+ 308  *cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+ 309  **
+ 310  *
+ 311  *cnstr_41_1(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) >= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (x_position(m,i,a1) - x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;
+ 312  *cnstr_41_2(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) <= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) - Y_position(m,i,a1) + y_position(n,j,a2)) )/v;
+ 313  *cnstr_41_3(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) >= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) <= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (x_position(m,i,a1) - x_position(n,j,a2) - Y_position(m,i,a1) + y_position(n,j,a2)) )/v;
+ 314  *cnstr_41_4(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;
+ 315   
+ 316  Model ConflictFreeSch /all/ ;
+ 317  solve conflictfreesch using mip min obj;
+ 318   
+ 319   
+ 320   
+ 321   
+ 322  *Option MIP = COPT;
+ 323  *Model ConflictFreeSch /adrp3, cnstr_2, cnstr_3, cnstr_4, cnstr_5, cnstr_6, cnstr_7/ ;
+ 324  *Solve ConflictFreeSch using mip minimizing slack1;
+ 325  *display z.l;
+ 326  *Solve ConflictFreeSch using mip minimizing slack1;
+ 327  *display z.l;
+ 328  *$gdxout BBAPP
+ 329  *$unload
+ 330  *$gdxout
+ 331  *Display x.l, x.m ;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 2
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/10/24 16:38:05 Page 2
 A branch and bound problem
-Equation Listing    SOLVE ConflictFreeSch Using MIP From line 316
+Equation Listing    SOLVE ConflictFreeSch Using MIP From line 317
 
+
+---- ADRP1  =G=  AGV Dispatching and Routing Problem
+
+ADRP1..  - T_Q(m3,i3) + obj =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- ADRP2  =G=  AGV Dispatching and Routing Problem
+
+ADRP2..  - T_Y(m3,i3) + obj =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
 
 ---- ADRP3  =G=  
 
@@ -394,9 +412,19 @@ cnstr_7(m3,i1)..  z(m3,i1,m0,i0,l1) + z(m3,i1,m0,i0,l2) + z(m3,i1,m0,i0,l3) + z(
      
 REMAINING ENTRY SKIPPED
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 3
+
+---- cnstr_8  =L=  C,C,XR
+
+                NONE
+
+
+---- cnstr_8_1  =G=  C,C,XR
+
+                NONE
+
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/10/24 16:38:05 Page 3
 A branch and bound problem
-Column Listing      SOLVE ConflictFreeSch Using MIP From line 316
+Column Listing      SOLVE ConflictFreeSch Using MIP From line 317
 
 
 ---- z  used mainly for handling QC double cycling, it consists of 0 virtual point!
@@ -418,52 +446,74 @@ z(m0,i0,m1,i1,l3)
 
 REMAINING 186 ENTRIES SKIPPED
 
+---- T_Q  start time of QC
+
+T_Q(m3,i3)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
+       -1       ADRP1
+
+
+---- T_Y  Start time of agv putting cont on ASC
+
+T_Y(m3,i3)
+                (.LO, .L, .UP, .M = 0, 0, 400000, 0)
+       -1       ADRP2
+
+
+---- obj  objective function
+
+obj
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       ADRP1
+        1       ADRP2
+
+
 ---- slack1  
 
 slack1
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       ADRP3
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 4
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/10/24 16:38:05 Page 4
 A branch and bound problem
-Range Statistics    SOLVE ConflictFreeSch Using MIP From line 316
+Range Statistics    SOLVE ConflictFreeSch Using MIP From line 317
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
 
 RHS       [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
-Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 4.000E+05] - Zero values observed as well
 Matrix    [min, max] : [ 1.000E+00, 1.000E+00]
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 5
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/10/24 16:38:05 Page 5
 A branch and bound problem
-Model Statistics    SOLVE ConflictFreeSch Using MIP From line 316
+Model Statistics    SOLVE ConflictFreeSch Using MIP From line 317
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS           7     SINGLE EQUATIONS           42
-BLOCKS OF VARIABLES           2     SINGLE VARIABLES          190
-NON ZERO ELEMENTS           598     DISCRETE VARIABLES        189
+BLOCKS OF EQUATIONS          11     SINGLE EQUATIONS           44
+BLOCKS OF VARIABLES           6     SINGLE VARIABLES          193
+NON ZERO ELEMENTS           602     DISCRETE VARIABLES        189
 
 
 GENERATION TIME      =        0.000 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 6
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/10/24 16:38:05 Page 6
 A branch and bound problem
-Solution Report     SOLVE ConflictFreeSch Using MIP From line 316
+Solution Report     SOLVE ConflictFreeSch Using MIP From line 317
 
 
                S O L V E      S U M M A R Y
 
-     MODEL   ConflictFreeSch     OBJECTIVE  slack1
+     MODEL   ConflictFreeSch     OBJECTIVE  obj
      TYPE    MIP                 DIRECTION  MINIMIZE
-     SOLVER  XPRESS              FROM LINE  316
+     SOLVER  XPRESS              FROM LINE  317
 
 **** SOLVER STATUS     1 Normal Completion
 **** MODEL STATUS      1 Optimal
-**** OBJECTIVE VALUE                0.0000
+**** OBJECTIVE VALUE                1.0000
 
- RESOURCE USAGE, LIMIT          0.015 10000000000.000
+ RESOURCE USAGE, LIMIT          0.219 10000000000.000
  ITERATION COUNT, LIMIT         0    2147483647
 
 FICO-Xpress      48.3.0 71b5641f Nov 12, 2024          WEI x86 64bit/MS Window
@@ -474,17 +524,22 @@ Xpress Solver 64bit v9.4.0 Apr 16 2024
 --- GMO setup time: 0.00s
 
 fixing discrete vars and re-solving as an LP.
-fixed LP solved successfully, objective = 0.
+fixed LP solved successfully, objective = 1.
 Integer solution proven optimal.
-MIP solution  :          0.000000
-Best possible :          0.000000
+MIP solution  :          1.000000
+Best possible :          1.000000
 Absolute gap  :          0.000000     optca :          0.000000
 Relative gap  :          0.000000     optcr :          0.000100
 
 
                            LOWER          LEVEL          UPPER         MARGINAL
 
----- EQU ADRP3               .              .            +INF            1.0000      
+---- EQU ADRP1              1.0000         1.0000        +INF            1.0000      
+---- EQU ADRP2              1.0000         1.0000        +INF            EPS         
+---- EQU ADRP3               .              .            +INF            EPS         
+
+  ADRP1  AGV Dispatching and Routing Problem
+  ADRP2  AGV Dispatching and Routing Problem
 
 ---- EQU cnstr_2  
 
@@ -556,6 +611,16 @@ m1.i2         1.0000         1.0000         1.0000          .
 m2.i1         1.0000         1.0000         1.0000          .          
 m3.i1         1.0000         1.0000         1.0000          .          
 m3.i3         1.0000         1.0000         1.0000          .          
+
+---- EQU cnstr_8  C,C,XR
+
+                NONE
+
+
+---- EQU cnstr_8_1  C,C,XR
+
+                NONE
+
 
 ---- VAR z  used mainly for handling QC double cycling, it consists of 0 virtual point!
 
@@ -751,565 +816,32 @@ m3.i3.m3.i3.l1          .              .             1.0000         EPS
 m3.i3.m3.i3.l2          .              .             1.0000         EPS         
 m3.i3.m3.i3.l3          .              .             1.0000         EPS         
 
+---- VAR T_Q  start time of QC
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+m3.i3          .              .        400000.0000         1.0000      
+
+---- VAR T_Y  Start time of agv putting cont on ASC
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+m3.i3          .              .        400000.0000          .          
+
                            LOWER          LEVEL          UPPER         MARGINAL
 
+---- VAR obj               -INF            1.0000        +INF             .          
 ---- VAR slack1            -INF             .            +INF             .          
+
+  obj  objective function
 
 
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 7
-A branch and bound problem
-E x e c u t i o n
 
 
-----    317 VARIABLE z.L  used mainly for handling QC double cycling, it consists of 0 virtual point!
-
-INDEX 1 = m0  INDEX 2 = i0
-
-               l1          l2          l3
-
-m1.i1       1.000
-m1.i2                               1.000
-m2.i1                   1.000
-
-INDEX 1 = m1  INDEX 2 = i1
-
-               l1
-
-m0.i0       1.000
-
-INDEX 1 = m1  INDEX 2 = i2
-
-               l3
-
-m0.i0       1.000
-
-INDEX 1 = m2  INDEX 2 = i1
-
-               l2
-
-m0.i0       1.000
-
-INDEX 1 = m2  INDEX 2 = i2
-
-               l1
-
-m3.i1       1.000
-
-INDEX 1 = m3  INDEX 2 = i1
-
-               l1
-
-m2.i2       1.000
-
-INDEX 1 = m3  INDEX 2 = i2
-
-               l1
-
-m3.i3       1.000
-
-INDEX 1 = m3  INDEX 2 = i3
-
-               l1
-
-m3.i2       1.000
-
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 8
-A branch and bound problem
-Equation Listing    SOLVE ConflictFreeSch Using MIP From line 318
-
-
----- ADRP3  =G=  
-
-ADRP3..  slack1 =G= 0 ; (LHS = 0)
-     
-
----- cnstr_2  =E=  
-
-cnstr_2(m1,i1)..  z(m1,i1,m0,i0,l1) + z(m1,i1,m0,i0,l2) + z(m1,i1,m0,i0,l3) + z(m1,i1,m1,i1,l1) + z(m1,i1,m1,i1,l2) + z(m1,i1,m1,i1,l3) + z(m1,i1,m1,i2,l1) + z(m1,i1,m1,i2,l2) + z(m1,i1,m1,i2,l3) + z(m1,i1,m2,i1,l1) + z(m1,i1,m2,i1,l2) + z(m1,i1,m2,i1,l3) + z(m1,i1,m2,i2,l1) + z(m1,i1,m2,i2,l2) + z(m1,i1,m2,i2,l3) + z(m1,i1,m3,i1,l1) + z(m1,i1,m3,i1,l2) + z(m1,i1,m3,i1,l3) + z(m1,i1,m3,i2,l1) + z(m1,i1,m3,i2,l2) + z(m1,i1,m3,i2,l3) + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) =E= 1 ; (LHS = 1)
-     
-cnstr_2(m1,i2)..  z(m1,i2,m0,i0,l1) + z(m1,i2,m0,i0,l2) + z(m1,i2,m0,i0,l3) + z(m1,i2,m1,i1,l1) + z(m1,i2,m1,i1,l2) + z(m1,i2,m1,i1,l3) + z(m1,i2,m1,i2,l1) + z(m1,i2,m1,i2,l2) + z(m1,i2,m1,i2,l3) + z(m1,i2,m2,i1,l1) + z(m1,i2,m2,i1,l2) + z(m1,i2,m2,i1,l3) + z(m1,i2,m2,i2,l1) + z(m1,i2,m2,i2,l2) + z(m1,i2,m2,i2,l3) + z(m1,i2,m3,i1,l1) + z(m1,i2,m3,i1,l2) + z(m1,i2,m3,i1,l3) + z(m1,i2,m3,i2,l1) + z(m1,i2,m3,i2,l2) + z(m1,i2,m3,i2,l3) + z(m1,i2,m3,i3,l1) + z(m1,i2,m3,i3,l2) + z(m1,i2,m3,i3,l3) =E= 1 ; (LHS = 1)
-     
-cnstr_2(m2,i1)..  z(m2,i1,m0,i0,l1) + z(m2,i1,m0,i0,l2) + z(m2,i1,m0,i0,l3) + z(m2,i1,m1,i1,l1) + z(m2,i1,m1,i1,l2) + z(m2,i1,m1,i1,l3) + z(m2,i1,m1,i2,l1) + z(m2,i1,m1,i2,l2) + z(m2,i1,m1,i2,l3) + z(m2,i1,m2,i1,l1) + z(m2,i1,m2,i1,l2) + z(m2,i1,m2,i1,l3) + z(m2,i1,m2,i2,l1) + z(m2,i1,m2,i2,l2) + z(m2,i1,m2,i2,l3) + z(m2,i1,m3,i1,l1) + z(m2,i1,m3,i1,l2) + z(m2,i1,m3,i1,l3) + z(m2,i1,m3,i2,l1) + z(m2,i1,m3,i2,l2) + z(m2,i1,m3,i2,l3) + z(m2,i1,m3,i3,l1) + z(m2,i1,m3,i3,l2) + z(m2,i1,m3,i3,l3) =E= 1 ; (LHS = 1)
-     
-REMAINING 4 ENTRIES SKIPPED
-
-
----- cnstr_3  =E=  C,B
-
-cnstr_3(m1,i1,l1)..  z(m0,i0,m1,i1,l1) - z(m1,i1,m0,i0,l1) - z(m1,i1,m1,i2,l1) - z(m1,i1,m2,i1,l1) - z(m1,i1,m2,i2,l1) - z(m1,i1,m3,i1,l1) - z(m1,i1,m3,i2,l1) - z(m1,i1,m3,i3,l1) + z(m1,i2,m1,i1,l1) + z(m2,i1,m1,i1,l1) + z(m2,i2,m1,i1,l1) + z(m3,i1,m1,i1,l1) + z(m3,i2,m1,i1,l1) + z(m3,i3,m1,i1,l1) =E= 0 ; (LHS = 0)
-     
-cnstr_3(m1,i1,l2)..  z(m0,i0,m1,i1,l2) - z(m1,i1,m0,i0,l2) - z(m1,i1,m1,i2,l2) - z(m1,i1,m2,i1,l2) - z(m1,i1,m2,i2,l2) - z(m1,i1,m3,i1,l2) - z(m1,i1,m3,i2,l2) - z(m1,i1,m3,i3,l2) + z(m1,i2,m1,i1,l2) + z(m2,i1,m1,i1,l2) + z(m2,i2,m1,i1,l2) + z(m3,i1,m1,i1,l2) + z(m3,i2,m1,i1,l2) + z(m3,i3,m1,i1,l2) =E= 0 ; (LHS = 0)
-     
-cnstr_3(m1,i1,l3)..  z(m0,i0,m1,i1,l3) - z(m1,i1,m0,i0,l3) - z(m1,i1,m1,i2,l3) - z(m1,i1,m2,i1,l3) - z(m1,i1,m2,i2,l3) - z(m1,i1,m3,i1,l3) - z(m1,i1,m3,i2,l3) - z(m1,i1,m3,i3,l3) + z(m1,i2,m1,i1,l3) + z(m2,i1,m1,i1,l3) + z(m2,i2,m1,i1,l3) + z(m3,i1,m1,i1,l3) + z(m3,i2,m1,i1,l3) + z(m3,i3,m1,i1,l3) =E= 0 ; (LHS = 0)
-     
-REMAINING 18 ENTRIES SKIPPED
-
-
----- cnstr_4  =E=  B with 0 virtual node
-
-cnstr_4(l1)..  z(m0,i0,m1,i1,l1) + z(m0,i0,m1,i2,l1) + z(m0,i0,m2,i1,l1) + z(m0,i0,m2,i2,l1) + z(m0,i0,m3,i1,l1) + z(m0,i0,m3,i2,l1) + z(m0,i0,m3,i3,l1) =E= 1 ; (LHS = 1)
-     
-cnstr_4(l2)..  z(m0,i0,m1,i1,l2) + z(m0,i0,m1,i2,l2) + z(m0,i0,m2,i1,l2) + z(m0,i0,m2,i2,l2) + z(m0,i0,m3,i1,l2) + z(m0,i0,m3,i2,l2) + z(m0,i0,m3,i3,l2) =E= 1 ; (LHS = 1)
-     
-cnstr_4(l3)..  z(m0,i0,m1,i1,l3) + z(m0,i0,m1,i2,l3) + z(m0,i0,m2,i1,l3) + z(m0,i0,m2,i2,l3) + z(m0,i0,m3,i1,l3) + z(m0,i0,m3,i2,l3) + z(m0,i0,m3,i3,l3) =E= 1 ; (LHS = 1)
-     
-
----- cnstr_5  =E=  ‌  "B with 0 virutal node"
-
-cnstr_5(l1)..  z(m1,i1,m0,i0,l1) + z(m1,i2,m0,i0,l1) + z(m2,i1,m0,i0,l1) + z(m2,i2,m0,i0,l1) + z(m3,i1,m0,i0,l1) + z(m3,i2,m0,i0,l1) + z(m3,i3,m0,i0,l1) =E= 1 ; (LHS = 1)
-     
-cnstr_5(l2)..  z(m1,i1,m0,i0,l2) + z(m1,i2,m0,i0,l2) + z(m2,i1,m0,i0,l2) + z(m2,i2,m0,i0,l2) + z(m3,i1,m0,i0,l2) + z(m3,i2,m0,i0,l2) + z(m3,i3,m0,i0,l2) =E= 1 ; (LHS = 1)
-     
-cnstr_5(l3)..  z(m1,i1,m0,i0,l3) + z(m1,i2,m0,i0,l3) + z(m2,i1,m0,i0,l3) + z(m2,i2,m0,i0,l3) + z(m3,i1,m0,i0,l3) + z(m3,i2,m0,i0,l3) + z(m3,i3,m0,i0,l3) =E= 1 ; (LHS = 1)
-     
-
----- cnstr_6  =E=  L
-
-cnstr_6(m1,i1)..  z(m1,i1,m0,i0,l1) + z(m1,i1,m0,i0,l2) + z(m1,i1,m0,i0,l3) + z(m1,i1,m1,i2,l1) + z(m1,i1,m1,i2,l2) + z(m1,i1,m1,i2,l3) + z(m1,i1,m2,i1,l1) + z(m1,i1,m2,i1,l2) + z(m1,i1,m2,i1,l3) + z(m1,i1,m3,i1,l1) + z(m1,i1,m3,i1,l2) + z(m1,i1,m3,i1,l3) + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) =E= 1 ; (LHS = 1)
-     
-cnstr_6(m2,i2)..  z(m2,i2,m0,i0,l1) + z(m2,i2,m0,i0,l2) + z(m2,i2,m0,i0,l3) + z(m2,i2,m1,i2,l1) + z(m2,i2,m1,i2,l2) + z(m2,i2,m1,i2,l3) + z(m2,i2,m2,i1,l1) + z(m2,i2,m2,i1,l2) + z(m2,i2,m2,i1,l3) + z(m2,i2,m3,i1,l1) + z(m2,i2,m3,i1,l2) + z(m2,i2,m3,i1,l3) + z(m2,i2,m3,i3,l1) + z(m2,i2,m3,i3,l2) + z(m2,i2,m3,i3,l3) =E= 1 ; (LHS = 1)
-     
-cnstr_6(m3,i2)..  z(m3,i2,m0,i0,l1) + z(m3,i2,m0,i0,l2) + z(m3,i2,m0,i0,l3) + z(m3,i2,m1,i2,l1) + z(m3,i2,m1,i2,l2) + z(m3,i2,m1,i2,l3) + z(m3,i2,m2,i1,l1) + z(m3,i2,m2,i1,l2) + z(m3,i2,m2,i1,l3) + z(m3,i2,m3,i1,l1) + z(m3,i2,m3,i1,l2) + z(m3,i2,m3,i1,l3) + z(m3,i2,m3,i3,l1) + z(m3,i2,m3,i3,l2) + z(m3,i2,m3,i3,l3) =E= 1 ; (LHS = 1)
-     
-
----- cnstr_7  =E=  D
-
-cnstr_7(m1,i2)..  z(m1,i2,m0,i0,l1) + z(m1,i2,m0,i0,l2) + z(m1,i2,m0,i0,l3) + z(m1,i2,m1,i1,l1) + z(m1,i2,m1,i1,l2) + z(m1,i2,m1,i1,l3) + z(m1,i2,m2,i2,l1) + z(m1,i2,m2,i2,l2) + z(m1,i2,m2,i2,l3) + z(m1,i2,m3,i2,l1) + z(m1,i2,m3,i2,l2) + z(m1,i2,m3,i2,l3) =E= 1 ; (LHS = 1)
-     
-cnstr_7(m2,i1)..  z(m2,i1,m0,i0,l1) + z(m2,i1,m0,i0,l2) + z(m2,i1,m0,i0,l3) + z(m2,i1,m1,i1,l1) + z(m2,i1,m1,i1,l2) + z(m2,i1,m1,i1,l3) + z(m2,i1,m2,i2,l1) + z(m2,i1,m2,i2,l2) + z(m2,i1,m2,i2,l3) + z(m2,i1,m3,i2,l1) + z(m2,i1,m3,i2,l2) + z(m2,i1,m3,i2,l3) =E= 1 ; (LHS = 1)
-     
-cnstr_7(m3,i1)..  z(m3,i1,m0,i0,l1) + z(m3,i1,m0,i0,l2) + z(m3,i1,m0,i0,l3) + z(m3,i1,m1,i1,l1) + z(m3,i1,m1,i1,l2) + z(m3,i1,m1,i1,l3) + z(m3,i1,m2,i2,l1) + z(m3,i1,m2,i2,l2) + z(m3,i1,m2,i2,l3) + z(m3,i1,m3,i2,l1) + z(m3,i1,m3,i2,l2) + z(m3,i1,m3,i2,l3) =E= 1 ; (LHS = 1)
-     
-REMAINING ENTRY SKIPPED
-
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 9
-A branch and bound problem
-Column Listing      SOLVE ConflictFreeSch Using MIP From line 318
-
-
----- z  used mainly for handling QC double cycling, it consists of 0 virtual point!
-
-z(m0,i0,m1,i1,l1)
-                (.LO, .L, .UP, .M = 0, 1, 1, EPS)
-        1       cnstr_3(m1,i1,l1)
-        1       cnstr_4(l1)
-
-z(m0,i0,m1,i1,l2)
-                (.LO, .L, .UP, .M = 0, 0, 1, EPS)
-        1       cnstr_3(m1,i1,l2)
-        1       cnstr_4(l2)
-
-z(m0,i0,m1,i1,l3)
-                (.LO, .L, .UP, .M = 0, 0, 1, EPS)
-        1       cnstr_3(m1,i1,l3)
-        1       cnstr_4(l3)
-
-REMAINING 186 ENTRIES SKIPPED
-
----- slack1  
-
-slack1
-                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
-        1       ADRP3
-
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 10
-A branch and bound problem
-Range Statistics    SOLVE ConflictFreeSch Using MIP From line 318
-
-
-RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
-
-RHS       [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
-Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
-Matrix    [min, max] : [ 1.000E+00, 1.000E+00]
-
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 11
-A branch and bound problem
-Model Statistics    SOLVE ConflictFreeSch Using MIP From line 318
-
-
-MODEL STATISTICS
-
-BLOCKS OF EQUATIONS           7     SINGLE EQUATIONS           42
-BLOCKS OF VARIABLES           2     SINGLE VARIABLES          190
-NON ZERO ELEMENTS           598     DISCRETE VARIABLES        189
-
-
-GENERATION TIME      =        0.000 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 12
-A branch and bound problem
-Solution Report     SOLVE ConflictFreeSch Using MIP From line 318
-
-
-               S O L V E      S U M M A R Y
-
-     MODEL   ConflictFreeSch     OBJECTIVE  slack1
-     TYPE    MIP                 DIRECTION  MINIMIZE
-     SOLVER  XPRESS              FROM LINE  318
-
-**** SOLVER STATUS     1 Normal Completion
-**** MODEL STATUS      1 Optimal
-**** OBJECTIVE VALUE                0.0000
-
- RESOURCE USAGE, LIMIT          0.031 10000000000.000
- ITERATION COUNT, LIMIT         0    2147483647
-
-FICO-Xpress      48.3.0 71b5641f Nov 12, 2024          WEI x86 64bit/MS Window
-
-*** This solver runs with a demo license. No commercial use.
-Xpress Optimizer 43.01
-Xpress Solver 64bit v9.4.0 Apr 16 2024
---- GMO setup time: 0.00s
-
-fixing discrete vars and re-solving as an LP.
-fixed LP solved successfully, objective = 0.
-Integer solution proven optimal.
-MIP solution  :          0.000000
-Best possible :          0.000000
-Absolute gap  :          0.000000     optca :          0.000000
-Relative gap  :          0.000000     optcr :          0.000100
-
-
-                           LOWER          LEVEL          UPPER         MARGINAL
-
----- EQU ADRP3               .              .            +INF            1.0000      
-
----- EQU cnstr_2  
-
-             LOWER          LEVEL          UPPER         MARGINAL
-
-m1.i1         1.0000         1.0000         1.0000          .          
-m1.i2         1.0000         1.0000         1.0000          .          
-m2.i1         1.0000         1.0000         1.0000          .          
-m2.i2         1.0000         1.0000         1.0000          .          
-m3.i1         1.0000         1.0000         1.0000          .          
-m3.i2         1.0000         1.0000         1.0000          .          
-m3.i3         1.0000         1.0000         1.0000          .          
-
----- EQU cnstr_3  C,B
-
-                LOWER          LEVEL          UPPER         MARGINAL
-
-m1.i1.l1          .              .              .              .          
-m1.i1.l2          .              .              .              .          
-m1.i1.l3          .              .              .              .          
-m1.i2.l1          .              .              .              .          
-m1.i2.l2          .              .              .              .          
-m1.i2.l3          .              .              .              .          
-m2.i1.l1          .              .              .              .          
-m2.i1.l2          .              .              .              .          
-m2.i1.l3          .              .              .              .          
-m2.i2.l1          .              .              .              .          
-m2.i2.l2          .              .              .              .          
-m2.i2.l3          .              .              .              .          
-m3.i1.l1          .              .              .              .          
-m3.i1.l2          .              .              .              .          
-m3.i1.l3          .              .              .              .          
-m3.i2.l1          .              .              .              .          
-m3.i2.l2          .              .              .              .          
-m3.i2.l3          .              .              .              .          
-m3.i3.l1          .              .              .              .          
-m3.i3.l2          .              .              .              .          
-m3.i3.l3          .              .              .              .          
-
----- EQU cnstr_4  B with 0 virtual node
-
-          LOWER          LEVEL          UPPER         MARGINAL
-
-l1         1.0000         1.0000         1.0000          .          
-l2         1.0000         1.0000         1.0000          .          
-l3         1.0000         1.0000         1.0000          .          
-
----- EQU cnstr_5  ‌  "B with 0 virutal node"
-
-          LOWER          LEVEL          UPPER         MARGINAL
-
-l1         1.0000         1.0000         1.0000          .          
-l2         1.0000         1.0000         1.0000          .          
-l3         1.0000         1.0000         1.0000          .          
-
----- EQU cnstr_6  L
-
-             LOWER          LEVEL          UPPER         MARGINAL
-
-m1.i1         1.0000         1.0000         1.0000          .          
-m2.i2         1.0000         1.0000         1.0000          .          
-m3.i2         1.0000         1.0000         1.0000          .          
-
----- EQU cnstr_7  D
-
-             LOWER          LEVEL          UPPER         MARGINAL
-
-m1.i2         1.0000         1.0000         1.0000          .          
-m2.i1         1.0000         1.0000         1.0000          .          
-m3.i1         1.0000         1.0000         1.0000          .          
-m3.i3         1.0000         1.0000         1.0000          .          
-
----- VAR z  used mainly for handling QC double cycling, it consists of 0 virtual point!
-
-                      LOWER          LEVEL          UPPER         MARGINAL
-
-m0.i0.m1.i1.l1          .             1.0000         1.0000         EPS         
-m0.i0.m1.i1.l2          .              .             1.0000         EPS         
-m0.i0.m1.i1.l3          .              .             1.0000         EPS         
-m0.i0.m1.i2.l1          .              .             1.0000         EPS         
-m0.i0.m1.i2.l2          .              .             1.0000         EPS         
-m0.i0.m1.i2.l3          .             1.0000         1.0000         EPS         
-m0.i0.m2.i1.l1          .              .             1.0000         EPS         
-m0.i0.m2.i1.l2          .             1.0000         1.0000         EPS         
-m0.i0.m2.i1.l3          .              .             1.0000         EPS         
-m0.i0.m2.i2.l1          .              .             1.0000         EPS         
-m0.i0.m2.i2.l2          .              .             1.0000         EPS         
-m0.i0.m2.i2.l3          .              .             1.0000         EPS         
-m0.i0.m3.i1.l1          .              .             1.0000         EPS         
-m0.i0.m3.i1.l2          .              .             1.0000         EPS         
-m0.i0.m3.i1.l3          .              .             1.0000         EPS         
-m0.i0.m3.i2.l1          .              .             1.0000         EPS         
-m0.i0.m3.i2.l2          .              .             1.0000         EPS         
-m0.i0.m3.i2.l3          .              .             1.0000         EPS         
-m0.i0.m3.i3.l1          .              .             1.0000         EPS         
-m0.i0.m3.i3.l2          .              .             1.0000         EPS         
-m0.i0.m3.i3.l3          .              .             1.0000         EPS         
-m1.i1.m0.i0.l1          .             1.0000         1.0000         EPS         
-m1.i1.m0.i0.l2          .              .             1.0000         EPS         
-m1.i1.m0.i0.l3          .              .             1.0000         EPS         
-m1.i1.m1.i1.l1          .              .             1.0000         EPS         
-m1.i1.m1.i1.l2          .              .             1.0000         EPS         
-m1.i1.m1.i1.l3          .              .             1.0000         EPS         
-m1.i1.m1.i2.l1          .              .             1.0000         EPS         
-m1.i1.m1.i2.l2          .              .             1.0000         EPS         
-m1.i1.m1.i2.l3          .              .             1.0000         EPS         
-m1.i1.m2.i1.l1          .              .             1.0000         EPS         
-m1.i1.m2.i1.l2          .              .             1.0000         EPS         
-m1.i1.m2.i1.l3          .              .             1.0000         EPS         
-m1.i1.m2.i2.l1          .              .             1.0000         EPS         
-m1.i1.m2.i2.l2          .              .             1.0000         EPS         
-m1.i1.m2.i2.l3          .              .             1.0000         EPS         
-m1.i1.m3.i1.l1          .              .             1.0000         EPS         
-m1.i1.m3.i1.l2          .              .             1.0000         EPS         
-m1.i1.m3.i1.l3          .              .             1.0000         EPS         
-m1.i1.m3.i2.l1          .              .             1.0000         EPS         
-m1.i1.m3.i2.l2          .              .             1.0000         EPS         
-m1.i1.m3.i2.l3          .              .             1.0000         EPS         
-m1.i1.m3.i3.l1          .              .             1.0000         EPS         
-m1.i1.m3.i3.l2          .              .             1.0000         EPS         
-m1.i1.m3.i3.l3          .              .             1.0000         EPS         
-m1.i2.m0.i0.l1          .              .             1.0000         EPS         
-m1.i2.m0.i0.l2          .              .             1.0000         EPS         
-m1.i2.m0.i0.l3          .             1.0000         1.0000         EPS         
-m1.i2.m1.i1.l1          .              .             1.0000         EPS         
-m1.i2.m1.i1.l2          .              .             1.0000         EPS         
-m1.i2.m1.i1.l3          .              .             1.0000         EPS         
-m1.i2.m1.i2.l1          .              .             1.0000         EPS         
-m1.i2.m1.i2.l2          .              .             1.0000         EPS         
-m1.i2.m1.i2.l3          .              .             1.0000         EPS         
-m1.i2.m2.i1.l1          .              .             1.0000         EPS         
-m1.i2.m2.i1.l2          .              .             1.0000         EPS         
-m1.i2.m2.i1.l3          .              .             1.0000         EPS         
-m1.i2.m2.i2.l1          .              .             1.0000         EPS         
-m1.i2.m2.i2.l2          .              .             1.0000         EPS         
-m1.i2.m2.i2.l3          .              .             1.0000         EPS         
-m1.i2.m3.i1.l1          .              .             1.0000         EPS         
-m1.i2.m3.i1.l2          .              .             1.0000         EPS         
-m1.i2.m3.i1.l3          .              .             1.0000         EPS         
-m1.i2.m3.i2.l1          .              .             1.0000         EPS         
-m1.i2.m3.i2.l2          .              .             1.0000         EPS         
-m1.i2.m3.i2.l3          .              .             1.0000         EPS         
-m1.i2.m3.i3.l1          .              .             1.0000         EPS         
-m1.i2.m3.i3.l2          .              .             1.0000         EPS         
-m1.i2.m3.i3.l3          .              .             1.0000         EPS         
-m2.i1.m0.i0.l1          .              .             1.0000         EPS         
-m2.i1.m0.i0.l2          .             1.0000         1.0000         EPS         
-m2.i1.m0.i0.l3          .              .             1.0000         EPS         
-m2.i1.m1.i1.l1          .              .             1.0000         EPS         
-m2.i1.m1.i1.l2          .              .             1.0000         EPS         
-m2.i1.m1.i1.l3          .              .             1.0000         EPS         
-m2.i1.m1.i2.l1          .              .             1.0000         EPS         
-m2.i1.m1.i2.l2          .              .             1.0000         EPS         
-m2.i1.m1.i2.l3          .              .             1.0000         EPS         
-m2.i1.m2.i1.l1          .              .             1.0000         EPS         
-m2.i1.m2.i1.l2          .              .             1.0000         EPS         
-m2.i1.m2.i1.l3          .              .             1.0000         EPS         
-m2.i1.m2.i2.l1          .              .             1.0000         EPS         
-m2.i1.m2.i2.l2          .              .             1.0000         EPS         
-m2.i1.m2.i2.l3          .              .             1.0000         EPS         
-m2.i1.m3.i1.l1          .              .             1.0000         EPS         
-m2.i1.m3.i1.l2          .              .             1.0000         EPS         
-m2.i1.m3.i1.l3          .              .             1.0000         EPS         
-m2.i1.m3.i2.l1          .              .             1.0000         EPS         
-m2.i1.m3.i2.l2          .              .             1.0000         EPS         
-m2.i1.m3.i2.l3          .              .             1.0000         EPS         
-m2.i1.m3.i3.l1          .              .             1.0000         EPS         
-m2.i1.m3.i3.l2          .              .             1.0000         EPS         
-m2.i1.m3.i3.l3          .              .             1.0000         EPS         
-m2.i2.m0.i0.l1          .              .             1.0000         EPS         
-m2.i2.m0.i0.l2          .              .             1.0000         EPS         
-m2.i2.m0.i0.l3          .              .             1.0000         EPS         
-m2.i2.m1.i1.l1          .              .             1.0000         EPS         
-m2.i2.m1.i1.l2          .              .             1.0000         EPS         
-m2.i2.m1.i1.l3          .              .             1.0000         EPS         
-m2.i2.m1.i2.l1          .              .             1.0000         EPS         
-m2.i2.m1.i2.l2          .              .             1.0000         EPS         
-m2.i2.m1.i2.l3          .              .             1.0000         EPS         
-m2.i2.m2.i1.l1          .              .             1.0000         EPS         
-m2.i2.m2.i1.l2          .              .             1.0000         EPS         
-m2.i2.m2.i1.l3          .              .             1.0000         EPS         
-m2.i2.m2.i2.l1          .              .             1.0000         EPS         
-m2.i2.m2.i2.l2          .              .             1.0000         EPS         
-m2.i2.m2.i2.l3          .              .             1.0000         EPS         
-m2.i2.m3.i1.l1          .             1.0000         1.0000         EPS         
-m2.i2.m3.i1.l2          .              .             1.0000         EPS         
-m2.i2.m3.i1.l3          .              .             1.0000         EPS         
-m2.i2.m3.i2.l1          .              .             1.0000         EPS         
-m2.i2.m3.i2.l2          .              .             1.0000         EPS         
-m2.i2.m3.i2.l3          .              .             1.0000         EPS         
-m2.i2.m3.i3.l1          .              .             1.0000         EPS         
-m2.i2.m3.i3.l2          .              .             1.0000         EPS         
-m2.i2.m3.i3.l3          .              .             1.0000         EPS         
-m3.i1.m0.i0.l1          .              .             1.0000         EPS         
-m3.i1.m0.i0.l2          .              .             1.0000         EPS         
-m3.i1.m0.i0.l3          .              .             1.0000         EPS         
-m3.i1.m1.i1.l1          .              .             1.0000         EPS         
-m3.i1.m1.i1.l2          .              .             1.0000         EPS         
-m3.i1.m1.i1.l3          .              .             1.0000         EPS         
-m3.i1.m1.i2.l1          .              .             1.0000         EPS         
-m3.i1.m1.i2.l2          .              .             1.0000         EPS         
-m3.i1.m1.i2.l3          .              .             1.0000         EPS         
-m3.i1.m2.i1.l1          .              .             1.0000         EPS         
-m3.i1.m2.i1.l2          .              .             1.0000         EPS         
-m3.i1.m2.i1.l3          .              .             1.0000         EPS         
-m3.i1.m2.i2.l1          .             1.0000         1.0000         EPS         
-m3.i1.m2.i2.l2          .              .             1.0000         EPS         
-m3.i1.m2.i2.l3          .              .             1.0000         EPS         
-m3.i1.m3.i1.l1          .              .             1.0000         EPS         
-m3.i1.m3.i1.l2          .              .             1.0000         EPS         
-m3.i1.m3.i1.l3          .              .             1.0000         EPS         
-m3.i1.m3.i2.l1          .              .             1.0000         EPS         
-m3.i1.m3.i2.l2          .              .             1.0000         EPS         
-m3.i1.m3.i2.l3          .              .             1.0000         EPS         
-m3.i1.m3.i3.l1          .              .             1.0000         EPS         
-m3.i1.m3.i3.l2          .              .             1.0000         EPS         
-m3.i1.m3.i3.l3          .              .             1.0000         EPS         
-m3.i2.m0.i0.l1          .              .             1.0000         EPS         
-m3.i2.m0.i0.l2          .              .             1.0000         EPS         
-m3.i2.m0.i0.l3          .              .             1.0000         EPS         
-m3.i2.m1.i1.l1          .              .             1.0000         EPS         
-m3.i2.m1.i1.l2          .              .             1.0000         EPS         
-m3.i2.m1.i1.l3          .              .             1.0000         EPS         
-m3.i2.m1.i2.l1          .              .             1.0000         EPS         
-m3.i2.m1.i2.l2          .              .             1.0000         EPS         
-m3.i2.m1.i2.l3          .              .             1.0000         EPS         
-m3.i2.m2.i1.l1          .              .             1.0000         EPS         
-m3.i2.m2.i1.l2          .              .             1.0000         EPS         
-m3.i2.m2.i1.l3          .              .             1.0000         EPS         
-m3.i2.m2.i2.l1          .              .             1.0000         EPS         
-m3.i2.m2.i2.l2          .              .             1.0000         EPS         
-m3.i2.m2.i2.l3          .              .             1.0000         EPS         
-m3.i2.m3.i1.l1          .              .             1.0000         EPS         
-m3.i2.m3.i1.l2          .              .             1.0000         EPS         
-m3.i2.m3.i1.l3          .              .             1.0000         EPS         
-m3.i2.m3.i2.l1          .              .             1.0000         EPS         
-m3.i2.m3.i2.l2          .              .             1.0000         EPS         
-m3.i2.m3.i2.l3          .              .             1.0000         EPS         
-m3.i2.m3.i3.l1          .             1.0000         1.0000         EPS         
-m3.i2.m3.i3.l2          .              .             1.0000         EPS         
-m3.i2.m3.i3.l3          .              .             1.0000         EPS         
-m3.i3.m0.i0.l1          .              .             1.0000         EPS         
-m3.i3.m0.i0.l2          .              .             1.0000         EPS         
-m3.i3.m0.i0.l3          .              .             1.0000         EPS         
-m3.i3.m1.i1.l1          .              .             1.0000         EPS         
-m3.i3.m1.i1.l2          .              .             1.0000         EPS         
-m3.i3.m1.i1.l3          .              .             1.0000         EPS         
-m3.i3.m1.i2.l1          .              .             1.0000         EPS         
-m3.i3.m1.i2.l2          .              .             1.0000         EPS         
-m3.i3.m1.i2.l3          .              .             1.0000         EPS         
-m3.i3.m2.i1.l1          .              .             1.0000         EPS         
-m3.i3.m2.i1.l2          .              .             1.0000         EPS         
-m3.i3.m2.i1.l3          .              .             1.0000         EPS         
-m3.i3.m2.i2.l1          .              .             1.0000         EPS         
-m3.i3.m2.i2.l2          .              .             1.0000         EPS         
-m3.i3.m2.i2.l3          .              .             1.0000         EPS         
-m3.i3.m3.i1.l1          .              .             1.0000         EPS         
-m3.i3.m3.i1.l2          .              .             1.0000         EPS         
-m3.i3.m3.i1.l3          .              .             1.0000         EPS         
-m3.i3.m3.i2.l1          .             1.0000         1.0000         EPS         
-m3.i3.m3.i2.l2          .              .             1.0000         EPS         
-m3.i3.m3.i2.l3          .              .             1.0000         EPS         
-m3.i3.m3.i3.l1          .              .             1.0000         EPS         
-m3.i3.m3.i3.l2          .              .             1.0000         EPS         
-m3.i3.m3.i3.l3          .              .             1.0000         EPS         
-
-                           LOWER          LEVEL          UPPER         MARGINAL
-
----- VAR slack1            -INF             .            +INF             .          
-
-
-**** REPORT SUMMARY :        0     NONOPT
-                             0 INFEASIBLE
-                             0  UNBOUNDED
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/02/24 14:31:04 Page 13
-A branch and bound problem
-E x e c u t i o n
-
-
-----    319 VARIABLE z.L  used mainly for handling QC double cycling, it consists of 0 virtual point!
-
-INDEX 1 = m0  INDEX 2 = i0
-
-               l1          l2          l3
-
-m1.i1       1.000
-m1.i2                               1.000
-m2.i1                   1.000
-
-INDEX 1 = m1  INDEX 2 = i1
-
-               l1
-
-m0.i0       1.000
-
-INDEX 1 = m1  INDEX 2 = i2
-
-               l3
-
-m0.i0       1.000
-
-INDEX 1 = m2  INDEX 2 = i1
-
-               l2
-
-m0.i0       1.000
-
-INDEX 1 = m2  INDEX 2 = i2
-
-               l1
-
-m3.i1       1.000
-
-INDEX 1 = m3  INDEX 2 = i1
-
-               l1
-
-m2.i2       1.000
-
-INDEX 1 = m3  INDEX 2 = i2
-
-               l1
-
-m3.i3       1.000
-
-INDEX 1 = m3  INDEX 2 = i3
-
-               l1
-
-m3.i2       1.000
-
-
-
-EXECUTION TIME       =        0.110 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
+EXECUTION TIME       =        0.297 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
 
 
 USER: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
