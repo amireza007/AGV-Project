@@ -1,10 +1,10 @@
 
---- Job BBAPP.gms Start 12/10/24 16:32:41 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
+--- Job BBAPP.gms Start 12/17/24 17:37:55 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\48\gmsprmNT.txt
     C:\Users\Asus\Documents\GAMS\gamsconfig.yaml
 --- GAMS Parameters defined
-    MIP XPRESS
+    MIP GUROBI
     Input C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
     PageSize 0
     ScrDir C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\225a\
@@ -21,36 +21,12 @@ Licensee: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
 Processor information: 1 socket(s), 14 core(s), and 20 thread(s) available
 GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 --- Starting compilation
---- BBAPP.gms(253) 3 Mb 5 Errors
-*** Error 145 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    Set identifier or quoted element expected
-*** Error   8 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    ')' expected
-*** Error  37 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    '=l=' or '=e=' or '=g=' operator expected
-*** Error 408 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    Too many ),] or }
-*** Error 409 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    Unrecognizable item - skip to find a new statement
-      looking for a ';' or a key word to get started again
---- BBAPP.gms(254) 3 Mb 10 Errors
-*** Error 145 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    Set identifier or quoted element expected
-*** Error   8 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    ')' expected
-*** Error  37 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    '=l=' or '=e=' or '=g=' operator expected
-*** Error 408 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    Too many ),] or }
-*** Error 409 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    Unrecognizable item - skip to find a new statement
-      looking for a ';' or a key word to get started again
---- BBAPP.gms(318) 3 Mb 11 Errors
+--- BBAPP.gms(313) 3 Mb 1 Error
+*** Error 140 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
+    Unknown symbol
+--- BBAPP.gms(322) 3 Mb 2 Errors
 *** Error 257 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
     Solve statement not checked because of previous errors
---- BBAPP.gms(320) 3 Mb 12 Errors
-*** Error 257 in C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    Solve statement not checked because of previous errors
---- BBAPP.gms(325) 3 Mb 12 Errors
+--- BBAPP.gms(336) 3 Mb 2 Errors
 *** Status: Compilation error(s)
---- Job BBAPP.gms Stop 12/10/24 16:32:41 elapsed 0:00:00.006
+--- Job BBAPP.gms Stop 12/17/24 17:37:55 elapsed 0:00:00.007
