@@ -100,7 +100,10 @@ Parameters
         o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2.i2 13, m3.i1 19, m3.i2 17, m3.i%d% 21/ 
         G_Q(m,i) /#C 1/ !! seems to be constant for all container jobs, bc of const 24
         G_Y(m,i) /#C 1/
-        ;
+******************************************************** The A_L and A_R are causing infeasiblity!
+        A_Lp(m,i) / /
+        A_Rp(m,i) / /
+;
 
 Binary Variables
 
@@ -274,9 +277,10 @@ cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0'))..
     P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the "variable" to be fixed!)
 
 cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0'))..
-    sum((A_L_set, A_R_set),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !! this is infeasible
+    sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1;
+                            !!this ord shows forces the container to belong to one and only one block
 cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3'))..
-    sum((A_L_set, A_R_set),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1; !! this is infeasible
+    sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
 
 cnstr_16(m,i) $(D(m,i) and wt(m,i,'a3')).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
 cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
