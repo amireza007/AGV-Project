@@ -365,7 +365,7 @@ $onEcho > CFS.opt
 iis 1
 $offEcho
 ConflictFreeSch.Optfile = 1;
-solve conflictfreesch using RMINLP min obj;
+solve conflictfreesch using MINLP min obj;
 
 
 
