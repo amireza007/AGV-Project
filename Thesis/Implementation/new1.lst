@@ -1,0 +1,114 @@
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/18/24 15:12:44 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  option solver =  Gurobi;
+   2   
+   3  set i /1,2,3,4/;
+   4  variables x(i), y(i);
+   5  set j /1/;
+   6  variable obj;
+   7   
+   8  scalar s /5/;
+   9  equation eq1;
+  10  eq1.. obj =e=
+  11  abs(x('1'));
+  12   
+  13  Model md /all/;
+  14   
+  19  md.optfile = 1;
+  20  solve md using DNLP min obj;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  48.3.0 71b5641f WEX-WEI
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/18/24 15:12:44 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE md Using DNLP From line 20
+
+
+---- eq1  =E=  
+
+eq1..  - (1)*x(1) + obj =E= 0 ; (LHS = 0)
+     
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/18/24 15:12:44 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE md Using DNLP From line 20
+
+
+---- x  
+
+x(1)
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+      (-1)      eq1
+
+
+---- obj  
+
+obj
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       eq1
+
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/18/24 15:12:44 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE md Using DNLP From line 20
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [        NA,        NA] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA]
+Matrix    [min, max] : [ 1.000E+00, 1.000E+00]
+
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/18/24 15:12:44 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE md Using DNLP From line 20
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           1     SINGLE EQUATIONS            1
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            2
+NON ZERO ELEMENTS             2     NON LINEAR N-Z              1
+CODE LENGTH                   6     CONSTANT POOL              16
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/18/24 15:12:44 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE md Using DNLP From line 20
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   md                  OBJECTIVE  obj
+     TYPE    DNLP                DIRECTION  MINIMIZE
+     SOLVER  GUROBI              FROM LINE  20
+
+**** SOLVER STATUS     7 Licensing Problems
+**** MODEL STATUS      11 Licensing Problem
+**** OBJECTIVE VALUE               NA
+
+ RESOURCE USAGE, LIMIT         NA     10000000000.000
+ ITERATION COUNT, LIMIT        NA    2147483647
+ EVALUATION ERRORS             NA             0
+*** This solver runs with a demo license. No commercial use.
+Gurobi library version 11.0.2
+GAMS/Gurobi demo/community requires a Gurobi license from Gurobi Optimization.
+*** Cannot initialize Gurobi environment. (status=10009|10009)
+*** No Gurobi license found (user asus, host AMIRSLAPTOP, hostid fe144264, cores 14)
+
+No solution returned
+
+
+EXECUTION TIME       =        0.032 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
+
+
+USER: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
+      https://www.gams.com/latest/docs/UG%5FLicense.html         DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\new1.gms
+Output     C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\new1.lst

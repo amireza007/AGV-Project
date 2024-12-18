@@ -1,0 +1,9 @@
+B 3 C o m p i l a t i o n
+B 27 Equation Listing    SOLVE md Using DNLP From line 20
+D 30 eq1
+B 36 Column Listing      SOLVE md Using DNLP From line 20
+E 39 x
+E 46 obj
+B 54 Range Statistics    SOLVE md Using DNLP From line 20
+B 65 Model Statistics    SOLVE md Using DNLP From line 20
+B 79 Solution Report     SOLVE md Using DNLP From line 20
