@@ -21,14 +21,14 @@ Scalars
         Mnum "a very large number" /10000000/;
 
 Sets
-        i0 "i with i0" /i0*i%d%/
-        i(i0) "index" /i1*i%d%/
+*        i0 "i with i0" /i0*i%d%/
+        i "index" /i0*i%d%/
         j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
     
         id(i) "last container" /i%d%/
         
-        m0 "m including virtual m0" /m0, m1, m2, m3/
-        m(m0)   "QC index" /m1,m2,m3/        
+*        m0 "m including virtual m0" /m0, m1, m2, m3/
+        m   "QC index" /m0,m1,m2,m3/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
 
         L(m,i)   /m1.i1 , m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
@@ -65,8 +65,8 @@ Sets
         A_R(m,i,XR) /#C.#A_R_set/
 
 !! these are written according to Fig 5. of base article
-        WTotal(m,i,a) "set of total actions with virtual node" /#C.#a/
-        WT(m,i,a) "set of total actions without virtual node. More precisely, just WH\cupWV " / #C.(a1*a4)/
+        WT(m,i,a) "set of total actions with virtual node" /#C.#a/
+*        WT(m,i,a) "set of total actions without virtual node. More precisely, just WH\cupWV " / #C.(a1*a4)/
         WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
         WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
 !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -104,7 +104,7 @@ Parameters
 
 Binary Variables
 
-        z(m0, i0, m0, i0, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
+        z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
         U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before" 
         U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
         
@@ -241,7 +241,7 @@ ADRP3.. slack1 =g= 0;
 **Job assinment constraints
 *as soon as you include conditional $(C(m,i)), you ignore virtual node!
 *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
-cnstr_2(m,i) $(C(m,i) ).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
+cnstr_2(m,i) $(C(m,i)).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
 
 cnstr_3(m,i,li) $(C(m,i))..
     sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) =e=

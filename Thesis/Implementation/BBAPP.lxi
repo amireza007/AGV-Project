@@ -9,30 +9,30 @@ D 495 cnstr_5
 D 504 cnstr_6
 D 513 cnstr_7
 D 524 cnstr_8
-D 529 cnstr_8_1
-D 534 cnstr_9
-D 539 cnstr_9_1
-D 544 cnstr_10
-D 555 cnstr_11
-D 566 cnstr_12
-D 571 cnstr_13
-D 576 cnstr_14
-D 581 cnstr_15
-D 586 cnstr_16
-D 597 cnstr_17
-D 606 cnstr_18
-D 615 cnstr_19
-D 626 cnstr_20
-D 637 cnstr_21
-D 648 cnstr_22
-D 659 cnstr_23
-D 671 cnstr_24
-B 677 Column Listing      SOLVE ConflictFreeSch Using RMINLP From line 364
-E 680 z
-E 696 U_AGV
-E 3354 P_X
-E 64087 P_Y
-E 66932 T_Q
-E 66939 obj
-E 66946 slack1
-B 66954 Model Statistics    SOLVE ConflictFreeSch Using RMINLP From line 364
+D 535 cnstr_8_1
+D 546 cnstr_9
+D 557 cnstr_9_1
+D 568 cnstr_10
+D 579 cnstr_11
+D 590 cnstr_12
+D 599 cnstr_13
+D 610 cnstr_14
+D 621 cnstr_15
+D 630 cnstr_16
+D 641 cnstr_17
+D 650 cnstr_18
+D 659 cnstr_19
+D 670 cnstr_20
+D 681 cnstr_21
+D 692 cnstr_22
+D 703 cnstr_23
+D 715 cnstr_24
+B 721 Column Listing      SOLVE ConflictFreeSch Using RMINLP From line 364
+E 724 z
+E 743 U_AGV
+E 3401 P_X
+E 64185 P_Y
+E 64249 T_Q
+E 64256 obj
+E 64263 slack1
+B 64271 Model Statistics    SOLVE ConflictFreeSch Using RMINLP From line 364
