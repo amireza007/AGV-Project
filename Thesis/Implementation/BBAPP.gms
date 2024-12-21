@@ -23,6 +23,7 @@ Scalars
 Sets
 *        i0 "i with i0" /i0*i%d%/
         i "index" /i0*i%d%/
+        i1(i) /#i/
         j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
     
         id(i) "last container" /i%d%/
@@ -36,8 +37,6 @@ Sets
         
         C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d%/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job" /m3.i%d%/
-*       C_prime(i) "The set of containers to be assigned"
-*       CHANGING THE NUMBER OF AGVS CAUSE DIFFERENT INFEASIBILITY. BAAAAADDDDDDDDDD!
         li "AGV index" /l1*l3/
         Bs(li) "set of all agvs" /#li/
         
@@ -56,7 +55,7 @@ Sets
 !! O_set(m,i,XR) below shows the allowed position for QC to be able to place its i-th container
 *       o_set(m,i,XR) /m1.(i1*i%d%).(3,5,7), m2.(i1*i%d%).(11,13,15), m3.(i1*i%d%).(17,19,21), m4.(i1*i%d%).(23,25,27)/
         
-        o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.19, m3.i2.17, m3.i%d%.21/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
+        o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.17, m3.i2.19, m3.i%d%.21/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
 *TODO 1
 !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
         A_L_set(XR) /1,7,13,19/
@@ -75,7 +74,7 @@ Sets
 *very challenging set!
 !!this needs fixing!
         psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m1.i1.m1.i2, m2.i1.m2.i2, m3.i1.m3.i2, m3.i2.m3.i3 / !!This is in data file. This identifies the container job sequence,
-        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i2 / !!This is in data file. 
+        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i1 / !!This is in data file. 
         ;
         
 *set testSet(*,*);
@@ -89,7 +88,7 @@ alias (a,a1);
 alias (a,a2);
 alias (a2,a2_1);
 alias (a1,a1_1);
-alias (i,i1);
+*alias (i,i1);
 set h(m)/#m/;  !! for cnstr_3
 set k(i) /#i/;
 set s(YR);
@@ -97,9 +96,9 @@ set XR2(XR) /#XR/;
 set x_t(XR) /#XR/;
 
 Parameters
-        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2.i2 13, m3.i1 19, m3.i2 17, m3.i%d% 21/ 
-        G_Q(m,i) /#C 1/ !! seems to be constant for all container jobs, bc of const 24
-        G_Y(m,i) /#C 1/
+        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2.i2 13, m3.i1 17, m3.i2 19, m3.i%d% 21/ 
+        G_Q(m,i) /#C 40/ !! seems to be constant for all container jobs, bc of const 24
+        G_Y(m,i) /#C 40/
 ******************************************************** The A_L and A_R are causing infeasiblity!
         A_Lp(m,i) / /
         A_Rp(m,i) / /
@@ -134,8 +133,9 @@ Positive Variables
 variable obj "objective function";
 variable slack1;
 *binary variables initial values
-z.up(m,i,n,j,li) $(c(m,i) and c(n,j)) = 1;
-z.lo(m,i,n,j,li) $(c(m,i) and c(n,j)) = 0;
+
+z.up(m,i,n,j,li) = 1;
+z.lo(m,i,n,j,li)= 0;
 U_AGV.up(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 1;
 U_AGV.lo(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 0;
 U_QC.up(m,i,n,j,a) $(c(m,i) and wh(n,j,a)) = 1;
@@ -151,19 +151,19 @@ P_Y0.up(m,i,a,YR)$(c(m,i)) =1;
 P_Y0.lo(m,i,a,YR)$(c(m,i)) =0;
 
 *positive variables initial values
-T_Q.up(m,i) $(c(m,i)) = 400000; 
-T_Q.lo(m,i) $(c(m,i)) = 0; 
-T_Y.up(m,i) $(c(m,i)) = 400000;
-T_Y.lo(m,i) $(c(m,i)) = 0;
-T_start.up(m,i,a) $(wt(m,i,a)) = 400000;
-T_start.lo(m,i,a) $(wt(m,i,a)) = 0;
+*T_Q.up(m,i) $(c(m,i)) = 40000000; 
+*T_Q.lo(m,i) $(c(m,i)) = 0; 
+*T_Y.up(m,i) $(c(m,i)) = 40000000;
+*T_Y.lo(m,i) $(c(m,i)) = 0;
+*T_start.up(m,i,a) $(wt(m,i,a)) = 40000000;
+*T_start.lo(m,i,a) $(wt(m,i,a)) = 0;
 *
 t_AGV.up(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 400000;
 *
 t_AGV.lo(m,i,a1,n,j,a2)$(wt(m,i,a1) and wt(n,j,a2)) = 0; 
-X_position.up(m,i,a) $(wt(m,i,a)) = 24 ;
+X_position.up(m,i,a) $(wt(m,i,a)) = 23 ;
 X_position.lo(m,i,a) $(wt(m,i,a)) = 1;
-Y_position.up(m,i,a) $(wt(m,i,a)) = 24;
+Y_position.up(m,i,a) $(wt(m,i,a)) = 23;
 Y_position.lo(m,i,a) $(wt(m,i,a)) = 1;
 
 
@@ -183,23 +183,23 @@ Equations
         cnstr_7(m,i)                "D"         
 *
 **       LOcation constraints of AGV acitons
-        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
-        cnstr_8_1(m,i,n,j,XR)         "C,C,XR"        
-        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
-        cnstr_9_1(m,i,n,j,YR)         "C,C,YR"    
+*        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
+*        cnstr_8_1(m,i,n,j,XR)         "C,C,XR"        
+*        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
+*        cnstr_9_1(m,i,n,j,YR)         "C,C,YR"    
         cnstr_10(m,i,a)             "C,a"     
         cnstr_11(m,i,a)             "C,a"      
         cnstr_12(m,i)               "L"        
         cnstr_13(m,i)               "D"        
         cnstr_14(m,i,XR)            "D"        
         cnstr_15(m,i)               "L"
+        cnstr_19(m,i)               "D"
         cnstr_16(m,i)               "D"
         cnstr_17(m,i)               "L"
         cnstr_18(m,i,XR)            "L"
-        cnstr_19(m,i)               "D"
         cnstr_20(m, i, a, a, YR)    "WH,YR"
         cnstr_21(m,i,a,a,XR)        "WV,XR"
-**
+***
 ***Conflict Free Constraints
         cnstr_22(m,i,n,j)           "C,C"
         cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR"
@@ -210,8 +210,8 @@ Equations
         cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
         cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
         cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
-*
-***Time Constraints
+**
+****Time Constraints
         cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
         cnstr_30(m,i,m,i)           "psi_1"
         cnstr_31(m,i,m,i)           "psi_2"
@@ -222,18 +222,19 @@ Equations
         cnstr_36(m,i,a)             "D,a"      !!alpha=4 and 1
         cnstr_37(m,i,a)             "D,a"      !!alpha=1 and 1
         cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
-        cnstr_39(m,i,a,XR)          "C,a,XR"
-        cnstr_39_1(m,i,a,XR)          "C,a,XR"
-        cnstr_40(m,i,a,YR)          "C,a,YR"
-        cnstr_40_1(m,i,a,YR)          "C,a,YR"
+*        cnstr_39(m,i,a,XR)          "C,a,XR"
+*        cnstr_39_1(m,i,a,XR)          "C,a,XR"
+*        cnstr_40(m,i,a,YR)          "C,a,YR"
+*        cnstr_40_1(m,i,a,YR)          "C,a,YR"
         cnstr_41(m,i,a,m,i,a)
+        
 *        cnstr_41_2(m,i,a,m,i,a)
 *        cnstr_41_3(m,i,a,m,i,a)
 *        cnstr_41_4(m,i,a,m,i,a)
         ;
 
 !! God willingly, obj become either one of these :))))
-ADRP1.. obj  =g= T_Q('m3','i%d%') + G_Q('m3','i%d%') ;
+ADRP1.. obj  =g= 1 ;
 *ADRP2.. obj =g= T_Y('m3','i%d%') + G_Y('m3','i%d%') ;
 
 variable obj1;
@@ -247,8 +248,8 @@ ADRP3.. slack1 =g= 0;
 cnstr_2(m,i) $(C(m,i)).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
 
 cnstr_3(m,i,li) $(C(m,i))..
-    sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) =e=
-    sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) ;
+    sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) -
+    sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) =e= 0;
 
 cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
 cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
@@ -258,102 +259,73 @@ cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'
 
 *****************************************************************************************************************************************************************************************
 ***Location constraints of AGV acitons
-cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0'))..
-    P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;  
-cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0'))..
-    P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;  
-cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0'))..
-    P_Y(m,i,'a4',YR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
-cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0'))..
-    P_Y(m,i,'a4',YR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
+***** THE BIG-M TRICK FOR IF-CONDITIONAL
+*cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;  
+*cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;  
+*cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
+*cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
+****************************************
 
-cnstr_10(m,i,a) $(WT(m,i,a)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
-cnstr_11(m,i,a) $(wt(m,i,a)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
-*
+cnstr_10(m,i,a) $(WT(m,i,a) and c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+cnstr_11(m,i,a) $(wt(m,i,a) and c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+**
 cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
 cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
-
-cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0'))..
-    P_X(m, i,'a0',XR) =e= 1; !! You could use P_X0('m1','i1','a0','3').fx = 1 (this is used when wanting the "variable" to be fixed!)
-
-cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0'))..
-    sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1;
-                            !!this ord shows forces the container to belong to one and only one block
-cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3'))..
-    sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
-
+*
+cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; 
+cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0'))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
+cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3'))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
+*
 cnstr_16(m,i) $(D(m,i) and wt(m,i,'a3')).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
 cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
 cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
-   
-cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1))..
-    P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
-cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and Wt(m,i,a1_1) and (ord(a1_1) = ord(a1)-1))..
-    P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
-
-******************************************************************************************************************************************************************************************
-***Conflict Free Constraints
+*   
+cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+*
+*******************************************************************************************************************************************************************************************
+****Conflict Free Constraints
 cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
-** wt(a1_1) and wt(a2_1) are computed here!            
-cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)
-    $((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..
-    U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -
-    (sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
-
-cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a))..
-    T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
-cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1))..
-    T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+* wt(a1_1) and wt(a2_1) are computed here!            
+cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
 *
-*!! absolute value is not considered in this constraint! what an stupid language, not letting to use abs in mip! WHY????
-cnstr_26(n,j,a2,YS,m,i,a1,a2_1)
-    $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..
-    (
-    3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +
-    abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))
-    ) * Mnum +
-    T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
-
-cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2))..
-    U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
-cnstr_28(m,i,a1, a1_1)
-    $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1))..
-    U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
 *
-******************************************************************************************************************************************************************************************
-**Time Constraints
-cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) =g= T_Q(m,i) + G_Q(m,i) + S_Q;
+*!! YS is used in here!
+cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+**
+*******************************************************************************************************************************************************************************************
+***Time Constraints
+cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
 cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
 cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
 
 cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
 cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
 
-cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..
-    T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
-cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..
-    T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
 
-cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..
-    T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
-cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..
-    T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
-cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1))..
-    T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
-
-cnstr_39(m,i,a,XR) $(C(m,i))..
-    x_position(m,i,a) - XR.val - Mnum *(1-P_X(m,i,a,XR)) =l= 0; 
-cnstr_39_1(m,i,a,XR) $(C(m,i))..
-    x_position(m,i,a) - XR.val + Mnum *(1-P_X(m,i,a,XR)) =g= 0;
-*cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
-**
-cnstr_40(m,i,a,YR) $(C(m,i))..
-    y_position(m,i,a) - YR.val  -Mnum *(1-P_Y(m,i,a,YR)) =l= 0;
-cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *(1-P_Y(m,i,a,YR)) =g= 0;
-
+cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1))..T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
 *
-cnstr_41(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2))..
-t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
+****** THE BIG-M TRICK FOR IF-CONDITIONAL
+*cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *(1-P_X(m,i,a,XR)) =l= 0; 
+*cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *(1-P_X(m,i,a,XR)) =g= 0;
+**cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+***
+*cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *(1-P_Y(m,i,a,YR)) =l= 0;
+*cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *(1-P_Y(m,i,a,YR)) =g= 0;
+****************************************
+*
+cnstr_41(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
+****************************************
+
+
 *cnstr_41_2(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) <= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) - Y_position(m,i,a1) + y_position(n,j,a2)) )/v;
 *cnstr_41_3(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) >= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) <= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (x_position(m,i,a1) - x_position(n,j,a2) - Y_position(m,i,a1) + y_position(n,j,a2)) )/v;
 *cnstr_41_4(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2) and ((x_position.l(m,i,a1) <= x_position.l(n,j,a2)) and  (Y_position.l(m,i,a1) >= y_position.l(n,j,a2)))).. t_agv(m,i,a1,n,j,a2) =e= ( (-x_position(m,i,a1) + x_position(n,j,a2) + Y_position(m,i,a1) - y_position(n,j,a2)) )/v;

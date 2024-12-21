@@ -1,0 +1,171 @@
+*************************************************************
+
+   NEOS Server Version 6.0
+   Job#     : 14969113
+   Password : NEBiRLkg
+   User     : amireza007
+   Solver   : milp:Gurobi:GAMS
+   Start    : 2024-12-18 09:18:33
+   End      : 2024-12-18 11:55:39
+   Host     : prod-sub-1.nes-server.org
+
+   Disclaimer:
+
+   This information is provided without any express or
+   implied warranty. In particular, there is no warranty
+   of any kind concerning the fitness of this
+   information for any particular purpose.
+
+   Announcements:
+*************************************************************
+Executed on prod-exec-7.neos-server.org
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 12/18/24 09:18:42 Page 1
+A branch and bound problem
+C o m p i l a t i o n
+
+
+
+
+COMPILATION TIME     =        0.001 SECONDS      3 MB  47.6.0 c2de9d6d LEX-LEG
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 12/18/24 09:18:42 Page 2
+A branch and bound problem
+Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 372
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 4.000E+05] - Zero values observed as well
+Matrix    [min, max] : [ 2.500E-01, 2.000E+07]
+
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 12/18/24 09:18:42 Page 3
+A branch and bound problem
+Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 372
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          46     SINGLE EQUATIONS      247,638
+BLOCKS OF VARIABLES          13     SINGLE VARIABLES        4,272  70 projected
+NON ZERO ELEMENTS    11,586,748     NON LINEAR N-Z         45,332
+CODE LENGTH              60,718     CONSTANT POOL              17     
+DISCRETE VARIABLES      2,926
+
+
+GENERATION TIME      =       18.240 SECONDS    955 MB  47.6.0 c2de9d6d LEX-LEG
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 12/18/24 09:18:42 Page 4
+A branch and bound problem
+Solution Report     SOLVE ConflictFreeSch Using MINLP From line 372
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   ConflictFreeSch     OBJECTIVE  obj
+     TYPE    MINLP               DIRECTION  MINIMIZE
+     SOLVER  GUROBI              FROM LINE  372
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      19 Infeasible - No Solution
+**** OBJECTIVE VALUE               NA
+
+ RESOURCE USAGE, LIMIT       9392.712 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+ EVALUATION ERRORS             NA             0
+Gurobi library version 11.0.2
+GRB_LICENSE_FILE = gurobi-client.lic
+GAMS/Gurobi Link license.
+Reading parameter(s) from "/var/lib/condor/execute/dir_1117887/gamsexec/gurobi.
+                                                                           opt"
+>>  iis 1
+Finished reading from "/var/lib/condor/execute/dir_1117887/gamsexec/gurobi.opt"
+--- GMO Q Extraction (ThreePass): 0.01s
+--- GMO setup time: 0.01
+Space for names approximately 10.98 Mb
+MIQCP status(4): Model was proven to be either infeasible or unbounded.
+Computing IIS...
+An IIS is a set equations and variables (ie a submodel) which is
+infeasible but becomes feasible if any one equation or variable bound
+is dropped.
+
+A problem may contain several independent IISs but only one will be
+found per run.
+Number of equations in the IIS: 52
+cnstr_3(m1,i2,l1) = 0
+cnstr_3(m1,i2,l2) = 0
+cnstr_3(m1,i2,l3) = 0
+cnstr_3(m2,i1,l1) = 0
+cnstr_3(m2,i1,l2) = 0
+cnstr_3(m2,i1,l3) = 0
+cnstr_3(m3,i1,l1) = 0
+cnstr_3(m3,i1,l2) = 0
+cnstr_3(m3,i1,l3) = 0
+cnstr_3(m3,i3,l1) = 0
+cnstr_3(m3,i3,l2) = 0
+cnstr_3(m3,i3,l3) = 0
+
+cnstr_4(l1) = 1
+cnstr_4(l2) = 1
+cnstr_4(l3) = 1
+
+cnstr_7(m1,i2) = 1
+cnstr_7(m2,i1) = 1
+cnstr_7(m3,i1) = 1
+cnstr_7(m3,i3) = 1
+
+cnstr_8(m2,i2,m3,i3,13) < 1e+07
+cnstr_8(m3,i2,m2,i1,17) < 1e+07
+cnstr_8(m3,i2,m3,i3,17) < 1e+07
+
+cnstr_8_1(m1,i1,m1,i2,5) > -1e+07
+cnstr_8_1(m1,i1,m2,i1,11) > -1e+07
+cnstr_8_1(m1,i1,m3,i1,19) > -1e+07
+cnstr_8_1(m1,i1,m3,i3,21) > -1e+07
+cnstr_8_1(m2,i2,m1,i2,5) > -1e+07
+cnstr_8_1(m2,i2,m2,i1,11) > -1e+07
+cnstr_8_1(m2,i2,m3,i1,19) > -1e+07
+cnstr_8_1(m3,i2,m1,i2,5) > -1e+07
+cnstr_8_1(m3,i2,m3,i1,19) > -1e+07
+
+cnstr_10(m1,i1,a4) = 1
+cnstr_10(m2,i2,a3) = 1
+cnstr_10(m3,i2,a4) = 1
+cnstr_10(m3,i3,a0) = 1
+
+cnstr_14(m1,i2,5) = 1
+cnstr_14(m2,i1,11) = 1
+cnstr_14(m3,i1,19) = 1
+cnstr_14(m3,i3,21) = 1
+
+cnstr_18(m1,i1,3) = 1
+cnstr_18(m2,i2,13) = 1
+cnstr_18(m3,i2,17) = 1
+
+cnstr_21(m1,i1,a4,a3,3) = 0
+cnstr_21(m2,i2,a4,a3,5) = 0
+cnstr_21(m2,i2,a4,a3,13) = 0
+cnstr_21(m3,i2,a4,a3,17) = 0
+
+cnstr_39(m2,i1,a0,11) < 1e+07
+cnstr_39(m2,i2,a4,11) < 1e+07
+cnstr_39(m2,i2,a4,13) < 1e+07
+
+cnstr_39_1(m2,i1,a0,17) > -9.99998e+06
+cnstr_39_1(m2,i2,a4,13) > -9.99999e+06
+cnstr_39_1(m2,i2,a4,19) > -9.99998e+06
+Number of variables in the IIS: 0
+
+No solution returned
+
+
+EXECUTION TIME       =     9416.444 SECONDS    955 MB  47.6.0 c2de9d6d LEX-LEG
+
+
+USER: NEOS Server License prod-exec-7.neos-server.orgS241211/0001AB-GEN
+      mac@2c:ea:7f:71:ac:18                                     DCE1890
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      /var/lib/condor/execute/dir_1117887/gamsexec/MODEL.gms
+Output     /var/lib/condor/execute/dir_1117887/gamsexec/solve.lst
