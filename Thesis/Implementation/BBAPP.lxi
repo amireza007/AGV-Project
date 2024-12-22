@@ -1,56 +1,35 @@
 B 3 C o m p i l a t i o n
-B 430 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 343
-D 433 ADRP1
-D 438 ADRP3
-D 443 cnstr_2
-D 454 cnstr_3
-D 465 cnstr_4
-D 474 cnstr_5
-D 483 cnstr_6
-D 492 cnstr_7
-D 503 cnstr_10
-D 514 cnstr_11
-D 525 cnstr_12
-D 534 cnstr_13
-D 545 cnstr_14
-D 556 cnstr_15
-D 565 cnstr_19
-D 576 cnstr_16
-D 587 cnstr_17
-D 596 cnstr_18
-D 605 cnstr_20
-D 616 cnstr_21
-D 627 cnstr_22
-D 638 cnstr_23
-D 649 cnstr_24
-D 660 cnstr_25
-D 671 cnstr_26
-D 682 cnstr_27
-D 693 cnstr_28
-D 704 cnstr_29
-D 715 cnstr_30
-D 726 cnstr_31
-D 731 cnstr_32
-D 742 cnstr_33
-D 751 cnstr_34
-D 762 cnstr_35
-D 773 cnstr_36
-D 784 cnstr_37
-D 795 cnstr_38
-D 806 cnstr_41
-B 818 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 343
-E 821 z
-E 840 U_AGV
-E 1386 U_QC
-E 1441 P_X
-E 62183 P_Y
-E 62205 T_Q
-E 63116 T_Y
-E 63138 T_start
-E 63400 t_AGV
-E 63458 X_position
-E 63678 Y_position
-E 63898 obj
-E 63905 slack1
-B 63913 Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 343
-B 63924 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 343
+B 427 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 340
+D 430 ADRP1
+D 435 ADRP3
+D 440 cnstr_2
+D 451 cnstr_3
+D 462 cnstr_4
+D 471 cnstr_5
+D 480 cnstr_6
+D 489 cnstr_7
+D 500 cnstr_8
+D 511 cnstr_8_1
+D 522 cnstr_10
+D 533 cnstr_11
+D 544 cnstr_12
+D 553 cnstr_13
+D 564 cnstr_14
+D 575 cnstr_15
+D 584 cnstr_19
+D 595 cnstr_16
+D 606 cnstr_17
+D 615 cnstr_18
+D 624 cnstr_20
+D 635 cnstr_21
+D 646 cnstr_22
+D 657 cnstr_23
+D 669 cnstr_24
+B 675 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 340
+E 678 z
+E 697 U_AGV
+E 3355 P_X
+E 64139 P_Y
+E 64161 obj
+E 64168 slack1
+B 64176 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 340
