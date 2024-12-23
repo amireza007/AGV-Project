@@ -170,7 +170,6 @@ Y_position.up(m,i,a) $(wt(m,i,a)) = 23;
 Y_position.lo(m,i,a) $(wt(m,i,a)) = 1;
 
 
-* set the upper and lower bound of each variable, including binary variable (what a horrible language, eh??)
 
 Equations
                                 
@@ -210,9 +209,9 @@ Equations
         cnstr_25(m,i,n,j,a,a)       "C, WH"
 *        
 **cnstr_26 need abs! So we need two separate constraints for dealing with abs in mip.
-        cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  !! for both alpha = 0 and alpha =  3
+        cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  
         cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
-        cnstr_28(m,i,a, a)          "C,a"      !! alpha>2
+        cnstr_28(m,i,a, a)          "C,a"      
 **
 ****Time Constraints
         cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
@@ -222,8 +221,8 @@ Equations
         cnstr_33(m,i)               "L"
         cnstr_34(m,i,m,i)           "D,L"
         cnstr_35(m,i,m,i)           "L,D"
-        cnstr_36(m,i,a)             "D,a"      !!alpha=4 and 1
-        cnstr_37(m,i,a)             "D,a"      !!alpha=1 and 1
+        cnstr_36(m,i,a)             "D,a"      
+        cnstr_37(m,i,a)             "D,a"      
         cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
 *        cnstr_39(m,i,a,XR)          "C,a,XR"
 *        cnstr_39_1(m,i,a,XR)          "C,a,XR"
@@ -236,9 +235,6 @@ Equations
 *        cnstr_41_4(m,i,a,m,i,a)
         ;
 
-!! God willingly, obj become either one of these :))))
-*ADRP2.. obj =g= T_Y('m3','i%d%') + G_Y('m3','i%d%') ;
-
 ADRP3(Cd).. CT(Cd) =e= max(T_Q(Cd)+G_Q(cd), T_Y(Cd)+G_Y(Cd));
 * > T_Y.l('m4','i%d%') + G_Y.l('m4','i%d%')
 ADRP1.. obj  =e= smax(Cd, CT(Cd));
@@ -248,10 +244,8 @@ ADRP1.. obj  =e= smax(Cd, CT(Cd));
 *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
 cnstr_2(m,i) $(C(m,i)).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
 
-cnstr_3(m,i,li) $(C(m,i))..
-    sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) -
-    sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) =e= 0;
-
+cnstr_3(m,i,li) $(C(m,i))..sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) -sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) =e= 0; 
+ 
 cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
 cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
 
