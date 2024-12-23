@@ -1,35 +1,56 @@
 B 3 C o m p i l a t i o n
-B 427 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 340
+B 427 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 342
 D 430 ADRP1
 D 435 ADRP3
-D 440 cnstr_2
-D 451 cnstr_3
-D 462 cnstr_4
-D 471 cnstr_5
-D 480 cnstr_6
-D 489 cnstr_7
-D 500 cnstr_8
-D 511 cnstr_8_1
-D 522 cnstr_10
-D 533 cnstr_11
-D 544 cnstr_12
-D 553 cnstr_13
-D 564 cnstr_14
-D 575 cnstr_15
-D 584 cnstr_19
-D 595 cnstr_16
-D 606 cnstr_17
-D 615 cnstr_18
-D 624 cnstr_20
-D 635 cnstr_21
-D 646 cnstr_22
-D 657 cnstr_23
-D 669 cnstr_24
-B 675 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 340
-E 678 z
-E 697 U_AGV
-E 3355 P_X
-E 64139 P_Y
-E 64161 obj
-E 64168 slack1
-B 64176 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 340
+D 444 cnstr_2
+D 455 cnstr_3
+D 466 cnstr_4
+D 475 cnstr_5
+D 484 cnstr_6
+D 493 cnstr_7
+D 504 cnstr_10
+D 515 cnstr_11
+D 526 cnstr_12
+D 535 cnstr_13
+D 546 cnstr_14
+D 557 cnstr_15
+D 566 cnstr_19
+D 577 cnstr_16
+D 588 cnstr_17
+D 597 cnstr_18
+D 606 cnstr_20
+D 617 cnstr_21
+D 628 cnstr_22
+D 639 cnstr_23
+D 650 cnstr_24
+D 661 cnstr_25
+D 672 cnstr_26
+D 683 cnstr_27
+D 694 cnstr_28
+D 705 cnstr_29
+D 716 cnstr_30
+D 727 cnstr_31
+D 732 cnstr_32
+D 743 cnstr_33
+D 752 cnstr_34
+D 763 cnstr_35
+D 774 cnstr_36
+D 785 cnstr_37
+D 796 cnstr_38
+D 807 cnstr_41
+B 819 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 342
+E 822 z
+E 841 U_AGV
+E 1387 U_QC
+E 1442 P_X
+E 62184 P_Y
+E 62206 T_Q
+E 63118 T_Y
+E 63141 T_start
+E 63403 CT
+E 63421 t_AGV
+E 63479 X_position
+E 63699 Y_position
+E 63919 obj
+B 63927 Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 342
+B 63938 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 342

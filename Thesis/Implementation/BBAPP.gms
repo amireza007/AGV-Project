@@ -4,8 +4,9 @@ $ONEMPTY
 *cnstr_15 and cnstr_19 are infeasible and I hypothesize it's due to not setting initial virtual positions!
 
 !!longest qc operation (or job in the problem)
-$set d 3
-
+$set d1 2
+$set d2 2
+$set d3 3
 !! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. I think the capacity of each block is 5 (bc of number of HPs)
 !! However, for the first experiment:
 !! blcoks = 4, QC = 3, AGVs = 3, containers = 7, ships = 3
@@ -22,21 +23,21 @@ Scalars
 
 Sets
 *        i0 "i with i0" /i0*i%d%/
-        i "index" /i0*i%d%/
+        i "index" /i0*i3/
         i1(i) /#i/
         j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
-    
-        id(i) "last container" /i%d%/
+        
+*        id(i) "last container" /i%d%/
         
 *        m0 "m including virtual m0" /m0, m1, m2, m3/
         m   "QC index" /m0,m1,m2,m3/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
 
         L(m,i)   /m1.i1 , m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
-        D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i%d%/ !! these are in the ships, waiting to be taking to ASCs
+        D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i%d3%/ !! these are in the ships, waiting to be taking to ASCs
         
-        C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d%/ !! this is in data file, this should contain 0 node, too!
-        Cd(m,i) "the last QC container job" /m3.i%d%/
+        C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d3%/ !! this is in data file, this should contain 0 node, too!
+        Cd(m,i) "the last QC container job for all QCs" /m1.i%d1%, m2.i%d2%, m3.i%d3%/
         li "AGV index" /l1*l3/
         Bs(li) "set of all agvs" /#li/
         
@@ -55,7 +56,7 @@ Sets
 !! O_set(m,i,XR) below shows the allowed position for QC to be able to place its i-th container
 *       o_set(m,i,XR) /m1.(i1*i%d%).(3,5,7), m2.(i1*i%d%).(11,13,15), m3.(i1*i%d%).(17,19,21), m4.(i1*i%d%).(23,25,27)/
         
-        o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.17, m3.i2.19, m3.i%d%.21/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
+        o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.17, m3.i2.19, m3.i%d3%.21/ !! For example if we have m1.i1 m1.i1(we know that m1.i1 is the same as m2.i1) o(m1.i1) = o(m1.i1) 
 *TODO 1
 !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
         A_L_set(XR) /1,7,13,19/
@@ -96,9 +97,10 @@ set XR2(XR) /#XR/;
 set x_t(XR) /#XR/;
 
 Parameters
-        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2.i2 13, m3.i1 17, m3.i2 19, m3.i%d% 21/ 
+        o1(m,i) "merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2.i2 13, m3.i1 17, m3.i2 19, m3.i%d3% 21/ 
         G_Q(m,i) /#C 40/ !! seems to be constant for all container jobs, bc of const 24
         G_Y(m,i) /#C 40/
+
 ******************************************************** The A_L and A_R are causing infeasiblity!
         A_Lp(m,i) / /
         A_Rp(m,i) / /
@@ -123,6 +125,7 @@ Positive Variables
         T_Q(m,i) "start time of QC" 
         T_Y(m,i) "Start time of agv putting cont on ASC"
         T_start(m,i,a) "Start of agv for action (m,i,a)"
+        CT(m,i)  "Op. completion time of for each QC m"
 
 *       Auxiliary Variables
         t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
@@ -173,7 +176,7 @@ Equations
                                 
         ADRP1                       "AGV Dispatching and Routing Problem"
 *        ADRP2                       "AGV Dispatching and Routing Problem"
-        ADRP3
+        ADRP3(m,i)
 *       Job assignment constraints
         cnstr_2(m,i)               
         cnstr_3(m,i,li)             "C,B"      
@@ -183,8 +186,8 @@ Equations
         cnstr_7(m,i)                "D"         
 *
 **       LOcation constraints of AGV acitons
-        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
-        cnstr_8_1(m,i,n,j,XR)         "C,C,XR"        
+*        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
+*        cnstr_8_1(m,i,n,j,XR)         "C,C,XR"        
 *        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
 *        cnstr_9_1(m,i,n,j,YR)         "C,C,YR"    
         cnstr_10(m,i,a)             "C,a"     
@@ -234,13 +237,11 @@ Equations
         ;
 
 !! God willingly, obj become either one of these :))))
-ADRP1.. obj  =g= 1 ;
 *ADRP2.. obj =g= T_Y('m3','i%d%') + G_Y('m3','i%d%') ;
 
-variable obj1;
-ADRP3.. slack1 =g= 0;
+ADRP3(Cd).. CT(Cd) =e= max(T_Q(Cd)+G_Q(cd), T_Y(Cd)+G_Y(Cd));
 * > T_Y.l('m4','i%d%') + G_Y.l('m4','i%d%')
-
+ADRP1.. obj  =e= smax(Cd, CT(Cd));
 
 **Job assinment constraints
 *as soon as you include conditional $(C(m,i)), you ignore virtual node!
@@ -261,8 +262,8 @@ cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'
 ***Location constraints of AGV acitons
 ***** THE BIG-M TRICK FOR IF-CONDITIONAL
 ** However, this four constraints are making the model infeasible. I hopothisize that `1- sum(li, z(m,i,n,j,li)` would become negative!!
-cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;  
-cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;  
+*cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;  
+*cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;  
 *cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
 *cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
 ****************************************
