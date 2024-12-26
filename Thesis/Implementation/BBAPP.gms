@@ -185,8 +185,8 @@ Equations
         cnstr_7(m,i)                "D"         
 *
 **       LOcation constraints of AGV acitons
-*        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
-*        cnstr_8_1(m,i,n,j,XR)         "C,C,XR"        
+        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
+        cnstr_8_1(m,i,n,j,XR)         "C,C,XR"        
 *        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
 *        cnstr_9_1(m,i,n,j,YR)         "C,C,YR"    
         cnstr_10(m,i,a)             "C,a"     
@@ -203,32 +203,32 @@ Equations
         cnstr_21(m,i,a,a,XR)        "WV,XR"
 ***
 ***Conflict Free Constraints
-        cnstr_22(m,i,n,j)           "C,C"
+*        cnstr_22(m,i,n,j)           "C,C"
         cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR"
-        cnstr_24(m,i,n,j,a)         "C, WH"
-        cnstr_25(m,i,n,j,a,a)       "C, WH"
+*        cnstr_24(m,i,n,j,a)         "C, WH"
+*        cnstr_25(m,i,n,j,a,a)       "C, WH"
 *        
 **cnstr_26 need abs! So we need two separate constraints for dealing with abs in mip.
-        cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  
-        cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
-        cnstr_28(m,i,a, a)          "C,a"      
+*        cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"  
+*        cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+*        cnstr_28(m,i,a, a)          "C,a"      
 **
 ****Time Constraints
-        cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
-        cnstr_30(m,i,m,i)           "psi_1"
-        cnstr_31(m,i,m,i)           "psi_2"
-        cnstr_32(m,i)               "D"
-        cnstr_33(m,i)               "L"
-        cnstr_34(m,i,m,i)           "D,L"
-        cnstr_35(m,i,m,i)           "L,D"
-        cnstr_36(m,i,a)             "D,a"      
-        cnstr_37(m,i,a)             "D,a"      
-        cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
+*        cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
+*        cnstr_30(m,i,m,i)           "psi_1"
+*        cnstr_31(m,i,m,i)           "psi_2"
+*        cnstr_32(m,i)               "D"
+*        cnstr_33(m,i)               "L"
+*        cnstr_34(m,i,m,i)           "D,L"
+*        cnstr_35(m,i,m,i)           "L,D"
+*        cnstr_36(m,i,a)             "D,a"      
+*        cnstr_37(m,i,a)             "D,a"      
+*        cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
 *        cnstr_39(m,i,a,XR)          "C,a,XR"
 *        cnstr_39_1(m,i,a,XR)          "C,a,XR"
 *        cnstr_40(m,i,a,YR)          "C,a,YR"
 *        cnstr_40_1(m,i,a,YR)          "C,a,YR"
-        cnstr_41(m,i,a,m,i,a)
+*        cnstr_41(m,i,a,m,i,a)
         
 *        cnstr_41_2(m,i,a,m,i,a)
 *        cnstr_41_3(m,i,a,m,i,a)
@@ -256,15 +256,15 @@ cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'
 ***Location constraints of AGV acitons
 ***** THE BIG-M TRICK FOR IF-CONDITIONAL
 ** However, this four constraints are making the model infeasible. I hopothisize that `1- sum(li, z(m,i,n,j,li)` would become negative!!
-*cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;  
-*cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;  
+cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;  
+cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;  
 *cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
 *cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
 ****************************************
 
 cnstr_10(m,i,a) $(WT(m,i,a) and c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
 cnstr_11(m,i,a) $(wt(m,i,a) and c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
-**
+***
 cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
 cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
 *
@@ -277,48 +277,48 @@ cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
 cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
 *   
 cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
-cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
-*
-*******************************************************************************************************************************************************************************************
-****Conflict Free Constraints
-cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
-* wt(a1_1) and wt(a2_1) are computed here!            
-cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
-*
-cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
-cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
-*
-*!! YS is used in here!
-cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
-cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
-cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+cnstr_21(m, i, a1, a1_1, XR) $(WV(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
 **
-*******************************************************************************************************************************************************************************************
-***Time Constraints
-cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
-cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
-cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
-
-cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
-cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
-
-cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
-cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
-
-cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
-cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
-cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1))..T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
-*
-****** THE BIG-M TRICK FOR IF-CONDITIONAL
-*cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *(1-P_X(m,i,a,XR)) =l= 0; 
-*cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *(1-P_X(m,i,a,XR)) =g= 0;
-**cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+********************************************************************************************************************************************************************************************
+*****Conflict Free Constraints
+*cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+** wt(a1_1) and wt(a2_1) are computed here!            
+cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1)) =g= 0;
+**
+*cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+*cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+**
+**!! YS is used in here!
+*cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+*cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+*cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
 ***
-*cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *(1-P_Y(m,i,a,YR)) =l= 0;
-*cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *(1-P_Y(m,i,a,YR)) =g= 0;
-****************************************
+********************************************************************************************************************************************************************************************
+****Time Constraints
+*cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
+*cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+*cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
 *
-cnstr_41(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
+*cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+*cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+*
+*cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+*cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+*
+*cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+*cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+*cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1))..T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+**
+******* THE BIG-M TRICK FOR IF-CONDITIONAL
+**cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *(1-P_X(m,i,a,XR)) =l= 0; 
+**cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *(1-P_X(m,i,a,XR)) =g= 0;
+***cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+****
+**cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *(1-P_Y(m,i,a,YR)) =l= 0;
+**cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *(1-P_Y(m,i,a,YR)) =g= 0;
+*****************************************
+**
+*cnstr_41(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
 ****************************************
 
 

@@ -1,4 +1,4 @@
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/23/24 13:01:41 Page 1
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/26/24 19:50:36 Page 1
 A branch and bound problem
 C o m p i l a t i o n
 
@@ -184,8 +184,8 @@ C o m p i l a t i o n
  185          cnstr_7(m,i)                "D"
  186  *
  187  **       LOcation constraints of AGV acitons
- 188  *        cnstr_8(m,i,n,j,XR)         "C,C,XR"
- 189  *        cnstr_8_1(m,i,n,j,XR)         "C,C,XR"
+ 188          cnstr_8(m,i,n,j,XR)         "C,C,XR"
+ 189          cnstr_8_1(m,i,n,j,XR)         "C,C,XR"
  190  *        cnstr_9(m,i,n,j,YR)         "C,C,YR"
  191  *        cnstr_9_1(m,i,n,j,YR)         "C,C,YR"
  192          cnstr_10(m,i,a)             "C,a"
@@ -202,32 +202,32 @@ C o m p i l a t i o n
  203          cnstr_21(m,i,a,a,XR)        "WV,XR"
  204  ***
  205  ***Conflict Free Constraints
- 206          cnstr_22(m,i,n,j)           "C,C"
+ 206  *        cnstr_22(m,i,n,j)           "C,C"
  207          cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR"
- 208          cnstr_24(m,i,n,j,a)         "C, WH"
- 209          cnstr_25(m,i,n,j,a,a)       "C, WH"
+ 208  *        cnstr_24(m,i,n,j,a)         "C, WH"
+ 209  *        cnstr_25(m,i,n,j,a,a)       "C, WH"
  210  *
  211  **cnstr_26 need abs! So we need two separate constraints for dealing with abs in mip.
- 212          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"
- 213          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
- 214          cnstr_28(m,i,a, a)          "C,a"
+ 212  *        cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"
+ 213  *        cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+ 214  *        cnstr_28(m,i,a, a)          "C,a"
  215  **
  216  ****Time Constraints
- 217          cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
- 218          cnstr_30(m,i,m,i)           "psi_1"
- 219          cnstr_31(m,i,m,i)           "psi_2"
- 220          cnstr_32(m,i)               "D"
- 221          cnstr_33(m,i)               "L"
- 222          cnstr_34(m,i,m,i)           "D,L"
- 223          cnstr_35(m,i,m,i)           "L,D"
- 224          cnstr_36(m,i,a)             "D,a"
- 225          cnstr_37(m,i,a)             "D,a"
- 226          cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
+ 217  *        cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
+ 218  *        cnstr_30(m,i,m,i)           "psi_1"
+ 219  *        cnstr_31(m,i,m,i)           "psi_2"
+ 220  *        cnstr_32(m,i)               "D"
+ 221  *        cnstr_33(m,i)               "L"
+ 222  *        cnstr_34(m,i,m,i)           "D,L"
+ 223  *        cnstr_35(m,i,m,i)           "L,D"
+ 224  *        cnstr_36(m,i,a)             "D,a"
+ 225  *        cnstr_37(m,i,a)             "D,a"
+ 226  *        cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
  227  *        cnstr_39(m,i,a,XR)          "C,a,XR"
  228  *        cnstr_39_1(m,i,a,XR)          "C,a,XR"
  229  *        cnstr_40(m,i,a,YR)          "C,a,YR"
  230  *        cnstr_40_1(m,i,a,YR)          "C,a,YR"
- 231          cnstr_41(m,i,a,m,i,a)
+ 231  *        cnstr_41(m,i,a,m,i,a)
  232   
  233  *        cnstr_41_2(m,i,a,m,i,a)
  234  *        cnstr_41_3(m,i,a,m,i,a)
@@ -255,15 +255,15 @@ C o m p i l a t i o n
  256  ***Location constraints of AGV acitons
  257  ***** THE BIG-M TRICK FOR IF-CONDITIONAL
  258  ** However, this four constraints are making the model infeasible. I hopothisize that `1- sum(li, z(m,i,n,j,li)` would become negative!!
- 259  *cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;
- 260  *cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;
+ 259  cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;
+ 260  cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;
  261  *cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;
  262  *cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;
  263  ****************************************
  264   
  265  cnstr_10(m,i,a) $(WT(m,i,a) and c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
  266  cnstr_11(m,i,a) $(wt(m,i,a) and c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
- 267  **
+ 267  ***
  268  cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
  269  cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
  270  *
@@ -276,48 +276,48 @@ C o m p i l a t i o n
  277  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
  278  *
  279  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
- 280  cnstr_21(m, i, a1, a1_1, XR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
- 281  *
- 282  *******************************************************************************************************************************************************************************************
- 283  ****Conflict Free Constraints
- 284  cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
- 285  * wt(a1_1) and wt(a2_1) are computed here!
- 286  cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
- 287  *
- 288  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
- 289  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
- 290  *
- 291  *!! YS is used in here!
- 292  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
- 293  cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
- 294  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
- 295  **
- 296  *******************************************************************************************************************************************************************************************
- 297  ***Time Constraints
- 298  cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
- 299  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
- 300  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
- 301   
- 302  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
- 303  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
- 304   
- 305  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 306  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 307   
- 308  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
- 309  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
- 310  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1))..T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
- 311  *
- 312  ****** THE BIG-M TRICK FOR IF-CONDITIONAL
- 313  *cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *(1-P_X(m,i,a,XR)) =l= 0;
- 314  *cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *(1-P_X(m,i,a,XR)) =g= 0;
- 315  **cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
- 316  ***
- 317  *cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *(1-P_Y(m,i,a,YR)) =l= 0;
- 318  *cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *(1-P_Y(m,i,a,YR)) =g= 0;
- 319  ****************************************
- 320  *
- 321  cnstr_41(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
+ 280  cnstr_21(m, i, a1, a1_1, XR) $(WV(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+ 281  **
+ 282  ********************************************************************************************************************************************************************************************
+ 283  *****Conflict Free Constraints
+ 284  *cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 285  ** wt(a1_1) and wt(a2_1) are computed here!
+ 286  cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) - sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1)) =g= 0;
+ 287  **
+ 288  *cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 289  *cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 290  **
+ 291  **!! YS is used in here!
+ 292  *cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 293  *cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 294  *cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 295  ***
+ 296  ********************************************************************************************************************************************************************************************
+ 297  ****Time Constraints
+ 298  *cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
+ 299  *cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+ 300  *cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+ 301  *
+ 302  *cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+ 303  *cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 304  *
+ 305  *cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 306  *cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 307  *
+ 308  *cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+ 309  *cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+ 310  *cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1))..T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+ 311  **
+ 312  ******* THE BIG-M TRICK FOR IF-CONDITIONAL
+ 313  **cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *(1-P_X(m,i,a,XR)) =l= 0;
+ 314  **cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *(1-P_X(m,i,a,XR)) =g= 0;
+ 315  ***cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) =e= YR.val  $(P_y.l(m,i,a,YR) = 1); !! This constraint is similar to the declaration of cnstr_8 and cnstr_9
+ 316  ****
+ 317  **cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *(1-P_Y(m,i,a,YR)) =l= 0;
+ 318  **cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *(1-P_Y(m,i,a,YR)) =g= 0;
+ 319  *****************************************
+ 320  **
+ 321  *cnstr_41(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
  322  ****************************************
  323   
  324   
@@ -416,7 +416,7 @@ C o m p i l a t i o n
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/23/24 13:01:41 Page 2
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/26/24 19:50:36 Page 2
 A branch and bound problem
 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 336
 
@@ -493,6 +493,28 @@ cnstr_7(m2,i1)..  z(m2,i1,m0,i0,l1) + z(m2,i1,m0,i0,l2) + z(m2,i1,m0,i0,l3) + z(
 cnstr_7(m3,i1)..  z(m3,i1,m0,i0,l1) + z(m3,i1,m0,i0,l2) + z(m3,i1,m0,i0,l3) + z(m3,i1,m1,i1,l1) + z(m3,i1,m1,i1,l2) + z(m3,i1,m1,i1,l3) + z(m3,i1,m2,i2,l1) + z(m3,i1,m2,i2,l2) + z(m3,i1,m2,i2,l3) + z(m3,i1,m3,i2,l1) + z(m3,i1,m3,i2,l2) + z(m3,i1,m3,i2,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 REMAINING ENTRY SKIPPED
+
+
+---- cnstr_8  =L=  C,C,XR
+
+cnstr_8(m1,i1,m1,i1,1)..  10000000*z(m1,i1,m1,i1,l1) + 10000000*z(m1,i1,m1,i1,l2) + 10000000*z(m1,i1,m1,i1,l3) - P_X(m1,i1,a0,1) + P_X(m1,i1,a4,1) =L= 10000000 ; (LHS = 0)
+     
+cnstr_8(m1,i1,m1,i1,2)..  10000000*z(m1,i1,m1,i1,l1) + 10000000*z(m1,i1,m1,i1,l2) + 10000000*z(m1,i1,m1,i1,l3) - P_X(m1,i1,a0,2) + P_X(m1,i1,a4,2) =L= 10000000 ; (LHS = 0)
+     
+cnstr_8(m1,i1,m1,i1,3)..  10000000*z(m1,i1,m1,i1,l1) + 10000000*z(m1,i1,m1,i1,l2) + 10000000*z(m1,i1,m1,i1,l3) - P_X(m1,i1,a0,3) + P_X(m1,i1,a4,3) =L= 10000000 ; (LHS = 0)
+     
+REMAINING 1124 ENTRIES SKIPPED
+
+
+---- cnstr_8_1  =G=  C,C,XR
+
+cnstr_8_1(m1,i1,m1,i1,1)..  - 10000000*z(m1,i1,m1,i1,l1) - 10000000*z(m1,i1,m1,i1,l2) - 10000000*z(m1,i1,m1,i1,l3) - P_X(m1,i1,a0,1) + P_X(m1,i1,a4,1) =G= -10000000 ; (LHS = 0)
+     
+cnstr_8_1(m1,i1,m1,i1,2)..  - 10000000*z(m1,i1,m1,i1,l1) - 10000000*z(m1,i1,m1,i1,l2) - 10000000*z(m1,i1,m1,i1,l3) - P_X(m1,i1,a0,2) + P_X(m1,i1,a4,2) =G= -10000000 ; (LHS = 0)
+     
+cnstr_8_1(m1,i1,m1,i1,3)..  - 10000000*z(m1,i1,m1,i1,l1) - 10000000*z(m1,i1,m1,i1,l2) - 10000000*z(m1,i1,m1,i1,l3) - P_X(m1,i1,a0,3) + P_X(m1,i1,a4,3) =G= -10000000 ; (LHS = 0)
+     
+REMAINING 1124 ENTRIES SKIPPED
 
 
 ---- cnstr_10  =E=  C,a
@@ -610,24 +632,13 @@ REMAINING 480 ENTRIES SKIPPED
 
 ---- cnstr_21  =E=  WV,XR
 
-cnstr_21(m1,i1,a1,a0,1)..  - P_X(m1,i1,a0,1) + P_X(m1,i1,a1,1) =E= 0 ; (LHS = 0)
+cnstr_21(m1,i1,a2,a1,1)..  - P_X(m1,i1,a1,1) + P_X(m1,i1,a2,1) =E= 0 ; (LHS = 0)
      
-cnstr_21(m1,i1,a1,a0,2)..  - P_X(m1,i1,a0,2) + P_X(m1,i1,a1,2) =E= 0 ; (LHS = 0)
+cnstr_21(m1,i1,a2,a1,2)..  - P_X(m1,i1,a1,2) + P_X(m1,i1,a2,2) =E= 0 ; (LHS = 0)
      
-cnstr_21(m1,i1,a1,a0,3)..  - P_X(m1,i1,a0,3) + P_X(m1,i1,a1,3) =E= 0 ; (LHS = 0)
+cnstr_21(m1,i1,a2,a1,3)..  - P_X(m1,i1,a1,3) + P_X(m1,i1,a2,3) =E= 0 ; (LHS = 0)
      
-REMAINING 480 ENTRIES SKIPPED
-
-
----- cnstr_22  =G=  C,C
-
-cnstr_22(m1,i1,m1,i1)..  - z(m1,i1,m1,i1,l1) - z(m1,i1,m1,i1,l2) - z(m1,i1,m1,i1,l3) + U_AGV(m1,i1,a4,m1,i1,a1) =G= 0 ; (LHS = 0)
-     
-cnstr_22(m1,i1,m1,i2)..  - z(m1,i1,m1,i2,l1) - z(m1,i1,m1,i2,l2) - z(m1,i1,m1,i2,l3) + U_AGV(m1,i1,a4,m1,i2,a1) =G= 0 ; (LHS = 0)
-     
-cnstr_22(m1,i1,m2,i1)..  - z(m1,i1,m2,i1,l1) - z(m1,i1,m2,i1,l2) - z(m1,i1,m2,i1,l3) + U_AGV(m1,i1,a4,m2,i1,a1) =G= 0 ; (LHS = 0)
-     
-REMAINING 46 ENTRIES SKIPPED
+REMAINING 158 ENTRIES SKIPPED
 
 
 ---- cnstr_23  =G=  WH,WH,YR,XR
@@ -640,13 +651,7 @@ cnstr_23(m1,i1,a1,m1,i1,a1,1,3,a0,a0)..  2*U_AGV(m1,i1,a1,m1,i1,a1) - 2*P_Y(m1,i
      
 REMAINING 233286 ENTRIES SKIPPED
 
-**** Exec Error at line 286: Execution halted: Triggered by pending CtrlC event
-
----- cnstr_24  =G=  C, WH
-
-                NONE
-
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/23/24 13:01:41 Page 3
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/26/24 19:50:36 Page 3
 A branch and bound problem
 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 336
 
@@ -3332,9 +3337,22 @@ REMAINING 438 ENTRIES SKIPPED
 
 P_X(m1,i1,a0,1)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_8(m1,i1,m1,i1,1)
+       -1       cnstr_8(m1,i2,m1,i1,1)
+       -1       cnstr_8(m2,i1,m1,i1,1)
+       -1       cnstr_8(m2,i2,m1,i1,1)
+       -1       cnstr_8(m3,i1,m1,i1,1)
+       -1       cnstr_8(m3,i2,m1,i1,1)
+       -1       cnstr_8(m3,i3,m1,i1,1)
+       -1       cnstr_8_1(m1,i1,m1,i1,1)
+       -1       cnstr_8_1(m1,i2,m1,i1,1)
+       -1       cnstr_8_1(m2,i1,m1,i1,1)
+       -1       cnstr_8_1(m2,i2,m1,i1,1)
+       -1       cnstr_8_1(m3,i1,m1,i1,1)
+       -1       cnstr_8_1(m3,i2,m1,i1,1)
+       -1       cnstr_8_1(m3,i3,m1,i1,1)
         1       cnstr_10(m1,i1,a0)
         1       cnstr_15(m1,i1)
-       -1       cnstr_21(m1,i1,a1,a0,1)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,1,a0,a2)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,2,a0,a2)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,3,a0,a2)
@@ -24498,9 +24516,22 @@ P_X(m1,i1,a0,1)
 
 P_X(m1,i1,a0,2)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_8(m1,i1,m1,i1,2)
+       -1       cnstr_8(m1,i2,m1,i1,2)
+       -1       cnstr_8(m2,i1,m1,i1,2)
+       -1       cnstr_8(m2,i2,m1,i1,2)
+       -1       cnstr_8(m3,i1,m1,i1,2)
+       -1       cnstr_8(m3,i2,m1,i1,2)
+       -1       cnstr_8(m3,i3,m1,i1,2)
+       -1       cnstr_8_1(m1,i1,m1,i1,2)
+       -1       cnstr_8_1(m1,i2,m1,i1,2)
+       -1       cnstr_8_1(m2,i1,m1,i1,2)
+       -1       cnstr_8_1(m2,i2,m1,i1,2)
+       -1       cnstr_8_1(m3,i1,m1,i1,2)
+       -1       cnstr_8_1(m3,i2,m1,i1,2)
+       -1       cnstr_8_1(m3,i3,m1,i1,2)
         1       cnstr_10(m1,i1,a0)
         1       cnstr_15(m1,i1)
-       -1       cnstr_21(m1,i1,a1,a0,2)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,2,a0,a2)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,3,a0,a2)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,4,a0,a2)
@@ -44744,9 +44775,22 @@ P_X(m1,i1,a0,2)
 
 P_X(m1,i1,a0,3)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cnstr_8(m1,i1,m1,i1,3)
+       -1       cnstr_8(m1,i2,m1,i1,3)
+       -1       cnstr_8(m2,i1,m1,i1,3)
+       -1       cnstr_8(m2,i2,m1,i1,3)
+       -1       cnstr_8(m3,i1,m1,i1,3)
+       -1       cnstr_8(m3,i2,m1,i1,3)
+       -1       cnstr_8(m3,i3,m1,i1,3)
+       -1       cnstr_8_1(m1,i1,m1,i1,3)
+       -1       cnstr_8_1(m1,i2,m1,i1,3)
+       -1       cnstr_8_1(m2,i1,m1,i1,3)
+       -1       cnstr_8_1(m2,i2,m1,i1,3)
+       -1       cnstr_8_1(m3,i1,m1,i1,3)
+       -1       cnstr_8_1(m3,i2,m1,i1,3)
+       -1       cnstr_8_1(m3,i3,m1,i1,3)
         1       cnstr_10(m1,i1,a0)
         1       cnstr_15(m1,i1)
-       -1       cnstr_21(m1,i1,a1,a0,3)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,3,a0,a2)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,4,a0,a2)
        -1       cnstr_23(m1,i1,a1,m1,i1,a3,1,5,a0,a2)
@@ -64146,17 +64190,28 @@ obj
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       ADRP1
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/23/24 13:01:41 Page 4
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/26/24 19:50:36 Page 4
+A branch and bound problem
+Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 336
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 1.000E+07] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.000E+07] - Zero values observed as well
+
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/26/24 19:50:36 Page 5
 A branch and bound problem
 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 336
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS          23     SINGLE EQUATIONS      234,447
+BLOCKS OF EQUATIONS          23     SINGLE EQUATIONS      236,330
 BLOCKS OF VARIABLES           8     SINGLE VARIABLES        2,250
-NON ZERO ELEMENTS    11,491,362     NON LINEAR N-Z              0
-CODE LENGTH                  34     CONSTANT POOL              17
+NON ZERO ELEMENTS    11,501,792     NON LINEAR N-Z              9
+CODE LENGTH                  34     CONSTANT POOL              17     DISCRETE VARIABLES      2,240
 
 
 
@@ -64164,7 +64219,8 @@ CODE LENGTH                  34     CONSTANT POOL              17
      As an academic user, you can submit large models to the NEOS service for free (see https://www.gams.com/neos)
      Alternatively, feel free to contact sales@gams.com to discuss your options
 
-GENERATION TIME      =        3.156 SECONDS    952 MB  48.3.0 71b5641f WEX-WEI
+**** Exec Error at line 336: Control C Event: execution halted
+GENERATION TIME      =        5.688 SECONDS    955 MB  48.3.0 71b5641f WEX-WEI
 
 **** SOLVE from line 336 ABORTED, EXECERROR = 1
 **** Terminated due to a licensing error
