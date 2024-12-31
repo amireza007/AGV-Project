@@ -1,0 +1,20 @@
+B 3 C o m p i l a t i o n
+B 53 Equation Listing    SOLVE small1 Using EMP From line 42
+D 56 Obj
+D 61 Eq1
+D 66 Eq2
+D 71 Eq3
+D 76 Eq4
+D 81 Eq5
+D 86 Eq6
+D 91 LEq1
+D 96 LEq2
+D 101 LEq3
+B 107 Column Listing      SOLVE small1 Using EMP From line 42
+E 110 x
+E 127 c
+E 136 z
+E 143 y
+B 163 Range Statistics    SOLVE small1 Using EMP From line 42
+B 174 Model Statistics    SOLVE small1 Using EMP From line 42
+B 188 Solution Report     SOLVE small1 Using EMP From line 42

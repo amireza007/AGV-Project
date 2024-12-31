@@ -1,42 +1,46 @@
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 11:57:05 Page 1
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 12:22:47 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
 
    1  binary variable p1,p2;
-   2  set i /0*4/;
+   2  set i /1*4/;
    3  set ii /1*3/;
    4  binary variable z(ii);
    5  set oo /slack, w/;
-   6  positive variable slack;
-   7  SOS1 variable x(i), ind(oo);
-   8  equation defBinarySOS1;
-   9  defBinarySOS1.. sum(i,x(i)) =e= 1;
-  10  binary variable w;
-  11  equation eq1, eq2, eq3, indOn, indOff;
-  12  eq1.. sum(ii,z(ii)) =e= sum (i,i.val*x(i));
-  13  eq2.. w =e= x('1');
-  14  eq3.. abs(p1-p2) =e= slack;
-  15  indOn.. ind('slack') =e= slack;
-  16  indOff.. ind('w') =e= w;
-  17   
-  18  variable obj;
-  19  equation costFunc;
-  20  costFunc.. obj =g= sum(ii,z(ii)) ;
-  21  Model hello /all/;
-  22   
-  23  Solve hello using MINLP minimizing obj;
+   6  variable slack;
+   7  variable x(i);
+   8  variable ind(oo);
+   9  SOS1 variable x, ind;
+  10  equation defBinarySOS1;
+  11  defBinarySOS1.. sum(i,x(i)) =e= 1;
+  12  binary variable w;
+  13  equation eq1, eq2, eq3, indOn, indOff;
+  14  x.up(i) = 1;
+  15  x.lo(i) = 0;
+  16  eq1.. sum(ii,z(ii)) =e= sum (i,i.val*x(i));
+  17  eq2.. w =e= x('1');
+  18  eq3.. abs(p1-p2) =e= slack;
+  19  indOn.. ind('slack') =e= slack;
+  20  indOff.. ind('w') =e= w;
+  21   
+  22  variable obj;
+  23  equation costFunc;
+  24  costFunc.. obj =g= sum(ii,z(ii)) ;
+  25  Model hello /all/;
+  26   
+  27  Solve hello using MINLP minimizing obj;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 11:57:05 Page 2
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 12:22:47 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE hello Using MINLP From line 23
+Equation Listing    SOLVE hello Using MINLP From line 27
 
 
 ---- defBinarySOS1  =E=  
 
-defBinarySOS1..  x(0) + x(1) + x(2) + x(3) + x(4) =E= 1 ; (LHS = 0, INFES = 1 ****)
+defBinarySOS1..  x(1) + x(2) + x(3) + x(4) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 
 ---- eq1  =E=  
@@ -68,9 +72,9 @@ indOff..  ind(w) - w =E= 0 ; (LHS = 0)
 
 costFunc..  - z(1) - z(2) - z(3) + obj =G= 0 ; (LHS = 0)
      
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 11:57:05 Page 3
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 12:22:47 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE hello Using MINLP From line 23
+Column Listing      SOLVE hello Using MINLP From line 27
 
 
 ---- p1  
@@ -108,29 +112,30 @@ z(3)
 ---- slack  
 
 slack
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
        -1       eq3
        -1       indOn
 
 
 ---- x  
 
-x(0)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
-        1       defBinarySOS1
-
 x(1)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
         1       defBinarySOS1
        -1       eq1
        -1       eq2
 
 x(2)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
         1       defBinarySOS1
        -2       eq1
 
-REMAINING 2 ENTRIES SKIPPED
+x(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       defBinarySOS1
+       -3       eq1
+
+REMAINING ENTRY SKIPPED
 
 ---- ind  
 
@@ -157,9 +162,9 @@ obj
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       costFunc
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 11:57:05 Page 4
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 12:22:47 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Range Statistics    SOLVE hello Using MINLP From line 23
+Range Statistics    SOLVE hello Using MINLP From line 27
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
@@ -168,43 +173,43 @@ RHS       [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
 Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
 Matrix    [min, max] : [ 1.000E+00, 4.000E+00]
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 11:57:05 Page 5
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 12:22:47 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE hello Using MINLP From line 23
+Model Statistics    SOLVE hello Using MINLP From line 27
 
 
 MODEL STATISTICS
 
 BLOCKS OF EQUATIONS           7     SINGLE EQUATIONS            7
-BLOCKS OF VARIABLES           8     SINGLE VARIABLES           15
-NON ZERO ELEMENTS            25     NON LINEAR N-Z              2
+BLOCKS OF VARIABLES           8     SINGLE VARIABLES           14
+NON ZERO ELEMENTS            24     NON LINEAR N-Z              2
 CODE LENGTH                   5     CONSTANT POOL              16     DISCRETE VARIABLES          6
 
 
-GENERATION TIME      =        0.000 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 11:57:05 Page 6
+GENERATION TIME      =        0.016 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 12:22:47 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE hello Using MINLP From line 23
+Solution Report     SOLVE hello Using MINLP From line 27
 
 
                S O L V E      S U M M A R Y
 
      MODEL   hello               OBJECTIVE  obj
      TYPE    MINLP               DIRECTION  MINIMIZE
-     SOLVER  DICOPT              FROM LINE  23
+     SOLVER  DICOPT              FROM LINE  27
 
 **** SOLVER STATUS     4 Terminated By Solver
 **** MODEL STATUS      9 Intermediate Non-Integer
-**** OBJECTIVE VALUE                0.0000
+**** OBJECTIVE VALUE                1.0000
 
  RESOURCE USAGE, LIMIT          0.015 10000000000.000
- ITERATION COUNT, LIMIT         1    2147483647
+ ITERATION COUNT, LIMIT         2    2147483647
  EVALUATION ERRORS              0             0
 -------------------------------------------------------------------------------
 Dicopt 2         48.3.0 71b5641f Nov 12, 2024          WEI x86 64bit/MS Window
 -------------------------------------------------------------------------------
 *** This solver runs with a demo license. No commercial use.
---- WARNING: 7 missing bounds on discrete variables.
+--- WARNING: 2 missing bounds on discrete variables.
 ---   In an integer cut, DICOPT will assume a bound of +/-1.000000e+04.
 ---   You can change this value by setting the option 'infbnd'.
 --- *** This solver runs with a demo license. No commercial use.
@@ -215,21 +220,21 @@ Dicopt 2         48.3.0 71b5641f Nov 12, 2024          WEI x86 64bit/MS Window
                   GAMS Development Corporation
  
  
-    The user model has 7 constraints and 15 variables
-    with 25 Jacobian elements, 2 of which are nonlinear.
+    The user model has 7 constraints and 14 variables
+    with 24 Jacobian elements, 2 of which are nonlinear.
     The Hessian of the Lagrangian has 2 elements on the diagonal,
     1 elements below the diagonal, and 2 nonlinear variables.
  
     The pre-triangular part of the model has 0 constraints and 2 variables.
     The post-triangular part of the model has 5 constraints and variables.
  
-    Preprocessed model has 2 constraints and 8 variables
-    with 12 Jacobian elements, 0 of which are nonlinear.
+    Preprocessed model has 2 constraints and 7 variables
+    with 11 Jacobian elements, 0 of which are nonlinear.
  
  ** Optimal solution. There are no superbasic variables.
  
  
- CONOPT time Total                            0.000 seconds
+ CONOPT time Total                            0.001 seconds
    of which: Function evaluations             0.000 =  0.0%
              1st Derivative evaluations       0.000 =  0.0%
              2nd Derivative evaluations       0.000 =  0.0%
@@ -255,7 +260,7 @@ GAMS/Gurobi demo/community requires a Gurobi license from Gurobi Optimization.
 
                            LOWER          LEVEL          UPPER         MARGINAL
 
----- EQU defBinary~         1.0000         1.0000         1.0000         EPS         
+---- EQU defBinary~         1.0000         1.0000         1.0000         1.0000      
 ---- EQU eq1                 .              .              .             1.0000      
 ---- EQU eq2                 .              .              .             EPS         
 ---- EQU eq3                 .              .              .             EPS         
@@ -272,44 +277,43 @@ GAMS/Gurobi demo/community requires a Gurobi license from Gurobi Optimization.
 
          LOWER          LEVEL          UPPER         MARGINAL
 
-1          .              .             1.0000         EPS         
+1          .             1.0000         1.0000         EPS         
 2          .              .             1.0000         EPS         
 3          .              .             1.0000         EPS         
 
                            LOWER          LEVEL          UPPER         MARGINAL
 
----- VAR slack               .              .            +INF             .          
+---- VAR slack             -INF             .            +INF             .          
 
 ---- VAR x  
 
          LOWER          LEVEL          UPPER         MARGINAL
 
-0          .             1.0000        +INF            EPS         
-1          .              .            +INF            1.0000      
-2          .              .            +INF            2.0000      
-3          .              .            +INF            3.0000      
-4          .              .            +INF            4.0000      
+1          .             1.0000         1.0000         EPS         
+2          .              .             1.0000         1.0000      
+3          .              .             1.0000         2.0000      
+4          .              .             1.0000         3.0000      
 
 ---- VAR ind  
 
              LOWER          LEVEL          UPPER         MARGINAL
 
 slack          .              .            +INF            EPS         
-w              .              .            +INF            EPS         
+w              .             1.0000        +INF            EPS         
 
                            LOWER          LEVEL          UPPER         MARGINAL
 
----- VAR w                   .              .             1.0000         EPS         
----- VAR obj               -INF             .            +INF             .          
+---- VAR w                   .             1.0000         1.0000         EPS         
+---- VAR obj               -INF            1.0000        +INF             .          
 
 
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
                              0     ERRORS
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 11:57:05 Page 7
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 12:22:47 Page 7
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE hello Using MINLP From line 23
+Solution Report     SOLVE hello Using MINLP From line 27
 
 
 **** SOLVER STATUS FILE LISTED BELOW
@@ -318,7 +322,7 @@ Solution Report     SOLVE hello Using MINLP From line 23
 =CDicopt 2         48.3.0 71b5641f Nov 12, 2024          WEI x86 64bit/MS Window
 -------------------------------------------------------------------------------
 =C*** This solver runs with a demo license. No commercial use.
-=C--- WARNING: 7 missing bounds on discrete variables.
+=C--- WARNING: 2 missing bounds on discrete variables.
 =C---   In an integer cut, DICOPT will assume a bound of +/-1.000000e+04.
 =C---   You can change this value by setting the option 'infbnd'.
 =1
@@ -345,8 +349,8 @@ Solution Report     SOLVE hello Using MINLP From line 23
   ***  Line    0  SET       RVTIME =     1.0000000000E+10
 =1
  
-    The user model has 7 constraints and 15 variables
-    with 25 Jacobian elements, 2 of which are nonlinear.
+    The user model has 7 constraints and 14 variables
+    with 24 Jacobian elements, 2 of which are nonlinear.
     The Hessian of the Lagrangian has 2 elements on the diagonal,
     1 elements below the diagonal, and 2 nonlinear variables.
 =2
@@ -362,21 +366,22 @@ Solution Report     SOLVE hello Using MINLP From line 23
 =2
 =1
  
-    Preprocessed model has 2 constraints and 8 variables
-    with 12 Jacobian elements, 0 of which are nonlinear.
+    Preprocessed model has 2 constraints and 7 variables
+    with 11 Jacobian elements, 0 of which are nonlinear.
 =2
                       1.0000000000E+00 (Full preprocessed model)
                       1.0000000000E+00 (After scaling)
  
     Iter Phase   Ninf   Infeasibility   RGmax      NSB   Step  InItr MX OK
+       1   0          0.0000000000E+00                 1.0E+00     1 T  T
  
- ** Feasible solution. Value of objective =    0.00000000000
+ ** Feasible solution. Value of objective =    1.00000000000
  
 Search for an optimal solution.
  
  
     Iter Phase   Ninf     Objective     RGmax      NSB   Step  InItr MX OK
-       1   4          0.0000000000E+00 0.0E+00       0
+       2   4          1.0000000000E+00 0.0E+00       0
 =1
  
  ** Optimal solution. There are no superbasic variables.
@@ -384,7 +389,7 @@ Search for an optimal solution.
 =2
 =1
  
- CONOPT time Total                            0.000 seconds
+ CONOPT time Total                            0.001 seconds
    of which: Function evaluations             0.000 =  0.0%
              1st Derivative evaluations       0.000 =  0.0%
              2nd Derivative evaluations       0.000 =  0.0%
@@ -392,7 +397,7 @@ Search for an optimal solution.
  
 =2
  
- Memory: Max used =      0.03 Mbytes
+ Memory: Max used =      0.02 Mbytes
   Total Allocated =      0.03 Mbytes
  
 =0Gurobi           48.3.0 71b5641f Nov 12, 2024          WEI x86 64bit/MS Window
@@ -421,7 +426,7 @@ Search for an optimal solution.
  ------------------------------------------------------------------
  Major Major     Objective    CPU time  Itera- Evaluation Solver
  Step  Iter       Function     (Sec)    tions   Errors
-  NLP    1         0.00000      0.01        1      0      conopt
+  NLP    1         1.00000      0.01        2      0      conopt
   MIP    1       *Failure*      0.00        0      0      gurobi
  ------------------------------------------------------------------
    Total solver times :  NLP =     0.01   MIP =     0.00
@@ -433,8 +438,8 @@ Search for an optimal solution.
    Values of discrete variables at the end of major iterations
  -------------------------------------------------------------
 
-  Total no. of variables         :    15
-  Total no. of binary variables  :    13
+  Total no. of variables         :    14
+  Total no. of binary variables  :    12
   Total no. of integer variables :     0
 
   Seq. no. of binary variables in the list of variables
@@ -442,22 +447,22 @@ Search for an optimal solution.
 
         1        2        3        4        5
         7        8        9       10       11
-       12       13       14
+       12       13
 
   Values of binary variables : Iteration no.: 1
 
 
-   0.000   0.000   0.000   0.000   0.000
+   0.000   0.000   1.000   0.000   0.000
    1.000   0.000   0.000   0.000   0.000
-   0.000   0.000   0.000
+   1.000   1.000
 
 **** SOLVER STATUS FILE LISTED ABOVE
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 11:57:05 Page 8
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 12/31/24 12:22:47 Page 8
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE hello Using MINLP From line 23
+Solution Report     SOLVE hello Using MINLP From line 27
 
 
-EXECUTION TIME       =        0.015 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
+EXECUTION TIME       =        0.031 SECONDS      4 MB  48.3.0 71b5641f WEX-WEI
 
 
 USER: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
@@ -466,5 +471,5 @@ USER: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
 
 **** FILE SUMMARY
 
-Input      C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\new1.gms
-Output     C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\new1.lst
+Input      C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\new22.gms
+Output     C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\new22.lst

@@ -1,0 +1,2 @@
+disjunction y('1') Eq1 Eq2 elseif y('2') Eq3 Eq4
+disjunction y('3') Eq5 else Eq6

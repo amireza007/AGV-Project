@@ -111,14 +111,16 @@ Binary Variables
         z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
         U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before" 
         U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
-        
+        W(m,i,n,j) "for indicator cnstr_8"
+        v_2(m,i,n,j)
+
 *       "Path related variables
         P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
         P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
-        P_X0(m,i,a,XR) "P_X(WV,x) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
+        P_X0(m,i,a,XR) "P_X(WV,x) Start H  loc, These are defined on actions, NOT ON CONTAINERS!"
         P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
         ;
-
+        
 Positive Variables
 
 *       Time related variables
@@ -126,7 +128,7 @@ Positive Variables
         T_Y(m,i) "Start time of agv putting cont on ASC"
         T_start(m,i,a) "Start of agv for action (m,i,a)"
         CT(m,i)  "Op. completion time of for each QC m"
-
+        
 *       Auxiliary Variables
         t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
         X_position(m,i,a)   "X_position(WT)"
@@ -134,7 +136,8 @@ Positive Variables
         ;
 
 variable obj "objective function";
-variable slack1;
+positive variable slack1(m,i,n,j);
+positive variable slack2(m,i,n,j);
 *binary variables initial values
 
 z.up(m,i,n,j,li) = 1;
@@ -169,7 +172,10 @@ X_position.lo(m,i,a) $(wt(m,i,a)) = 1;
 Y_position.up(m,i,a) $(wt(m,i,a)) = 23;
 Y_position.lo(m,i,a) $(wt(m,i,a)) = 1;
 
-
+set oo1 /slack1, ps/;
+set oo2 /slack2, sumz/;
+SOS1 variable ind1(oo1);
+SOS1 variable ind2(oo2); 
 
 Equations
                                 
@@ -185,7 +191,12 @@ Equations
         cnstr_7(m,i)                "D"         
 *
 **       LOcation constraints of AGV acitons
-*        cnstr_8(m,i,n,j,XR)         "C,C,XR"        
+        cnstr_8(m,i,n,j,XR)         "C,C,XR"
+        cnstr_8_slack(m,i,n,j)
+        auxOn1(m,i,n,j)
+        auxOff1(m,i,n,j)
+*        auxOn2(m,i,n,j)
+*        auxOff2(m,i,n,j)
 *        cnstr_8_1(m,i,n,j,XR)         "C,C,XR"        
 *        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
 *        cnstr_9_1(m,i,n,j,YR)         "C,C,YR"    
@@ -256,7 +267,12 @@ cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'
 ***Location constraints of AGV acitons
 ***** THE BIG-M TRICK FOR IF-CONDITIONAL
 ** However, this four constraints are making the model infeasible. I hopothisize that `1- sum(li, z(m,i,n,j,li)` would become negative!!
-*cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =l= 0;  
+cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. abs(P_X(m,i,'a4',XR) - P_X(n,j,'a0',XR)) =e= slack1(m,i,n,j);
+cnstr_8_slack(m,i,n,j) $(c(m,i) and c(n,j)).. sum(li, z(m,i,n,j,li)) - 2*v_2(m,i,n,j) =n= 1;
+
+auxOn1(m,i,n,j) $(c(m,i) and c(n,j)).. ind1('slack1') =e= slack1(m,i,n,j);
+auxOff1(m,i,n,j)$(c(m,i) and c(n,j)).. ind1('ps') =e= w(m,i,n,j); 
+
 *cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)).. P_X(m,i,'a4',XR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_X(n,j,'a0',XR) =g= 0;  
 *cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
 *cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
@@ -331,6 +347,7 @@ option SOLVER = Gurobi;
 
 *$onEcho > CFS.opt
 *iis 1
+*indic cnstr_8(m,i,n,j,XR)$slack(m,i,n,j) 1
 *$offEcho
 *ConflictFreeSch.Optfile = 1;
 solve conflictfreesch using MINLP min obj;
