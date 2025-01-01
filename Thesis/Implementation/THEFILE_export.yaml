@@ -1,0 +1,130 @@
+- GDXReader:
+    file: C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\THEFILE.gdx
+    symbols: 
+      - name: p1
+      - name: p2
+      - name: i
+      - name: ii
+      - name: z
+      - name: oo
+      - name: slack
+      - name: x
+      - name: ind
+      - name: defBinarySOS1
+      - name: w
+      - name: eq1
+      - name: eq2
+      - name: eq3
+      - name: indOn
+      - name: indOff
+      - name: obj
+      - name: costFunc
+- Projection:
+    name: p1.all
+    newName: p1_proj_
+- Projection:
+    name: p2.all
+    newName: p2_proj_
+- Projection:
+    name: z.all(0)
+    newName: z_proj_(0)
+- Projection:
+    name: slack.all
+    newName: slack_proj_
+- Projection:
+    name: x.all(0)
+    newName: x_proj_(0)
+- Projection:
+    name: ind.all(0)
+    newName: ind_proj_(0)
+- Projection:
+    name: defBinarySOS1.all
+    newName: defBinarySOS1_proj_
+- Projection:
+    name: w.all
+    newName: w_proj_
+- Projection:
+    name: eq1.all
+    newName: eq1_proj_
+- Projection:
+    name: eq2.all
+    newName: eq2_proj_
+- Projection:
+    name: eq3.all
+    newName: eq3_proj_
+- Projection:
+    name: indOn.all
+    newName: indOn_proj_
+- Projection:
+    name: indOff.all
+    newName: indOff_proj_
+- Projection:
+    name: obj.all
+    newName: obj_proj_
+- Projection:
+    name: costFunc.all
+    newName: costFunc_proj_
+- ExcelWriter:
+    file: C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\THEFILE_export2.xlsx
+    valueSubstitutions: {
+      EPS: EPS,
+      INF: INF,
+      -INF: -INF,
+      UNDEF: UNDEF,
+      NA: NA
+    }
+    symbols:
+      - name: p1_proj_
+        range: p1!A1
+        columnDimension: 1
+      - name: p2_proj_
+        range: p2!A1
+        columnDimension: 1
+      - name: i
+        range: i!A1
+        columnDimension: 0
+      - name: ii
+        range: ii!A1
+        columnDimension: 0
+      - name: z_proj_
+        range: z!A1
+        columnDimension: 1
+      - name: oo
+        range: oo!A1
+        columnDimension: 0
+      - name: slack_proj_
+        range: slack!A1
+        columnDimension: 1
+      - name: x_proj_
+        range: x!A1
+        columnDimension: 1
+      - name: ind_proj_
+        range: ind!A1
+        columnDimension: 1
+      - name: defBinarySOS1_proj_
+        range: defBinarySOS1!A1
+        columnDimension: 1
+      - name: w_proj_
+        range: w!A1
+        columnDimension: 1
+      - name: eq1_proj_
+        range: eq1!A1
+        columnDimension: 1
+      - name: eq2_proj_
+        range: eq2!A1
+        columnDimension: 1
+      - name: eq3_proj_
+        range: eq3!A1
+        columnDimension: 1
+      - name: indOn_proj_
+        range: indOn!A1
+        columnDimension: 1
+      - name: indOff_proj_
+        range: indOff!A1
+        columnDimension: 1
+      - name: obj_proj_
+        range: obj!A1
+        columnDimension: 1
+      - name: costFunc_proj_
+        range: costFunc!A1
+        columnDimension: 1

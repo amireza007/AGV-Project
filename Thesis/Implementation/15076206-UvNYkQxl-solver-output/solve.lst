@@ -1,0 +1,97 @@
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/01/25 06:07:24 Page 1
+A branch and bound problem
+C o m p i l a t i o n
+
+
+
+
+COMPILATION TIME     =        0.001 SECONDS      3 MB  47.6.0 c2de9d6d LEX-LEG
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/01/25 06:07:24 Page 2
+A branch and bound problem
+Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 333
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 4.000E+05] - Zero values observed as well
+Matrix    [min, max] : [ 2.500E-01, 2.000E+07] - Zero values observed as well
+
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/01/25 06:07:24 Page 3
+A branch and bound problem
+Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 333
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          48     SINGLE EQUATIONS      244,182
+BLOCKS OF VARIABLES          17     SINGLE VARIABLES        4,521  70 projected
+NON ZERO ELEMENTS    11,567,690     NON LINEAR N-Z         47,595
+CODE LENGTH              66,387     CONSTANT POOL              18     
+DISCRETE VARIABLES      2,975
+
+
+GENERATION TIME      =        8.330 SECONDS    955 MB  47.6.0 c2de9d6d LEX-LEG
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/01/25 06:07:24 Page 4
+A branch and bound problem
+Solution Report     SOLVE ConflictFreeSch Using MINLP From line 333
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   ConflictFreeSch     OBJECTIVE  obj
+     TYPE    MINLP               DIRECTION  MINIMIZE
+     SOLVER  GUROBI              FROM LINE  333
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      19 Infeasible - No Solution
+**** OBJECTIVE VALUE               NA
+
+ RESOURCE USAGE, LIMIT        166.439 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+ EVALUATION ERRORS             NA             0
+Gurobi library version 11.0.2
+GRB_LICENSE_FILE = gurobi-client.lic
+GAMS/Gurobi Link license.
+Reading parameter(s) from "/var/lib/condor/execute/dir_387306/gamsexec/gurobi.o
+                                                                            pt"
+>>  iis 1
+Finished reading from "/var/lib/condor/execute/dir_387306/gamsexec/gurobi.opt"
+--- GMO Q Extraction (ThreePass): 0.01s
+--- GMO setup time: 0.01
+Space for names approximately 10.85 Mb
+MIQCP status(4): Model was proven to be either infeasible or unbounded.
+Computing IIS...
+An IIS is a set equations and variables (ie a submodel) which is
+infeasible but becomes feasible if any one equation or variable bound
+is dropped.
+
+A problem may contain several independent IISs but only one will be
+found per run.
+Number of equations in the IIS: 5
+DefBinarySS(m3,i2,m1,i2) = 1
+DefBinarySS(m3,i2,m2,i1) = 1
+cnstr_6(m3,i2) = 1
+cnstr_8_slack(m3,i2,m1,i2) = 0
+cnstr_8_slack(m3,i2,m2,i1) = 0
+Number of variables in the IIS: 4
+0 < ss(l2,m3,i2,m1,i2)
+0 < ss(l2,m3,i2,m2,i1)
+0 < ss(l3,m3,i2,m1,i2)
+0 < ss(l3,m3,i2,m2,i1)
+
+No solution returned
+
+
+EXECUTION TIME       =      177.641 SECONDS    955 MB  47.6.0 c2de9d6d LEX-LEG
+
+
+USER: NEOS Server License prod-exec-6.neos-server.orgS241211/0001AB-GEN
+      mac@d0:94:66:89:89:0f                                     DCE1890
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      /var/lib/condor/execute/dir_387306/gamsexec/MODEL.gms
+Output     /var/lib/condor/execute/dir_387306/gamsexec/solve.lst

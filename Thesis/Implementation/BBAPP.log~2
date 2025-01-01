@@ -1,5 +1,5 @@
 
---- Job BBAPP.gms Start 12/29/24 20:12:17 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
+--- Job BBAPP.gms Start 01/01/25 14:17:58 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\48\gmsprmNT.txt
     C:\Users\Asus\Documents\GAMS\gamsconfig.yaml
@@ -21,21 +21,20 @@ Licensee: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
 Processor information: 1 socket(s), 14 core(s), and 20 thread(s) available
 GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 --- Starting compilation
---- BBAPP.gms(438) 3 Mb
+--- BBAPP.gms(414) 3 Mb
 --- Starting execution: elapsed 0:00:00.005
---- BBAPP.gms(348) 4 Mb
+--- BBAPP.gms(324) 4 Mb
 --- Generating MINLP model ConflictFreeSch
---- BBAPP.gms(304) 955 Mb  5 secs
---- BBAPP.gms(306) 955 Mb
-*** Error at line 304: Execution halted: Triggered by pending CtrlC event
---- BBAPP.gms(355) 955 Mb 1 Error
+--- BBAPP.gms(282) 955 Mb
+*** Error at line 280: Execution halted: Triggered by pending CtrlC event
+--- BBAPP.gms(331) 955 Mb 1 Error
 *** The model exceeds the demo license limits for nonlinear models of more than 1000 rows or columns
     As an academic user, you can submit large models to the NEOS service for free (see https://www.gams.com/neos)
     Alternatively, feel free to contact sales@gams.com to discuss your options
---- BBAPP.gms(355) 953 Mb
+--- BBAPP.gms(331) 953 Mb
 *** SOLVE aborted
---- BBAPP.gms(355) 953 Mb 1 Error
+--- BBAPP.gms(331) 953 Mb 1 Error
 *** Status: Terminated due to a licensing error
 ***         License file: C:\GAMS\48\gamslice.txt
 ***         Inspect listing file for more information.
---- Job BBAPP.gms Stop 12/29/24 20:12:25 elapsed 0:00:08.132
+--- Job BBAPP.gms Stop 01/01/25 14:18:02 elapsed 0:00:04.154

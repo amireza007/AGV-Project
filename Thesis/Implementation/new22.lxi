@@ -1,36 +1,38 @@
 B 3 C o m p i l a t i o n
-B 38 Equation Listing    SOLVE hello Using MINLP From line 27
-D 41 defBinarySOS1
-D 46 eq1
-D 51 eq2
-D 56 eq3
-D 61 indOn
-D 66 indOff
-D 71 costFunc
-B 77 Column Listing      SOLVE hello Using MINLP From line 27
-E 80 p1
-E 87 p2
-E 94 z
-E 112 slack
-E 120 x
-E 140 ind
-E 151 w
-E 159 obj
-B 167 Range Statistics    SOLVE hello Using MINLP From line 27
-B 178 Model Statistics    SOLVE hello Using MINLP From line 27
-B 192 Solution Report     SOLVE hello Using MINLP From line 27
-F 263 defBinarySOS1
-F 264 eq1
-F 265 eq2
-F 266 eq3
-F 267 indOn
-F 268 indOff
-F 269 costFunc
-G 273 p1
-G 274 p2
-G 276 z
-G 286 slack
-G 288 x
-G 297 ind
-G 306 w
-G 307 obj
+B 54 Equation Listing    SOLVE hello Using MINLP From line 35
+D 57 defBinarySOS1
+D 62 eq1
+D 67 eq2
+D 72 eq3
+D 77 indOn
+D 82 indOff
+D 87 costFunc
+B 93 Column Listing      SOLVE hello Using MINLP From line 35
+E 96 p1
+E 103 p2
+E 110 z
+E 128 slack
+E 136 x
+E 158 ind
+E 169 w
+E 177 obj
+B 185 Range Statistics    SOLVE hello Using MINLP From line 35
+B 196 Model Statistics    SOLVE hello Using MINLP From line 35
+B 210 Solution Report     SOLVE hello Using MINLP From line 35
+F 281 defBinarySOS1
+F 282 eq1
+F 283 eq2
+F 284 eq3
+F 285 indOn
+F 286 indOff
+F 287 costFunc
+G 291 p1
+G 292 p2
+G 294 z
+G 304 slack
+G 306 x
+G 315 ind
+G 324 w
+G 325 obj
+B 480 E x e c u t i o n
+I 480 ind
