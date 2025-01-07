@@ -1,45 +1,39 @@
 B 3 C o m p i l a t i o n
-B 417 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 329
-D 420 DefBinarySS
-D 431 auxOn
-D 442 auxOff
-D 453 activator
-D 464 ADRP
-D 469 LJob
-D 478 cnstr_2
-D 489 cnstr_3
-D 500 cnstr_4
-D 509 cnstr_5
-D 518 cnstr_6
-D 527 cnstr_7
-D 538 cnstr_8
-D 549 cnstr_8_slack
-D 560 cnstr_10
-D 571 cnstr_11
-D 582 cnstr_12
-D 591 cnstr_13
-D 602 cnstr_14
-D 613 cnstr_15
-D 622 cnstr_19
-D 633 cnstr_16
-D 644 cnstr_17
-D 653 cnstr_18
-D 662 cnstr_20
-D 673 cnstr_21
-D 684 cnstr_22
-D 695 cnstr_23
-D 707 cnstr_24
-B 713 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 329
-E 716 z
-E 735 U_AGV
-E 3393 P_X
-E 64153 P_Y
-E 64175 T_Q
-E 64190 T_Y
-E 64205 CT
-E 64223 obj
-E 64230 ind
-E 64337 ss
-E 64359 slack
-E 64444 W
-B 64464 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 329
+B 416 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 328
+D 419 ADRP
+D 424 LJob
+D 433 cnstr_2
+D 444 cnstr_3
+D 455 cnstr_4
+D 464 cnstr_5
+D 473 cnstr_6
+D 482 cnstr_7
+D 493 cnstr_8
+D 504 cnstr_8_slack
+D 515 cnstr_10
+D 526 cnstr_11
+D 537 cnstr_12
+D 546 cnstr_13
+D 557 cnstr_14
+D 568 cnstr_15
+D 577 cnstr_19
+D 588 cnstr_16
+D 599 cnstr_17
+D 608 cnstr_18
+D 617 cnstr_20
+D 628 cnstr_21
+D 639 cnstr_22
+D 650 cnstr_23
+D 662 cnstr_24
+B 668 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 328
+E 671 z
+E 690 U_AGV
+E 3348 P_X
+E 64108 P_Y
+E 64130 T_Q
+E 64145 T_Y
+E 64160 CT
+E 64178 obj
+E 64185 ss
+E 64201 slack
+B 64284 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 328

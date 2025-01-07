@@ -150,25 +150,7 @@ X_position.lo(m,i,a) $(wt(m,i,a)) = 1;
 Y_position.up(m,i,a) $(wt(m,i,a)) = 23;
 Y_position.lo(m,i,a) $(wt(m,i,a)) = 1;
 
-*****************************************************************************************************************
-* for indicator cnstr_8, using two sets of SOS1 Variables, set of x(i) and ind(slack, w). X(i) deals with the values of the x                            . 
-set oo /slack, w/;
-SOS1 variable ind(oo);
-variable ss(li,m,i,n,j);
-SOS1 variable ss(li,m,i,n,j);
-equation DefBinarySS(m,i,n,j);
-DefBinarySS(m,i,n,j) $(c(m,i)and c(n,j)).. sum(li, ss(li,m,i,n,j)) =e= 1;
 
-positive variable slack(m,i,n,j);
-Binary Variable W(m,i,n,j) ;
-Equation auxOn(m,i,n,j), auxOff(m,i,n,j);
-auxOn(m,i,n,j) $(c(m,i) and c(n,j)).. ind('w') =e= w(m,i,n,j);
-auxOff(m,i,n,j) $(c(m,i) and c(n,j)).. ind('slack') =e= slack(m,i,n,j);
-
-equation activator(m,i,n,j);
-activator(m,i,n,j) $(c(m,i) and c(n,j)).. w(m,i,n,j) =e= ss('l1',m,i,n,j);
-
-********************************************************************
 Equations
                                 
         ADRP                       "AGV Dispatching and Routing Problem"
@@ -247,6 +229,23 @@ cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
 cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 
+*****************************************************************************************************************
+* for indicator cnstr_8, using two sets of SOS1 Variables, set of x(i) and ind(slack, w). X(i) deals with the values of the x                            . 
+set oo /slack, w/;
+SOS1 variable ind(oo);
+*variable ss(li,m,i,n,j);
+SOS1 variable ss(li,m,i,n,j);
+equation DefBinarySS(m,i,n,j);
+DefBinarySS(m,i,n,j) $(c(m,i) and c(n,j)).. sum(li, ss(li,m,i,n,j)) =e= 1;
+
+positive variable slack(m,i,n,j);
+Binary Variable W(m,i,n,j) ;
+Equation auxOn(m,i,n,j), auxOff(m,i,n,j);
+auxOn(m,i,n,j) $(c(m,i) and c(n,j)).. ind('w') =e= w(m,i,n,j);
+auxOff(m,i,n,j) $(c(m,i) and c(n,j)).. ind('slack') =e= slack(m,i,n,j);
+
+equation activator(m,i,n,j);
+activator(m,i,n,j) $(c(m,i) and c(n,j)).. w(m,i,n,j) =e= ss('l1',m,i,n,j); !! Why 'l1'???
 **************************************************************************************************************************************************************************************
 **Location constraints of AGV acitons
 ***** THE BIG-M TRICK FOR IF-CONDITIONAL
