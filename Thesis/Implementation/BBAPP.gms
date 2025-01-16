@@ -28,13 +28,13 @@ Sets
         i1(i) /#i/
         j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
         
-        m   "QC index" /m0,m1,m2,m3/        
+        m   "QC index" /m0, m1, m2, m3/        
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
 
-        L(m,i)   /m1.i1 , m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+        L(m,i)   /m1.i1, m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
         D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i%d3%/ !! these are in the ships, waiting to be taking to ASCs
         
-        C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d3%/ !! this is in data file, this should contain 0 node, too!
+        C(m,i)  "All  Containers" /m1.i1, m1.i2, m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d3%/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job for all QCs" /m1.i%d1%, m2.i%d2%, m3.i%d3%/
         
         

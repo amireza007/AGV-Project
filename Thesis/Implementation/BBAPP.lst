@@ -1,4 +1,4 @@
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/12/25 11:49:13 Page 1
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/16/25 18:22:08 Page 1
 A branch and bound problem
 C o m p i l a t i o n
 
@@ -27,13 +27,13 @@ C o m p i l a t i o n
   28          i1(i) /#i/
   29          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
   30   
-  31          m   "QC index" /m0,m1,m2,m3/
+  31          m   "QC index" /m0, m1, m2, m3/
   32          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
   33   
-  34          L(m,i)   /m1.i1 , m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+  34          L(m,i)   /m1.i1, m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
   35          D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i3/ !! these are in the ships, waiting to be taking to ASCs
   36   
-  37          C(m,i)  "All  Containers" /m1.i1, m1.i2 , m2.i1, m2.i2, m3.i1, m3.i2, m3.i3/ !! this is in data file, this should contain 0 node, too!
+  37          C(m,i)  "All  Containers" /m1.i1, m1.i2, m2.i1, m2.i2, m3.i1, m3.i2, m3.i3/ !! this is in data file, this should contain 0 node, too!
   38          Cd(m,i) "the last QC container job for all QCs" /m1.i2, m2.i2, m3.i3/
   39   
   40   
@@ -411,7 +411,7 @@ C o m p i l a t i o n
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/12/25 11:49:13 Page 2
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/16/25 18:22:08 Page 2
 A branch and bound problem
 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 328
 
@@ -663,7 +663,7 @@ REMAINING 233286 ENTRIES SKIPPED
 
                 NONE
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/12/25 11:49:13 Page 3
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/16/25 18:22:08 Page 3
 A branch and bound problem
 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 328
 
@@ -64279,7 +64279,7 @@ slack(m1,i1,m2,i1)
        -1       cnstr_8(m1,i1,m2,i1,23)
 
 REMAINING 46 ENTRIES SKIPPED
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/12/25 11:49:13 Page 4
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/16/25 18:22:08 Page 4
 A branch and bound problem
 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 328
 
@@ -64297,7 +64297,7 @@ CODE LENGTH               5,669     CONSTANT POOL              17
      As an academic user, you can submit large models to the NEOS service for free (see https://www.gams.com/neos)
      Alternatively, feel free to contact sales@gams.com to discuss your options
 
-GENERATION TIME      =        3.031 SECONDS    953 MB  48.3.0 71b5641f WEX-WEI
+GENERATION TIME      =        3.938 SECONDS    953 MB  48.3.0 71b5641f WEX-WEI
 
 **** SOLVE from line 328 ABORTED, EXECERROR = 1
 **** Terminated due to a licensing error
