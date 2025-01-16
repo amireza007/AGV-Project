@@ -51,9 +51,17 @@ Sets
 *********************************************
 *Location based sets
         XR (*)  "Vertical Operational Area" /1*23/
-        YR (*) "Horizontal Operational Area" /1*23/
-        YS(YR)  "Horizontal Seaside Operation Area" /12*23/
-        YL(YR)  "Horizontal Path" /1*11/
+******************** First Experminent
+*        YR (*) "Horizontal Operational Area" /1*23/
+*        YS(YR)  "Horizontal Seaside Operation Area" /12*23/
+*        YL(YR)  "Horizontal Path" /1*11/
+**********************
+
+*2nd experiment
+        YR (*) "Horizontal Operational Area" /1*10/
+        YS(YR)  "Horizontal Seaside Operation Area" /6*10/
+        YL(YR)  "Horizontal Path" /1*5/
+
 !! what o(m,i,XR) basically determines is the vertical position of the QCs.        
         o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.17, m3.i2.19, m3.i%d3%.21/
 !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
