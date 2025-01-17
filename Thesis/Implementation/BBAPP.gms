@@ -51,6 +51,7 @@ Sets
 *********************************************
 *Location based sets
         XR (*)  "Vertical Operational Area" /1*23/
+
 ******************** First Experminent
 *        YR (*) "Horizontal Operational Area" /1*23/
 *        YS(YR)  "Horizontal Seaside Operation Area" /12*23/
@@ -246,20 +247,20 @@ SOS1 variable ss(li,m,i,n,j);
 equation DefBinarySS(m,i,n,j);
 DefBinarySS(m,i,n,j) $(c(m,i) and c(n,j)).. sum(li, ss(li,m,i,n,j)) =e= 1;
 
-positive variable slack(m,i,n,j);
+Binary variable slack(m,i,n,j);
 Binary Variable W(m,i,n,j) ;
 Equation auxOn(m,i,n,j), auxOff(m,i,n,j);
 auxOn(m,i,n,j) $(c(m,i) and c(n,j)).. ind('w') =e= w(m,i,n,j);
 auxOff(m,i,n,j) $(c(m,i) and c(n,j)).. ind('slack') =e= slack(m,i,n,j);
 
 equation activator(m,i,n,j);
-activator(m,i,n,j) $(c(m,i) and c(n,j)).. w(m,i,n,j) =e= ss('l1',m,i,n,j); !! Why 'l1'???
+activator(m,i,n,j) $(c(m,i) and c(n,j)).. w(m,i,n,j) =e= ss('l1',m,i,n,j); !! Why 'l1'??? because ord('l1')*ss('l1',m,i,n,j) = 1 or 0
 **************************************************************************************************************************************************************************************
 **Location constraints of AGV acitons
 ***** THE BIG-M TRICK FOR IF-CONDITIONAL
 ** However, this four constraints are making the model infeasible. I hopothisize that `1- sum(li, z(m,i,n,j,li)` would become negative!!
-cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. abs(P_X(m,i,'a4',XR) - P_X(n,j,'a0',XR)) =e= slack(m,i,n,j);
-cnstr_8_slack(m,i,n,j) $(c(m,i) and c(n,j)).. sum(li, z(m,i,n,j,li)) =e= sum(li,ord(li)*ss(li,m,i,n,j));
+cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. abs(P_X(m,i,'a4',XR) - P_X(n,j,'a0',XR)) =l= slack(m,i,n,j);
+cnstr_8_slack(m,i,n,j) $(c(m,i) and c(n,j)).. sum(li,ord(li)*ss(li,m,i,n,j)) - sum(li, z(m,i,n,j,li)) =e= 0;
 
 
 *cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
