@@ -115,7 +115,7 @@ Parameters
 *****************************************************************************************************************
 
 Binary Variables
-        z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
+        z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!" !! (m,i) and (m,i) are NOT equal, TOO!
         U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before" !! note that (m,i,a) and (m,i,a) are NOT equal!!
         U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
 
