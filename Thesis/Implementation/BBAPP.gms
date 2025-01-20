@@ -64,7 +64,13 @@ Sets
         YL(YR)  "Horizontal Path" /1*5/
 
 !! what o(m,i,XR) basically determines is the vertical position of the QCs.        
-        o(m,i,XR) /m1.i1.3, m1.i2.5, m2.i1.11, m2.i2.13, m3.i1.17, m3.i2.19, m3.i%d3%.21/
+        o(m,i,XR) / m1.i1.3,
+                    m1.i2.5,
+                    m2.i1.11,
+                    m2.i2.13,
+                    m3.i1.17,
+                    m3.i2.19,
+                    m3.i%d3%.21/
 !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
         A_L_set(XR) /1,7,13,19/
         A_R_set(XR) /5,11,17,23/
@@ -76,7 +82,15 @@ Sets
         psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m1.i1.m1.i2, m2.i1.m2.i2, m3.i1.m3.i2, m3.i2.m3.i3 /
         psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i2 / !!This is in data file. (m,i) and (m,i) belong to the same block!
         ;
-        
+parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
+                m1.i1 3, 
+                m1.i2 5,
+                m2.i1 11,
+                m2.i2 13,
+                m3.i1 17,
+                m3.i2 19,
+                m3.i%d3% 21/
+    
 *****************************************************************************************************************
 *Dupilcates of the some of the sets!
 alias (XR, XR1);
@@ -95,7 +109,7 @@ set x_t(XR) /#XR/;
 *****************************************************************************************************************
 
 Parameters
-        o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number" /m1.i1 3, m1.i2 5, m2.i1 11, m2.i2 13, m3.i1 17, m3.i2 19, m3.i%d3% 21/ 
+         
         G_Q(m,i) /#C 40/ !! seems to be constant for all container jobs, bc of const 24
         G_Y(m,i) /#C 40/
         ;
@@ -127,38 +141,6 @@ Positive Variables
         ;
 variable obj "objective function";
 *****************************************************************************************************************
-*These domains are specified for the sole purpose of activity level of variables.
-z.up(m,i,n,j,li) = 1;
-z.lo(m,i,n,j,li)= 0;
-U_AGV.up(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 1;
-U_AGV.lo(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 0;
-U_QC.up(m,i,n,j,a) $(c(m,i) and wh(n,j,a)) = 1;
-U_QC.lo(m,i,n,j,a) $(c(m,i) and wh(n,j,a)) = 0; 
-                 
-P_X.up(m,i,a,XR) $(c(m,i)) =1;
-P_X.lo(m,i,a,XR) $(c(m,i))=0;
-P_Y.up(m,i,a,YR) $(c(m,i))=1;
-P_Y.lo(m,i,a,YR) $(c(m,i))=0;
-P_X0.up(m,i,a,XR)$(c(m,i)) =1;
-P_X0.lo(m,i,a,XR)$(c(m,i)) =0;
-P_Y0.up(m,i,a,YR)$(c(m,i)) =1;
-P_Y0.lo(m,i,a,YR)$(c(m,i)) =0;
-
-*positive variables initial values
-*T_Q.up(m,i) $(c(m,i)) = 40000000; 
-*T_Q.lo(m,i) $(c(m,i)) = 0; 
-*T_Y.up(m,i) $(c(m,i)) = 40000000;
-*T_Y.lo(m,i) $(c(m,i)) = 0;
-*T_start.up(m,i,a) $(wt(m,i,a)) = 40000000;
-*T_start.lo(m,i,a) $(wt(m,i,a)) = 0;
-
-t_AGV.up(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)) = 400000;
-t_AGV.lo(m,i,a1,n,j,a2)$(wt(m,i,a1) and wt(n,j,a2)) = 0; 
-X_position.up(m,i,a) $(wt(m,i,a)) = 23 ;
-X_position.lo(m,i,a) $(wt(m,i,a)) = 1;
-Y_position.up(m,i,a) $(wt(m,i,a)) = 23;
-Y_position.lo(m,i,a) $(wt(m,i,a)) = 1;
-
 
 Equations
                                 
@@ -174,9 +156,12 @@ Equations
         cnstr_7(m,i)                "D"         
 **********************************************************************
 *       Location constraints of AGV acitons
-        cnstr_8(m,i,n,j,XR)         "C,C,XR"
-        cnstr_8_slack(m,i,n,j)
-*        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
+*        cnstr_8(m,i,n,j,XR)         "C,C,XR"
+*        cnstr_8_slack(m,i,n,j)
+        cnstr_8(m,i,n,j,xr)
+        cnstr_8_1(m,i,n,j,xr)
+        cnstr_9(m,i,n,j,YR)         "C,C,YR"    
+        cnstr_9_1(m,i,n,j,YR)         "C,C,YR"    
         cnstr_10(m,i,a)             "C,a"     
         cnstr_11(m,i,a)             "C,a"      
         cnstr_12(m,i)               "L"        
@@ -238,33 +223,11 @@ cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
 cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 
-*****************************************************************************************************************
-* for indicator cnstr_8, using two sets of SOS1 Variables, set of x(i) and ind(slack, w). X(i) deals with the values of the x                            . 
-set oo /slack, w/;
-SOS1 variable ind(oo);
-*variable ss(li,m,i,n,j);
-SOS1 variable ss(li,m,i,n,j);
-equation DefBinarySS(m,i,n,j);
-DefBinarySS(m,i,n,j) $(c(m,i) and c(n,j)).. sum(li, ss(li,m,i,n,j)) =e= 1;
+cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =l= 0;  
+cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =g= 0; 
 
-Binary variable slack(m,i,n,j);
-Binary Variable W(m,i,n,j) ;
-Equation auxOn(m,i,n,j), auxOff(m,i,n,j);
-auxOn(m,i,n,j) $(c(m,i) and c(n,j)).. ind('w') =e= w(m,i,n,j);
-auxOff(m,i,n,j) $(c(m,i) and c(n,j)).. ind('slack') =e= slack(m,i,n,j);
-
-equation activator(m,i,n,j);
-activator(m,i,n,j) $(c(m,i) and c(n,j)).. w(m,i,n,j) =e= ss('l1',m,i,n,j); !! Why 'l1'??? because ord('l1')*ss('l1',m,i,n,j) = 1 or 0
-**************************************************************************************************************************************************************************************
-**Location constraints of AGV acitons
-***** THE BIG-M TRICK FOR IF-CONDITIONAL
-** However, this four constraints are making the model infeasible. I hopothisize that `1- sum(li, z(m,i,n,j,li)` would become negative!!
-cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. abs(P_X(m,i,'a4',XR) - P_X(n,j,'a0',XR)) =l= slack(m,i,n,j);
-cnstr_8_slack(m,i,n,j) $(c(m,i) and c(n,j)).. sum(li,ord(li)*ss(li,m,i,n,j)) - sum(li, z(m,i,n,j,li)) =e= 0;
-
-
-*cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
-*cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
+cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
+cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
 ****************************************
 
 cnstr_10(m,i,a) $(WT(m,i,a) and c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
@@ -315,10 +278,10 @@ cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) ).
 cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1)).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
 
 * THE BIG-M TRICK FOR IF-CONDITIONAL
-cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *(1-P_X(m,i,a,XR)) =l= 0; 
-cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *(1-P_X(m,i,a,XR)) =g= 0;
-cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *(1-P_Y(m,i,a,YR)) =l= 0;
-cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *(1-P_Y(m,i,a,YR)) =g= 0;
+cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *abs(1-P_X(m,i,a,XR)) =l= 0; 
+cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *abs(1-P_X(m,i,a,XR)) =g= 0;
+cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *abs(1-P_Y(m,i,a,YR)) =l= 0;
+cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *abs(1-P_Y(m,i,a,YR)) =g= 0;
 ****************************************
 * Just writing the switch time between actions according the position of the start and finish locaiton of the action and AGVs next aciton
 *and the speed of the vehicle which is constant. Which might be bad!!
