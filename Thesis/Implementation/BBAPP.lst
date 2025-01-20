@@ -1,4 +1,4 @@
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 12:26:35 Page 1
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 13:13:35 Page 1
 A branch and bound problem
 C o m p i l a t i o n
 
@@ -42,7 +42,7 @@ C o m p i l a t i o n
   43          Bs(li) "set of all agvs" /#li/
   44          a   "AGV actions" /a0*a4/
   45          !! Below is written according to Fig 5. of base article
-  46          WT(m,i,a) "set of total actions with virtual node" /#C.#a/
+  46          WT(m,i,a) "set of total actions with virtual node" /#C.(a1,a2,a3,a4)/
   47          WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
   48          WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
   49   
@@ -63,261 +63,261 @@ C o m p i l a t i o n
   64          YL(YR)  "Horizontal Path" /1*5/
   65   
   66  !! what o(m,i,XR) basically determines is the vertical position of the QCs.
-  67  *        o(m,i,XR) / m1.i1.3,
-  68  *                    m1.i2.5,
-  69  *                    m2.i1.11,
-  70  *                    m2.i2.13,
-  71  *                    m3.i1.17,
-  72  *                    m3.i2.19,
-  73  *                    m3.i%d3%.21/
-  74          o(m,i,XR) / m1.i1.3,
-  75                      m1.i2.3,
-  76                      m2.i1.11,
-  77                      m2.i2.11,
-  78                      m3.i1.17,
-  79                      m3.i2.17,
-  80                      m3.i3.17/
-  81  !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
-  82          A_L_set(XR) /1,7,13,19/
-  83          A_R_set(XR) /5,11,17,23/
-  84          A_L(m,i,XR) /#C.#A_L_set/
-  85          A_R(m,i,XR) /#C.#A_R_set/
-  86   
-  87   
-  88  !! Maybe Badly Put! Needs fixing! In the data file!
-  89          psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m1.i1.m1.i2, m2.i1.m2.i2, m3.i1.m3.i2, m3.i2.m3.i3 /
-  90          psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i2 / !!This is in data file. (m,i) and (m,i) belong to the same block!
-  91          ;
-  92  parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
-  93                  m1.i1 3,
-  94                  m1.i2 3,
-  95                  m2.i1 11,
-  96                  m2.i2 11,
-  97                  m3.i1 17,
-  98                  m3.i2 17,
-  99                  m3.i3 17/
- 100          ;
- 101  *****************************************************************************************************************
- 102  *Dupilcates of the some of the sets!
- 103  alias (XR, XR1);
- 104  alias (XR, XR_1);
- 105  alias (YR, YR_1);
- 106  alias (a,a1);
- 107  alias (a,a2);
- 108  alias (a2,a2_1);
- 109  alias (a1,a1_1);
- 110  *alias (i,i1);
- 111  set h(m)/#m/;  !! for cnstr_3
- 112  set k(i) /#i/;
- 113  set s(YR);
- 114  set XR2(XR) /#XR/;
- 115  set x_t(XR) /#XR/;
+  67          o(m,i,XR) / m1.i1.3,
+  68                      m1.i2.5,
+  69                      m2.i1.11,
+  70                      m2.i2.13,
+  71                      m3.i1.17,
+  72                      m3.i2.19,
+  73                      m3.i3.21/
+  74  !!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
+  75          A_L_set(XR) /1,7,13,19/
+  76          A_R_set(XR) /5,11,17,23/
+  77          A_L(m,i,XR) /#C.#A_L_set/
+  78          A_R(m,i,XR) /#C.#A_R_set/
+  79   
+  80   
+  81  !! Maybe Badly Put! Needs fixing! In the data file!
+  82          psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m1.i1.m1.i2, m2.i1.m2.i2, m3.i1.m3.i2, m3.i2.m3.i3 /
+  83          psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i2 / !!This is in data file. (m,i) and (m,i) belong to the same block!
+  84          ;
+  85  parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
+  86                  m1.i1 3,
+  87                  m1.i2 5,
+  88                  m2.i1 11,
+  89                  m2.i2 13,
+  90                  m3.i1 17,
+  91                  m3.i2 19,
+  92                  m3.i3 21/
+  93   
+  94  *****************************************************************************************************************
+  95  *Dupilcates of the some of the sets!
+  96  alias (XR, XR1);
+  97  alias (XR, XR_1);
+  98  alias (YR, YR_1);
+  99  alias (a,a1);
+ 100  alias (a,a2);
+ 101  alias (a2,a2_1);
+ 102  alias (a1,a1_1);
+ 103  *alias (i,i1);
+ 104  set h(m)/#m/;  !! for cnstr_3
+ 105  set k(i) /#i/;
+ 106  set s(YR);
+ 107  set XR2(XR) /#XR/;
+ 108  set x_t(XR) /#XR/;
+ 109  *****************************************************************************************************************
+ 110   
+ 111  Parameters
+ 112   
+ 113          G_Q(m,i) /#C 40/ !! seems to be constant for all container jobs, bc of const 24
+ 114          G_Y(m,i) /#C 40/
+ 115          ;
  116  *****************************************************************************************************************
  117   
- 118  Parameters
- 119   
- 120          G_Q(m,i) /#C 40/ !! seems to be constant for all container jobs, bc of const 24
- 121          G_Y(m,i) /#C 40/
- 122          ;
- 123  *****************************************************************************************************************
- 124   
- 125  Binary Variables
- 126          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
- 127          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before"
- 128          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
- 129   
- 130  *       Path related variables
- 131          P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
- 132          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
- 133          P_X0(m,i,a,XR) "P_X(WV,x) Start H  loc, These are defined on actions, NOT ON CONTAINERS!"
- 134          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
- 135          ;
- 136  *****************************************************************************************************************
- 137  Positive Variables
- 138  *       Time related variables
- 139          T_Q(m,i) "start time of QC"
- 140          T_Y(m,i) "Start time of agv putting cont on ASC"
- 141          T_start(m,i,a) "Start of agv for action (m,i,a)"
- 142          CT(m,i)  "Op. completion time of for each QC m"
- 143   
- 144  *       Auxiliary Variables
- 145          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
- 146          X_position(m,i,a)   "X_position(WT)"
- 147          Y_position(m,i,a)   "Y_position(WT)"
- 148          ;
- 149  variable obj "objective function";
- 150  *****************************************************************************************************************
- 151   
- 152  Equations
- 153   
- 154          ADRP                       "AGV Dispatching and Routing Problem"
- 155          LJob(m,i)
- 156   
- 157  *       Job assignment constraints
- 158          cnstr_2(m,i)
- 159          cnstr_3(m,i,li)             "C,B"
- 160          cnstr_4(li)                 "B with 0 virtual node"
- 161          cnstr_5(li)               ‌  "B with 0 virutal node"
- 162          cnstr_6(m,i)                "L"
- 163          cnstr_7(m,i)                "D"
- 164  **********************************************************************
- 165  *       Location constraints of AGV acitons
- 166  *        cnstr_8(m,i,n,j,XR)         "C,C,XR"
- 167  *        cnstr_8_slack(m,i,n,j)
- 168          cnstr_8(m,i,n,j,xr)
- 169          cnstr_8_1(m,i,n,j,xr)
- 170          cnstr_9(m,i,n,j,YR)         "C,C,YR"
- 171          cnstr_9_1(m,i,n,j,YR)         "C,C,YR"
- 172          cnstr_10(m,i,a)             "C,a"
- 173          cnstr_11(m,i,a)             "C,a"
- 174          cnstr_12(m,i)               "L"
- 175          cnstr_13(m,i)               "D"
- 176          cnstr_14(m,i,XR)            "D"
- 177          cnstr_15(m,i)               "L"
- 178          cnstr_19(m,i)               "D"
- 179          cnstr_16(m,i)               "D"
- 180          cnstr_17(m,i)               "L"
- 181          cnstr_18(m,i,XR)            "L"
- 182          cnstr_20(m, i, a, a, YR)    "WH,YR"
- 183          cnstr_21(m,i,a,a,XR)        "WV,XR"
- 184   
- 185  **********************************************************************
- 186  *       Conflict Free Constraints
- 187          cnstr_22(m,i,n,j)           "C,C"
- 188          cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR" !!Look How many equations it would add to the model
- 189          cnstr_24(m,i,n,j,a)         "C, WH"
- 190          cnstr_25(m,i,n,j,a,a)       "C, WH"
- 191          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"
- 192          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
- 193          cnstr_28(m,i,a, a)          "C,a"
- 194  **********************************************************************
- 195  ****Time Constraints
- 196          cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
- 197          cnstr_30(m,i,m,i)           "psi_1"
- 198          cnstr_31(m,i,m,i)           "psi_2"
- 199          cnstr_32(m,i)               "D"
- 200          cnstr_33(m,i)               "L"
- 201          cnstr_34(m,i,m,i)           "D,L"
- 202          cnstr_35(m,i,m,i)           "L,D"
- 203          cnstr_36(m,i,a)             "D,a"
- 204          cnstr_37(m,i,a)             "D,a"
- 205          cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
- 206          cnstr_39(m,i,a,XR)          "C,a,XR"
- 207          cnstr_39_1(m,i,a,XR)          "C,a,XR"
- 208          cnstr_40(m,i,a,YR)          "C,a,YR"
- 209          cnstr_40_1(m,i,a,YR)          "C,a,YR"
- 210          cnstr_41(m,i,a,m,i,a)
- 211          ;
- 212   
- 213  **********************************************************************
- 214  *This determines whether the last container job is for QC or AGV
- 215  LJob(Cd).. CT(Cd) =e= max(T_Q(Cd)+G_Q(cd), T_Y(Cd)+G_Y(Cd));
- 216  *This constraint clarifies the lengthiest operation among all container jobs
- 217  ADRP.. obj  =e= smax(Cd, CT(Cd));
- 218   
- 219  *****************************************************************************************************************
- 220  **Job assinment constraints
- 221  *as soon as you include conditional $(C(m,i)), you ignore virtual node!
- 222  *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
- 223  cnstr_2(m,i) $(C(m,i)).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
- 224   
- 225  cnstr_3(m,i,li) $(C(m,i))..sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) -sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) =e= 0;
- 226   
- 227  cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
- 228  cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
- 229   
- 230  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
- 231  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 118  Binary Variables
+ 119          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
+ 120          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before"
+ 121          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
+ 122   
+ 123  *       Path related variables
+ 124          P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
+ 125          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
+ 126          P_X0(m,i,a,XR) "P_X(WV,x) Start H  loc, These are defined on actions, NOT ON CONTAINERS!"
+ 127          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
+ 128          ;
+ 129  *****************************************************************************************************************
+ 130  Positive Variables
+ 131  *       Time related variables
+ 132          T_Q(m,i) "start time of QC"
+ 133          T_Y(m,i) "Start time of agv putting cont on ASC"
+ 134          T_start(m,i,a) "Start of agv for action (m,i,a)"
+ 135          CT(m,i)  "Op. completion time of for each QC m"
+ 136   
+ 137  *       Auxiliary Variables
+ 138          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
+ 139          X_position(m,i,a)   "X_position(WT)"
+ 140          Y_position(m,i,a)   "Y_position(WT)"
+ 141          ;
+ 142  variable obj "objective function";
+ 143  *****************************************************************************************************************
+ 144   
+ 145  Equations
+ 146   
+ 147          ADRP                       "AGV Dispatching and Routing Problem"
+ 148          LJob(m,i)
+ 149   
+ 150  *       Job assignment constraints
+ 151          cnstr_2(m,i)
+ 152          cnstr_3(m,i,li)             "C,B"
+ 153          cnstr_4(li)                 "B with 0 virtual node"
+ 154          cnstr_5(li)               ‌  "B with 0 virutal node"
+ 155          cnstr_6(m,i)                "L"
+ 156          cnstr_7(m,i)                "D"
+ 157  **********************************************************************
+ 158  *       Location constraints of AGV acitons
+ 159  *        cnstr_8(m,i,n,j,XR)         "C,C,XR"
+ 160  *        cnstr_8_slack(m,i,n,j)
+ 161          cnstr_8(m,i,n,j,xr)
+ 162          cnstr_8_1(m,i,n,j,xr)
+ 163          cnstr_9(m,i,n,j,YR)         "C,C,YR"
+ 164          cnstr_9_1(m,i,n,j,YR)         "C,C,YR"
+ 165          cnstr_10(m,i,a)             "C,a"
+ 166          cnstr_11(m,i,a)             "C,a"
+ 167          cnstr_12(m,i)               "L"
+ 168          cnstr_13(m,i)               "D"
+ 169          cnstr_14(m,i,XR)            "D"
+ 170          cnstr_15(m,i)               "L"
+ 171          cnstr_19(m,i)               "D"
+ 172          cnstr_16(m,i)               "D"
+ 173          cnstr_17(m,i)               "L"
+ 174          cnstr_18(m,i,XR)            "L"
+ 175          cnstr_20(m, i, a, a, YR)    "WH,YR"
+ 176          cnstr_21(m,i,a,a,XR)        "WV,XR"
+ 177   
+ 178  **********************************************************************
+ 179  *       Conflict Free Constraints
+ 180          cnstr_22(m,i,n,j)           "C,C"
+ 181          cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR" !!Look How many equations it would add to the model
+ 182          cnstr_24(m,i,n,j,a)         "C, WH"
+ 183          cnstr_25(m,i,n,j,a,a)       "C, WH"
+ 184          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"
+ 185          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+ 186          cnstr_28(m,i,a, a)          "C,a"
+ 187  **********************************************************************
+ 188  ****Time Constraints
+ 189          cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
+ 190          cnstr_30(m,i,m,i)           "psi_1"
+ 191          cnstr_31(m,i,m,i)           "psi_2"
+ 192          cnstr_32(m,i)               "D"
+ 193          cnstr_33(m,i)               "L"
+ 194          cnstr_34(m,i,m,i)           "D,L"
+ 195          cnstr_35(m,i,m,i)           "L,D"
+ 196          cnstr_36(m,i,a)             "D,a"
+ 197          cnstr_37(m,i,a)             "D,a"
+ 198          cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
+ 199          cnstr_39(m,i,a,XR)          "C,a,XR"
+ 200          cnstr_39_1(m,i,a,XR)          "C,a,XR"
+ 201          cnstr_40(m,i,a,YR)          "C,a,YR"
+ 202          cnstr_40_1(m,i,a,YR)          "C,a,YR"
+ 203          cnstr_41(m,i,a,m,i,a)
+ 204          ;
+ 205   
+ 206  **********************************************************************
+ 207  *This determines whether the last container job is for QC or AGV
+ 208  LJob(Cd).. CT(Cd) =e= max(T_Q(Cd)+G_Q(cd), T_Y(Cd)+G_Y(Cd));
+ 209  *This constraint clarifies the lengthiest operation among all container jobs
+ 210  ADRP.. obj  =e= smax(Cd, CT(Cd));
+ 211   
+ 212  *****************************************************************************************************************
+ 213  **Job assinment constraints
+ 214  *as soon as you include conditional $(C(m,i)), you ignore virtual node!
+ 215  *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
+ 216  cnstr_2(m,i) $(C(m,i)).. sum((li,n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
+ 217   
+ 218  cnstr_3(m,i,li) $(C(m,i))..sum((n,j) $(C(n,j) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) -sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) =e= 0;
+ 219   
+ 220  cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
+ 221  cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
+ 222   
+ 223  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 224  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 225   
+ 226  cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =l= 0;
+ 227  cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =g= 0;
+ 228   
+ 229  cnstr_9(m,i,n,j,yr) $(c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;
+ 230  cnstr_9_1(m,i,n,j,yr) $(c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;
+ 231  ****************************************
  232   
- 233  cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =l= 0;
- 234  cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =g= 0;
+ 233  cnstr_10(m,i,a) $(c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+ 234  cnstr_11(m,i,a) $(c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
  235   
- 236  cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;
- 237  cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;
- 238  ****************************************
- 239   
- 240  cnstr_10(m,i,a) $(WT(m,i,a) and c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
- 241  cnstr_11(m,i,a) $(wt(m,i,a) and c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+ 236  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+ 237  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
+ 238   
+ 239  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X(m, i,'a0',XR) =e= 1;
+ 240  cnstr_15(m,i) $(L(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
+ 241  cnstr_19(m,i) $(D(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
  242   
- 243  cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
- 244  cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
- 245   
- 246  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1;
- 247  cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0'))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
- 248  cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3'))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
+ 243  cnstr_16(m,i) $(D(m,i)).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
+ 244  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 245  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X(m, i,'a3',XR) =e= 1;
+ 246   
+ 247  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+ 248  cnstr_21(m, i, a1, a1_1, XR) $(WV(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
  249   
- 250  cnstr_16(m,i) $(D(m,i) and wt(m,i,'a3')).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
- 251  cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 252  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
- 253   
- 254  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
- 255  cnstr_21(m, i, a1, a1_1, XR) $(WV(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
- 256   
- 257  *******************************************************************************************************************************************************************************************
- 258  ****Conflict Free Constraints
- 259  cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
- 260  * wt(a1_1) and wt(a2_1) are computed here!
- 261  cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
- 262  *
- 263  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
- 264  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
- 265  *
- 266  *!! YS is used in here!
- 267  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
- 268  cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
- 269  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
- 270   
- 271  *******************************************************************************************************************************************************************************************
- 272  ***Time Constraints
- 273  cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
- 274  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
- 275  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
- 276   
- 277  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
- 278  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 250  *******************************************************************************************************************************************************************************************
+ 251  ****Conflict Free Constraints
+ 252  cnstr_22(m,i,n,j) $(c(m,i) and c(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 253  * wt(a1_1) and wt(a2_1) are computed here!
+ 254  cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
+ 255  *
+ 256  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 257  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 258  *
+ 259  *!! YS is used in here!
+ 260  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 261  cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2)).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 262  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 263   
+ 264  *******************************************************************************************************************************************************************************************
+ 265  ***Time Constraints
+ 266  cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
+ 267  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+ 268  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+ 269   
+ 270  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+ 271  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 272   
+ 273  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 274  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 275   
+ 276  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+ 277  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+ 278  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1)).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
  279   
- 280  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 281  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 282   
- 283  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
- 284  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
- 285  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1)).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
- 286   
- 287  * THE BIG-M TRICK FOR IF-CONDITIONAL
- 288  cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *abs(1-P_X(m,i,a,XR)) =l= 0;
- 289  cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *abs(1-P_X(m,i,a,XR)) =g= 0;
- 290  cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *abs(1-P_Y(m,i,a,YR)) =l= 0;
- 291  cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *abs(1-P_Y(m,i,a,YR)) =g= 0;
- 292  ****************************************
- 293  * Just writing the switch time between actions according the position of the start and finish locaiton of the action and AGVs next aciton
- 294  *and the speed of the vehicle which is constant. Which might be bad!!
- 295  cnstr_41(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
- 296  ****************************************
- 297   
- 298  Model ConflictFreeSch /all/ ;
- 299  option SOLVER = Gurobi;
- 300   
- 301  * This is for detecting a set of Irredicuible Infeasible Solutions; Gurobi-specific:
- 302  *$onEcho > CFS.opt
- 303  *iis 1
- 304  *indic cnstr_8(m,i,n,j,XR)$slack(m,i,n,j) 1
- 305  *$offEcho
- 306  *ConflictFreeSch.Optfile = 1;
- 307  solve conflictfreesch using MINLP min obj;
- 308   
- 309   
- 310   
- 311   
- 312  *Option MIP = COPT;
- 313  *Model ConflictFreeSch /adrp3, cnstr_2, cnstr_3, cnstr_4, cnstr_5, cnstr_6, cnstr_7/ ;
- 314  *Solve ConflictFreeSch using mip minimizing slack1;
- 315  *display z.l;
- 316  *Solve ConflictFreeSch using mip minimizing slack1;
- 317  *display z.l;
- 318  *$gdxout BBAPP
- 319  *$unload
- 320  *$gdxout
- 321  *Display x.l, x.m ;
+ 280  * THE BIG-M TRICK FOR IF-CONDITIONAL
+ 281  cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *abs(1-P_X(m,i,a,XR)) =l= 0;
+ 282  cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *abs(1-P_X(m,i,a,XR)) =g= 0;
+ 283  cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *abs(1-P_Y(m,i,a,YR)) =l= 0;
+ 284  cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *abs(1-P_Y(m,i,a,YR)) =g= 0;
+ 285  ****************************************
+ 286  * Just writing the switch time between actions according the position of the start and finish locaiton of the action and AGVs next aciton
+ 287  *and the speed of the vehicle which is constant. Which might be bad!!
+ 288  cnstr_41(m,i,a1,n,j,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
+ 289  ****************************************
+ 290   
+ 291  Model ConflictFreeSch /all/ ;
+ 292  option SOLVER = Gurobi;
+ 293   
+ 294  * This is for detecting a set of Irredicuible Infeasible Solutions; Gurobi-specific:
+ 295  *$onEcho > CFS.opt
+ 296  *iis 1
+ 297  *indic cnstr_8(m,i,n,j,XR)$slack(m,i,n,j) 1
+ 298  *$offEcho
+ 299  *ConflictFreeSch.Optfile = 1;
+ 300  solve conflictfreesch using MINLP min obj;
+ 301   
+ 302   
+ 303   
+ 304   
+ 305  *Option MIP = COPT;
+ 306  *Model ConflictFreeSch /adrp3, cnstr_2, cnstr_3, cnstr_4, cnstr_5, cnstr_6, cnstr_7/ ;
+ 307  *Solve ConflictFreeSch using mip minimizing slack1;
+ 308  *display z.l;
+ 309  *Solve ConflictFreeSch using mip minimizing slack1;
+ 310  *display z.l;
+ 311  *$gdxout BBAPP
+ 312  *$unload
+ 313  *$gdxout
+ 314  *Display x.l, x.m ;
+ 315   
+ 316   
+ 317   
+ 318   
+ 319   
+ 320   
+ 321   
  322   
  323   
  324   
@@ -380,19 +380,12 @@ C o m p i l a t i o n
  381   
  382   
  383   
- 384   
- 385   
- 386   
- 387   
- 388   
- 389   
- 390   
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 12:26:35 Page 2
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 13:13:35 Page 2
 A branch and bound problem
-Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 307
+Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 300
 
 
 ---- ADRP  =E=  AGV Dispatching and Routing Problem
@@ -557,7 +550,7 @@ REMAINING ENTRY SKIPPED
 
 ---- cnstr_14  =E=  D
 
-cnstr_14(m1,i2,3)..  P_X(m1,i2,a0,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_14(m1,i2,5)..  P_X(m1,i2,a0,5) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 cnstr_14(m2,i1,11)..  P_X(m2,i1,a0,11) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
@@ -610,9 +603,9 @@ cnstr_17(m3,i2)..  P_Y(m3,i2,a3,6) + P_Y(m3,i2,a3,7) + P_Y(m3,i2,a3,8) + P_Y(m3,
 
 cnstr_18(m1,i1,3)..  P_X(m1,i1,a3,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_18(m2,i2,11)..  P_X(m2,i2,a3,11) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_18(m2,i2,13)..  P_X(m2,i2,a3,13) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_18(m3,i2,17)..  P_X(m3,i2,a3,17) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_18(m3,i2,19)..  P_X(m3,i2,a3,19) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 
 ---- cnstr_20  =E=  WH,YR
@@ -685,7 +678,7 @@ REMAINING 144 ENTRIES SKIPPED
 
 cnstr_26(m1,i1,a1,6,m1,i1,a3,a0)..  - 10000000*U_QC(m1,i1,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,4) - (10000000)*P_X(m1,i1,a0,5) - (10000000)*P_X(m1,i1,a0,6) - (10000000)*P_X(m1,i1,a0,7) - (10000000)*P_X(m1,i1,a0,8) - (10000000)*P_X(m1,i1,a0,9) - (10000000)*P_X(m1,i1,a0,10) - (10000000)*P_X(m1,i1,a0,11) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17) - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2) + (10000000)*P_X(m1,i1,a1,3) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m1,i1,a3,6) - T_Q(m1,i1) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m1,i1,a3) =G= -29999960 ; (LHS = 0)
      
-cnstr_26(m1,i1,a1,6,m1,i2,a0,a0)..  - 10000000*U_QC(m1,i2,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,4) - (10000000)*P_X(m1,i1,a0,5) - (10000000)*P_X(m1,i1,a0,6) - (10000000)*P_X(m1,i1,a0,7) - (10000000)*P_X(m1,i1,a0,8) - (10000000)*P_X(m1,i1,a0,9) - (10000000)*P_X(m1,i1,a0,10) - (10000000)*P_X(m1,i1,a0,11) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17) - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2) + (10000000)*P_X(m1,i1,a1,3) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m1,i2,a0,6) - T_Q(m1,i2) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m1,i2,a0) =G= -29999960 ; (LHS = 0)
+cnstr_26(m1,i1,a1,6,m1,i2,a0,a0)..  - 10000000*U_QC(m1,i2,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,6) - (10000000)*P_X(m1,i1,a0,7) - (10000000)*P_X(m1,i1,a0,8) - (10000000)*P_X(m1,i1,a0,9) - (10000000)*P_X(m1,i1,a0,10) - (10000000)*P_X(m1,i1,a0,11) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17) - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2) + (10000000)*P_X(m1,i1,a1,3) + (10000000)*P_X(m1,i1,a1,4) + (10000000)*P_X(m1,i1,a1,5) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m1,i2,a0,6) - T_Q(m1,i2) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m1,i2,a0) =G= -29999960 ; (LHS = 0)
      
 cnstr_26(m1,i1,a1,6,m2,i1,a0,a0)..  - 10000000*U_QC(m2,i1,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17) - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2) + (10000000)*P_X(m1,i1,a1,3) + (10000000)*P_X(m1,i1,a1,4) + (10000000)*P_X(m1,i1,a1,5) + (10000000)*P_X(m1,i1,a1,6) + (10000000)*P_X(m1,i1,a1,7) + (10000000)*P_X(m1,i1,a1,8) + (10000000)*P_X(m1,i1,a1,9) + (10000000)*P_X(m1,i1,a1,10) + (10000000)*P_X(m1,i1,a1,11) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m2,i1,a0,6) - T_Q(m2,i1) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m2,i1,a0) =G= -29999960 ; (LHS = 0)
      
@@ -807,13 +800,13 @@ REMAINING 4 ENTRIES SKIPPED
 
 ---- cnstr_38  =G=  WT,WT
 
-cnstr_38(m1,i1,a1,a0,m1,i1,a0)..  - 10000000*U_AGV(m1,i1,a1,m1,i1,a0) + T_start(m1,i1,a0) - T_start(m1,i1,a1) - t_AGV(m1,i1,a0,m1,i1,a1) =G= -10000000 ; (LHS = 0)
-     
 cnstr_38(m1,i1,a1,a0,m1,i1,a1)..  - 10000000*U_AGV(m1,i1,a1,m1,i1,a1) - t_AGV(m1,i1,a0,m1,i1,a1) =G= -10000000 ; (LHS = 0)
      
 cnstr_38(m1,i1,a1,a0,m1,i1,a2)..  - 10000000*U_AGV(m1,i1,a1,m1,i1,a2) - T_start(m1,i1,a1) + T_start(m1,i1,a2) - t_AGV(m1,i1,a0,m1,i1,a1) =G= -10000000 ; (LHS = 0)
      
-REMAINING 977 ENTRIES SKIPPED
+cnstr_38(m1,i1,a1,a0,m1,i1,a3)..  - 10000000*U_AGV(m1,i1,a1,m1,i1,a3) - T_start(m1,i1,a1) + T_start(m1,i1,a3) - t_AGV(m1,i1,a0,m1,i1,a1) =G= -10000000 ; (LHS = 0)
+     
+REMAINING 781 ENTRIES SKIPPED
 
 
 ---- cnstr_39  =L=  C,a,XR
@@ -870,9 +863,9 @@ cnstr_41(m1,i1,a0,m1,i1,a2)..  t_AGV(m1,i1,a0,m1,i1,a2) - (0.25)*X_position(m1,i
      
 REMAINING 1222 ENTRIES SKIPPED
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 12:26:35 Page 3
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 13:13:35 Page 3
 A branch and bound problem
-Column Listing      SOLVE ConflictFreeSch Using MINLP From line 307
+Column Listing      SOLVE ConflictFreeSch Using MINLP From line 300
 
 
 ---- z  used mainly for handling QC double cycling, it consists of 0 virtual point!
@@ -895,10 +888,6 @@ z(m0,i0,m1,i1,l3)
 REMAINING 186 ENTRIES SKIPPED
 
 ---- U_AGV  U_AGV(j_1,j_2) conducted before
-
-U_AGV(m1,i1,a1,m1,i1,a0)
-                (.LO, .L, .UP, .M = 0, 0, 1, 0)
-  -1.000000E+7  cnstr_38(m1,i1,a1,a0,m1,i1,a0)
 
 U_AGV(m1,i1,a1,m1,i1,a1)
                 (.LO, .L, .UP, .M = 0, 0, 1, 0)
@@ -1139,7 +1128,471 @@ U_AGV(m1,i1,a1,m1,i1,a2)
         1       cnstr_28(m1,i1,a2,a1)
   -1.000000E+7  cnstr_38(m1,i1,a1,a0,m1,i1,a2)
 
-REMAINING 977 ENTRIES SKIPPED
+U_AGV(m1,i1,a1,m1,i1,a3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,1,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,2,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,3,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,4,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,5,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,6,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,7,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,8,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,9,23,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,1,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,2,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,3,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,4,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,5,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,6,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,7,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,8,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,9,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,10,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,11,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,12,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,13,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,14,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,15,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,16,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,17,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,18,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,19,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,20,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,21,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,22,a0,a2)
+        1       cnstr_23(m1,i1,a1,m1,i1,a3,10,23,a0,a2)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,1,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,2,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,3,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,4,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,5,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,6,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,7,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,8,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,9,23,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,1,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,2,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,3,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,4,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,5,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,6,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,7,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,8,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,9,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,10,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,11,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,12,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,13,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,14,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,15,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,16,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,17,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,18,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,19,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,20,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,21,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,22,a2,a0)
+        1       cnstr_23(m1,i1,a3,m1,i1,a1,10,23,a2,a0)
+  -1.000000E+7  cnstr_38(m1,i1,a1,a0,m1,i1,a3)
+
+REMAINING 781 ENTRIES SKIPPED
 
 ---- U_QC  U_QC(j,WT) conducted before
 
@@ -28208,37 +28661,6 @@ REMAINING 4 ENTRIES SKIPPED
 
 ---- T_start  Start of agv for action (m,i,a)
 
-T_start(m1,i1,a0)
-                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
-        1       cnstr_38(m1,i1,a1,a0,m1,i1,a0)
-        1       cnstr_38(m1,i1,a2,a1,m1,i1,a0)
-        1       cnstr_38(m1,i1,a3,a2,m1,i1,a0)
-        1       cnstr_38(m1,i1,a4,a3,m1,i1,a0)
-        1       cnstr_38(m1,i2,a1,a0,m1,i1,a0)
-        1       cnstr_38(m1,i2,a2,a1,m1,i1,a0)
-        1       cnstr_38(m1,i2,a3,a2,m1,i1,a0)
-        1       cnstr_38(m1,i2,a4,a3,m1,i1,a0)
-        1       cnstr_38(m2,i1,a1,a0,m1,i1,a0)
-        1       cnstr_38(m2,i1,a2,a1,m1,i1,a0)
-        1       cnstr_38(m2,i1,a3,a2,m1,i1,a0)
-        1       cnstr_38(m2,i1,a4,a3,m1,i1,a0)
-        1       cnstr_38(m2,i2,a1,a0,m1,i1,a0)
-        1       cnstr_38(m2,i2,a2,a1,m1,i1,a0)
-        1       cnstr_38(m2,i2,a3,a2,m1,i1,a0)
-        1       cnstr_38(m2,i2,a4,a3,m1,i1,a0)
-        1       cnstr_38(m3,i1,a1,a0,m1,i1,a0)
-        1       cnstr_38(m3,i1,a2,a1,m1,i1,a0)
-        1       cnstr_38(m3,i1,a3,a2,m1,i1,a0)
-        1       cnstr_38(m3,i1,a4,a3,m1,i1,a0)
-        1       cnstr_38(m3,i2,a1,a0,m1,i1,a0)
-        1       cnstr_38(m3,i2,a2,a1,m1,i1,a0)
-        1       cnstr_38(m3,i2,a3,a2,m1,i1,a0)
-        1       cnstr_38(m3,i2,a4,a3,m1,i1,a0)
-        1       cnstr_38(m3,i3,a1,a0,m1,i1,a0)
-        1       cnstr_38(m3,i3,a2,a1,m1,i1,a0)
-        1       cnstr_38(m3,i3,a3,a2,m1,i1,a0)
-        1       cnstr_38(m3,i3,a4,a3,m1,i1,a0)
-
 T_start(m1,i1,a1)
                 (.LO, .L, .UP, .M = 0, 0, +INF, 0)
        -1       cnstr_24(m1,i1,m1,i1,a1)
@@ -28291,36 +28713,29 @@ T_start(m1,i1,a1)
         1       cnstr_26(m1,i1,a1,10,m3,i2,a3,a0)
         1       cnstr_26(m1,i1,a1,10,m3,i3,a0,a0)
         1       cnstr_36(m1,i1,a1)
-       -1       cnstr_38(m1,i1,a1,a0,m1,i1,a0)
        -1       cnstr_38(m1,i1,a1,a0,m1,i1,a2)
        -1       cnstr_38(m1,i1,a1,a0,m1,i1,a3)
        -1       cnstr_38(m1,i1,a1,a0,m1,i1,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m1,i2,a0)
        -1       cnstr_38(m1,i1,a1,a0,m1,i2,a1)
        -1       cnstr_38(m1,i1,a1,a0,m1,i2,a2)
        -1       cnstr_38(m1,i1,a1,a0,m1,i2,a3)
        -1       cnstr_38(m1,i1,a1,a0,m1,i2,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m2,i1,a0)
        -1       cnstr_38(m1,i1,a1,a0,m2,i1,a1)
        -1       cnstr_38(m1,i1,a1,a0,m2,i1,a2)
        -1       cnstr_38(m1,i1,a1,a0,m2,i1,a3)
        -1       cnstr_38(m1,i1,a1,a0,m2,i1,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m2,i2,a0)
        -1       cnstr_38(m1,i1,a1,a0,m2,i2,a1)
        -1       cnstr_38(m1,i1,a1,a0,m2,i2,a2)
        -1       cnstr_38(m1,i1,a1,a0,m2,i2,a3)
        -1       cnstr_38(m1,i1,a1,a0,m2,i2,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m3,i1,a0)
        -1       cnstr_38(m1,i1,a1,a0,m3,i1,a1)
        -1       cnstr_38(m1,i1,a1,a0,m3,i1,a2)
        -1       cnstr_38(m1,i1,a1,a0,m3,i1,a3)
        -1       cnstr_38(m1,i1,a1,a0,m3,i1,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m3,i2,a0)
        -1       cnstr_38(m1,i1,a1,a0,m3,i2,a1)
        -1       cnstr_38(m1,i1,a1,a0,m3,i2,a2)
        -1       cnstr_38(m1,i1,a1,a0,m3,i2,a3)
        -1       cnstr_38(m1,i1,a1,a0,m3,i2,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m3,i3,a0)
        -1       cnstr_38(m1,i1,a1,a0,m3,i3,a1)
        -1       cnstr_38(m1,i1,a1,a0,m3,i3,a2)
        -1       cnstr_38(m1,i1,a1,a0,m3,i3,a3)
@@ -28356,36 +28771,29 @@ T_start(m1,i1,a1)
 T_start(m1,i1,a2)
                 (.LO, .L, .UP, .M = 0, 0, +INF, 0)
         1       cnstr_38(m1,i1,a1,a0,m1,i1,a2)
-       -1       cnstr_38(m1,i1,a2,a1,m1,i1,a0)
        -1       cnstr_38(m1,i1,a2,a1,m1,i1,a1)
        -1       cnstr_38(m1,i1,a2,a1,m1,i1,a3)
        -1       cnstr_38(m1,i1,a2,a1,m1,i1,a4)
-       -1       cnstr_38(m1,i1,a2,a1,m1,i2,a0)
        -1       cnstr_38(m1,i1,a2,a1,m1,i2,a1)
        -1       cnstr_38(m1,i1,a2,a1,m1,i2,a2)
        -1       cnstr_38(m1,i1,a2,a1,m1,i2,a3)
        -1       cnstr_38(m1,i1,a2,a1,m1,i2,a4)
-       -1       cnstr_38(m1,i1,a2,a1,m2,i1,a0)
        -1       cnstr_38(m1,i1,a2,a1,m2,i1,a1)
        -1       cnstr_38(m1,i1,a2,a1,m2,i1,a2)
        -1       cnstr_38(m1,i1,a2,a1,m2,i1,a3)
        -1       cnstr_38(m1,i1,a2,a1,m2,i1,a4)
-       -1       cnstr_38(m1,i1,a2,a1,m2,i2,a0)
        -1       cnstr_38(m1,i1,a2,a1,m2,i2,a1)
        -1       cnstr_38(m1,i1,a2,a1,m2,i2,a2)
        -1       cnstr_38(m1,i1,a2,a1,m2,i2,a3)
        -1       cnstr_38(m1,i1,a2,a1,m2,i2,a4)
-       -1       cnstr_38(m1,i1,a2,a1,m3,i1,a0)
        -1       cnstr_38(m1,i1,a2,a1,m3,i1,a1)
        -1       cnstr_38(m1,i1,a2,a1,m3,i1,a2)
        -1       cnstr_38(m1,i1,a2,a1,m3,i1,a3)
        -1       cnstr_38(m1,i1,a2,a1,m3,i1,a4)
-       -1       cnstr_38(m1,i1,a2,a1,m3,i2,a0)
        -1       cnstr_38(m1,i1,a2,a1,m3,i2,a1)
        -1       cnstr_38(m1,i1,a2,a1,m3,i2,a2)
        -1       cnstr_38(m1,i1,a2,a1,m3,i2,a3)
        -1       cnstr_38(m1,i1,a2,a1,m3,i2,a4)
-       -1       cnstr_38(m1,i1,a2,a1,m3,i3,a0)
        -1       cnstr_38(m1,i1,a2,a1,m3,i3,a1)
        -1       cnstr_38(m1,i1,a2,a1,m3,i3,a2)
        -1       cnstr_38(m1,i1,a2,a1,m3,i3,a3)
@@ -28417,7 +28825,114 @@ T_start(m1,i1,a2)
         1       cnstr_38(m3,i3,a3,a2,m1,i1,a2)
         1       cnstr_38(m3,i3,a4,a3,m1,i1,a2)
 
-REMAINING 32 ENTRIES SKIPPED
+T_start(m1,i1,a3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       cnstr_24(m1,i1,m1,i1,a3)
+       -1       cnstr_24(m1,i2,m1,i1,a3)
+       -1       cnstr_24(m2,i1,m1,i1,a3)
+       -1       cnstr_24(m2,i2,m1,i1,a3)
+       -1       cnstr_24(m3,i1,m1,i1,a3)
+       -1       cnstr_24(m3,i2,m1,i1,a3)
+       -1       cnstr_24(m3,i3,m1,i1,a3)
+        1       cnstr_25(m1,i1,m1,i1,a3,a2)
+        1       cnstr_25(m1,i2,m1,i1,a3,a2)
+        1       cnstr_25(m2,i1,m1,i1,a3,a2)
+        1       cnstr_25(m2,i2,m1,i1,a3,a2)
+        1       cnstr_25(m3,i1,m1,i1,a3,a2)
+        1       cnstr_25(m3,i2,m1,i1,a3,a2)
+        1       cnstr_25(m3,i3,m1,i1,a3,a2)
+        1       cnstr_26(m1,i1,a3,6,m1,i1,a3,a2)
+        1       cnstr_26(m1,i1,a3,6,m1,i2,a0,a2)
+        1       cnstr_26(m1,i1,a3,6,m2,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,6,m2,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,6,m3,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,6,m3,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,6,m3,i3,a0,a2)
+        1       cnstr_26(m1,i1,a3,7,m1,i1,a3,a2)
+        1       cnstr_26(m1,i1,a3,7,m1,i2,a0,a2)
+        1       cnstr_26(m1,i1,a3,7,m2,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,7,m2,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,7,m3,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,7,m3,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,7,m3,i3,a0,a2)
+        1       cnstr_26(m1,i1,a3,8,m1,i1,a3,a2)
+        1       cnstr_26(m1,i1,a3,8,m1,i2,a0,a2)
+        1       cnstr_26(m1,i1,a3,8,m2,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,8,m2,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,8,m3,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,8,m3,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,8,m3,i3,a0,a2)
+        1       cnstr_26(m1,i1,a3,9,m1,i1,a3,a2)
+        1       cnstr_26(m1,i1,a3,9,m1,i2,a0,a2)
+        1       cnstr_26(m1,i1,a3,9,m2,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,9,m2,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,9,m3,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,9,m3,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,9,m3,i3,a0,a2)
+        1       cnstr_26(m1,i1,a3,10,m1,i1,a3,a2)
+        1       cnstr_26(m1,i1,a3,10,m1,i2,a0,a2)
+        1       cnstr_26(m1,i1,a3,10,m2,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,10,m2,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,10,m3,i1,a0,a2)
+        1       cnstr_26(m1,i1,a3,10,m3,i2,a3,a2)
+        1       cnstr_26(m1,i1,a3,10,m3,i3,a0,a2)
+       -1       cnstr_33(m1,i1)
+        1       cnstr_38(m1,i1,a1,a0,m1,i1,a3)
+        1       cnstr_38(m1,i1,a2,a1,m1,i1,a3)
+       -1       cnstr_38(m1,i1,a3,a2,m1,i1,a1)
+       -1       cnstr_38(m1,i1,a3,a2,m1,i1,a2)
+       -1       cnstr_38(m1,i1,a3,a2,m1,i1,a4)
+       -1       cnstr_38(m1,i1,a3,a2,m1,i2,a1)
+       -1       cnstr_38(m1,i1,a3,a2,m1,i2,a2)
+       -1       cnstr_38(m1,i1,a3,a2,m1,i2,a3)
+       -1       cnstr_38(m1,i1,a3,a2,m1,i2,a4)
+       -1       cnstr_38(m1,i1,a3,a2,m2,i1,a1)
+       -1       cnstr_38(m1,i1,a3,a2,m2,i1,a2)
+       -1       cnstr_38(m1,i1,a3,a2,m2,i1,a3)
+       -1       cnstr_38(m1,i1,a3,a2,m2,i1,a4)
+       -1       cnstr_38(m1,i1,a3,a2,m2,i2,a1)
+       -1       cnstr_38(m1,i1,a3,a2,m2,i2,a2)
+       -1       cnstr_38(m1,i1,a3,a2,m2,i2,a3)
+       -1       cnstr_38(m1,i1,a3,a2,m2,i2,a4)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i1,a1)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i1,a2)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i1,a3)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i1,a4)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i2,a1)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i2,a2)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i2,a3)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i2,a4)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i3,a1)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i3,a2)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i3,a3)
+       -1       cnstr_38(m1,i1,a3,a2,m3,i3,a4)
+        1       cnstr_38(m1,i1,a4,a3,m1,i1,a3)
+        1       cnstr_38(m1,i2,a1,a0,m1,i1,a3)
+        1       cnstr_38(m1,i2,a2,a1,m1,i1,a3)
+        1       cnstr_38(m1,i2,a3,a2,m1,i1,a3)
+        1       cnstr_38(m1,i2,a4,a3,m1,i1,a3)
+        1       cnstr_38(m2,i1,a1,a0,m1,i1,a3)
+        1       cnstr_38(m2,i1,a2,a1,m1,i1,a3)
+        1       cnstr_38(m2,i1,a3,a2,m1,i1,a3)
+        1       cnstr_38(m2,i1,a4,a3,m1,i1,a3)
+        1       cnstr_38(m2,i2,a1,a0,m1,i1,a3)
+        1       cnstr_38(m2,i2,a2,a1,m1,i1,a3)
+        1       cnstr_38(m2,i2,a3,a2,m1,i1,a3)
+        1       cnstr_38(m2,i2,a4,a3,m1,i1,a3)
+        1       cnstr_38(m3,i1,a1,a0,m1,i1,a3)
+        1       cnstr_38(m3,i1,a2,a1,m1,i1,a3)
+        1       cnstr_38(m3,i1,a3,a2,m1,i1,a3)
+        1       cnstr_38(m3,i1,a4,a3,m1,i1,a3)
+        1       cnstr_38(m3,i2,a1,a0,m1,i1,a3)
+        1       cnstr_38(m3,i2,a2,a1,m1,i1,a3)
+        1       cnstr_38(m3,i2,a3,a2,m1,i1,a3)
+        1       cnstr_38(m3,i2,a4,a3,m1,i1,a3)
+        1       cnstr_38(m3,i3,a1,a0,m1,i1,a3)
+        1       cnstr_38(m3,i3,a2,a1,m1,i1,a3)
+        1       cnstr_38(m3,i3,a3,a2,m1,i1,a3)
+        1       cnstr_38(m3,i3,a4,a3,m1,i1,a3)
+
+REMAINING 25 ENTRIES SKIPPED
 
 ---- CT  Op. completion time of for each QC m
 
@@ -28452,37 +28967,30 @@ t_AGV(m1,i1,a0,m1,i1,a1)
         1       cnstr_25(m3,i1,m1,i1,a1,a0)
         1       cnstr_25(m3,i2,m1,i1,a1,a0)
         1       cnstr_25(m3,i3,m1,i1,a1,a0)
-       -1       cnstr_38(m1,i1,a1,a0,m1,i1,a0)
        -1       cnstr_38(m1,i1,a1,a0,m1,i1,a1)
        -1       cnstr_38(m1,i1,a1,a0,m1,i1,a2)
        -1       cnstr_38(m1,i1,a1,a0,m1,i1,a3)
        -1       cnstr_38(m1,i1,a1,a0,m1,i1,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m1,i2,a0)
        -1       cnstr_38(m1,i1,a1,a0,m1,i2,a1)
        -1       cnstr_38(m1,i1,a1,a0,m1,i2,a2)
        -1       cnstr_38(m1,i1,a1,a0,m1,i2,a3)
        -1       cnstr_38(m1,i1,a1,a0,m1,i2,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m2,i1,a0)
        -1       cnstr_38(m1,i1,a1,a0,m2,i1,a1)
        -1       cnstr_38(m1,i1,a1,a0,m2,i1,a2)
        -1       cnstr_38(m1,i1,a1,a0,m2,i1,a3)
        -1       cnstr_38(m1,i1,a1,a0,m2,i1,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m2,i2,a0)
        -1       cnstr_38(m1,i1,a1,a0,m2,i2,a1)
        -1       cnstr_38(m1,i1,a1,a0,m2,i2,a2)
        -1       cnstr_38(m1,i1,a1,a0,m2,i2,a3)
        -1       cnstr_38(m1,i1,a1,a0,m2,i2,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m3,i1,a0)
        -1       cnstr_38(m1,i1,a1,a0,m3,i1,a1)
        -1       cnstr_38(m1,i1,a1,a0,m3,i1,a2)
        -1       cnstr_38(m1,i1,a1,a0,m3,i1,a3)
        -1       cnstr_38(m1,i1,a1,a0,m3,i1,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m3,i2,a0)
        -1       cnstr_38(m1,i1,a1,a0,m3,i2,a1)
        -1       cnstr_38(m1,i1,a1,a0,m3,i2,a2)
        -1       cnstr_38(m1,i1,a1,a0,m3,i2,a3)
        -1       cnstr_38(m1,i1,a1,a0,m3,i2,a4)
-       -1       cnstr_38(m1,i1,a1,a0,m3,i3,a0)
        -1       cnstr_38(m1,i1,a1,a0,m3,i3,a1)
        -1       cnstr_38(m1,i1,a1,a0,m3,i3,a2)
        -1       cnstr_38(m1,i1,a1,a0,m3,i3,a3)
@@ -29133,9 +29641,9 @@ obj
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       ADRP
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 12:26:35 Page 4
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 13:13:35 Page 4
 A branch and bound problem
-Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 307
+Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 300
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
@@ -29144,17 +29652,17 @@ RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
 Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
 Matrix    [min, max] : [ 2.500E-01, 2.000E+07] - Zero values observed as well
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 12:26:35 Page 5
+GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/20/25 13:13:35 Page 5
 A branch and bound problem
-Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 307
+Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 300
 
 
 MODEL STATISTICS
 
-BLOCKS OF EQUATIONS          46     SINGLE EQUATIONS      111,973
-BLOCKS OF VARIABLES          13     SINGLE VARIABLES        3,819
-NON ZERO ELEMENTS     5,054,526     NON LINEAR N-Z         33,686
-CODE LENGTH              75,473     CONSTANT POOL              18     DISCRETE VARIABLES      2,471
+BLOCKS OF EQUATIONS          46     SINGLE EQUATIONS      111,777
+BLOCKS OF VARIABLES          13     SINGLE VARIABLES        3,616
+NON ZERO ELEMENTS     5,053,742     NON LINEAR N-Z         33,686
+CODE LENGTH              75,473     CONSTANT POOL              18     DISCRETE VARIABLES      2,275
 
 
 
@@ -29162,7 +29670,7 @@ CODE LENGTH              75,473     CONSTANT POOL              18     DISCRETE V
      As an academic user, you can submit large models to the NEOS service for free (see https://www.gams.com/neos)
      Alternatively, feel free to contact sales@gams.com to discuss your options
 
-GENERATION TIME      =        2.406 SECONDS    418 MB  48.3.0 71b5641f WEX-WEI
+GENERATION TIME      =        2.344 SECONDS    418 MB  48.3.0 71b5641f WEX-WEI
 **** Terminated due to a licensing error
 **** License file: C:\GAMS\48\gamslice.txt
 

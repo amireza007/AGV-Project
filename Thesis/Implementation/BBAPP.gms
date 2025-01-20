@@ -43,7 +43,7 @@ Sets
         Bs(li) "set of all agvs" /#li/
         a   "AGV actions" /a0*a4/
         !! Below is written according to Fig 5. of base article
-        WT(m,i,a) "set of total actions with virtual node" /#C.#a/
+        WT(m,i,a) "set of total actions with virtual node" /#C.(a1,a2,a3,a4)/
         WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
         WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
 
@@ -223,33 +223,33 @@ cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
 cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 
-cnstr_8(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =l= 0;  
-cnstr_8_1(m,i,n,j,xr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =g= 0; 
+cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =l= 0;  
+cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =g= 0; 
 
-cnstr_9(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
-cnstr_9_1(m,i,n,j,yr) $(WT(m,i,'a4') and WT(n,j,'a0') and c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
+cnstr_9(m,i,n,j,yr) $(c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
+cnstr_9_1(m,i,n,j,yr) $(c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
 ****************************************
 
-cnstr_10(m,i,a) $(WT(m,i,a) and c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
-cnstr_11(m,i,a) $(wt(m,i,a) and c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+cnstr_10(m,i,a) $(c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+cnstr_11(m,i,a) $(c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
 
-cnstr_12(m,i) $(L(m,i) and wt(m,i,'a0')).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
-cnstr_13(m,i) $(D(m,i) and wt(m,i,'a0')).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
+cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
 
-cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR) and Wt(m,i,'a0')).. P_X(m, i,'a0',XR) =e= 1; 
-cnstr_15(m,i) $(L(m,i) and Wt(m,i,'a0'))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
-cnstr_19(m,i) $(D(m,i) and Wt(m,i,'a3'))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
+cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X(m, i,'a0',XR) =e= 1; 
+cnstr_15(m,i) $(L(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
+cnstr_19(m,i) $(D(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
 
-cnstr_16(m,i) $(D(m,i) and wt(m,i,'a3')).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
-cnstr_17(m,i) $(L(m,i) and wt(m,i,'a3')).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
-cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR) and WT(m,i,'a3')).. P_X(m, i,'a3',XR) =e= 1;
+cnstr_16(m,i) $(D(m,i)).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
+cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X(m, i,'a3',XR) =e= 1;
    
 cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
 cnstr_21(m, i, a1, a1_1, XR) $(WV(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
 
 *******************************************************************************************************************************************************************************************
 ****Conflict Free Constraints
-cnstr_22(m,i,n,j) $(wt(m,i,'a4') and wt(n,j,'a1')).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+cnstr_22(m,i,n,j) $(c(m,i) and c(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
 * wt(a1_1) and wt(a2_1) are computed here!            
 cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
 *
@@ -285,7 +285,7 @@ cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *abs(1-P_Y(m
 ****************************************
 * Just writing the switch time between actions according the position of the start and finish locaiton of the action and AGVs next aciton
 *and the speed of the vehicle which is constant. Which might be bad!!
-cnstr_41(m,i,a1,n,j,a2) $(wt(m,i,a1) and wt(n,j,a2)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
+cnstr_41(m,i,a1,n,j,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
 ****************************************
 
 Model ConflictFreeSch /all/ ;
