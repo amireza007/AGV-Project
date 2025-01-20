@@ -13,17 +13,11 @@ $set d3 3
 Scalars
 
         S_Q "switch time for qc between two containers" /2/ !! temporarily assumed constant (take look at 6.1 and qc_double_cycle.svg)
-        x /1/
-        y /1/
-        x_R /14/
-        y_R /14/
-        y_r1 /10/ !! these should be rewritten with $set and inside sets!
         v "AGV speed" /4/
         Mnum "a very large number" /10000000/;
         
 
 Sets
-*        i0 "i with i0" /i0*i%d%/
         i "index" /i0*i3/
         i1(i) /#i/
         j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
@@ -36,9 +30,7 @@ Sets
         
         C(m,i)  "All  Containers" /m1.i1, m1.i2, m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d3%/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job for all QCs" /m1.i%d1%, m2.i%d2%, m3.i%d3%/
-        
-        
-*       0 in a is a virtual starting point
+                
         li "AGV index" /l1*l3/
         Bs(li) "set of all agvs" /#li/
         a   "AGV actions" /a0*a4/
@@ -47,7 +39,6 @@ Sets
         WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
         WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
 
-*********************************************
 *********************************************
 *Location based sets
         XR (*)  "Vertical Operational Area" /1*23/
@@ -63,15 +54,23 @@ Sets
         YS(YR)  "Horizontal Seaside Operation Area" /6*10/
         YL(YR)  "Horizontal Path" /1*5/
 
-!! what o(m,i,XR) basically determines is the vertical position of the QCs.        
+!! what o(m,i,XR) basically determines is location of storage blocks on the ship. (How many ships are there)     
+*        o(m,i,XR) / m1.i1.3,
+*                    m1.i2.5,
+*                    m2.i1.11,
+*                    m2.i2.13,
+*                    m3.i1.17,
+*                    m3.i2.19,
+*                    m3.i%d3%.21/
         o(m,i,XR) / m1.i1.3,
-                    m1.i2.5,
+                    m1.i2.3,
                     m2.i1.11,
-                    m2.i2.13,
+                    m2.i2.11,
                     m3.i1.17,
-                    m3.i2.19,
-                    m3.i%d3%.21/
-!!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
+                    m3.i2.17,
+                    m3.i%d3%.17/
+
+*!!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
         A_L_set(XR) /1,7,13,19/
         A_R_set(XR) /5,11,17,23/
         A_L(m,i,XR) /#C.#A_L_set/  
@@ -84,12 +83,12 @@ Sets
         ;
 parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
                 m1.i1 3, 
-                m1.i2 5,
+                m1.i2 3,
                 m2.i1 11,
-                m2.i2 13,
+                m2.i2 11,
                 m3.i1 17,
-                m3.i2 19,
-                m3.i%d3% 21/
+                m3.i2 17,
+                m3.i%d3% 17/
     
 *****************************************************************************************************************
 *Dupilcates of the some of the sets!
@@ -117,7 +116,7 @@ Parameters
 
 Binary Variables
         z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!"
-        U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before" 
+        U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before" !! note that (m,i,a) and (m,i,a) are NOT equal!!
         U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
 
 *       Path related variables
@@ -223,12 +222,11 @@ cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
 cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 
-cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =l= 0;  
-cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)).. P_x(m,i,'a4',xR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_x(n,j,'a0',xR) =g= 0; 
+cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j)).. abs(P_x(m,i,'a4',xR)- P_x(n,j,'a0',xR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;  
+cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)).. abs(P_x(m,i,'a4',xR) - P_x(n,j,'a0',xR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0; 
 
-cnstr_9(m,i,n,j,yr) $(c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) - Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',yR) =l= 0;  
-cnstr_9_1(m,i,n,j,yr) $(c(m,i) and c(n,j)).. P_Y(m,i,'a4',YR) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) - P_Y(n,j,'a0',YR) =g= 0;  
-****************************************
+cnstr_9(m,i,n,j,yr) $(c(m,i) and c(n,j)).. abs(P_Y(m,i,'a4',YR) - P_Y(n,j,'a0',yR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;  
+cnstr_9_1(m,i,n,j,yr) $(c(m,i) and c(n,j)).. abs(P_Y(m,i,'a4',YR) - P_Y(n,j,'a0',yR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0;  
 
 cnstr_10(m,i,a) $(c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
 cnstr_11(m,i,a) $(c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
@@ -236,7 +234,8 @@ cnstr_11(m,i,a) $(c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
 cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
 cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
 
-cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X(m, i,'a0',XR) =e= 1; 
+cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X(m, i,'a0',XR) =e= 1;
+* A_L depends on container (m,i), it needs fixing, hence cnstr_15 and cnstr_19 and A_R
 cnstr_15(m,i) $(L(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
 cnstr_19(m,i) $(D(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
 

@@ -1,5 +1,5 @@
 
---- Job BBAPP.gms Start 01/20/25 13:11:28 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
+--- Job BBAPP.gms Start 01/20/25 14:31:55 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\48\gmsprmNT.txt
     C:\Users\Asus\Documents\GAMS\gamsconfig.yaml
@@ -21,13 +21,13 @@ Licensee: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
 Processor information: 1 socket(s), 14 core(s), and 20 thread(s) available
 GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 --- Starting compilation
---- BBAPP.gms(383) 3 Mb
+--- BBAPP.gms(374) 3 Mb
 --- Starting execution: elapsed 0:00:00.004
---- BBAPP.gms(292) 4 Mb
+--- BBAPP.gms(283) 4 Mb
 --- Generating MINLP model ConflictFreeSch
---- BBAPP.gms(300) 420 Mb
----   111,336 rows  3,287 columns  5,051,565 non-zeroes
----   70,699 nl-code  31,950 nl-non-zeroes
+--- BBAPP.gms(291) 420 Mb
+---   111,777 rows  3,616 columns  5,053,742 non-zeroes
+---   85,175 nl-code  40,154 nl-non-zeroes
 ---   2,275 discrete-columns
 --- Range statistics (absolute non-zero finite values)
 --- RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
@@ -36,11 +36,11 @@ GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 *** The model exceeds the demo license limits for nonlinear models of more than 1000 rows or columns
     As an academic user, you can submit large models to the NEOS service for free (see https://www.gams.com/neos)
     Alternatively, feel free to contact sales@gams.com to discuss your options
-*** Error at line 300: Control C Event: execution halted
---- BBAPP.gms(300) 418 Mb 1 Error
+*** Error at line 291: Control C Event: execution halted
+--- BBAPP.gms(291) 418 Mb 1 Error
 *** SOLVE aborted
---- BBAPP.gms(300) 418 Mb 1 Error
+--- BBAPP.gms(291) 418 Mb 1 Error
 *** Status: Terminated due to a licensing error
 ***         License file: C:\GAMS\48\gamslice.txt
 ***         Inspect listing file for more information.
---- Job BBAPP.gms Stop 01/20/25 13:11:31 elapsed 0:00:02.371
+--- Job BBAPP.gms Stop 01/20/25 14:31:57 elapsed 0:00:02.439
