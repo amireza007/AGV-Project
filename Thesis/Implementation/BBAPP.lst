@@ -1,4 +1,4 @@
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/21/25 18:42:48 Page 1
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 12:54:19 Page 1
 A branch and bound problem
 C o m p i l a t i o n
 
@@ -249,13 +249,15 @@ C o m p i l a t i o n
  250  ****Conflict Free Constraints
  251  cnstr_22(m,i,n,j) $(c(m,i) and c(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
  252  * wt(a1_1) and wt(a2_1) are computed here!
- 253  cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2)))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
+ 253  cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2)))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i
+      ,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
  254  *
  255  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
  256  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
  257  *
  258  *!! YS is used in here!
- 259  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 259  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)
+      ) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
  260  cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2))).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
  261  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
  262   
@@ -381,8 +383,8 @@ C o m p i l a t i o n
  382   
 
 
-COMPILATION TIME     =        0.000 SECONDS      3 MB  48.3.0 71b5641f WEX-WEI
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/21/25 18:42:48 Page 2
+COMPILATION TIME     =        0.000 SECONDS      3 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 12:54:19 Page 2
 A branch and bound problem
 Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 299
 
@@ -403,22 +405,34 @@ LJob(m3,i3)..  - (1)*T_Q(m3,i3) + (0)*T_Y(m3,i3) + CT(m3,i3) =E= 0 ; (LHS = -40,
 
 ---- cnstr_2  =E=  
 
-cnstr_2(m1,i1)..  z(m1,i1,m0,i0,l1) + z(m1,i1,m0,i0,l2) + z(m1,i1,m0,i0,l3) + z(m1,i1,m1,i2,l1) + z(m1,i1,m1,i2,l2) + z(m1,i1,m1,i2,l3) + z(m1,i1,m2,i1,l1) + z(m1,i1,m2,i1,l2) + z(m1,i1,m2,i1,l3) + z(m1,i1,m2,i2,l1) + z(m1,i1,m2,i2,l2) + z(m1,i1,m2,i2,l3) + z(m1,i1,m3,i1,l1) + z(m1,i1,m3,i1,l2) + z(m1,i1,m3,i1,l3) + z(m1,i1,m3,i2,l1) + z(m1,i1,m3,i2,l2) + z(m1,i1,m3,i2,l3) + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_2(m1,i1)..  z(m1,i1,m0,i0,l1) + z(m1,i1,m0,i0,l2) + z(m1,i1,m0,i0,l3) + z(m1,i1,m1,i2,l1) + z(m1,i1,m1,i2,l2) + z(m1,i1,m1,i2,l3) + z(m1,i1,m2,i1,l1) + z(m1,i1,m2,i1,l2) + z(m1,i1,m2,i1,l3) + z(m1,i1,m2,i2,l1) + z(m1,i1,m2,i2,l2) + z(m1,i1,m2,i2,l3)
      
-cnstr_2(m1,i2)..  z(m1,i2,m0,i0,l1) + z(m1,i2,m0,i0,l2) + z(m1,i2,m0,i0,l3) + z(m1,i2,m1,i1,l1) + z(m1,i2,m1,i1,l2) + z(m1,i2,m1,i1,l3) + z(m1,i2,m2,i1,l1) + z(m1,i2,m2,i1,l2) + z(m1,i2,m2,i1,l3) + z(m1,i2,m2,i2,l1) + z(m1,i2,m2,i2,l2) + z(m1,i2,m2,i2,l3) + z(m1,i2,m3,i1,l1) + z(m1,i2,m3,i1,l2) + z(m1,i2,m3,i1,l3) + z(m1,i2,m3,i2,l1) + z(m1,i2,m3,i2,l2) + z(m1,i2,m3,i2,l3) + z(m1,i2,m3,i3,l1) + z(m1,i2,m3,i3,l2) + z(m1,i2,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+      + z(m1,i1,m3,i1,l1) + z(m1,i1,m3,i1,l2) + z(m1,i1,m3,i1,l3) + z(m1,i1,m3,i2,l1) + z(m1,i1,m3,i2,l2) + z(m1,i1,m3,i2,l3) + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_2(m2,i1)..  z(m2,i1,m0,i0,l1) + z(m2,i1,m0,i0,l2) + z(m2,i1,m0,i0,l3) + z(m2,i1,m1,i1,l1) + z(m2,i1,m1,i1,l2) + z(m2,i1,m1,i1,l3) + z(m2,i1,m1,i2,l1) + z(m2,i1,m1,i2,l2) + z(m2,i1,m1,i2,l3) + z(m2,i1,m2,i2,l1) + z(m2,i1,m2,i2,l2) + z(m2,i1,m2,i2,l3) + z(m2,i1,m3,i1,l1) + z(m2,i1,m3,i1,l2) + z(m2,i1,m3,i1,l3) + z(m2,i1,m3,i2,l1) + z(m2,i1,m3,i2,l2) + z(m2,i1,m3,i2,l3) + z(m2,i1,m3,i3,l1) + z(m2,i1,m3,i3,l2) + z(m2,i1,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_2(m1,i2)..  z(m1,i2,m0,i0,l1) + z(m1,i2,m0,i0,l2) + z(m1,i2,m0,i0,l3) + z(m1,i2,m1,i1,l1) + z(m1,i2,m1,i1,l2) + z(m1,i2,m1,i1,l3) + z(m1,i2,m2,i1,l1) + z(m1,i2,m2,i1,l2) + z(m1,i2,m2,i1,l3) + z(m1,i2,m2,i2,l1) + z(m1,i2,m2,i2,l2) + z(m1,i2,m2,i2,l3)
+     
+      + z(m1,i2,m3,i1,l1) + z(m1,i2,m3,i1,l2) + z(m1,i2,m3,i1,l3) + z(m1,i2,m3,i2,l1) + z(m1,i2,m3,i2,l2) + z(m1,i2,m3,i2,l3) + z(m1,i2,m3,i3,l1) + z(m1,i2,m3,i3,l2) + z(m1,i2,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cnstr_2(m2,i1)..  z(m2,i1,m0,i0,l1) + z(m2,i1,m0,i0,l2) + z(m2,i1,m0,i0,l3) + z(m2,i1,m1,i1,l1) + z(m2,i1,m1,i1,l2) + z(m2,i1,m1,i1,l3) + z(m2,i1,m1,i2,l1) + z(m2,i1,m1,i2,l2) + z(m2,i1,m1,i2,l3) + z(m2,i1,m2,i2,l1) + z(m2,i1,m2,i2,l2) + z(m2,i1,m2,i2,l3)
+     
+      + z(m2,i1,m3,i1,l1) + z(m2,i1,m3,i1,l2) + z(m2,i1,m3,i1,l3) + z(m2,i1,m3,i2,l1) + z(m2,i1,m3,i2,l2) + z(m2,i1,m3,i2,l3) + z(m2,i1,m3,i3,l1) + z(m2,i1,m3,i3,l2) + z(m2,i1,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 REMAINING 4 ENTRIES SKIPPED
 
 
 ---- cnstr_3  =E=  C,B
 
-cnstr_3(m1,i1,l1)..  z(m0,i0,m1,i1,l1) - z(m1,i1,m0,i0,l1) - z(m1,i1,m1,i1,l1) - z(m1,i1,m1,i2,l1) - z(m1,i1,m2,i1,l1) - z(m1,i1,m2,i2,l1) - z(m1,i1,m3,i1,l1) - z(m1,i1,m3,i2,l1) - z(m1,i1,m3,i3,l1) + z(m1,i2,m1,i1,l1) + z(m2,i1,m1,i1,l1) + z(m2,i2,m1,i1,l1) + z(m3,i1,m1,i1,l1) + z(m3,i2,m1,i1,l1) + z(m3,i3,m1,i1,l1) =E= 0 ; (LHS = 0)
+cnstr_3(m1,i1,l1)..  z(m0,i0,m1,i1,l1) - z(m1,i1,m0,i0,l1) - z(m1,i1,m1,i1,l1) - z(m1,i1,m1,i2,l1) - z(m1,i1,m2,i1,l1) - z(m1,i1,m2,i2,l1) - z(m1,i1,m3,i1,l1) - z(m1,i1,m3,i2,l1) - z(m1,i1,m3,i3,l1) + z(m1,i2,m1,i1,l1) + z(m2,i1,m1,i1,l1)
      
-cnstr_3(m1,i1,l2)..  z(m0,i0,m1,i1,l2) - z(m1,i1,m0,i0,l2) - z(m1,i1,m1,i1,l2) - z(m1,i1,m1,i2,l2) - z(m1,i1,m2,i1,l2) - z(m1,i1,m2,i2,l2) - z(m1,i1,m3,i1,l2) - z(m1,i1,m3,i2,l2) - z(m1,i1,m3,i3,l2) + z(m1,i2,m1,i1,l2) + z(m2,i1,m1,i1,l2) + z(m2,i2,m1,i1,l2) + z(m3,i1,m1,i1,l2) + z(m3,i2,m1,i1,l2) + z(m3,i3,m1,i1,l2) =E= 0 ; (LHS = 0)
+      + z(m2,i2,m1,i1,l1) + z(m3,i1,m1,i1,l1) + z(m3,i2,m1,i1,l1) + z(m3,i3,m1,i1,l1) =E= 0 ; (LHS = 0)
      
-cnstr_3(m1,i1,l3)..  z(m0,i0,m1,i1,l3) - z(m1,i1,m0,i0,l3) - z(m1,i1,m1,i1,l3) - z(m1,i1,m1,i2,l3) - z(m1,i1,m2,i1,l3) - z(m1,i1,m2,i2,l3) - z(m1,i1,m3,i1,l3) - z(m1,i1,m3,i2,l3) - z(m1,i1,m3,i3,l3) + z(m1,i2,m1,i1,l3) + z(m2,i1,m1,i1,l3) + z(m2,i2,m1,i1,l3) + z(m3,i1,m1,i1,l3) + z(m3,i2,m1,i1,l3) + z(m3,i3,m1,i1,l3) =E= 0 ; (LHS = 0)
+cnstr_3(m1,i1,l2)..  z(m0,i0,m1,i1,l2) - z(m1,i1,m0,i0,l2) - z(m1,i1,m1,i1,l2) - z(m1,i1,m1,i2,l2) - z(m1,i1,m2,i1,l2) - z(m1,i1,m2,i2,l2) - z(m1,i1,m3,i1,l2) - z(m1,i1,m3,i2,l2) - z(m1,i1,m3,i3,l2) + z(m1,i2,m1,i1,l2) + z(m2,i1,m1,i1,l2)
+     
+      + z(m2,i2,m1,i1,l2) + z(m3,i1,m1,i1,l2) + z(m3,i2,m1,i1,l2) + z(m3,i3,m1,i1,l2) =E= 0 ; (LHS = 0)
+     
+cnstr_3(m1,i1,l3)..  z(m0,i0,m1,i1,l3) - z(m1,i1,m0,i0,l3) - z(m1,i1,m1,i1,l3) - z(m1,i1,m1,i2,l3) - z(m1,i1,m2,i1,l3) - z(m1,i1,m2,i2,l3) - z(m1,i1,m3,i1,l3) - z(m1,i1,m3,i2,l3) - z(m1,i1,m3,i3,l3) + z(m1,i2,m1,i1,l3) + z(m2,i1,m1,i1,l3)
+     
+      + z(m2,i2,m1,i1,l3) + z(m3,i1,m1,i1,l3) + z(m3,i2,m1,i1,l3) + z(m3,i3,m1,i1,l3) =E= 0 ; (LHS = 0)
      
 REMAINING 18 ENTRIES SKIPPED
 
@@ -443,20 +457,29 @@ cnstr_5(l3)..  z(m1,i1,m0,i0,l3) + z(m1,i2,m0,i0,l3) + z(m2,i1,m0,i0,l3) + z(m2,
 
 ---- cnstr_6  =E=  L
 
-cnstr_6(m1,i1)..  z(m1,i1,m0,i0,l1) + z(m1,i1,m0,i0,l2) + z(m1,i1,m0,i0,l3) + z(m1,i1,m1,i2,l1) + z(m1,i1,m1,i2,l2) + z(m1,i1,m1,i2,l3) + z(m1,i1,m2,i1,l1) + z(m1,i1,m2,i1,l2) + z(m1,i1,m2,i1,l3) + z(m1,i1,m3,i1,l1) + z(m1,i1,m3,i1,l2) + z(m1,i1,m3,i1,l3) + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_6(m1,i1)..  z(m1,i1,m0,i0,l1) + z(m1,i1,m0,i0,l2) + z(m1,i1,m0,i0,l3) + z(m1,i1,m1,i2,l1) + z(m1,i1,m1,i2,l2) + z(m1,i1,m1,i2,l3) + z(m1,i1,m2,i1,l1) + z(m1,i1,m2,i1,l2) + z(m1,i1,m2,i1,l3) + z(m1,i1,m3,i1,l1) + z(m1,i1,m3,i1,l2) + z(m1,i1,m3,i1,l3)
      
-cnstr_6(m2,i2)..  z(m2,i2,m0,i0,l1) + z(m2,i2,m0,i0,l2) + z(m2,i2,m0,i0,l3) + z(m2,i2,m1,i2,l1) + z(m2,i2,m1,i2,l2) + z(m2,i2,m1,i2,l3) + z(m2,i2,m2,i1,l1) + z(m2,i2,m2,i1,l2) + z(m2,i2,m2,i1,l3) + z(m2,i2,m3,i1,l1) + z(m2,i2,m3,i1,l2) + z(m2,i2,m3,i1,l3) + z(m2,i2,m3,i3,l1) + z(m2,i2,m3,i3,l2) + z(m2,i2,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+      + z(m1,i1,m3,i3,l1) + z(m1,i1,m3,i3,l2) + z(m1,i1,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_6(m3,i2)..  z(m3,i2,m0,i0,l1) + z(m3,i2,m0,i0,l2) + z(m3,i2,m0,i0,l3) + z(m3,i2,m1,i2,l1) + z(m3,i2,m1,i2,l2) + z(m3,i2,m1,i2,l3) + z(m3,i2,m2,i1,l1) + z(m3,i2,m2,i1,l2) + z(m3,i2,m2,i1,l3) + z(m3,i2,m3,i1,l1) + z(m3,i2,m3,i1,l2) + z(m3,i2,m3,i1,l3) + z(m3,i2,m3,i3,l1) + z(m3,i2,m3,i3,l2) + z(m3,i2,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_6(m2,i2)..  z(m2,i2,m0,i0,l1) + z(m2,i2,m0,i0,l2) + z(m2,i2,m0,i0,l3) + z(m2,i2,m1,i2,l1) + z(m2,i2,m1,i2,l2) + z(m2,i2,m1,i2,l3) + z(m2,i2,m2,i1,l1) + z(m2,i2,m2,i1,l2) + z(m2,i2,m2,i1,l3) + z(m2,i2,m3,i1,l1) + z(m2,i2,m3,i1,l2) + z(m2,i2,m3,i1,l3)
+     
+      + z(m2,i2,m3,i3,l1) + z(m2,i2,m3,i3,l2) + z(m2,i2,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cnstr_6(m3,i2)..  z(m3,i2,m0,i0,l1) + z(m3,i2,m0,i0,l2) + z(m3,i2,m0,i0,l3) + z(m3,i2,m1,i2,l1) + z(m3,i2,m1,i2,l2) + z(m3,i2,m1,i2,l3) + z(m3,i2,m2,i1,l1) + z(m3,i2,m2,i1,l2) + z(m3,i2,m2,i1,l3) + z(m3,i2,m3,i1,l1) + z(m3,i2,m3,i1,l2) + z(m3,i2,m3,i1,l3)
+     
+      + z(m3,i2,m3,i3,l1) + z(m3,i2,m3,i3,l2) + z(m3,i2,m3,i3,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 
 ---- cnstr_7  =E=  D
 
-cnstr_7(m1,i2)..  z(m1,i2,m0,i0,l1) + z(m1,i2,m0,i0,l2) + z(m1,i2,m0,i0,l3) + z(m1,i2,m1,i1,l1) + z(m1,i2,m1,i1,l2) + z(m1,i2,m1,i1,l3) + z(m1,i2,m2,i2,l1) + z(m1,i2,m2,i2,l2) + z(m1,i2,m2,i2,l3) + z(m1,i2,m3,i2,l1) + z(m1,i2,m3,i2,l2) + z(m1,i2,m3,i2,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_7(m1,i2)..  z(m1,i2,m0,i0,l1) + z(m1,i2,m0,i0,l2) + z(m1,i2,m0,i0,l3) + z(m1,i2,m1,i1,l1) + z(m1,i2,m1,i1,l2) + z(m1,i2,m1,i1,l3) + z(m1,i2,m2,i2,l1) + z(m1,i2,m2,i2,l2) + z(m1,i2,m2,i2,l3) + z(m1,i2,m3,i2,l1) + z(m1,i2,m3,i2,l2) + z(m1,i2,m3,i2,l3)
+      =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_7(m2,i1)..  z(m2,i1,m0,i0,l1) + z(m2,i1,m0,i0,l2) + z(m2,i1,m0,i0,l3) + z(m2,i1,m1,i1,l1) + z(m2,i1,m1,i1,l2) + z(m2,i1,m1,i1,l3) + z(m2,i1,m2,i2,l1) + z(m2,i1,m2,i2,l2) + z(m2,i1,m2,i2,l3) + z(m2,i1,m3,i2,l1) + z(m2,i1,m3,i2,l2) + z(m2,i1,m3,i2,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_7(m2,i1)..  z(m2,i1,m0,i0,l1) + z(m2,i1,m0,i0,l2) + z(m2,i1,m0,i0,l3) + z(m2,i1,m1,i1,l1) + z(m2,i1,m1,i1,l2) + z(m2,i1,m1,i1,l3) + z(m2,i1,m2,i2,l1) + z(m2,i1,m2,i2,l2) + z(m2,i1,m2,i2,l3) + z(m2,i1,m3,i2,l1) + z(m2,i1,m3,i2,l2) + z(m2,i1,m3,i2,l3)
+      =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_7(m3,i1)..  z(m3,i1,m0,i0,l1) + z(m3,i1,m0,i0,l2) + z(m3,i1,m0,i0,l3) + z(m3,i1,m1,i1,l1) + z(m3,i1,m1,i1,l2) + z(m3,i1,m1,i1,l3) + z(m3,i1,m2,i2,l1) + z(m3,i1,m2,i2,l2) + z(m3,i1,m2,i2,l3) + z(m3,i1,m3,i2,l1) + z(m3,i1,m3,i2,l2) + z(m3,i1,m3,i2,l3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_7(m3,i1)..  z(m3,i1,m0,i0,l1) + z(m3,i1,m0,i0,l2) + z(m3,i1,m0,i0,l3) + z(m3,i1,m1,i1,l1) + z(m3,i1,m1,i1,l2) + z(m3,i1,m1,i1,l3) + z(m3,i1,m2,i2,l1) + z(m3,i1,m2,i2,l2) + z(m3,i1,m2,i2,l3) + z(m3,i1,m3,i2,l1) + z(m3,i1,m3,i2,l2) + z(m3,i1,m3,i2,l3)
+      =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 REMAINING ENTRY SKIPPED
 
@@ -507,11 +530,17 @@ REMAINING 417 ENTRIES SKIPPED
 
 ---- cnstr_10  =E=  C,a
 
-cnstr_10(m1,i1,a0)..  P_X(m1,i1,a0,1) + P_X(m1,i1,a0,2) + P_X(m1,i1,a0,3) + P_X(m1,i1,a0,4) + P_X(m1,i1,a0,5) + P_X(m1,i1,a0,6) + P_X(m1,i1,a0,7) + P_X(m1,i1,a0,8) + P_X(m1,i1,a0,9) + P_X(m1,i1,a0,10) + P_X(m1,i1,a0,11) + P_X(m1,i1,a0,12) + P_X(m1,i1,a0,13) + P_X(m1,i1,a0,14) + P_X(m1,i1,a0,15) + P_X(m1,i1,a0,16) + P_X(m1,i1,a0,17) + P_X(m1,i1,a0,18) + P_X(m1,i1,a0,19) + P_X(m1,i1,a0,20) + P_X(m1,i1,a0,21) + P_X(m1,i1,a0,22) + P_X(m1,i1,a0,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_10(m1,i1,a0)..  P_X(m1,i1,a0,1) + P_X(m1,i1,a0,2) + P_X(m1,i1,a0,3) + P_X(m1,i1,a0,4) + P_X(m1,i1,a0,5) + P_X(m1,i1,a0,6) + P_X(m1,i1,a0,7) + P_X(m1,i1,a0,8) + P_X(m1,i1,a0,9) + P_X(m1,i1,a0,10) + P_X(m1,i1,a0,11) + P_X(m1,i1,a0,12)
      
-cnstr_10(m1,i1,a1)..  P_X(m1,i1,a1,1) + P_X(m1,i1,a1,2) + P_X(m1,i1,a1,3) + P_X(m1,i1,a1,4) + P_X(m1,i1,a1,5) + P_X(m1,i1,a1,6) + P_X(m1,i1,a1,7) + P_X(m1,i1,a1,8) + P_X(m1,i1,a1,9) + P_X(m1,i1,a1,10) + P_X(m1,i1,a1,11) + P_X(m1,i1,a1,12) + P_X(m1,i1,a1,13) + P_X(m1,i1,a1,14) + P_X(m1,i1,a1,15) + P_X(m1,i1,a1,16) + P_X(m1,i1,a1,17) + P_X(m1,i1,a1,18) + P_X(m1,i1,a1,19) + P_X(m1,i1,a1,20) + P_X(m1,i1,a1,21) + P_X(m1,i1,a1,22) + P_X(m1,i1,a1,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+      + P_X(m1,i1,a0,13) + P_X(m1,i1,a0,14) + P_X(m1,i1,a0,15) + P_X(m1,i1,a0,16) + P_X(m1,i1,a0,17) + P_X(m1,i1,a0,18) + P_X(m1,i1,a0,19) + P_X(m1,i1,a0,20) + P_X(m1,i1,a0,21) + P_X(m1,i1,a0,22) + P_X(m1,i1,a0,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_10(m1,i1,a2)..  P_X(m1,i1,a2,1) + P_X(m1,i1,a2,2) + P_X(m1,i1,a2,3) + P_X(m1,i1,a2,4) + P_X(m1,i1,a2,5) + P_X(m1,i1,a2,6) + P_X(m1,i1,a2,7) + P_X(m1,i1,a2,8) + P_X(m1,i1,a2,9) + P_X(m1,i1,a2,10) + P_X(m1,i1,a2,11) + P_X(m1,i1,a2,12) + P_X(m1,i1,a2,13) + P_X(m1,i1,a2,14) + P_X(m1,i1,a2,15) + P_X(m1,i1,a2,16) + P_X(m1,i1,a2,17) + P_X(m1,i1,a2,18) + P_X(m1,i1,a2,19) + P_X(m1,i1,a2,20) + P_X(m1,i1,a2,21) + P_X(m1,i1,a2,22) + P_X(m1,i1,a2,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_10(m1,i1,a1)..  P_X(m1,i1,a1,1) + P_X(m1,i1,a1,2) + P_X(m1,i1,a1,3) + P_X(m1,i1,a1,4) + P_X(m1,i1,a1,5) + P_X(m1,i1,a1,6) + P_X(m1,i1,a1,7) + P_X(m1,i1,a1,8) + P_X(m1,i1,a1,9) + P_X(m1,i1,a1,10) + P_X(m1,i1,a1,11) + P_X(m1,i1,a1,12)
+     
+      + P_X(m1,i1,a1,13) + P_X(m1,i1,a1,14) + P_X(m1,i1,a1,15) + P_X(m1,i1,a1,16) + P_X(m1,i1,a1,17) + P_X(m1,i1,a1,18) + P_X(m1,i1,a1,19) + P_X(m1,i1,a1,20) + P_X(m1,i1,a1,21) + P_X(m1,i1,a1,22) + P_X(m1,i1,a1,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cnstr_10(m1,i1,a2)..  P_X(m1,i1,a2,1) + P_X(m1,i1,a2,2) + P_X(m1,i1,a2,3) + P_X(m1,i1,a2,4) + P_X(m1,i1,a2,5) + P_X(m1,i1,a2,6) + P_X(m1,i1,a2,7) + P_X(m1,i1,a2,8) + P_X(m1,i1,a2,9) + P_X(m1,i1,a2,10) + P_X(m1,i1,a2,11) + P_X(m1,i1,a2,12)
+     
+      + P_X(m1,i1,a2,13) + P_X(m1,i1,a2,14) + P_X(m1,i1,a2,15) + P_X(m1,i1,a2,16) + P_X(m1,i1,a2,17) + P_X(m1,i1,a2,18) + P_X(m1,i1,a2,19) + P_X(m1,i1,a2,20) + P_X(m1,i1,a2,21) + P_X(m1,i1,a2,22) + P_X(m1,i1,a2,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 REMAINING 32 ENTRIES SKIPPED
 
@@ -560,20 +589,32 @@ REMAINING ENTRY SKIPPED
 
 ---- cnstr_15  =E=  L
 
-cnstr_15(m1,i1)..  P_X(m1,i1,a0,1) + P_X(m1,i1,a0,2) + P_X(m1,i1,a0,3) + P_X(m1,i1,a0,4) + P_X(m1,i1,a0,5) + P_X(m1,i1,a0,7) + P_X(m1,i1,a0,8) + P_X(m1,i1,a0,9) + P_X(m1,i1,a0,10) + P_X(m1,i1,a0,11) + P_X(m1,i1,a0,13) + P_X(m1,i1,a0,14) + P_X(m1,i1,a0,15) + P_X(m1,i1,a0,16) + P_X(m1,i1,a0,17) + P_X(m1,i1,a0,19) + P_X(m1,i1,a0,20) + P_X(m1,i1,a0,21) + P_X(m1,i1,a0,22) + P_X(m1,i1,a0,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_15(m1,i1)..  P_X(m1,i1,a0,1) + P_X(m1,i1,a0,2) + P_X(m1,i1,a0,3) + P_X(m1,i1,a0,4) + P_X(m1,i1,a0,5) + P_X(m1,i1,a0,7) + P_X(m1,i1,a0,8) + P_X(m1,i1,a0,9) + P_X(m1,i1,a0,10) + P_X(m1,i1,a0,11) + P_X(m1,i1,a0,13) + P_X(m1,i1,a0,14) + P_X(m1,i1,a0,15)
      
-cnstr_15(m2,i2)..  P_X(m2,i2,a0,1) + P_X(m2,i2,a0,2) + P_X(m2,i2,a0,3) + P_X(m2,i2,a0,4) + P_X(m2,i2,a0,5) + P_X(m2,i2,a0,7) + P_X(m2,i2,a0,8) + P_X(m2,i2,a0,9) + P_X(m2,i2,a0,10) + P_X(m2,i2,a0,11) + P_X(m2,i2,a0,13) + P_X(m2,i2,a0,14) + P_X(m2,i2,a0,15) + P_X(m2,i2,a0,16) + P_X(m2,i2,a0,17) + P_X(m2,i2,a0,19) + P_X(m2,i2,a0,20) + P_X(m2,i2,a0,21) + P_X(m2,i2,a0,22) + P_X(m2,i2,a0,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+      + P_X(m1,i1,a0,16) + P_X(m1,i1,a0,17) + P_X(m1,i1,a0,19) + P_X(m1,i1,a0,20) + P_X(m1,i1,a0,21) + P_X(m1,i1,a0,22) + P_X(m1,i1,a0,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_15(m3,i2)..  P_X(m3,i2,a0,1) + P_X(m3,i2,a0,2) + P_X(m3,i2,a0,3) + P_X(m3,i2,a0,4) + P_X(m3,i2,a0,5) + P_X(m3,i2,a0,7) + P_X(m3,i2,a0,8) + P_X(m3,i2,a0,9) + P_X(m3,i2,a0,10) + P_X(m3,i2,a0,11) + P_X(m3,i2,a0,13) + P_X(m3,i2,a0,14) + P_X(m3,i2,a0,15) + P_X(m3,i2,a0,16) + P_X(m3,i2,a0,17) + P_X(m3,i2,a0,19) + P_X(m3,i2,a0,20) + P_X(m3,i2,a0,21) + P_X(m3,i2,a0,22) + P_X(m3,i2,a0,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_15(m2,i2)..  P_X(m2,i2,a0,1) + P_X(m2,i2,a0,2) + P_X(m2,i2,a0,3) + P_X(m2,i2,a0,4) + P_X(m2,i2,a0,5) + P_X(m2,i2,a0,7) + P_X(m2,i2,a0,8) + P_X(m2,i2,a0,9) + P_X(m2,i2,a0,10) + P_X(m2,i2,a0,11) + P_X(m2,i2,a0,13) + P_X(m2,i2,a0,14) + P_X(m2,i2,a0,15)
+     
+      + P_X(m2,i2,a0,16) + P_X(m2,i2,a0,17) + P_X(m2,i2,a0,19) + P_X(m2,i2,a0,20) + P_X(m2,i2,a0,21) + P_X(m2,i2,a0,22) + P_X(m2,i2,a0,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cnstr_15(m3,i2)..  P_X(m3,i2,a0,1) + P_X(m3,i2,a0,2) + P_X(m3,i2,a0,3) + P_X(m3,i2,a0,4) + P_X(m3,i2,a0,5) + P_X(m3,i2,a0,7) + P_X(m3,i2,a0,8) + P_X(m3,i2,a0,9) + P_X(m3,i2,a0,10) + P_X(m3,i2,a0,11) + P_X(m3,i2,a0,13) + P_X(m3,i2,a0,14) + P_X(m3,i2,a0,15)
+     
+      + P_X(m3,i2,a0,16) + P_X(m3,i2,a0,17) + P_X(m3,i2,a0,19) + P_X(m3,i2,a0,20) + P_X(m3,i2,a0,21) + P_X(m3,i2,a0,22) + P_X(m3,i2,a0,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 
 ---- cnstr_19  =E=  D
 
-cnstr_19(m1,i2)..  P_X(m1,i2,a3,1) + P_X(m1,i2,a3,2) + P_X(m1,i2,a3,3) + P_X(m1,i2,a3,4) + P_X(m1,i2,a3,5) + P_X(m1,i2,a3,7) + P_X(m1,i2,a3,8) + P_X(m1,i2,a3,9) + P_X(m1,i2,a3,10) + P_X(m1,i2,a3,11) + P_X(m1,i2,a3,13) + P_X(m1,i2,a3,14) + P_X(m1,i2,a3,15) + P_X(m1,i2,a3,16) + P_X(m1,i2,a3,17) + P_X(m1,i2,a3,19) + P_X(m1,i2,a3,20) + P_X(m1,i2,a3,21) + P_X(m1,i2,a3,22) + P_X(m1,i2,a3,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_19(m1,i2)..  P_X(m1,i2,a3,1) + P_X(m1,i2,a3,2) + P_X(m1,i2,a3,3) + P_X(m1,i2,a3,4) + P_X(m1,i2,a3,5) + P_X(m1,i2,a3,7) + P_X(m1,i2,a3,8) + P_X(m1,i2,a3,9) + P_X(m1,i2,a3,10) + P_X(m1,i2,a3,11) + P_X(m1,i2,a3,13) + P_X(m1,i2,a3,14) + P_X(m1,i2,a3,15)
      
-cnstr_19(m2,i1)..  P_X(m2,i1,a3,1) + P_X(m2,i1,a3,2) + P_X(m2,i1,a3,3) + P_X(m2,i1,a3,4) + P_X(m2,i1,a3,5) + P_X(m2,i1,a3,7) + P_X(m2,i1,a3,8) + P_X(m2,i1,a3,9) + P_X(m2,i1,a3,10) + P_X(m2,i1,a3,11) + P_X(m2,i1,a3,13) + P_X(m2,i1,a3,14) + P_X(m2,i1,a3,15) + P_X(m2,i1,a3,16) + P_X(m2,i1,a3,17) + P_X(m2,i1,a3,19) + P_X(m2,i1,a3,20) + P_X(m2,i1,a3,21) + P_X(m2,i1,a3,22) + P_X(m2,i1,a3,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+      + P_X(m1,i2,a3,16) + P_X(m1,i2,a3,17) + P_X(m1,i2,a3,19) + P_X(m1,i2,a3,20) + P_X(m1,i2,a3,21) + P_X(m1,i2,a3,22) + P_X(m1,i2,a3,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
-cnstr_19(m3,i1)..  P_X(m3,i1,a3,1) + P_X(m3,i1,a3,2) + P_X(m3,i1,a3,3) + P_X(m3,i1,a3,4) + P_X(m3,i1,a3,5) + P_X(m3,i1,a3,7) + P_X(m3,i1,a3,8) + P_X(m3,i1,a3,9) + P_X(m3,i1,a3,10) + P_X(m3,i1,a3,11) + P_X(m3,i1,a3,13) + P_X(m3,i1,a3,14) + P_X(m3,i1,a3,15) + P_X(m3,i1,a3,16) + P_X(m3,i1,a3,17) + P_X(m3,i1,a3,19) + P_X(m3,i1,a3,20) + P_X(m3,i1,a3,21) + P_X(m3,i1,a3,22) + P_X(m3,i1,a3,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+cnstr_19(m2,i1)..  P_X(m2,i1,a3,1) + P_X(m2,i1,a3,2) + P_X(m2,i1,a3,3) + P_X(m2,i1,a3,4) + P_X(m2,i1,a3,5) + P_X(m2,i1,a3,7) + P_X(m2,i1,a3,8) + P_X(m2,i1,a3,9) + P_X(m2,i1,a3,10) + P_X(m2,i1,a3,11) + P_X(m2,i1,a3,13) + P_X(m2,i1,a3,14) + P_X(m2,i1,a3,15)
+     
+      + P_X(m2,i1,a3,16) + P_X(m2,i1,a3,17) + P_X(m2,i1,a3,19) + P_X(m2,i1,a3,20) + P_X(m2,i1,a3,21) + P_X(m2,i1,a3,22) + P_X(m2,i1,a3,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+cnstr_19(m3,i1)..  P_X(m3,i1,a3,1) + P_X(m3,i1,a3,2) + P_X(m3,i1,a3,3) + P_X(m3,i1,a3,4) + P_X(m3,i1,a3,5) + P_X(m3,i1,a3,7) + P_X(m3,i1,a3,8) + P_X(m3,i1,a3,9) + P_X(m3,i1,a3,10) + P_X(m3,i1,a3,11) + P_X(m3,i1,a3,13) + P_X(m3,i1,a3,14) + P_X(m3,i1,a3,15)
+     
+      + P_X(m3,i1,a3,16) + P_X(m3,i1,a3,17) + P_X(m3,i1,a3,19) + P_X(m3,i1,a3,20) + P_X(m3,i1,a3,21) + P_X(m3,i1,a3,22) + P_X(m3,i1,a3,23) =E= 1 ; (LHS = 0, INFES = 1 ****)
      
 REMAINING ENTRY SKIPPED
 
@@ -644,9 +685,13 @@ REMAINING 46 ENTRIES SKIPPED
 
 cnstr_23(m1,i1,a1,m1,i1,a3,1,1,a0,a2)..  U_AGV(m1,i1,a1,m1,i1,a3) + U_AGV(m1,i1,a3,m1,i1,a1) - P_X(m1,i1,a0,1) + P_X(m1,i1,a1,1) + P_X(m1,i1,a2,1) - P_X(m1,i1,a3,1) - P_Y(m1,i1,a1,1) - P_Y(m1,i1,a3,1) =G= -3 ; (LHS = 0)
      
-cnstr_23(m1,i1,a1,m1,i1,a3,1,2,a0,a2)..  U_AGV(m1,i1,a1,m1,i1,a3) + U_AGV(m1,i1,a3,m1,i1,a1) - P_X(m1,i1,a0,1) - P_X(m1,i1,a0,2) + P_X(m1,i1,a1,1) + P_X(m1,i1,a1,2) + P_X(m1,i1,a2,1) + P_X(m1,i1,a2,2) - P_X(m1,i1,a3,1) - P_X(m1,i1,a3,2) - P_Y(m1,i1,a1,1) - P_Y(m1,i1,a3,1) =G= -3 ; (LHS = 0)
+cnstr_23(m1,i1,a1,m1,i1,a3,1,2,a0,a2)..  U_AGV(m1,i1,a1,m1,i1,a3) + U_AGV(m1,i1,a3,m1,i1,a1) - P_X(m1,i1,a0,1) - P_X(m1,i1,a0,2) + P_X(m1,i1,a1,1) + P_X(m1,i1,a1,2) + P_X(m1,i1,a2,1) + P_X(m1,i1,a2,2) - P_X(m1,i1,a3,1) - P_X(m1,i1,a3,2) - P_Y(m1,i1,a1,1)
      
-cnstr_23(m1,i1,a1,m1,i1,a3,1,3,a0,a2)..  U_AGV(m1,i1,a1,m1,i1,a3) + U_AGV(m1,i1,a3,m1,i1,a1) - P_X(m1,i1,a0,1) - P_X(m1,i1,a0,2) - P_X(m1,i1,a0,3) + P_X(m1,i1,a1,1) + P_X(m1,i1,a1,2) + P_X(m1,i1,a1,3) + P_X(m1,i1,a2,1) + P_X(m1,i1,a2,2) + P_X(m1,i1,a2,3) - P_X(m1,i1,a3,1) - P_X(m1,i1,a3,2) - P_X(m1,i1,a3,3) - P_Y(m1,i1,a1,1) - P_Y(m1,i1,a3,1) =G= -3 ; (LHS = 0)
+      - P_Y(m1,i1,a3,1) =G= -3 ; (LHS = 0)
+     
+cnstr_23(m1,i1,a1,m1,i1,a3,1,3,a0,a2)..  U_AGV(m1,i1,a1,m1,i1,a3) + U_AGV(m1,i1,a3,m1,i1,a1) - P_X(m1,i1,a0,1) - P_X(m1,i1,a0,2) - P_X(m1,i1,a0,3) + P_X(m1,i1,a1,1) + P_X(m1,i1,a1,2) + P_X(m1,i1,a1,3) + P_X(m1,i1,a2,1) + P_X(m1,i1,a2,2) + P_X(m1,i1,a2,3)
+     
+      - P_X(m1,i1,a3,1) - P_X(m1,i1,a3,2) - P_X(m1,i1,a3,3) - P_Y(m1,i1,a1,1) - P_Y(m1,i1,a3,1) =G= -3 ; (LHS = 0)
      
 REMAINING 96597 ENTRIES SKIPPED
 
@@ -675,11 +720,29 @@ REMAINING 144 ENTRIES SKIPPED
 
 ---- cnstr_26  =G=  WH,YS,D
 
-cnstr_26(m1,i1,a1,6,m1,i1,a3,a0)..  - 10000000*U_QC(m1,i1,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,4) - (10000000)*P_X(m1,i1,a0,5) - (10000000)*P_X(m1,i1,a0,6) - (10000000)*P_X(m1,i1,a0,7) - (10000000)*P_X(m1,i1,a0,8) - (10000000)*P_X(m1,i1,a0,9) - (10000000)*P_X(m1,i1,a0,10) - (10000000)*P_X(m1,i1,a0,11) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17) - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2) + (10000000)*P_X(m1,i1,a1,3) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m1,i1,a3,6) - T_Q(m1,i1) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m1,i1,a3) =G= -29999960 ; (LHS = 0)
+cnstr_26(m1,i1,a1,6,m1,i1,a3,a0)..  - 10000000*U_QC(m1,i1,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,4) - (10000000)*P_X(m1,i1,a0,5) - (10000000)*P_X(m1,i1,a0,6) - (10000000)*P_X(m1,i1,a0,7) - (10000000)*P_X(m1,i1,a0,8) - (10000000)*P_X(m1,i1,a0,9)
      
-cnstr_26(m1,i1,a1,6,m1,i2,a0,a0)..  - 10000000*U_QC(m1,i2,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,4) - (10000000)*P_X(m1,i1,a0,5) - (10000000)*P_X(m1,i1,a0,6) - (10000000)*P_X(m1,i1,a0,7) - (10000000)*P_X(m1,i1,a0,8) - (10000000)*P_X(m1,i1,a0,9) - (10000000)*P_X(m1,i1,a0,10) - (10000000)*P_X(m1,i1,a0,11) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17) - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2) + (10000000)*P_X(m1,i1,a1,3) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m1,i2,a0,6) - T_Q(m1,i2) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m1,i2,a0) =G= -29999960 ; (LHS = 0)
+      - (10000000)*P_X(m1,i1,a0,10) - (10000000)*P_X(m1,i1,a0,11) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17)
      
-cnstr_26(m1,i1,a1,6,m2,i1,a0,a0)..  - 10000000*U_QC(m2,i1,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17) - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2) + (10000000)*P_X(m1,i1,a1,3) + (10000000)*P_X(m1,i1,a1,4) + (10000000)*P_X(m1,i1,a1,5) + (10000000)*P_X(m1,i1,a1,6) + (10000000)*P_X(m1,i1,a1,7) + (10000000)*P_X(m1,i1,a1,8) + (10000000)*P_X(m1,i1,a1,9) + (10000000)*P_X(m1,i1,a1,10) + (10000000)*P_X(m1,i1,a1,11) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m2,i1,a0,6) - T_Q(m2,i1) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m2,i1,a0) =G= -29999960 ; (LHS = 0)
+      - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2)
+     
+      + (10000000)*P_X(m1,i1,a1,3) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m1,i1,a3,6) - T_Q(m1,i1) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m1,i1,a3) =G= -29999960 ; (LHS = 0)
+     
+cnstr_26(m1,i1,a1,6,m1,i2,a0,a0)..  - 10000000*U_QC(m1,i2,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,4) - (10000000)*P_X(m1,i1,a0,5) - (10000000)*P_X(m1,i1,a0,6) - (10000000)*P_X(m1,i1,a0,7) - (10000000)*P_X(m1,i1,a0,8) - (10000000)*P_X(m1,i1,a0,9)
+     
+      - (10000000)*P_X(m1,i1,a0,10) - (10000000)*P_X(m1,i1,a0,11) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17)
+     
+      - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2)
+     
+      + (10000000)*P_X(m1,i1,a1,3) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m1,i2,a0,6) - T_Q(m1,i2) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m1,i2,a0) =G= -29999960 ; (LHS = 0)
+     
+cnstr_26(m1,i1,a1,6,m2,i1,a0,a0)..  - 10000000*U_QC(m2,i1,m1,i1,a1) - (10000000)*P_X(m1,i1,a0,12) - (10000000)*P_X(m1,i1,a0,13) - (10000000)*P_X(m1,i1,a0,14) - (10000000)*P_X(m1,i1,a0,15) - (10000000)*P_X(m1,i1,a0,16) - (10000000)*P_X(m1,i1,a0,17)
+     
+      - (10000000)*P_X(m1,i1,a0,18) - (10000000)*P_X(m1,i1,a0,19) - (10000000)*P_X(m1,i1,a0,20) - (10000000)*P_X(m1,i1,a0,21) - (10000000)*P_X(m1,i1,a0,22) - (10000000)*P_X(m1,i1,a0,23) + (10000000)*P_X(m1,i1,a1,1) + (10000000)*P_X(m1,i1,a1,2)
+     
+      + (10000000)*P_X(m1,i1,a1,3) + (10000000)*P_X(m1,i1,a1,4) + (10000000)*P_X(m1,i1,a1,5) + (10000000)*P_X(m1,i1,a1,6) + (10000000)*P_X(m1,i1,a1,7) + (10000000)*P_X(m1,i1,a1,8) + (10000000)*P_X(m1,i1,a1,9) + (10000000)*P_X(m1,i1,a1,10)
+     
+      + (10000000)*P_X(m1,i1,a1,11) - 10000000*P_Y(m1,i1,a1,6) - 10000000*P_Y(m2,i1,a0,6) - T_Q(m2,i1) + T_start(m1,i1,a1) + t_AGV(m1,i1,a0,m2,i1,a0) =G= -29999960 ; (LHS = 0)
      
 REMAINING 732 ENTRIES SKIPPED
 
@@ -862,7 +925,7 @@ cnstr_41(m1,i1,a0,m1,i1,a2)..  t_AGV(m1,i1,a0,m1,i1,a2) - (0.25)*X_position(m1,i
      
 REMAINING 1222 ENTRIES SKIPPED
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/21/25 18:42:48 Page 3
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 12:54:19 Page 3
 A branch and bound problem
 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 299
 
@@ -29857,18 +29920,7 @@ obj
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       ADRP
 
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/21/25 18:42:48 Page 4
-A branch and bound problem
-Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 299
-
-
-RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
-
-RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
-Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
-Matrix    [min, max] : [ 2.500E-01, 2.000E+07] - Zero values observed as well
-
-GAMS 48.3.0  71b5641f Nov 12, 2024          WEX-WEI x86 64bit/MS Windows - 01/21/25 18:42:48 Page 5
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 12:54:19 Page 4
 A branch and bound problem
 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 299
 
@@ -29878,21 +29930,169 @@ MODEL STATISTICS
 BLOCKS OF EQUATIONS          46     SINGLE EQUATIONS      106,296
 BLOCKS OF VARIABLES          13     SINGLE VARIABLES        3,588
 NON ZERO ELEMENTS     5,041,394     NON LINEAR N-Z         37,844
-CODE LENGTH              79,862     CONSTANT POOL              18     DISCRETE VARIABLES      2,247
+DERIVATIVE POOL              20     CONSTANT POOL              18
+CODE LENGTH              79,862     DISCRETE VARIABLES      2,247
 
 
+GENERATION TIME      =        2.359 SECONDS    398 MB  25.1.2 r67455 WEX-WEI
 
-**** The model exceeds the demo license limits for nonlinear models of more than 1000 rows or columns
-     As an academic user, you can submit large models to the NEOS service for free (see https://www.gams.com/neos)
-     Alternatively, feel free to contact sales@gams.com to discuss your options
 
-GENERATION TIME      =        2.516 SECONDS    411 MB  48.3.0 71b5641f WEX-WEI
-**** Terminated due to a licensing error
-**** License file: C:\GAMS\48\gamslice.txt
+EXECUTION TIME       =        2.359 SECONDS    398 MB  25.1.2 r67455 WEX-WEI
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 12:54:19 Page 5
+A branch and bound problem
+Solution Report     SOLVE ConflictFreeSch Using MINLP From line 299
 
-**** Current license content:
-     GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
-     https://www.gams.com/latest/docs/UG%5FLicense.html               
-     1496474900                                                       
-     0801350405                                                       
-     DC0000       g 1                               C Eval            
+
+               S O L V E      S U M M A R Y
+
+     MODEL   ConflictFreeSch     OBJECTIVE  obj
+     TYPE    MINLP               DIRECTION  MINIMIZE
+     SOLVER  DICOPT              FROM LINE  299
+
+**** SOLVER STATUS     13 System Failure           
+**** MODEL STATUS      13 Error No Solution        
+**** OBJECTIVE VALUE               NA
+
+ RESOURCE USAGE, LIMIT         NA          1000.000
+ ITERATION COUNT, LIMIT        NA    2000000000
+ EVALUATION ERRORS             NA             0
+-------------------------------------------------------------------------------
+Dicopt 2         25.1.2 r67455 Released Aug  1, 2018 WEI x86 64bit/MS Windows 
+-------------------------------------------------------------------------------
+by Aldo Vecchietti, Director del Instituto INGAR,
+   CONICET, UTN, Santa Fe, Argentina
+by Ignacio E. Grossmann, Chemical Engineering Faculty,
+   Carnegie Mellon University, Pittsburgh, PA, USA
+-------------------------------------------------------------------------------
+CONOPT 3         25.1.2 r67455 Released Aug  1, 2018 WEI x86 64bit/MS Windows 
+ 
+ 
+    C O N O P T 3   version 3.17I
+    Copyright (C)   ARKI Consulting and Development A/S
+                    Bagsvaerdvej 246 A
+                    DK-2880 Bagsvaerd, Denmark
+ 
+ 
+    The model has 3588 variables and 106296 constraints
+    with 5041394 Jacobian elements, 37844 of which are nonlinear.
+    The Hessian of the Lagrangian has 1360 elements on the diagonal,
+    12949 elements below the diagonal, and 1360 nonlinear variables.
+ 
+                   Pre-triangular equations:   63
+                   Post-triangular equations:  2555
+                   Definitional equations:     235
+ 
+
+No solution returned
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 12:54:19 Page 6
+A branch and bound problem
+Solution Report     SOLVE ConflictFreeSch Using MINLP From line 299
+
+
+**** SOLVER STATUS FILE LISTED BELOW
+=1
+-------------------------------------------------------------------------------
+=CDicopt 2         25.1.2 r67455 Released Aug  1, 2018 WEI x86 64bit/MS Windows 
+-------------------------------------------------------------------------------
+by Aldo Vecchietti, Director del Instituto INGAR,
+   CONICET, UTN, Santa Fe, Argentina
+by Ignacio E. Grossmann, Chemical Engineering Faculty,
+   Carnegie Mellon University, Pittsburgh, PA, USA
+-------------------------------------------------------------------------------
+=CCONOPT 3         25.1.2 r67455 Released Aug  1, 2018 WEI x86 64bit/MS Windows 
+=0CONOPT 3         25.1.2 r67455 Released Aug  1, 2018 WEI x86 64bit/MS Windows 
+=1
+ 
+ 
+    C O N O P T 3   version 3.17I
+    Copyright (C)   ARKI Consulting and Development A/S
+                    Bagsvaerdvej 246 A
+                    DK-2880 Bagsvaerd, Denmark
+ 
+=2
+    1  INPUT                                                                  (DEFAULT)
+    2  BRANCH * MAJERR MINERR JACERR                                          (DEFAULT)
+    3  OPTIMIZE                                                               (DEFAULT)
+    4  BRANCH * * * * * * MAJERR                                              (DEFAULT)
+    5  OUTPUT                                                                 (DEFAULT)
+    6  EXIT                                                                   (DEFAULT)
+    7  MAJERR MESSAGE MAJOR ERROR - TERMINATE                                 (DEFAULT)
+    8  EXIT                                                                   (DEFAULT)
+    9  MINERR MESSAGE MINOR ERROR - TERMINATE                                 (DEFAULT)
+   10  EXIT                                                                   (DEFAULT)
+   11  JACERR MESSAGE FUNCTION OR DERIVATIVE ERROR                            (DEFAULT)
+   12  OUTPUT                                                                 (DEFAULT)
+   13  EXIT                                                                   (DEFAULT)
+ 
+  ***  Line    1  INPUT
+ 
+  ***  Line    0  SET       LFEERR   =           0
+ 
+  ***  Line    0  SET       LFITER   =  1000000000
+ 
+  ***  Line    0  SET       RVTIME   =      1000.000000
+=1
+ 
+    The model has 3588 variables and 106296 constraints
+    with 5041394 Jacobian elements, 37844 of which are nonlinear.
+    The Hessian of the Lagrangian has 1360 elements on the diagonal,
+    12949 elements below the diagonal, and 1360 nonlinear variables.
+=2
+ 
+  ***  Line    2  BRANCH with Lbranch =  1
+ 
+  ***  Line    3  OPTIMIZE
+ 
+Search for a first feasible solution
+ 
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+      0   0        1.1870000000E+03 (Input point)
+=1
+ 
+                   Pre-triangular equations:   63
+                   Post-triangular equations:  2555
+                   Definitional equations:     235
+ 
+=2
+      1   0        6.8675000000E+02 (After pre-processing)
+      2   0        1.1381253481E+02 (After scaling)
+      3   0   113  1.0481255436E+02               1.0E+00      F  T
+      4   1   113  8.9812632709E+01 2.1E+06     3 1.0E+00    3 T  T
+      5   1    96  8.7267499664E+01 1.1E+01    12 1.0E+00   21 T  T
+      6   1    96  6.2813830970E+01 8.0E+00    14 1.0E+00   13 T  T
+      7   1    64  4.7037657230E+01 2.4E+01    74 1.0E+00   19 T  T
+      8   1    46  2.4812732952E+01 2.0E+01    51 1.0E+00   23 T  T
+      9   1    31  1.3812746230E+01 1.0E+01    53 1.0E+00   29 T  T
+     10   1    26  2.3128401015E+00 1.0E+01    42 1.0E+00   33 T  T
+     11   1    10  5.5056264738E-05 4.0E+00    64 1.0E+00   18 T  T
+     12   1    10  5.5056264738E-05 5.0E-01     9 0.0E+00    9 F  F
+ 
+ ** Feasible solution. Value of objective =    680.000000000
+ 
+Search for an optimal solution.
+ 
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+     13   3        5.2000000000E+02 1.5E+07     5 1.0E+00    2 F  T
+     14   3        2.9649999982E+02 8.4E+06     3 1.0E+00    3 T  T
+     15   3        2.0900000000E+02 8.4E+06     8 1.0E+00    6 T  T
+     16   3        2.0900000000E+02 4.0E+00     8 0.0E+00    5 
+**** SOLVER STATUS FILE LISTED ABOVE
+GAMS 25.1.2  r67455 Released Aug  1, 2018 WEX-WEI x86 64bit/MS Windows - 01/01/14 12:54:19 Page 7
+A branch and bound problem
+Solution Report     SOLVE ConflictFreeSch Using MINLP From line 299
+
+
+EXECUTION TIME       =        0.000 SECONDS     11 MB  25.1.2 r67455 WEX-WEI
+
+
+USER: EWEPA 2015 Eval License                        S150430/0001AO-GEN
+      The 14th European Workshop on Efficiency and Productivity DC11746
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
+Output     C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.lst
