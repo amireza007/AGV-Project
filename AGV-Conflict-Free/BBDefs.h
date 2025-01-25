@@ -17,7 +17,7 @@ struct node {
     // long subtree;
 };
 //R(m,i), set of routes for container (m,i), each route having a property S(m,i). This needs preprocessing!
-//The problem is, finding all possible routes for a container
+//The problem is, finding all possible routes for a container, with respect to actions, definied in WV and WH. Also take a look at 6.1
 //S(m,i), set of op time for container (m,i), listed from smalles to largest
 // QVector<std::tuple<container,QVector
 
