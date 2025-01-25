@@ -31,7 +31,7 @@ Sets
         C(m,i)  "All  Containers" /m1.i1, m1.i2, m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d3%/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job for all QCs" /m1.i%d1%, m2.i%d2%, m3.i%d3%/
                 
-        li "AGV index" /l1*l3/
+        li "AGV index" /l1*l2/
         Bs(li) "set of all agvs" /#li/
         a   "AGV actions" /a0*a4/
         !! Below is written according to Fig 5. of base article

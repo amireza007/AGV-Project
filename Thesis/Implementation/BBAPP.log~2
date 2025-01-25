@@ -1,5 +1,5 @@
 
---- Job BBAPP.gms Start 01/21/25 17:23:11 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
+--- Job BBAPP.gms Start 01/21/25 18:42:48 48.3.0 71b5641f WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\48\gmsprmNT.txt
     C:\Users\Asus\Documents\GAMS\gamsconfig.yaml
@@ -26,8 +26,8 @@ GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 --- BBAPP.gms(291) 4 Mb
 --- Generating MINLP model ConflictFreeSch
 --- BBAPP.gms(299) 413 Mb
----   106,597 rows  3,588 columns  5,042,899 non-zeroes
----   83,243 nl-code  39,349 nl-non-zeroes
+---   106,296 rows  3,588 columns  5,041,394 non-zeroes
+---   79,862 nl-code  37,844 nl-non-zeroes
 ---   2,247 discrete-columns
 --- Range statistics (absolute non-zero finite values)
 --- RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
@@ -40,4 +40,4 @@ GAMS 48.3.0   Copyright (C) 1987-2024 GAMS Development. All rights reserved
 *** Status: Terminated due to a licensing error
 ***         License file: C:\GAMS\48\gamslice.txt
 ***         Inspect listing file for more information.
---- Job BBAPP.gms Stop 01/21/25 17:23:13 elapsed 0:00:02.423
+--- Job BBAPP.gms Stop 01/21/25 18:42:50 elapsed 0:00:02.510

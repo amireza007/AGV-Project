@@ -34,6 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         lowerbound.h lowerbound.cpp
         initialsolution.h initialsolution.cpp
         bbapproach.h bbapproach.cpp
+        BBDefs.h
 
 
 

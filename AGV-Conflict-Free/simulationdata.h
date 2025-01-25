@@ -30,19 +30,11 @@ struct AGV {
 
 };
 
-QVector<QVector<int>> schemes;
-
-
-//Branch and bound simulation data
-typedef struct node* node_p;
-struct node {
-    node_p pred;
-    node_p child;
-    // node_p right_sibling;
-    // node_p left_sibling;
-    // long subtree;
-
-};
-
+//port layout simulation data
+// should be more interactive and customizable
+int XR[23] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+int YR[10] = {1,2,3,4,5,6,7,8,9,10};
+int YL[5] = {1,2,3,4,5};
+int YS[5] = {6,7,8,9,10};
 
 #endif // SIMULATIONDATA_H
