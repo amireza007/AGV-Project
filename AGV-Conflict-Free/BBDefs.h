@@ -15,9 +15,9 @@ struct node {
     // node_p right_sibling;
     // node_p left_sibling;
     // long subtree;
-
 };
-//R(m,i), set of routes for container (m,i), each route having a property S(m,i)
+//R(m,i), set of routes for container (m,i), each route having a property S(m,i). This needs preprocessing!
+//The problem is, finding all possible routes for a container
 //S(m,i), set of op time for container (m,i), listed from smalles to largest
 // QVector<std::tuple<container,QVector
 
