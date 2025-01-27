@@ -2,6 +2,7 @@
 #define SIMULATIONDATA_H
 // #include <iostream>
 #include <QVector>
+#include <QQueue>
 #include <tuple>
 //set of QCs should be called QCBuffer,
 //set of AGVs shold be called AGVBuffer
@@ -9,10 +10,10 @@
 // Problem specific simulation data
 struct QuayCrane {
     int m; // the index
-    QVector<int> jobs; // means first job is loading
+    QQueue<int> jobs; // means first job is loading
 };
 
-// int q;  //maximumNumberOfContainers conducted by each AGV
+// int q = T_UB / tMin;  //maximumNumberOfContainers conducted by each AGV
 struct container {
     QuayCrane m;
     int i; // which is jobs[i]
@@ -20,13 +21,16 @@ struct container {
 };
 
 struct AllContainers{
-    QVector<QuayCrane> L;   //Loading Containers
-    QVector<QuayCrane> D;   //unloading containers
+    QVector<container> L;       //Loading Containers
+    QVector<container> D;       //unloading containers
+    double tMin;                 //minimum operation time for containers without considering conflict, used for computing AGV scheme
 };
 
 struct AGV {
+    int l; // the index
     QVector<std::tuple<QuayCrane, int>> assignedContainers;
     int CompletionTimeOfCurrentjob(); //T(l)
+    int num; //number of assigned containers to an AGV
 
 };
 
