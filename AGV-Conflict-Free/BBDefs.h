@@ -1,7 +1,7 @@
 #ifndef BBDEFS_H
 #define BBDEFS_H
 #include "simulationdata.h"
-
+#include <map>
 //Branch and bound approach simulation data
 //BFS strategy is used
 QVector<QVector<int>> schemes;
@@ -13,14 +13,14 @@ struct v { //s node in N
     v_p pred;   // pointer to v or N_{(t-1)}??
     v_p child;
     QVector<container> assignedContainers;
-    QVector<container> ToBeContainers; //from QC.jobs
-    int bl;//number of unassigned agvs
-
+    QVector<container> ToBeContainers; //C'_{(tau, v)} from QC.jobs
+    AGV newlyAssignedAGV;
+    // variables for determining Lower Bound of the node
+    std::map<AGV, int> b;    //number of unassigned containers to agv l, could be determined with the help of schemes set!
+    double t_min;   //shortes op time, retrieved from s(m,i) set, of ToBeContainers
+    std::map<container, double> t_Container;    //Min time for newlyAssignedAGV conducting a container WCC
+    void compute_t_container();
     // what decision variable to update after assinging (m,i) to l
-
-    // node_p right_sibling;
-    // node_p left_sibling;
-    // long subtree;
 };
 
 struct N_T{ //set of nodes in height T
