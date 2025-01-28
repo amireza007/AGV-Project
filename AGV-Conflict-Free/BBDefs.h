@@ -14,7 +14,10 @@ struct v { //s node in N
     v_p child;
     QVector<container> assignedContainers;
     QVector<container> ToBeContainers; //from QC.jobs
-    //shouldn't we have pointer to the N_T we belong right now??
+    int bl;//number of unassigned agvs
+
+    // what decision variable to update after assinging (m,i) to l
+
     // node_p right_sibling;
     // node_p left_sibling;
     // long subtree;
