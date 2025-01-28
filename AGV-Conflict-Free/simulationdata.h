@@ -18,6 +18,14 @@ struct container {
     QuayCrane m;
     int i; // which is jobs[i]
     bool  Loading;
+    QVector<int> R; //R_(m,i)
+    QVector<int> ComputeR(QVector<int> R); //according to QC m location and the block
+};
+
+struct Block{
+    QVector<container> requestedContainers;
+    QVector<std::tuple<container,int>> AL;
+    QVector<std::tuple<container,int>> AR;
 };
 
 struct AllContainers{
