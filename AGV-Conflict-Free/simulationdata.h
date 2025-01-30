@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QQueue>
 #include <tuple>
+#include <map>
 //set of QCs should be called QCBuffer,
 //set of AGVs shold be called AGVBuffer
 
@@ -13,24 +14,31 @@ struct QuayCrane {
     QQueue<int> jobs; // means first job is loading
 };
 
+struct W{//set of actions on each container
+
+};
+
 // int q = T_UB / tMin;  //maximumNumberOfContainers conducted by each AGV
 struct container {
     QuayCrane m;
     int i; // which is jobs[i]
-    bool  Loading;
+    bool  isLoading;
     //according to QC m location and the block
+    QVector<std::tuple<container, double>> S;//list of container op time
+    QVector<std::map<double, QVector<W>>> R;// R(s(m,i), [routes])
+    QVector<QVector<W>> BuildR(container &c);
 };
 
 struct Block{
 
-    QVector<container> requestedContainers;
-    QVector<std::tuple<container,int>> AL;
-    QVector<std::tuple<container,int>> AR;
+    QVector<container> requestedContainers;  // this could be used for creating set \psi_2
+    QVector<std::map<container,int>> AL;
+    QVector<std::map<container,int>> AR;
 
-    QVector<std::tuple<container, double>> S;//container op time
-    QVector<std::tuple<double, int>> R;//container op time
-    QVector<std::tuple<double, int>> BuildR(container &c);
+
 };
+
+
 
 struct AllContainers{
     QVector<container> L;       //Loading Containers
