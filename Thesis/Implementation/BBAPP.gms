@@ -109,7 +109,7 @@ set x_t(XR) /#XR/;
 
 Parameters
          
-        G_Q(m,i) /#C 40/ !! seems to be constant for all container jobs, bc of const 24
+        G_Q(m,i) /#C 40/ !! seems to be constant for all container jobs, bc of const 24. Which shouldn't make sense because of def of ADRP!!!
         G_Y(m,i) /#C 40/
         ;
 *****************************************************************************************************************

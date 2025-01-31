@@ -19,25 +19,26 @@ enum action {a0 ,a1, a2, a3, a4};
 // int q = T_UB / tMin;  //maximumNumberOfContainers conducted by each AGV
 struct container {
     std::tuple<QuayCrane, int> c;
+    container();
     container(QuayCrane m, int i, bool _Loading){
         c = {m,i};
         isLoading = _Loading;
     }
+    ~container(){};
     int i; // which is jobs[i]
     bool  isLoading;
     //according to QC m location and the block
 };
 
-typedef std::tuple<container,QuayCrane,action> W; //set of actions on each container
-
-
+typedef std::tuple<container,action> W; //set of actions on each container
+// {container, 0} i;
 struct Block{
     QVector<container> requestedContainers;  // this could be used for creating set \psi_2
     QVector<std::map<container,int>> AL;
     QVector<std::map<container,int>> AR;
 };
-
-
+container c;
+W w0;
 
 struct AllContainers{
     QVector<container> L;       //Loading Containers
@@ -73,5 +74,27 @@ typedef std::map<container, QVector<int>> O_Container;
 //sequence of QCS and ASCs
 typedef std::tuple<container,container> psi1;
 typedef std::tuple<container,container> psi2;
+
+////////////////////////////////////////////////////////
+//Decision variables
+//AGV Job Assignment
+std::map<std::tuple<container,container>, int> Z;
+
+// AGV job sequence
+std::map<std::tuple<W,W>, int> UAGV;
+
+// AGV locations
+std::map<std::tuple<W,int>,int> PX;
+std::map<std::tuple<W,int>,int> PY;
+std::map<std::tuple<W,int>,int> PX0;
+std::map<std::tuple<W,int>,int> PY0;
+
+// AGV time related decision variable
+std::map<container, double> TQ;
+std::map<container, double> TY;
+std::map<W, double> Tstart;
+std::map<std::tuple<W,W>, double> tAGV;
+std::map<W,int> X_Postion; //Can be used in R(m,i)
+std::map<W,int> Y_Postion;
 
 #endif // SIMULATIONDATA_H
