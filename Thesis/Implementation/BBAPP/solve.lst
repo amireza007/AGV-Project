@@ -1,0 +1,72 @@
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  47.6.0 c2de9d6d LEX-LEG
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/31/25 11:02:44 Page 1
+A branch and bound problem
+Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 299
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 2.500E-01, 2.000E+07] - Zero values observed as well
+
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/31/25 11:02:44 Page 2
+A branch and bound problem
+Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 299
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          46     SINGLE EQUATIONS      106,287
+BLOCKS OF VARIABLES          13     SINGLE VARIABLES        3,525
+NON ZERO ELEMENTS     5,038,350     NON LINEAR N-Z         35,072
+CODE LENGTH              77,090     CONSTANT POOL              18     
+DISCRETE VARIABLES      2,184
+
+
+GENERATION TIME      =        3.820 SECONDS    410 MB  47.6.0 c2de9d6d LEX-LEG
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/31/25 11:02:44 Page 3
+A branch and bound problem
+Solution Report     SOLVE ConflictFreeSch Using MINLP From line 299
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   ConflictFreeSch     OBJECTIVE  obj
+     TYPE    MINLP               DIRECTION  MINIMIZE
+     SOLVER  GUROBI              FROM LINE  299
+
+**** SOLVER STATUS     7 Licensing Problems
+**** MODEL STATUS      11 Licensing Problem
+**** OBJECTIVE VALUE               NA
+
+ RESOURCE USAGE, LIMIT         NA     10000000000.000
+ ITERATION COUNT, LIMIT        NA    2147483647
+ EVALUATION ERRORS             NA             0
+Gurobi library version 11.0.2
+GAMS/Gurobi Link license.
+*** Cannot initialize Gurobi environment. (status=10009|10009)
+*** No Gurobi license found (user nobody, host prod-exec-6.neos-server.org, hos
+                                                        tid 66898910, cores 36)
+
+No solution returned
+GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/31/25 11:02:44 Page 4
+A branch and bound problem
+E x e c u t i o n
+
+
+EXECUTION TIME       =        5.045 SECONDS    410 MB  47.6.0 c2de9d6d LEX-LEG
+
+
+USER: NEOS Server License prod-exec-6.neos-server.orgS241211/0001AB-GEN
+      mac@d0:94:66:89:89:0f                                     DCE1890
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Restart    /var/lib/condor/execute/dir_3327382/gamsexec/restart.g00
+Input      /var/lib/condor/execute/dir_3327382/gamsexec/MODEL.gms
+Output     /var/lib/condor/execute/dir_3327382/gamsexec/solve.lst

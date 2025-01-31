@@ -68,6 +68,9 @@ int YR[10] = {1,2,3,4,5,6,7,8,9,10};
 int YL[5] = {1,2,3,4,5};
 int YS[5] = {6,7,8,9,10};
 
+QVector<std::map<container, double>> G_Q = {};
+QVector<std::map<container, double>> G_Y = {};
+
 //QC vertical path
 typedef std::map<container, QVector<int>> O_Container;
 
