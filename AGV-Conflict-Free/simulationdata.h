@@ -18,7 +18,11 @@ enum action {a0 ,a1, a2, a3, a4};
 
 // int q = T_UB / tMin;  //maximumNumberOfContainers conducted by each AGV
 struct container {
-    QuayCrane m;
+    std::tuple<QuayCrane, int> c;
+    container(QuayCrane m, int i, bool _Loading){
+        c = {m,i};
+        isLoading = _Loading;
+    }
     int i; // which is jobs[i]
     bool  isLoading;
     //according to QC m location and the block
@@ -49,7 +53,7 @@ extern QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> Bui
 
 struct AGV {
     int l; // the index
-    QVector<std::tuple<QuayCrane, int>> assignedContainers;
+    QVector<container> assignedContainers;
     int CompletionTimeOfCurrentjob(); //T(l)
     int num; //number of assigned containers to an AGV
 };
@@ -67,7 +71,7 @@ int YS[5] = {6,7,8,9,10};
 typedef std::map<container, QVector<int>> O_Container;
 
 //sequence of QCS and ASCs
-typedef std::tuple<QuayCrane,container,QuayCrane,container> psi1;
-typedef std::tuple<QuayCrane,container,QuayCrane,container> psi2;
+typedef std::tuple<container,container> psi1;
+typedef std::tuple<container,container> psi2;
 
 #endif // SIMULATIONDATA_H
