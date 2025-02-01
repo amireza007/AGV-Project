@@ -37,9 +37,6 @@ struct Block{
     QVector<std::map<container,int>> AL;
     QVector<std::map<container,int>> AR;
 };
-container c;
-W w0;
-
 struct AllContainers{
     QVector<container> L;       //Loading Containers
     QVector<container> D;       //unloading containers

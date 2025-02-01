@@ -17,10 +17,11 @@ struct v { //s node in N
     AGV newlyAssignedAGV;
 
     // variables for determining Lower Bound of the node
-    std::map<std::tuple<container,container,AGV>, int> Z_prime;     //sequence of two containers assigned to the same agv l
+    QVector<std::map<std::tuple<container,container,AGV>, int>> Z_prime;     //sequence of two containers assigned to the same agv l
     std::map<AGV, int> b;    //number of unassigned co  ntainers to agv l, could be determined with the help of schemes set!
     double t_min;   //shortes op time, retrieved from s(m,i) set, of ToBeContainers
-
+    QVector<std::map<std::tuple<container,container>, double>> t_empty; //empty tranvel for container (m,i) to (n,j)
+    QVector<std::map<container,double>> t_load; //loading time of (m,i) WCC
     std::map<container, double> t_Container;    //Min time for newlyAssignedAGV conducting a container WCC
     void compute_t_container();
     // what decision variable to update after assinging (m,i) to l

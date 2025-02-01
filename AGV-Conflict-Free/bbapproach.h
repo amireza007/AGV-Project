@@ -10,7 +10,6 @@ public:
     ~BBApproach();
     void InitialSoltuion();
 private:
-    QVector<std::tuple<container,float,>>;
 };
 
 #endif // BBAPPROACH_H
