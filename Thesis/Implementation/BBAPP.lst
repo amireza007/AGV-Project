@@ -1,319 +1,316 @@
-GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 12:24:36 Page 1
-A branch and bound problem
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 19:07:39 Page 1
+A conflict free container dispatching problem
 C o m p i l a t i o n
 
 
    4  *cnstr_15 and cnstr_19 are infeasible and I hypothesize it's due to not setting initial virtual positions!
    5   
    6  !!longest qc operation (or job in the problem)
-  10  !! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. I think the capacity of each block is 5 (bc of number of HPs)
-  11  !! However, for the first experiment:
-  12  !! blcoks = 4, QC = 3, AGVs = 3, containers = 7, ships = 3
-  13  Scalars
-  14   
-  15          S_Q "switch time for qc between two containers" /2/ !! temporarily assumed constant (take look at 6.1 and qc_double_cycle.svg)
-  16          v "AGV speed" /4/
-  17          Mnum "a very large number" /10000000/;
-  18   
-  19   
-  20  Sets
-  21          i "index" /i0*i3/
-  22          i1(i) /#i/
-  23          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
-  24   
-  25          m   "QC index" /m0, m1, m2, m3/
-  26          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
-  27   
-  28          L(m,i)   /m1.i1, m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
-  29          D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i3/ !! these are in the ships, waiting to be taking to ASCs
-  30   
-  31          C(m,i)  "All  Containers" /m1.i1, m1.i2, m2.i1, m2.i2, m3.i1, m3.i2, m3.i3/ !! this is in data file, this should contain 0 node, too!
-  32          Cd(m,i) "the last QC container job for all QCs" /m1.i2, m2.i2, m3.i3/
-  33   
-  34          li "AGV index" /l1*l2/
-  35          Bs(li) "set of all agvs" /#li/
-  36          a   "AGV actions" /a0*a4/
-  37          !! Below is written according to Fig 5. of base article
-  38          WT(m,i,a) "set of total actions with virtual node" /#C.(a1,a2,a3,a4)/
-  39          WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
-  40          WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
-  41   
-  42  *********************************************
-  43  *Location based sets
-  44          XR (*)  "Vertical Operational Area" /1*23/
-  45   
-  46  ******************** First Experminent
-  47  *        YR (*) "Horizontal Operational Area" /1*23/
-  48  *        YS(YR)  "Horizontal Seaside Operation Area" /12*23/
-  49  *        YL(YR)  "Horizontal Path" /1*11/
-  50  **********************
-  51   
-  52  *2nd experiment
-  53          YR (*) "Horizontal Operational Area" /1*10/
-  54          YS(YR)  "Horizontal Seaside Operation Area" /6*10/
-  55          YL(YR)  "Horizontal Path" /1*5/
-  56   
-  57  !! what o(m,i,XR) basically determines is location of storage blocks on the ship. (How many ships are there)
-  58  *        o(m,i,XR) / m1.i1.3,
-  59  *                    m1.i2.5,
-  60  *                    m2.i1.11,
-  61  *                    m2.i2.13,
-  62  *                    m3.i1.17,
-  63  *                    m3.i2.19,
-  64  *                    m3.i%d3%.21/
-  65          o(m,i,XR) / m1.i1.3,
-  66                      m1.i2.3,
-  67                      m2.i1.11,
-  68                      m2.i2.11,
-  69                      m3.i1.17,
-  70                      m3.i2.17,
-  71                      m3.i3.17/
-  72   
-  73  *!!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
-  74          A_L_set(XR) /1,7,13,19/
-  75          A_R_set(XR) /5,11,17,23/
-  76          A_L(m,i,XR) /#C.#A_L_set/
-  77          A_R(m,i,XR) /#C.#A_R_set/
-  78   
-  79   
-  80  !! Maybe Badly Put! Needs fixing! In the data file!
-  81          psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m1.i1.m1.i2, m2.i1.m2.i2, m3.i1.m3.i2, m3.i2.m3.i3 /
-  82          psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i2 / !!This is in data file. (m,i) and (m,i) belong to the same block!
-  83          ;
-  84  parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
-  85                  m1.i1 3,
-  86                  m1.i2 3,
-  87                  m2.i1 11,
-  88                  m2.i2 11,
-  89                  m3.i1 17,
-  90                  m3.i2 17,
-  91                  m3.i3 17/
-  92   
-  93  *****************************************************************************************************************
-  94  *Dupilcates of the some of the sets!
-  95  alias (XR, XR1);
-  96  alias (XR, XR_1);
-  97  alias (YR, YR_1);
-  98  alias (a,a1);
-  99  alias (a,a2);
- 100  alias (a2,a2_1);
- 101  alias (a1,a1_1);
- 102  *alias (i,i1);
- 103  set h(m)/#m/;  !! for cnstr_3
- 104  set k(i) /#i/;
- 105  set s(YR);
- 106  set XR2(XR) /#XR/;
- 107  set x_t(XR) /#XR/;
- 108  *****************************************************************************************************************
- 109   
- 110  Parameters
+  13  !! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. I think the capacity of each block is 5 (bc of number of HPs)
+  14  !! However, for the first experiment:
+  15  !! blcoks = 4, QC = 3, AGVs = 3, containers = 7
+  16  Scalars
+  17   
+  18          S_Q "switch time for qc between two containers" /2/ !! temporarily assumed constant (take look at 6.1 and qc_double_cycle.svg)
+  19          v "AGV speed" /4/
+  20          Mnum "a very large number" /10000000/;
+  21   
+  22  Sets
+  23          i "index" /i0*i3/ !!
+  24          i1(i) /#i/
+  25          j(i) "a duplicate of i" /#i/ !!this is temporary, a better is to write /#i/
+  26   
+  27          m   "QC index" /m0*m3/
+  28          n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
+  29   
+  30          L(m,i)   /m1.i1, m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+  31          D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i3/ !! these are in the ships, waiting to be taking to ASCs
+  32   
+  33          C(m,i)  "All  Containers" /m1.i1, m1.i2, m2.i1, m2.i2, m3.i1, m3.i2, m3.i3/ !! this is in data file, this should contain 0 node, too!
+  34          Cd(m,i) "the last QC container job for all QCs" /m1.i2, m2.i2, m3.i3/
+  35   
+  36          li "AGV index" /l1*l2/
+  37          Bs(li) "set of all agvs" /#li/
+  38          a   "AGV actions" /a0*a4/
+  39          !! Below is written according to Fig 5. of base article
+  40          WT(m,i,a) "set of total actions with virtual node" /#C.(a1,a2,a3,a4)/
+  41          WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
+  42          WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
+  43   
+  44  *********************************************
+  45  *Location based sets
+  46          XR (*)  "Vertical Operational Area" /1*23/
+  47   
+  48  ******************** First Experminent
+  49  *        YR (*) "Horizontal Operational Area" /1*23/
+  50  *        YS(YR)  "Horizontal Seaside Operation Area" /12*23/
+  51  *        YL(YR)  "Horizontal Path" /1*11/
+  52  **********************
+  53   
+  54  *2nd experiment
+  55          YR (*) "Horizontal Operational Area" /1*10/
+  56          YS(YR)  "Horizontal Seaside Operation Area" /6*10/
+  57          YL(YR)  "Horizontal Path" /1*5/
+  58   
+  59  !! what o(m,i,XR) basically determines is location of storage blocks on the ship. (How many ships are there)
+  60  *        o(m,i,XR) / m1.i1.3,
+  61  *                    m1.i2.5,
+  62  *                    m2.i1.11,
+  63  *                    m2.i2.13,
+  64  *                    m3.i1.17,
+  65  *                    m3.i2.19,
+  66  *                    m3.i%d3%.21/
+  67          o(m,i,XR) / m1.i1.3,
+  68                      m1.i2.3,
+  69                      m2.i1.11,
+  70                      m2.i2.11,
+  71                      m3.i1.17,
+  72                      m3.i2.17,
+  73                      m3.i3.17/
+  74   
+  75  *!!these sets refers right and left positions of the blocks in the fig. 4 of the article. These two are related to the L(m,i). Positions of the block storing (m,i). (which is totally a wrong statement, it should contain membs of D(m,i), too!)
+  76          A_L_set(XR) /1,7,13,19/
+  77          A_R_set(XR) /5,11,17,23/
+  78          A_L(m,i,XR) /#C.#A_L_set/
+  79          A_R(m,i,XR) /#C.#A_R_set/
+  80   
+  81   
+  82  !! Maybe Badly Put! Needs fixing! In the data file!
+  83          psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m1.i1.m1.i2, m2.i1.m2.i2, m3.i1.m3.i2, m3.i2.m3.i3 /
+  84          psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i2 / !!This is in data file. (m,i) and (m,i) belong to the same block!
+  85          ;
+  86  parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
+  87                  m1.i1 3,
+  88                  m1.i2 3,
+  89                  m2.i1 11,
+  90                  m2.i2 11,
+  91                  m3.i1 17,
+  92                  m3.i2 17,
+  93                  m3.i3 17/
+  94   
+  95  *****************************************************************************************************************
+  96  *Dupilcates of the some of the sets!
+  97  alias (XR, XR1);
+  98  alias (XR, XR_1);
+  99  alias (YR, YR_1);
+ 100  alias (a,a1);
+ 101  alias (a,a2);
+ 102  alias (a2,a2_1);
+ 103  alias (a1,a1_1);
+ 104  *alias (i,i1);
+ 105  set h(m)/#m/;  !! for cnstr_3
+ 106  set k(i) /#i/;
+ 107  set s(YR);
+ 108  set XR2(XR) /#XR/;
+ 109  set x_t(XR) /#XR/;
+ 110  *****************************************************************************************************************
  111   
- 112          G_Q(m,i)
- 113          G_Y(m,i)
- 114          ;
- 115  ****************************************************************************************************************
- 116  G_Q(m,i) = uniform(60,90);
- 117  G_Y(m,i) = uniform(20,30);
- 118   
- 119  Binary Variables
- 120          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!" !! (m,i) and (m,i) are NOT equal, TOO!
- 121          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before" !! note that (m,i,a) and (m,i,a) are NOT equal!!
- 122          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
- 123   
- 124  *       Path related variables
- 125          P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
- 126          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
- 127          P_X0(m,i,a,XR) "P_X(WV,x) Start H  loc, These are defined on actions, NOT ON CONTAINERS!"
- 128          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
- 129          ;
- 130  *****************************************************************************************************************
- 131  Positive Variables
- 132  *       Time related variables
- 133          T_Q(m,i) "start time of QC"
- 134          T_Y(m,i) "Start time of agv putting cont on ASC"
- 135          T_start(m,i,a) "Start of agv for action (m,i,a)"
- 136          CT(m,i)  "Op. completion time of for each QC m"
- 137   
- 138  *       Auxiliary Variables
- 139          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
- 140          X_position(m,i,a)   "X_position(WT)"
- 141          Y_position(m,i,a)   "Y_position(WT)"
- 142          ;
- 143  variable obj "objective function";
- 144  *****************************************************************************************************************
- 145   
- 146  Equations
+ 112  Parameters
+ 113   
+ 114          G_Q(m,i)
+ 115          G_Y(m,i)
+ 116          ;
+ 117  ****************************************************************************************************************
+ 118  G_Q(m,i) = uniform(60,90);
+ 119  G_Y(m,i) = uniform(20,30);
+ 120   
+ 121  Binary Variables
+ 122          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!" !! (m,i) and (m,i) are NOT equal, TOO!
+ 123          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before" !! note that (m,i,a) and (m,i,a) are NOT equal!!
+ 124          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
+ 125   
+ 126  *       Path related variables
+ 127          P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
+ 128          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
+ 129          P_X0(m,i,a,XR) "P_X(WV,x) Start H  loc, These are defined on actions, NOT ON CONTAINERS!"
+ 130          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
+ 131          ;
+ 132  *****************************************************************************************************************
+ 133  Positive Variables
+ 134  *       Time related variables
+ 135          T_Q(m,i) "start time of QC"
+ 136          T_Y(m,i) "Start time of agv putting cont on ASC"
+ 137          T_start(m,i,a) "Start of agv for action (m,i,a)"
+ 138          CT(m,i)  "Op. completion time of for each QC m"
+ 139   
+ 140  *       Auxiliary Variables
+ 141          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
+ 142          X_position(m,i,a)   "X_position(WT)"
+ 143          Y_position(m,i,a)   "Y_position(WT)"
+ 144          ;
+ 145  variable obj "objective function";
+ 146  *****************************************************************************************************************
  147   
- 148          ADRP                       "AGV Dispatching and Routing Problem"
- 149          LJob(m,i)
- 150   
- 151  *       Job assignment constraints
- 152          cnstr_2(m,i)
- 153          cnstr_3(m,i,li)             "C,B"
- 154          cnstr_4(li)                 "B with 0 virtual node"
- 155          cnstr_5(li)               ‌  "B with 0 virutal node"
- 156          cnstr_6(m,i)                "L"
- 157          cnstr_7(m,i)                "D"
- 158  **********************************************************************
- 159  *       Location constraints of AGV acitons
- 160  *        cnstr_8(m,i,n,j,XR)         "C,C,XR"
- 161  *        cnstr_8_slack(m,i,n,j)
- 162          cnstr_8(m,i,n,j,xr)
- 163          cnstr_8_1(m,i,n,j,xr)
- 164          cnstr_9(m,i,n,j,YR)         "C,C,YR"
- 165          cnstr_9_1(m,i,n,j,YR)         "C,C,YR"
- 166          cnstr_10(m,i,a)             "C,a"
- 167          cnstr_11(m,i,a)             "C,a"
- 168          cnstr_12(m,i)               "L"
- 169          cnstr_13(m,i)               "D"
- 170          cnstr_14(m,i,XR)            "D"
- 171          cnstr_15(m,i)               "L"
- 172          cnstr_19(m,i)               "D"
- 173          cnstr_16(m,i)               "D"
- 174          cnstr_17(m,i)               "L"
- 175          cnstr_18(m,i,XR)            "L"
- 176          cnstr_20(m, i, a, a, YR)    "WH,YR"
- 177          cnstr_21(m,i,a,a,XR)        "WV,XR"
- 178   
- 179  **********************************************************************
- 180  *       Conflict Free Constraints
- 181          cnstr_22(m,i,n,j)           "C,C"
- 182          cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR" !!Look How many equations it would add to the model
- 183          cnstr_24(m,i,n,j,a)         "C, WH"
- 184          cnstr_25(m,i,n,j,a,a)       "C, WH"
- 185          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"
- 186          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
- 187          cnstr_28(m,i,a, a)          "C,a"
- 188  **********************************************************************
- 189  ****Time Constraints
- 190          cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
- 191          cnstr_30(m,i,m,i)           "psi_1"
- 192          cnstr_31(m,i,m,i)           "psi_2"
- 193          cnstr_32(m,i)               "D"
- 194          cnstr_33(m,i)               "L"
- 195          cnstr_34(m,i,m,i)           "D,L"
- 196          cnstr_35(m,i,m,i)           "L,D"
- 197          cnstr_36(m,i,a)             "D,a"
- 198          cnstr_37(m,i,a)             "D,a"
- 199          cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
- 200          cnstr_39(m,i,a,XR)          "C,a,XR"
- 201          cnstr_39_1(m,i,a,XR)          "C,a,XR"
- 202          cnstr_40(m,i,a,YR)          "C,a,YR"
- 203          cnstr_40_1(m,i,a,YR)          "C,a,YR"
- 204          cnstr_41(m,i,a,m,i,a)
- 205          ;
- 206   
- 207  **********************************************************************
- 208  *This determines whether the last container job is for QC or AGV
- 209  LJob(Cd).. CT(Cd) =e= max(T_Q(Cd)+G_Q(cd), T_Y(Cd)+G_Y(Cd));
- 210  *This constraint clarifies the lengthiest operation among all container jobs
- 211  ADRP.. obj  =e= smax(Cd, CT(Cd));
- 212   
- 213  *****************************************************************************************************************
- 214  **Job assinment constraints
- 215  *as soon as you include conditional $(C(m,i)), you ignore virtual node!
- 216  *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
- 217  cnstr_2(m,i) $(C(m,i)).. sum((li,n,j) $((C(n,j) and (not sameas(m,n) or not sameas(i,j))) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
- 218   
- 219  cnstr_3(m,i,li) $(C(m,i))..sum((n,j) $((C(n,j)and (not sameas(m,n) or not sameas(i,j))) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) -sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) =e= 0;
+ 148  Equations
+ 149   
+ 150          ADRP                       "AGV Dispatching and Routing Problem"
+ 151          LJob(m,i)
+ 152   
+ 153  *       Job assignment constraints
+ 154          cnstr_2(m,i)
+ 155          cnstr_3(m,i,li)             "C,B"
+ 156          cnstr_4(li)                 "B with 0 virtual node"
+ 157          cnstr_5(li)               ‌  "B with 0 virutal node"
+ 158          cnstr_6(m,i)                "L"
+ 159          cnstr_7(m,i)                "D"
+ 160  **********************************************************************
+ 161  *       Location constraints of AGV acitons
+ 162  *        cnstr_8(m,i,n,j,XR)         "C,C,XR"
+ 163  *        cnstr_8_slack(m,i,n,j)
+ 164          cnstr_8(m,i,n,j,xr)
+ 165          cnstr_8_1(m,i,n,j,xr)
+ 166          cnstr_9(m,i,n,j,YR)         "C,C,YR"
+ 167          cnstr_9_1(m,i,n,j,YR)         "C,C,YR"
+ 168          cnstr_10(m,i,a)             "C,a"
+ 169          cnstr_11(m,i,a)             "C,a"
+ 170          cnstr_12(m,i)               "L"
+ 171          cnstr_13(m,i)               "D"
+ 172          cnstr_14(m,i,XR)            "D"
+ 173          cnstr_15(m,i)               "L"
+ 174          cnstr_19(m,i)               "D"
+ 175          cnstr_16(m,i)               "D"
+ 176          cnstr_17(m,i)               "L"
+ 177          cnstr_18(m,i,XR)            "L"
+ 178          cnstr_20(m, i, a, a, YR)    "WH,YR"
+ 179          cnstr_21(m,i,a,a,XR)        "WV,XR"
+ 180   
+ 181  **********************************************************************
+ 182  *       Conflict Free Constraints
+ 183          cnstr_22(m,i,n,j)           "C,C"
+ 184          cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR" !!Look How many equations it would add to the model
+ 185          cnstr_24(m,i,n,j,a)         "C, WH"
+ 186          cnstr_25(m,i,n,j,a,a)       "C, WH"
+ 187          cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"
+ 188          cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+ 189          cnstr_28(m,i,a, a)          "C,a"
+ 190  **********************************************************************
+ 191  ****Time Constraints
+ 192          cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
+ 193          cnstr_30(m,i,m,i)           "psi_1"
+ 194          cnstr_31(m,i,m,i)           "psi_2"
+ 195          cnstr_32(m,i)               "D"
+ 196          cnstr_33(m,i)               "L"
+ 197          cnstr_34(m,i,m,i)           "D,L"
+ 198          cnstr_35(m,i,m,i)           "L,D"
+ 199          cnstr_36(m,i,a)             "D,a"
+ 200          cnstr_37(m,i,a)             "D,a"
+ 201          cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
+ 202          cnstr_39(m,i,a,XR)          "C,a,XR"
+ 203          cnstr_39_1(m,i,a,XR)          "C,a,XR"
+ 204          cnstr_40(m,i,a,YR)          "C,a,YR"
+ 205          cnstr_40_1(m,i,a,YR)          "C,a,YR"
+ 206          cnstr_41(m,i,a,m,i,a)
+ 207          ;
+ 208   
+ 209  **********************************************************************
+ 210  *This determines whether the last container job is for QC or AGV
+ 211  LJob(Cd).. CT(Cd) =e= max(T_Q(Cd)+G_Q(cd), T_Y(Cd)+G_Y(Cd));
+ 212  *This constraint clarifies the lengthiest operation among all container jobs
+ 213  ADRP.. obj  =e= smax(Cd, CT(Cd));
+ 214   
+ 215  *****************************************************************************************************************
+ 216  **Job assinment constraints
+ 217  *as soon as you include conditional $(C(m,i)), you ignore virtual node!
+ 218  *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
+ 219  cnstr_2(m,i) $(C(m,i)).. sum((li,n,j) $((C(n,j) and (not sameas(m,n) or not sameas(i,j))) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
  220   
- 221  cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
- 222  cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
- 223   
- 224  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
- 225  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
- 226   
- 227  cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j) and (not sameas(m,n) or not sameas(i,j))).. abs(P_x(m,i,'a4',xR)- P_x(n,j,'a0',xR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;
- 228  cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_x(m,i,'a4',xR) - P_x(n,j,'a0',xR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0;
- 229   
- 230  cnstr_9(m,i,n,j,yr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_Y(m,i,'a4',YR) - P_Y(n,j,'a0',yR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;
- 231  cnstr_9_1(m,i,n,j,yr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_Y(m,i,'a4',YR) - P_Y(n,j,'a0',yR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0;
- 232   
- 233  cnstr_10(m,i,a) $(c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
- 234  cnstr_11(m,i,a) $(c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
- 235   
- 236  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
- 237  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
- 238   
- 239  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X(m, i,'a0',XR) =e= 1;
- 240  * A_L depends on container (m,i), it needs fixing, hence cnstr_15 and cnstr_19 and A_R
- 241  cnstr_15(m,i) $(L(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
- 242  cnstr_19(m,i) $(D(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
- 243   
- 244  cnstr_16(m,i) $(D(m,i)).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
- 245  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
- 246  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X(m, i,'a3',XR) =e= 1;
- 247   
- 248  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
- 249  cnstr_21(m, i, a1, a1_1, XR) $(WV(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
- 250   
- 251  *******************************************************************************************************************************************************************************************
- 252  ****Conflict Free Constraints
- 253  cnstr_22(m,i,n,j) $(c(m,i) and c(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
- 254  * wt(a1_1) and wt(a2_1) are computed here!
- 255  cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2)))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
- 256  *
- 257  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
- 258  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
- 259  *
- 260  *!! YS is used in here!
- 261  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
- 262  cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2))).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
- 263  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
- 264   
- 265  *******************************************************************************************************************************************************************************************
- 266  ***Time Constraints
- 267  cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
- 268  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
- 269  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
- 270   
- 271  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
- 272  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
- 273   
- 274  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 275  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
- 276   
- 277  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
- 278  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
- 279  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2))).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
- 280   
- 281  * THE BIG-M TRICK FOR IF-CONDITIONAL
- 282  cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *abs(1-P_X(m,i,a,XR)) =l= 0;
- 283  cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *abs(1-P_X(m,i,a,XR)) =g= 0;
- 284  cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *abs(1-P_Y(m,i,a,YR)) =l= 0;
- 285  cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *abs(1-P_Y(m,i,a,YR)) =g= 0;
- 286  ****************************************
- 287  * Just writing the switch time between actions according the position of the start and finish locaiton of the action and AGVs next aciton
- 288  *and the speed of the vehicle which is constant. Which might be bad!!
- 289  cnstr_41(m,i,a1,n,j,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
- 290  ****************************************
- 291   
- 292  Model ConflictFreeSch /all/ ;
- 293  option SOLVER = Gurobi;
- 294   
- 295  * This is for detecting a set of Irredicuible Infeasible Solutions; Gurobi-specific:
- 296  *$onEcho > CFS.opt
- 297  *iis 1
- 298  *indic cnstr_8(m,i,n,j,XR)$slack(m,i,n,j) 1
- 299  *$offEcho
- 300  *ConflictFreeSch.Optfile = 1;
- 301  solve conflictfreesch using MINLP min obj;
- 302   
- 303   
+ 221  cnstr_3(m,i,li) $(C(m,i))..sum((n,j) $((C(n,j)and (not sameas(m,n) or not sameas(i,j))) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) -sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) =e= 0;
+ 222   
+ 223  cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
+ 224  cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
+ 225   
+ 226  cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 227  cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 228   
+ 229  cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j) and (not sameas(m,n) or not sameas(i,j))).. abs(P_x(m,i,'a4',xR)- P_x(n,j,'a0',xR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;
+ 230  cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_x(m,i,'a4',xR) - P_x(n,j,'a0',xR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0;
+ 231   
+ 232  cnstr_9(m,i,n,j,yr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_Y(m,i,'a4',YR) - P_Y(n,j,'a0',yR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;
+ 233  cnstr_9_1(m,i,n,j,yr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_Y(m,i,'a4',YR) - P_Y(n,j,'a0',yR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0;
+ 234   
+ 235  cnstr_10(m,i,a) $(c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+ 236  cnstr_11(m,i,a) $(c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+ 237   
+ 238  cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+ 239  cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
+ 240   
+ 241  cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X(m, i,'a0',XR) =e= 1;
+ 242  * A_L depends on container (m,i), it needs fixing, hence cnstr_15 and cnstr_19 and A_R
+ 243  cnstr_15(m,i) $(L(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
+ 244  cnstr_19(m,i) $(D(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
+ 245   
+ 246  cnstr_16(m,i) $(D(m,i)).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
+ 247  cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 248  cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X(m, i,'a3',XR) =e= 1;
+ 249   
+ 250  cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+ 251  cnstr_21(m, i, a1, a1_1, XR) $(WV(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+ 252   
+ 253  *******************************************************************************************************************************************************************************************
+ 254  ****Conflict Free Constraints
+ 255  cnstr_22(m,i,n,j) $(c(m,i) and c(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 256  * wt(a1_1) and wt(a2_1) are computed here!
+ 257  cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2)))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
+ 258  *
+ 259  cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 260  cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 261  *
+ 262  *!! YS is used in here!
+ 263  cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 264  cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2))).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 265  cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 266   
+ 267  *******************************************************************************************************************************************************************************************
+ 268  ***Time Constraints
+ 269  cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
+ 270  cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+ 271  cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+ 272   
+ 273  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+ 274  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 275   
+ 276  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 277  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 278   
+ 279  cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+ 280  cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+ 281  cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2))).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+ 282   
+ 283  * THE BIG-M TRICK FOR IF-CONDITIONAL
+ 284  cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *abs(1-P_X(m,i,a,XR)) =l= 0;
+ 285  cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *abs(1-P_X(m,i,a,XR)) =g= 0;
+ 286  cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *abs(1-P_Y(m,i,a,YR)) =l= 0;
+ 287  cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *abs(1-P_Y(m,i,a,YR)) =g= 0;
+ 288  ****************************************
+ 289  * Just writing the switch time between actions according the position of the start and finish locaiton of the action and AGVs next aciton
+ 290  *and the speed of the vehicle which is constant. Which might be bad!!
+ 291  cnstr_41(m,i,a1,n,j,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
+ 292  ****************************************
+ 293   
+ 294  Model ConflictFreeSch /all/ ;
+ 295  option SOLVER = Gurobi;
+ 296   
+ 297  * This is for detecting a set of Irredicuible Infeasible Solutions; Gurobi-specific:
+ 298  *$onEcho > CFS.opt
+ 299  *iis 1
+ 300  *indic cnstr_8(m,i,n,j,XR)$slack(m,i,n,j) 1
+ 301  *$offEcho
+ 302  *ConflictFreeSch.Optfile = 1;
+ 303  solve conflictfreesch using MINLP min obj;
  304   
  305   
- 306  *Option MIP = COPT;
- 307  *Model ConflictFreeSch /adrp3, cnstr_2, cnstr_3, cnstr_4, cnstr_5, cnstr_6, cnstr_7/ ;
- 308  *Solve ConflictFreeSch using mip minimizing slack1;
- 309  *display z.l;
+ 306   
+ 307   
+ 308  *Option MIP = COPT;
+ 309  *Model ConflictFreeSch /adrp3, cnstr_2, cnstr_3, cnstr_4, cnstr_5, cnstr_6, cnstr_7/ ;
  310  *Solve ConflictFreeSch using mip minimizing slack1;
  311  *display z.l;
- 312  *$gdxout BBAPP
- 313  *$unload
- 314  *$gdxout
- 315  *Display x.l, x.m ;
- 316   
- 317   
+ 312  *Solve ConflictFreeSch using mip minimizing slack1;
+ 313  *display z.l;
+ 314  *$gdxout BBAPP
+ 315  *$unload
+ 316  *$gdxout
+ 317  *Display x.l, x.m ;
  318   
  319   
  320   
@@ -381,12 +378,14 @@ C o m p i l a t i o n
  382   
  383   
  384   
+ 385   
+ 386   
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  48.6.1 67fbb04b WEX-WEI
-GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 12:24:36 Page 2
-A branch and bound problem
-Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 301
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 19:07:39 Page 2
+A conflict free container dispatching problem
+Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 303
 
 
 ---- ADRP  =E=  AGV Dispatching and Routing Problem
@@ -860,9 +859,9 @@ cnstr_41(m1,i1,a0,m1,i1,a2)..  t_AGV(m1,i1,a0,m1,i1,a2) - (0.25)*X_position(m1,i
      
 REMAINING 1222 ENTRIES SKIPPED
 
-GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 12:24:36 Page 3
-A branch and bound problem
-Column Listing      SOLVE ConflictFreeSch Using MINLP From line 301
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 19:07:39 Page 3
+A conflict free container dispatching problem
+Column Listing      SOLVE ConflictFreeSch Using MINLP From line 303
 
 
 ---- z  used mainly for handling QC double cycling, it consists of 0 virtual point!
@@ -29855,9 +29854,9 @@ obj
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       ADRP
 
-GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 12:24:36 Page 4
-A branch and bound problem
-Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 301
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 19:07:39 Page 4
+A conflict free container dispatching problem
+Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 303
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
@@ -29866,9 +29865,9 @@ RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
 Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
 Matrix    [min, max] : [ 2.500E-01, 2.000E+07] - Zero values observed as well
 
-GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 12:24:36 Page 5
-A branch and bound problem
-Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 301
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/01/25 19:07:39 Page 5
+A conflict free container dispatching problem
+Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 303
 
 
 MODEL STATISTICS
@@ -29884,7 +29883,7 @@ CODE LENGTH              77,090     CONSTANT POOL              23     DISCRETE V
      As an academic user, you can submit large models to the NEOS service for free (see https://www.gams.com/neos)
      Alternatively, feel free to contact sales@gams.com to discuss your options
 
-GENERATION TIME      =        2.453 SECONDS    411 MB  48.6.1 67fbb04b WEX-WEI
+GENERATION TIME      =        2.438 SECONDS    411 MB  48.6.1 67fbb04b WEX-WEI
 **** Terminated due to a licensing error
 **** License file: C:\GAMS\48\gamslice.txt
 

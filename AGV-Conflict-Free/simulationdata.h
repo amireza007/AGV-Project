@@ -68,36 +68,36 @@ int YR[10] = {1,2,3,4,5,6,7,8,9,10};
 int YL[5] = {1,2,3,4,5};
 int YS[5] = {6,7,8,9,10};
 
-QVector<std::map<container, double>> G_Q = {};
-QVector<std::map<container, double>> G_Y = {};
+QVector<std::map<container, double>> G_Q = {};//uniform(60,90)
+QVector<std::map<container, double>> G_Y = {};//uniform(20,30)
 
 //QC vertical path
-typedef std::map<container, QVector<int>> O_Container;
+QVector<std::map<container, QVector<int>>> O_Container;
 
 //sequence of QCS and ASCs
-typedef std::tuple<container,container> psi1;
-typedef std::tuple<container,container> psi2;
+QVector<std::tuple<container,container>> psi1;
+QVector<std::tuple<container,container>> psi2;
 
 ////////////////////////////////////////////////////////
 //Decision variables
 //AGV Job Assignment
-std::map<std::tuple<container,container>, int> Z;
+QVector<std::map<std::tuple<container,container>, int>> Z;
 
 // AGV job sequence
-std::map<std::tuple<W,W>, int> UAGV;
+QVector<std::map<std::tuple<W,W>, int>> UAGV;
 
 // AGV locations
-std::map<std::tuple<W,int>,int> PX;
-std::map<std::tuple<W,int>,int> PY;
-std::map<std::tuple<W,int>,int> PX0;
-std::map<std::tuple<W,int>,int> PY0;
+QVector<std::map<std::tuple<W,int>,int>> PX;
+QVector<std::map<std::tuple<W,int>,int>> PY;
+QVector<std::map<std::tuple<W,int>,int>> PX0;
+QVector<std::map<std::tuple<W,int>,int>> PY0;
 
 // AGV time related decision variable
-std::map<container, double> TQ;
-std::map<container, double> TY;
-std::map<W, double> Tstart;
-std::map<std::tuple<W,W>, double> tAGV;
-std::map<W,int> X_Postion; //Can be used in R(m,i)
-std::map<W,int> Y_Postion;
+QVector<std::map<container, double>> TQ;
+QVector<std::map<container, double>> TY;
+QVector<std::map<W, double>> Tstart;
+QVector<std::map<std::tuple<W,W>, double>> tAGV;
+QVector<std::map<W,int>> X_Postion; //Can be used in R(m,i)
+QVector<std::map<W,int>> Y_Postion;
 
 #endif // SIMULATIONDATA_H

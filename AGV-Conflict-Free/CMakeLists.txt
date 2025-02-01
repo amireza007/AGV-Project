@@ -35,6 +35,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         initialsolution.h initialsolution.cpp
         bbapproach.h bbapproach.cpp
         BBDefs.h
+        job_generator.h job_generator.cpp
 
 
 
