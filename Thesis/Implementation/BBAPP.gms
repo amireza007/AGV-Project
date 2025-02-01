@@ -109,10 +109,12 @@ set x_t(XR) /#XR/;
 
 Parameters
          
-        G_Q(m,i) /#C 40/ !! seems to be constant for all container jobs, bc of const 24. Which shouldn't make sense because of def of ADRP!!!
-        G_Y(m,i) /#C 40/
+        G_Q(m,i) 
+        G_Y(m,i)
         ;
-*****************************************************************************************************************
+****************************************************************************************************************
+G_Q(m,i) = uniform(60,90);
+G_Y(m,i) = uniform(20,30);
 
 Binary Variables
         z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!" !! (m,i) and (m,i) are NOT equal, TOO!

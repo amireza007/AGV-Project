@@ -1,21 +1,19 @@
---- Job BBAPP.gms Start 01/31/25 20:27:47 48.6.1 67fbb04b WEX-WEI x86 64bit/MS Windows
+
+--- Job BBAPP.gms Start 02/01/25 12:23:11 48.6.1 67fbb04b WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\48\gmsprmNT.txt
     C:\Users\Asus\Documents\GAMS\gamsconfig.yaml
 --- GAMS Parameters defined
     MIP GUROBI
     Input C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.gms
-    XSave C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\BBAPP.g0?
     PageSize 0
-    Action C
-    ScrDir C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\225b\
+    ScrDir C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\225c\
     SysDir C:\GAMS\48\
     LogOption 3
     ErrMsg 1
     ErrorLog 99
     IDE 1
     LstTitleLeftAligned 1
-    PreviousWork 1
 Licensee: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
           https://www.gams.com/latest/docs/UG%5FLicense.html         DC0000
           C:\GAMS\48\gamslice.txt
@@ -23,87 +21,23 @@ Licensee: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
 Processor information: 1 socket(s), 14 core(s), and 20 thread(s) available
 GAMS 48.6.1   Copyright (C) 1987-2025 GAMS Development. All rights reserved
 --- Starting compilation
---- BBAPP.gms(382) 3 Mb
-*** Status: Normal completion
---- Job BBAPP.gms Stop 01/31/25 20:27:47 elapsed 0:00:00.007
-
---- switch to NEOS .\BBAPP\solve.lst
-Job 15236988 dispatched
-password: lvtmSNDB
-Executed on prod-exec-1.neos-server.org
-
-
-COMPILATION TIME     =        0.000 SECONDS      3 MB  47.6.0 c2de9d6d LEX-LEG
-GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/31/25 10:57:52 Page 1
-A branch and bound problem
-Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 299
-
-
-RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
-
-RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
-Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
-Matrix    [min, max] : [ 2.500E-01, 2.000E+07] - Zero values observed as well
-
-GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/31/25 10:57:52 Page 2
-A branch and bound problem
-Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 299
-
-
-MODEL STATISTICS
-
-BLOCKS OF EQUATIONS          46     SINGLE EQUATIONS      106,287
-BLOCKS OF VARIABLES          13     SINGLE VARIABLES        3,525
-NON ZERO ELEMENTS     5,038,350     NON LINEAR N-Z         35,072
-CODE LENGTH              77,090     CONSTANT POOL              18     
-DISCRETE VARIABLES      2,184
-
-
-GENERATION TIME      =        3.974 SECONDS    410 MB  47.6.0 c2de9d6d LEX-LEG
-GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/31/25 10:57:52 Page 3
-A branch and bound problem
-Solution Report     SOLVE ConflictFreeSch Using MINLP From line 299
-
-
-               S O L V E      S U M M A R Y
-
-     MODEL   ConflictFreeSch     OBJECTIVE  obj
-     TYPE    MINLP               DIRECTION  MINIMIZE
-     SOLVER  GUROBI              FROM LINE  299
-
-**** SOLVER STATUS     7 Licensing Problems
-**** MODEL STATUS      11 Licensing Problem
-**** OBJECTIVE VALUE               NA
-
- RESOURCE USAGE, LIMIT         NA     10000000000.000
- ITERATION COUNT, LIMIT        NA    2147483647
- EVALUATION ERRORS             NA             0
-Gurobi library version 11.0.2
-GAMS/Gurobi Link license.
-*** Cannot initialize Gurobi environment. (status=10009|10009)
-*** No Gurobi license found (user nobody, host prod-exec-1.neos-server.org, hos
-                                                        tid 4225df6f, cores 32)
-
-No solution returned
-GAMS 47.6.0  c2de9d6d Sep 12, 2024          LEX-LEG x86 64bit/Linux - 01/31/25 10:57:52 Page 4
-A branch and bound problem
-E x e c u t i o n
-
-
-EXECUTION TIME       =        5.201 SECONDS    410 MB  47.6.0 c2de9d6d LEX-LEG
-
-
-USER: NEOS Server License prod-exec-1.neos-server.orgS241211/0001AB-GEN
-      mac@44:a8:42:25:df:6c                                     DCE1890
-      License for teaching and research at degree granting institutions
-
-
-**** FILE SUMMARY
-
-Restart    C:/Users/Asus/Projects/FrequentlyUsedRepos/AGV-Project/Thesis/Implementation\BBAPP\restart.g00
-Input      C:/Users/Asus/Projects/FrequentlyUsedRepos/AGV-Project/Thesis/Implementation\BBAPP.gms
-Output     C:/Users/Asus/Projects/FrequentlyUsedRepos/AGV-Project/Thesis/Implementation\BBAPP\solve.lst
-Archive:  solver-output.zip
---- extracting: .\BBAPP\solve.log
---- skipping: .\BBAPP\solve.lxi
---- extracting: .\BBAPP\solve.lst
+--- BBAPP.gms(384) 3 Mb
+--- Starting execution: elapsed 0:00:00.004
+--- BBAPP.gms(293) 4 Mb
+--- Generating MINLP model ConflictFreeSch
+--- BBAPP.gms(301) 413 Mb
+---   106,287 rows  3,525 columns  5,038,350 non-zeroes
+---   77,090 nl-code  35,072 nl-non-zeroes
+---   2,184 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 3.000E+07] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+--- Matrix    [min, max] : [ 2.500E-01, 2.000E+07] - Zero values observed as well
+*** The model exceeds the demo license limits for nonlinear models of more than 1000 rows or columns
+    As an academic user, you can submit large models to the NEOS service for free (see https://www.gams.com/neos)
+    Alternatively, feel free to contact sales@gams.com to discuss your options
+--- BBAPP.gms(301) 411 Mb
+*** Status: Terminated due to a licensing error
+***         License file: C:\GAMS\48\gamslice.txt
+***         Inspect listing file for more information.
+--- Job BBAPP.gms Stop 02/01/25 12:23:14 elapsed 0:00:02.431
