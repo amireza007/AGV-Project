@@ -23,14 +23,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AGV-Conflict-Free
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        SimulationDefs.h
+        PortSimulation.h
         DecisionVariables.h
-        JobAssignmentCnstrs.h
-        LocationCnstrs.h
-        ConflictFreeCnstrs.h
-        TimeCnstrs.h
-        ConflictFreeCnstrs.cpp
-        Parameters.h
         lowerbound.h lowerbound.cpp
         initialsolution.h initialsolution.cpp
         bbapproach.h bbapproach.cpp
@@ -38,6 +32,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         job_generator.h job_generator.cpp
         DATAFILE.h
         DATAFILE.cpp
+        PortSimulation.cpp
+        equipments.h equipments.cpp
+        portlayout.h portlayout.cpp
 
 
 
