@@ -1,6 +1,6 @@
 #ifndef BBDEFS_H
 #define BBDEFS_H
-#include "simulationdata.h"
+#include "SimulationDefs.h"
 #include <map>
 //Branch and bound approach simulation data
 //BFS strategy is used

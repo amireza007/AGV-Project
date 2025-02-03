@@ -16,7 +16,7 @@ $set qcs 3
 
 Scalars
 
-        S_Q "switch time for qc between two containers" /2/ !! temporarily assumed constant (take look at 6.1 and qc_double_cycle.svg)
+        S_Q "switch time for qc between two containers" /600/ !! temporarily assumed constant (take look at 6.1 and qc_double_cycle.svg)
         v "AGV speed" /4/
         Mnum "a very large number" /100000000/;
 
