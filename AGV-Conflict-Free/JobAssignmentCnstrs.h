@@ -1,4 +1,0 @@
-#ifndef JOBASSIGNMENTCNSTRS_H
-#define JOBASSIGNMENTCNSTRS_H
-#include "DecisionVariables.h"
-#endif // JOBASSIGNMENTCNSTRS_H
