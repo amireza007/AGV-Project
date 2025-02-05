@@ -71,8 +71,10 @@ Sets
 
 
 !! Maybe Badly Put! Needs fixing! In the data file!
-        psi_1(m,i,m,i)   "sequence of Container jobs for QC" /m1.i1.m1.i2, m2.i1.m2.i2, m3.i1.m3.i2, m3.i2.m3.i3 /
-        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i2 / !!This is in data file. (m,i) and (m,i) belong to the same block!
+        psi_1(m,i,m,i)   "sequence of Container jobs for QC" /
+        m1.i1.m1.i2, m1.i2.m1.i3, m2.i1.m2.i2,  m2.i2.m2.i3, m2.i3.m2.i4, m2.i4.m2.i5,m3.i1.m3.i2,  m3.i2.m3.i3, m3.i3.m3.i4, m3.i4.m3.i5/
+        
+        psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i2.m2.i2/ !!This is in data file. (m,i) and (m,i) belong to the same block!
         ;
 parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
                     m1.i1 12,
