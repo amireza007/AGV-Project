@@ -12,7 +12,7 @@ $set lngstJob 3
 $set qcs 3
 !! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. I think the capacity of each block is 5 (bc of number of HPs)
 !! However, for the first experiment:
-!! blcoks = 4, QC = 3, AGVs = 3, containers = 7
+!! blcoks = 6, QC = 3, AGVs = 3, containers = 13
 
 Scalars
 
@@ -44,7 +44,7 @@ Sets
 
 *********************************************
 *Location based sets
-        XR (*)  "Vertical Operational Area" /1*23/
+        XR (*)  "Vertical Operational Area" /1*35/
         YR (*) "Horizontal Operational Area" /1*10/
         YS(YR)  "Horizontal Seaside Operation Area" /6*10/
         YL(YR)  "Horizontal Path" /1*5/
