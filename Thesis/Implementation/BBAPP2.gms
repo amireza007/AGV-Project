@@ -7,8 +7,8 @@ $ONEMPTY
 $set d1 2
 $set d2 2
 $set d3 3
-$set agvs 2
-$set lngstJob 3
+$set agvs 4
+$set lngstJob 5
 $set qcs 3
 !! The default number of qcs and blocks are set to 3 and 6. Therefore AL and AR each should have 12 members. I think the capacity of each block is 5 (bc of number of HPs)
 !! However, for the first experiment:
@@ -28,10 +28,10 @@ Sets
         m   "QC index" /m0*m%qcs%/
         n(m)   "A duplicate of j" /#m/ !!this is temporary, a better is to write /#m/
 
-        L(m,i)   /m1.i1, m2.i2, m3.i2/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
-        D(m,i) "Unloading Containers. U is a subset of index i" /m1.i2, m2.i1, m3.i1, m3.i%d3%/ !! these are in the ships, waiting to be taking to ASCs
+        L(m,i)   /m1.i2, m1.i3, m2.i2, m2.i4, m3.i2, m3.i4/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+        D(m,i) "Unloading Containers. U is a subset of index i" /m1.i1, m2.i1, m2.i3, m2.i5, m3.i1, m3.i3, m3.i5/ !! these are in the ships, waiting to be taking to ASCs
 
-        C(m,i)  "All  Containers" /m1.i1, m1.i2, m2.i1, m2.i2, m3.i1, m3.i2, m3.i%d3%/ !! this is in data file, this should contain 0 node, too!
+        C(m,i)  "All  Containers" /m1.i2, m1.i3, m2.i2, m2.i4, m3.i2, m3.i4, m1.i1, m2.i1, m2.i3, m2.i5, m3.i1, m3.i3, m3.i5/ !! this is in data file, this should contain 0 node, too!
         Cd(m,i) "the last QC container job for all QCs" /m1.i%d1%, m2.i%d2%, m3.i%d3%/
 
         li "AGV index" /l1*l%agvs%/
@@ -49,17 +49,23 @@ Sets
         YS(YR)  "Horizontal Seaside Operation Area" /6*10/
         YL(YR)  "Horizontal Path" /1*5/
 
-        o(m,i,XR) / m1.i1.3,
-                    m1.i2.3,
-                    m2.i1.11,
-                    m2.i2.11,
-                    m3.i1.17,
-                    m3.i2.17,
-                    m3.i%d3%.17/
+        o(m,i,XR) / m1.i1.12,
+                    m1.i2.13,
+                    m1.i3.35,
+                    m2.i1.20,
+                    m2.i2.17,
+                    m2.i3.24,
+                    m2.i4.29,
+                    m2.i5.20,
+                    m3.i1.32,
+                    m3.i2.3,
+                    m3.i3.28,
+                    m3.i4.23,
+                    m3.i5.32/
 
 *!!these sets refers right and left positions of the blocks in the fig. 4 of the article. (which is totally a wrong statement, it should contain membs of D(m,i), too!)
-        A_L_set(XR) /1,7,13,19/
-        A_R_set(XR) /5,11,17,23/
+        A_L_set(XR) /1,7,13,19,25,31/
+        A_R_set(XR) /5,11,17,23,29,35/
         A_L(m,i,XR) /#C.#A_L_set/
         A_R(m,i,XR) /#C.#A_R_set/
 
@@ -69,13 +75,19 @@ Sets
         psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m2.i2.m3.i2 / !!This is in data file. (m,i) and (m,i) belong to the same block!
         ;
 parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
-                m1.i1 3,
-                m1.i2 3,
-                m2.i1 11,
-                m2.i2 11,
-                m3.i1 17,
-                m3.i2 17,
-                m3.i%d3% 17/
+                    m1.i1 12,
+                    m1.i2 13,
+                    m1.i3 35,
+                    m2.i1 20,
+                    m2.i2 17,
+                    m2.i3 24,
+                    m2.i4 29,
+                    m2.i5 20,
+                    m3.i1 32,
+                    m3.i2 3,
+                    m3.i3 28,
+                    m3.i4 23,
+                    m3.i5 32/
 
 *****************************************************************************************************************
 *Dupilcates of the some of the sets!
