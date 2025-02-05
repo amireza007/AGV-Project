@@ -39,4 +39,7 @@ struct AGV {
     // int q = T_UB / tMin;  //maximumNumberOfContainers conducted by each AGV
 };
 
+typedef std::tuple<container,action> W; //set of actions on each container
+
+
 #endif // EQUIPMENTS_H

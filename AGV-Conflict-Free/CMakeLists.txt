@@ -29,7 +29,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         initialsolution.h initialsolution.cpp
         bbapproach.h bbapproach.cpp
         BBDefs.h
-
         DATAFILE.h
         DATAFILE.cpp
         PortSimulation.cpp

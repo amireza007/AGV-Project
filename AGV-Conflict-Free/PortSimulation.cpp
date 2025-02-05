@@ -4,7 +4,9 @@ PortSimulation::PortSimulation(int _CNumber,int _AGVNumber) :CNumber(_CNumber), 
     JobGenerator();
 }
 
-void PortSimulation::JobGenerator(){
+void PortSimulation::JobGenerator(){//this method should also initialize decision variables after the parameters of the model are built
+
+
     // // Generate Jobs and Schedule (Static fashion )
     // int i,i1,i2,r;
     // AnsiString BlockStrS, BlockStrD;

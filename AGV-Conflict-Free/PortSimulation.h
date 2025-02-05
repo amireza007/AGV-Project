@@ -6,7 +6,6 @@
 //set of QCs should be called QCBuffer,
 //set of AGVs shold be called AGVBuffer
 
-typedef std::tuple<container,action> W; //set of actions on each container
 
 // {container, 0} i;
 
@@ -30,8 +29,8 @@ public:
     struct AllContainers containers;
     QuayCrane QCs[3];
     QVector<AGV> AGVs;
-    QVector<std::map<container, double>> G_Q = {};//uniform(60,90)
-    QVector<std::map<container, double>> G_Y = {};//uniform(20,30)
+    QVector<std::map<container, double>> G_Q;//uniform(60,90)
+    QVector<std::map<container, double>> G_Y;//uniform(20,30)
 
     //QC vertical path
     QVector<std::map<container,int>> O_Container; //deteremined by someone
