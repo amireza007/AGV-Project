@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    firstExperiment f = firstExperiment();
+    Experiment f = Experiment();
 
     return a.exec();
 }

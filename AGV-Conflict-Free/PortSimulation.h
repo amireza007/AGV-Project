@@ -1,4 +1,4 @@
-// #include <iostream>
+#include "equipments.h"
 #include <QVector>
 #include <QQueue>
 #include <tuple>
@@ -6,36 +6,10 @@
 //set of QCs should be called QCBuffer,
 //set of AGVs shold be called AGVBuffer
 
-// Problem specific simulation data
-struct QuayCrane {
-    int m; // the index
-    QList<int> jobs;
-    QuayCrane(int c,QList<int> _jobs) : m(c), jobs(_jobs){};
-};
-enum action {a0 ,a1, a2, a3, a4};
-
-
-// int q = T_UB / tMin;  //maximumNumberOfContainers conducted by each AGV
-struct container {
-    std::tuple<QuayCrane, int> c;
-    container();
-    container(QuayCrane m, int j, bool _Loading) : c(m,j), isLoading(_Loading) {
-        // c = {m,i};
-    }
-    ~container(){};
-    //int i; // which is jobs[i]
-    bool  isLoading;
-    //according to QC m location and the block
-};
-
 typedef std::tuple<container,action> W; //set of actions on each container
 
 // {container, 0} i;
-struct Block{
-    QVector<container> requestedContainers;  // this could be used for creating set \psi_2
-    QVector<std::map<container,int>> AL;
-    QVector<std::map<container,int>> AR;
-};
+
 struct AllContainers{
     QVector<container> L;       //Loading Containers
     QVector<container> D;       //unloading containers
@@ -46,12 +20,24 @@ struct AllContainers{
     QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> R;// R(s(m,i), [routes])
 };
 
-extern QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> BuildR(container &c);
 
-struct AGV {
-    int l; // the index
-    QVector<container> assignedContainers;
-    int CompletionTimeOfCurrentjob(); //T(l)
-    int num; //number of assigned containers to an AGV
+class PortSimulation{
+public:
+    QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> BuildR(container &c);
+    PortSimulation(int _CNumber,int _AGVNumber);
+    int CNumber;
+    int AGVNumber;
+    struct AllContainers containers;
+    QuayCrane QCs[3];
+    QVector<AGV> AGVs;
+    QVector<std::map<container, double>> G_Q = {};//uniform(60,90)
+    QVector<std::map<container, double>> G_Y = {};//uniform(20,30)
+
+    //QC vertical path
+    QVector<std::map<container,int>> O_Container; //deteremined by someone
+
+    //sequence of QCS and ASCs
+    QVector<std::tuple<container,container>> psi1;
+    QVector<std::tuple<container,container>> psi2;
+    void JobGenerator();
 };
-

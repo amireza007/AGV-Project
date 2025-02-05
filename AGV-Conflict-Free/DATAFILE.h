@@ -1,7 +1,7 @@
 #include "PortSimulation.h"
 
-class firstExperiment{
+class Experiment{
 public:
-    firstExperiment();
+    Experiment();
 
 };
