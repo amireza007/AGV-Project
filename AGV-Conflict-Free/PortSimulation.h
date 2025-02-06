@@ -3,22 +3,18 @@
 #include <QQueue>
 #include <tuple>
 #include <map>
+#include "DecisionVariables.h"
 //set of QCs should be called QCBuffer,
 //set of AGVs shold be called AGVBuffer
 
-
-// {container, 0} i;
-
 struct AllContainers{
-    QVector<container> L;       //Loading Containers
-    QVector<container> D;       //unloading containers
+    QVector<container> allC;       //Loading Containers
     double tMin;                //minimum operation time for containers without considering conflict, used for computing AGV scheme
 
     ////////////// possibly bad!
     QVector<std::map<container, QVector<std::tuple<container, double>>>> S;//list of container op time
     QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> R;// R(s(m,i), [routes])
 };
-
 
 class PortSimulation{
 public:
@@ -28,15 +24,16 @@ public:
     int AGVNumber;
     struct AllContainers containers;
     QuayCrane QCs[3];
-    QVector<AGV> AGVs;
+    QVector<AGV> B;
     QVector<std::map<container, double>> G_Q;//uniform(60,90)
     QVector<std::map<container, double>> G_Y;//uniform(20,30)
 
     //QC vertical path
     QVector<std::map<container,int>> O_Container; //deteremined by someone
-
     //sequence of QCS and ASCs
     QVector<std::tuple<container,container>> psi1;
     QVector<std::tuple<container,container>> psi2;
+    ModelVariables *modelVariables = new ModelVariables();
     void JobGenerator();
+    bool FeasibilityChecker();
 };

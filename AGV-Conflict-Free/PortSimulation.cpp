@@ -115,3 +115,23 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     //         PortContainerForm->Table1->FieldValues["DestPoint"]  = BlockStrD;
 
 }
+
+bool PortSimulation::FeasibilityChecker(){
+    bool isSolFeas = true;
+    //cnstr_2
+    std::map<std::tuple<int,int>, int> Z1;
+    foreach (container c1, containers.allC) {
+        foreach (container c2, containers.allC) {
+            foreach (AGV l, B) {
+
+                //modelVariables->z[{c1,c2,l}] = 2;
+
+                // if(true){
+                //     isSolFeas = false;
+                //     break;
+                // }
+            }
+        }
+    }
+    return isSolFeas;
+}

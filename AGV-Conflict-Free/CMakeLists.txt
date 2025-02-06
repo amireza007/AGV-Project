@@ -34,6 +34,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         PortSimulation.cpp
         equipments.h equipments.cpp
         portlayout.h portlayout.cpp
+        DecisionVariables.cpp
+
 
 
 

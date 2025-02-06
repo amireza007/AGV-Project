@@ -8,8 +8,8 @@
 struct QuayCrane {
     int m; // the index
     QList<int> jobs;
-    QuayCrane(int c,QList<int> _jobs) : m(c), jobs(_jobs){};
-    QuayCrane(){};
+    QuayCrane(int c,QList<int> _jobs) : m(c), jobs(_jobs){}
+    QuayCrane(){}
 };
 
 enum action {a0 ,a1, a2, a3, a4};
@@ -20,9 +20,9 @@ struct container {
     container(QuayCrane m, int j, bool _Loading) : c(m,j), isLoading(_Loading) {
         // c = {m,i};
     }
-    ~container(){};
-    //int i; // which is jobs[i]
-    bool  isLoading;
+    ~container(){}
+    int i; // which is jobs[i]
+    bool  isLoading; //This determines if container is loading or not!
     //according to QC m location and the block
 };
 struct Block{
