@@ -217,7 +217,6 @@ bool PortSimulation::cnstr_6_7(){
     return sum6 == 1 && sum7 == 1;
 }
 
-
 bool PortSimulation::FeasibilityChecker(){
     bool isSolFeas;
 
