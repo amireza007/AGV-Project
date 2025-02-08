@@ -37,4 +37,14 @@ public:
     ModelVariables modelVariables = ModelVariables();
     void JobGenerator();
     bool FeasibilityChecker();
+    //job assignment and AGV scheme constraints
+    bool cnstr_2();
+    bool cnstr_3();
+    bool cnstr_4_5();
+    bool cnstr_6();
+    bool cnstr_7();
+
+    //Location based constraints
+    bool cnstr_8();
+
 };

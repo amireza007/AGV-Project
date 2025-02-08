@@ -58,7 +58,7 @@ Sets
                     m2.i4.29,
                     m2.i5.20,
                     m3.i1.32,
-                    m3.i2.3,
+                    m3.i2.3 ,
                     m3.i3.28,
                     m3.i4.23,
                     m3.i5.32/
@@ -86,7 +86,7 @@ parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
                     m2.i4 29,
                     m2.i5 20,
                     m3.i1 32,
-                    m3.i2 3,
+                    m3.i2  3,
                     m3.i3 28,
                     m3.i4 23,
                     m3.i5 32/
@@ -224,6 +224,8 @@ cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
 cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
 
+***********************************************
+****Location constraints
 cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j) and (not sameas(m,n) or not sameas(i,j))).. abs(P_x(m,i,'a4',xR)- P_x(n,j,'a0',xR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;
 cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_x(m,i,'a4',xR) - P_x(n,j,'a0',xR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0;
 

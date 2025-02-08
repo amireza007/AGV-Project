@@ -116,9 +116,7 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
 
 }
 
-bool PortSimulation::FeasibilityChecker(){
-    bool isSolFeas = true;
-
+bool PortSimulation::cnstr_2(){
     //cnstr_2
     int index = 0; //index of operands of Z
     int sum = 0;
@@ -135,10 +133,62 @@ bool PortSimulation::FeasibilityChecker(){
             }
         }
     }
-    if (sum != 1){
-        isSolFeas = false;
-        return isSolFeas;
-    }
-//////////////////////////////////////////////////
-    return isSolFeas;
+    if (sum == 1) return true;
+    else return false;
+
 }
+
+bool PortSimulation::cnstr_3(){
+    int index = 0;
+    int indexRHS = 0;
+    int indexLHS = 0;
+    int rhsSum = 0;
+    int lhsSum = 0;
+    foreach (container c1, containers.allC) {//write with unique_ptr!
+        foreach(AGV l, B){
+            //TODO compute sums in two threads
+            {
+                std::unique_ptr<z_op> temp1 = std::make_unique<z_op>(containers.c0,c1,l,++index);
+                std::unique_ptr<z_op> temp2 = std::make_unique<z_op>(c1,containers.c0,l, ++index);
+                rhsSum += modelVariables.z[*temp1];
+                lhsSum += modelVariables.z[*temp2];
+            }
+            foreach(container c2, containers.allC){
+                std::unique_ptr<z_op> temp1 = std::make_unique<z_op>(c2,c1,l,++index);
+                std::unique_ptr<z_op> temp2= std::make_unique<z_op>(c1,c2,l,++index);
+                rhsSum += modelVariables.z[*temp1];
+                lhsSum += modelVariables.z[*temp2];
+            }
+        }
+    }
+    return rhsSum == lhsSum;
+}
+
+bool PortSimulation::cnstr_4_5(){
+    int sum1 = 0;
+    int sum2 = 0;
+    int index = 0;
+    foreach (AGV l, B){
+        foreach (container c, containers.allC){
+            std::unique_ptr<z_op> temp1 = std::make_unique<z_op>(containers.c0,c,l,++index);
+            std::unique_ptr<z_op> temp2 = std::make_unique<z_op>(c,containers.c0,l,++index);
+            sum1 += modelVariables.z[*temp1];
+            sum2 += modelVariables.z[*temp2];
+        }
+    }
+    return sum1 == 1 && sum2 == 1;
+}
+
+bool PortSimulation::cnstr_6(){}
+
+bool PortSimulation::cnstr_7(){}
+
+
+bool PortSimulation::FeasibilityChecker(){
+    bool isSolFeas;
+
+
+//////////////////////////////////////////////////
+    return true;
+}
+

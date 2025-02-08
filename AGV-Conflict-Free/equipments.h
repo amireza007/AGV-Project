@@ -17,11 +17,13 @@ enum action {a0 ,a1, a2, a3, a4};
 struct container {
     std::tuple<QuayCrane, int> c;
     container(){}
-    container(QuayCrane m, int j, bool _Loading) : c(m,j), isLoading(_Loading) {
+    container(QuayCrane m, int j, bool _Loading) : c(m,j), isLoading(_Loading)
+    {
         // c = {m,i};
     }
     ~container(){}
     int i; // which is jobs[i]
+    int index; //container number
     bool  isLoading; //This determines if container is loading or not!
     //according to QC m location and the block
 };
