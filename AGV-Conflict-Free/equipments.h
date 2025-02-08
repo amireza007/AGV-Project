@@ -16,7 +16,7 @@ enum action {a0 ,a1, a2, a3, a4};
 
 struct container {
     std::tuple<QuayCrane, int> c;
-    container();
+    container(){}
     container(QuayCrane m, int j, bool _Loading) : c(m,j), isLoading(_Loading) {
         // c = {m,i};
     }

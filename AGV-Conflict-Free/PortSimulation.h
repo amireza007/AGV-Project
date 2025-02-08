@@ -7,8 +7,9 @@
 //set of QCs should be called QCBuffer,
 //set of AGVs shold be called AGVBuffer
 
-struct AllContainers{
-    QVector<container> allC;       //Loading Containers
+struct AllContainers{//these don't contain virtual containers
+    QVector<container> allC;        //Loading Containers
+    container c0 = container(QuayCrane(0,{}), 0,false);
     double tMin;                //minimum operation time for containers without considering conflict, used for computing AGV scheme
 
     ////////////// possibly bad!
@@ -33,7 +34,7 @@ public:
     //sequence of QCS and ASCs
     QVector<std::tuple<container,container>> psi1;
     QVector<std::tuple<container,container>> psi2;
-    ModelVariables *modelVariables = new ModelVariables();
+    ModelVariables modelVariables = ModelVariables();
     void JobGenerator();
     bool FeasibilityChecker();
 };

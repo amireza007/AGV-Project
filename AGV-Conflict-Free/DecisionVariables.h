@@ -3,11 +3,25 @@
 #include <iostream>
 #include <QVector>
 #include <map>
+#include <unordered_map>
 #include "equipments.h"
 
+struct z_op{
+    container c1;
+    container c2;
+    AGV l;
+    int index;
+    z_op(container _c1, container _c2, AGV _l, int _index): c1(_c1), c2(_c2), l(_l),
+        index(_index){}
+};
+struct cmp{
+    bool operator()(const struct z_op& o1, const struct z_op& o2) const{
+        return o1.index != o2.index;//
+    }
+};
 
 struct ModelVariables {
-    std::map<std::tuple<container,container,AGV>, int> z;
+    std::map<struct z_op, int, cmp> z;
     QVector<std::map<std::tuple<W,W>, int>> UAGV;
 
     // AGV locations

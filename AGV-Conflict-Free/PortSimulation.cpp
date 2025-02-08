@@ -1,5 +1,5 @@
 #include "PortSimulation.h"
-
+#include <memory>
 PortSimulation::PortSimulation(int _CNumber,int _AGVNumber) :CNumber(_CNumber), AGVNumber(_AGVNumber) {
     JobGenerator();
 }
@@ -118,20 +118,27 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
 
 bool PortSimulation::FeasibilityChecker(){
     bool isSolFeas = true;
+
     //cnstr_2
-    std::map<std::tuple<int,int>, int> Z1;
+    int index = 0; //index of operands of Z
+    int sum = 0;
     foreach (container c1, containers.allC) {
+        bool virtualContNow = true;
+        foreach (AGV l, B) {
+            std::unique_ptr<z_op> temp = std::make_unique<z_op>(c1,containers.c0,l,++index);
+            sum += modelVariables.z[*temp];
+        }
         foreach (container c2, containers.allC) {
             foreach (AGV l, B) {
-
-                //modelVariables->z[{c1,c2,l}] = 2;
-
-                // if(true){
-                //     isSolFeas = false;
-                //     break;
-                // }
+                std::unique_ptr<z_op> temp = std::make_unique<z_op>(c1,c2,l,++index);
+                sum += modelVariables.z[*temp];
             }
         }
     }
+    if (sum != 1){
+        isSolFeas = false;
+        return isSolFeas;
+    }
+//////////////////////////////////////////////////
     return isSolFeas;
 }
