@@ -41,8 +41,7 @@ public:
     bool cnstr_2();
     bool cnstr_3();
     bool cnstr_4_5();
-    bool cnstr_6();
-    bool cnstr_7();
+    bool cnstr_6_7();
 
     //Location based constraints
     bool cnstr_8();

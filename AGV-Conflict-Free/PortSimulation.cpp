@@ -179,9 +179,43 @@ bool PortSimulation::cnstr_4_5(){
     return sum1 == 1 && sum2 == 1;
 }
 
-bool PortSimulation::cnstr_6(){}
-
-bool PortSimulation::cnstr_7(){}
+bool PortSimulation::cnstr_6_7(){
+    int sum6 = 0;
+    int sum7 = 0;
+    int index1 = 0;
+    int index2 = 0;
+    foreach(AGV l, B){
+        foreach (container c1, containers.allC){
+            if(c1.isLoading){
+                {
+                    std::unique_ptr<z_op> temp1 = std::make_unique<z_op>(c1,containers.c0,l,++index1);
+                    sum6 += modelVariables.z[*temp1];
+                }
+                foreach(container c2, containers.allC){
+                    if(!c2.isLoading){
+                        std::unique_ptr<z_op> temp1 = std::make_unique<z_op>(c1,c2, l, ++index1);
+                        sum6 += modelVariables.z[*temp1];
+                    }
+                }
+            }
+        }
+        foreach (container c1, containers.allC){
+            if(!c1.isLoading){
+                {
+                    std::unique_ptr<z_op> temp1 = std::make_unique<z_op>(c1,containers.c0,l,++index1);
+                    sum7 += modelVariables.z[*temp1];
+                }
+                foreach(container c2, containers.allC){
+                    if(c2.isLoading){
+                        std::unique_ptr<z_op> temp1 = std::make_unique<z_op>(c1,c2, l, ++index1);
+                        sum7 += modelVariables.z[*temp1];
+                    }
+                }
+            }
+        }
+    }
+    return sum6 == 1 && sum7 == 1;
+}
 
 
 bool PortSimulation::FeasibilityChecker(){
