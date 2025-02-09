@@ -9,7 +9,7 @@
 
 struct AllContainers{//these don't contain virtual containers
     QVector<container> allC;        //Loading Containers
-    container c0 = container(QuayCrane(0,{}), 0,false);
+    container c0 = container(QuayCrane(0,{},{}), 0,false);
     double tMin;                //minimum operation time for containers without considering conflict, used for computing AGV scheme
 
     ////////////// possibly bad!
@@ -30,7 +30,7 @@ public:
     QVector<std::map<container, double>> G_Y;//uniform(20,30)
 
     //QC vertical path
-    QVector<std::map<container,int>> O_Container; //deteremined by someone
+    QVector<std::map<container,int>> O_Container; //deteremined by someone or randomly
     //sequence of QCS and ASCs
     QVector<std::tuple<container,container>> psi1;
     QVector<std::tuple<container,container>> psi2;

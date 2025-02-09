@@ -5,10 +5,12 @@
 #include <QQueue>
 #include <tuple>
 #include <map>
+#include "portlayout.h"
 struct QuayCrane {
     int m; // the index
     QList<int> jobs;
-    QuayCrane(int c,QList<int> _jobs) : m(c), jobs(_jobs){}
+    QList<int> locations;
+    QuayCrane(int c,QList<int> _jobs, QList<int> _locations) : m(c), jobs(_jobs), locations(_locations){}
     QuayCrane(){}
 };
 
@@ -36,9 +38,10 @@ struct Block{
 struct AGV {
     int l; // the index
     QVector<container> assignedContainers;
-    int CompletionTimeOfCurrentjob(); //T(l)
+    int CompletionTimeC(); //T(l):CompletionTimeOfCurrentjob
     int num; //number of assigned containers to an AGV
     // int q = T_UB / tMin;  //maximumNumberOfContainers conducted by each AGV
+    AGV(int _l, QVector<container> _AC, int _CT, int _num): l(_l), assignedContainers(_AC), num(_num){}
 };
 
 typedef std::tuple<container,action> W; //set of actions on each container
