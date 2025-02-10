@@ -66,8 +66,11 @@ Sets
 *!!these sets refers right and left positions of the blocks in the fig. 4 of the article. (which is totally a wrong statement, it should contain membs of D(m,i), too!)
         A_L_set(XR) /1,7,13,19,25,31/
         A_R_set(XR) /5,11,17,23,29,35/
-        A_L(m,i,XR) /#C.#A_L_set/
-        A_R(m,i,XR) /#C.#A_R_set/
+        
+*NOT ACCURATE!!
+*D and L should be dealt with separately!        
+        A_L(m,i,XR) /#D.#A_L_set, m3.i2.1, m1.i2.13, m2.i2.13, m3.i4.19, m2.i4.25, m1.i3.31/
+        A_R(m,i,XR) /#D.#A_R_set, m3.i2.5, m1.i2.17, m2.i2.17, m3.i4.23, m2.i4.29, m1.i3.35/
 
 
 !! Maybe Badly Put! Needs fixing! In the data file!

@@ -19,7 +19,7 @@ enum action {a0 ,a1, a2, a3, a4};
 struct container {
     std::tuple<QuayCrane, int> c;
     container(){}
-    container(QuayCrane m, int j, bool _Loading) : c(m,j), isLoading(_Loading)
+    container(QuayCrane m, int j, bool _Loading, int _InitLoc) : c(m,j), isLoading(_Loading), verticalLocation(_InitLoc)
     {
         // c = {m,i};
     }
@@ -28,11 +28,13 @@ struct container {
     int index; //container number
     bool  isLoading; //This determines if container is loading or not!
     //according to QC m location and the block
+    int verticalLocation;
 };
 struct Block{
     QVector<container> requestedContainers;  // this could be used for creating set \psi_2
     QVector<std::map<container,int>> AL;
     QVector<std::map<container,int>> AR;
+
 };
 
 struct AGV {

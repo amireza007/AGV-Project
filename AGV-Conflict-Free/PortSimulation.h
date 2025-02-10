@@ -23,9 +23,14 @@ public:
     PortSimulation(int _CNumber,int _AGVNumber);
     int CNumber;
     int AGVNumber;
-    struct AllContainers containers;
+
+    //Main equipments
+    AllContainers containers;
     QuayCrane QCs[3];
     QVector<AGV> B;
+    Block blocks[6];
+    ///////////////////////////
+
     QVector<std::map<container, double>> G_Q;//uniform(60,90)
     QVector<std::map<container, double>> G_Y;//uniform(20,30)
 

@@ -5,6 +5,7 @@ PortSimulation::PortSimulation(int _CNumber,int _AGVNumber) :CNumber(_CNumber), 
     QCs[0] = QuayCrane(1,{},{4,8,12});
     QCs[1] = QuayCrane(2,{},{16,20,24});
     QCs[3] = QuayCrane(3,{},{28,32});
+    // blocks[0] = BLock
     JobGenerator();
 }
 
@@ -16,6 +17,18 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     QRandomGenerator rand = QRandomGenerator();
     int NLoadC = (rand.generate() % 10)+ 1;
     int NDLoadC = numOfContainers - NLoadC;
+    //start of job generation
+    int LCIterator = 0;
+    int DCIterator = 0;
+    int randomQCPicker ;
+    int randomBlockPicker ;
+    while(++DCIterator <= NDLoadC){
+        randomQCPicker = rand.generate()%3;
+    }
+    while(++LCIterator <= NLoadC){
+        randomBlockPicker = rand.generate()%6;
+
+    }
     // // Generate Jobs and Schedule (Static fashion )
     // int i,i1,i2,r;
     // if( b == false)
