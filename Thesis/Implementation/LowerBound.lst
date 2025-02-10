@@ -1,0 +1,1197 @@
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/10/25 20:14:08 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   3   
+  10   
+  11   
+  12  Scalars
+  13   
+  14          S_Q "switch time for qc between two containers" /300/
+  15          v "AGV speed" /4/
+  16          Mnum "a very large number" /100000000/;
+  17   
+  18  Sets
+  19          i "index" /i0*i5/
+  20          i1(i) /#i/
+  21          j(i) "a duplicate of i" /#i/
+  22   
+  23          m   "QC index" /m0*m3/
+  24          n(m)   "A duplicate of j" /#m/
+  25   
+  26          L(m,i)   /m1.i2, m1.i3, m2.i2, m2.i4, m3.i2, m3.i4/ !! these are stored in ASC storage area, waiting to be placed in the ship by the QC
+  27          D(m,i) "Unloading Containers. U is a subset of index i" /m1.i1, m2.i1, m2.i3, m2.i5, m3.i1, m3.i3, m3.i5/ !! these are in the ships, waiting to be taking to ASCs
+  28   
+  29          C(m,i)  "All  Containers" /m1.i2, m1.i3, m2.i2, m2.i4, m3.i2, m3.i4, m1.i1, m2.i1, m2.i3, m2.i5, m3.i1, m3.i3, m3.i5/ !! this is in data file, this should contain 0 node, too!
+  30          Cd(m,i) "the last QC container job for all QCs" /m1.i2, m2.i2, m3.i3/
+  31   
+  32          li "AGV index" /l1*l4/
+  33          Bs(li) "set of all agvs" /#li/
+  34          a   "AGV actions" /a0*a4/
+  35          !! Below is written according to Fig 5. of base article
+  36          WT(m,i,a) "set of total actions with virtual node" /#C.(a1,a2,a3,a4)/
+  37          WV(m,i,a)  "Vertical Actions" /#C.a2/ !! those containing a2. Note that this set includes all the containers (m,i) in C(m,i)
+  38          WH(m,i,a)  "Horizontal Actions" /#D.(a1,a3,a4), #L.(a1,a3,a4)/ !! those containing a1,a3,a4. Be sure to include virtual a0 in it.
+  39   
+  40  *********************************************
+  41  *Location based sets
+  42          XR (*)  "Vertical Operational Area" /1*35/
+  43          YR (*) "Horizontal Operational Area" /1*10/
+  44          YS(YR)  "Horizontal Seaside Operation Area" /6*10/
+  45          YL(YR)  "Horizontal Path" /1*5/
+  46   
+  47          o(m,i,XR) / m1.i1.12,
+  48                      m1.i2.13,
+  49                      m1.i3.35,
+  50                      m2.i1.20,
+  51                      m2.i2.17,
+  52                      m2.i3.24,
+  53                      m2.i4.29,
+  54                      m2.i5.20,
+  55                      m3.i1.32,
+  56                      m3.i2.3 ,
+  57                      m3.i3.28,
+  58                      m3.i4.23,
+  59                      m3.i5.32/
+  60   
+  61  *!!these sets refers right and left positions of the blocks in the fig. 4 of the article. (which is totally a wrong statement, it should contain membs of D(m,i), too!)
+  62          A_L_set(XR) /1,7,13,19,25,31/
+  63          A_R_set(XR) /5,11,17,23,29,35/
+  64   
+  65  *NOT ACCURATE!!
+  66  *D and L should be dealt with separately!
+  67          A_L(m,i,XR) /#D.#A_L_set, m3.i2.1, m1.i2.13, m2.i2.13, m3.i4.19, m2.i4.25, m1.i3.31/
+  68          A_R(m,i,XR) /#D.#A_R_set, m3.i2.5, m1.i2.17, m2.i2.17, m3.i4.23, m2.i4.29, m1.i3.35/
+  69   
+  70   
+  71  !! Maybe Badly Put! Needs fixing! In the data file!
+  72          psi_1(m,i,m,i)   "sequence of Container jobs for QC" /
+  73          m1.i1.m1.i2, m1.i2.m1.i3, m2.i1.m2.i2,  m2.i2.m2.i3, m2.i3.m2.i4, m2.i4.m2.i5,m3.i1.m3.i2,  m3.i2.m3.i3, m3.i3.m3.i4, m3.i4.m3.i5/
+  74   
+  75          psi_2(m,i,m,i)   "sequence of Container jobs for ASC" /m1.i2.m2.i2/ !!This is in data file. (m,i) and (m,i) belong to the same block!
+  76          ;
+  77  parameter o1(m,i) "Merely a copy of the o(m,i,XR), with XR treated as a number"/
+  78                      m1.i1 12,
+  79                      m1.i2 13,
+  80                      m1.i3 35,
+  81                      m2.i1 20,
+  82                      m2.i2 17,
+  83                      m2.i3 24,
+  84                      m2.i4 29,
+  85                      m2.i5 20,
+  86                      m3.i1 32,
+  87                      m3.i2  3,
+  88                      m3.i3 28,
+  89                      m3.i4 23,
+  90                      m3.i5 32/
+  91   
+  92  *****************************************************************************************************************
+  93  *Dupilcates of the some of the sets!
+  94  alias (XR, XR1);
+  95  alias (XR, XR_1);
+  96  alias (YR, YR_1);
+  97  alias (a,a1);
+  98  alias (a,a2);
+  99  alias (a2,a2_1);
+ 100  alias (a1,a1_1);
+ 101  *alias (i,i1);
+ 102  set h(m)/#m/;  !! for cnstr_3
+ 103  set k(i) /#i/;
+ 104  set s(YR);
+ 105  set XR2(XR) /#XR/;
+ 106  set x_t(XR) /#XR/;
+ 107  *****************************************************************************************************************
+ 108  Parameters
+ 109   
+ 110          G_Q(m,i)
+ 111          G_Y(m,i)
+ 112          ;
+ 113  ****************************************************************************************************************
+ 114  G_Q(m,i) = uniform(60,90);
+ 115  G_Y(m,i) = uniform(20,30);
+ 116   
+ 117  Binary Variables
+ 118          z(m, i, m, i, li)   "used mainly for handling QC double cycling, it consists of 0 virtual point!" !! (m,i) and (m,i) are NOT equal, TOO!
+ 119          U_AGV(m,i,a,m,i,a)  "U_AGV(j_1,j_2) conducted before" !! note that (m,i,a) and (m,i,a) are NOT equal!!
+ 120          U_QC(m,i,m,i,a)   "U_QC(j,WT) conducted before"
+ 121   
+ 122  *       Path related variables
+ 123          P_X(m,i,a,XR) "P_X(WV,x) finish V loc, These are defined on actions, NOT ON CONTAINERS!"
+ 124          P_Y(m,i,a,YR) "P_Y(WH,y) finish H loc, These are defined on actions, NOT ON CONTAINERS!"
+ 125          P_X0(m,i,a,XR) "P_X(WV,x) Start H  loc, These are defined on actions, NOT ON CONTAINERS!"
+ 126          P_Y0(m,i,a,YR) "P_Y(WH,y) Start H loc, These are defined on actions, NOT ON CONTAINERS!"
+ 127          ;
+ 128  *****************************************************************************************************************
+ 129  Positive Variables
+ 130  *       Time related variables
+ 131          T_Q(m,i) "start time of QC"
+ 132          T_Y(m,i) "Start time of agv putting cont on ASC"
+ 133          T_start(m,i,a) "Start of agv for action (m,i,a)"
+ 134          CT(m,i)  "Op. completion time of for each QC m"
+ 135   
+ 136  *       Auxiliary Variables
+ 137          t_AGV(m,i,a,m,i,a)        "t_AGV(WT_1,WT_2"
+ 138          X_position(m,i,a)   "X_position(WT)"
+ 139          Y_position(m,i,a)   "Y_position(WT)"
+ 140          ;
+ 141  variable obj "objective function";
+ 142  *****************************************************************************************************************
+ 143   
+ 144  Equations
+ 145   
+ 146          ADRP                       "AGV Dispatching and Routing Problem"
+ 147          LJob(m,i)
+ 148   
+ 149  *       Job assignment constraints
+ 150  *        cnstr_2(m,i)
+ 151  *        cnstr_3(m,i,li)             "C,B"
+ 152  *        cnstr_4(li)                 "B with 0 virtual node"
+ 153  *        cnstr_5(li)               ‌  "B with 0 virutal node"
+ 154  *        cnstr_6(m,i)                "L"
+ 155  *        cnstr_7(m,i)                "D"
+ 156  **********************************************************************
+ 157  *       Location constraints of AGV acitons
+ 158  *        cnstr_8(m,i,n,j,XR)         "C,C,XR"
+ 159  *        cnstr_8_slack(m,i,n,j)
+ 160  *        cnstr_8(m,i,n,j,xr)
+ 161  *        cnstr_8_1(m,i,n,j,xr)
+ 162  *        cnstr_9(m,i,n,j,YR)         "C,C,YR"
+ 163  *        cnstr_9_1(m,i,n,j,YR)         "C,C,YR"
+ 164  *        cnstr_10(m,i,a)             "C,a"
+ 165  *        cnstr_11(m,i,a)             "C,a"
+ 166  *        cnstr_12(m,i)               "L"
+ 167  *        cnstr_13(m,i)               "D"
+ 168  *        cnstr_14(m,i,XR)            "D"
+ 169  *        cnstr_15(m,i)               "L"
+ 170  *        cnstr_19(m,i)               "D"
+ 171  *        cnstr_16(m,i)               "D"
+ 172  *        cnstr_17(m,i)               "L"
+ 173  *        cnstr_18(m,i,XR)            "L"
+ 174  *        cnstr_20(m, i, a, a, YR)    "WH,YR"
+ 175  *        cnstr_21(m,i,a,a,XR)        "WV,XR"
+ 176   
+ 177  **********************************************************************
+ 178  *       Conflict Free Constraints
+ 179  *        cnstr_22(m,i,n,j)           "C,C"
+ 180  *        cnstr_23(m,i,a,n,j,a,YR,XR, a, a) "WH,WH,YR,XR" !!Look How many equations it would add to the model
+ 181  *        cnstr_24(m,i,n,j,a)         "C, WH"
+ 182  *        cnstr_25(m,i,n,j,a,a)       "C, WH"
+ 183  *        cnstr_26(n,j,a,YS,m,i,a,a)  "WH,YS,D"
+ 184  *        cnstr_27(m,i,a,n,j,a,XR)    "WV, XR"
+ 185  *        cnstr_28(m,i,a, a)          "C,a"
+ 186  **********************************************************************
+ 187  ****Time Constraints
+ 188          cnstr_29(m,i,i)             "C,C"      !! two consecutive containers, i and i+1
+ 189  *        cnstr_30(m,i,m,i)           "psi_1"
+ 190  *        cnstr_31(m,i,m,i)           "psi_2"
+ 191          cnstr_32(m,i)               "D"
+ 192          cnstr_33(m,i)               "L"
+ 193          cnstr_34(m,i,m,i)           "D,L"
+ 194          cnstr_35(m,i,m,i)           "L,D"
+ 195  *        cnstr_36(m,i,a)             "D,a"
+ 196  *        cnstr_37(m,i,a)             "D,a"
+ 197  *        cnstr_38(m,i,a,a,n,j,a)     "WT,WT"
+ 198  *        cnstr_39(m,i,a,XR)          "C,a,XR"
+ 199  *        cnstr_39_1(m,i,a,XR)          "C,a,XR"
+ 200  *        cnstr_40(m,i,a,YR)          "C,a,YR"
+ 201  *        cnstr_40_1(m,i,a,YR)          "C,a,YR"
+ 202  *        cnstr_41(m,i,a,m,i,a)
+ 203          ;
+ 204   
+ 205  **********************************************************************
+ 206  *This determines whether the last container job is for QC or AGV
+ 207  LJob(Cd).. CT(Cd) =e= max(T_Q(Cd)+G_Q(cd), T_Y(Cd)+G_Y(Cd));
+ 208  *This constraint clarifies the lengthiest operation among all container jobs
+ 209  ADRP.. obj  =e= smax(Cd, CT(Cd));
+ 210   
+ 211  *****************************************************************************************************************
+ 212  **Job assinment constraints
+ 213  *as soon as you include conditional $(C(m,i)), you ignore virtual node!
+ 214  *there are many actions, having a0 as their starting. a0 is not in the formulation in the article
+ 215  *cnstr_2(m,i) $(C(m,i)).. sum((li,n,j) $((C(n,j) and (not sameas(m,n) or not sameas(i,j))) or (sameas(n,'m0') and sameas(j, 'i0'))),  z(m,i,n,j,li)) =e= 1 ;
+ 216  *
+ 217  *cnstr_3(m,i,li) $(C(m,i))..sum((n,j) $((C(n,j)and (not sameas(m,n) or not sameas(i,j))) or (sameas(n,'m0') and sameas(j, 'i0'))), z(n,j,m,i,li)) -sum((h,k) $(C(h,k) or (sameas(h,'m0') and sameas(k,'i0'))), z(m,i,h,k,li)) =e= 0;
+ 218  *
+ 219  *cnstr_4(li).. sum((m,i) $(C(m,i)), z('m0', 'i0', m, i, li))=e= 1;
+ 220  *cnstr_5(li).. sum((m,i) $(C(m,i)), z(m, i, 'm0', 'i0', li))=e= 1;
+ 221  *
+ 222  *cnstr_6(m,i) $(L(m,i)).. sum((li,n,j) $(D(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 223  *cnstr_7(m,i) $(D(m,i)).. sum((li,n,j) $(L(n,j) or (sameas(n,'m0') and sameas(j,'i0'))), z(m,i,n,j,li))=e= 1 ;
+ 224  *
+ 225  ***********************************************
+ 226  ****Location constraints
+ 227  *cnstr_8(m,i,n,j,xr) $(c(m,i) and c(n,j) and (not sameas(m,n) or not sameas(i,j))).. abs(P_x(m,i,'a4',xR)- P_x(n,j,'a0',xR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;
+ 228  *cnstr_8_1(m,i,n,j,xr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_x(m,i,'a4',xR) - P_x(n,j,'a0',xR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0;
+ 229  *
+ 230  *cnstr_9(m,i,n,j,yr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_Y(m,i,'a4',YR) - P_Y(n,j,'a0',yR)) - Mnum*abs(1 - sum(li, z(m,i,n,j,li)))  =l= 0;
+ 231  *cnstr_9_1(m,i,n,j,yr) $(c(m,i) and c(n,j)and (not sameas(m,n) or not sameas(i,j))).. abs(P_Y(m,i,'a4',YR) - P_Y(n,j,'a0',yR)) + Mnum*abs(1 - sum(li, z(m,i,n,j,li))) =g= 0;
+ 232  *
+ 233  *cnstr_10(m,i,a) $(c(m,i)).. sum(XR, P_X(m,i,a,XR)) =e= 1;
+ 234  *cnstr_11(m,i,a) $(c(m,i)).. sum(YR, P_Y(m,i,a,YR)) =e= 1;
+ 235  *
+ 236  *cnstr_12(m,i) $(L(m,i)).. sum(YL, P_Y(m,i,'a0',YL)) =e= 1;
+ 237  *cnstr_13(m,i) $(D(m,i)).. sum(YS, P_Y(m,i,'a0',YS)) =e= 1;
+ 238  *
+ 239  *cnstr_14(m,i,XR) $(D(m,i) and o(m,i,XR)).. P_X(m, i,'a0',XR) =e= 1;
+ 240  ** A_L depends on container (m,i), it needs fixing, hence cnstr_15 and cnstr_19 and A_R
+ 241  *cnstr_15(m,i) $(L(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)),sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a0',x_t))) =e= 1; !!this ord shows forces the container to belong to one and only one block
+ 242  *cnstr_19(m,i) $(D(m,i))..sum((A_L_set, A_R_set) $(ord(A_L_set) = ord(A_R_set)) ,sum(x_t $(x_t.val >= A_L_set.val and x_t.val<=A_R_set.val) ,P_X(m,i,'a3',x_t))) =e= 1;
+ 243  *
+ 244  *cnstr_16(m,i) $(D(m,i)).. sum(YL, P_Y(m,i,'a3',YL)) =e= 1;
+ 245  *cnstr_17(m,i) $(L(m,i)).. sum(YS, P_Y(m,i,'a3',YS)) =e= 1;
+ 246  *cnstr_18(m,i,XR) $(L(m,i) and o(m,i,XR)).. P_X(m, i,'a3',XR) =e= 1;
+ 247  *
+ 248  *cnstr_20(m, i, a1, a1_1, YR) $(WH(m,i,a1) and (ord(a1_1) = ord(a1)-1)).. P_Y(m,i,a1,YR) =e= P_Y(m,i,a1_1,YR);
+ 249  *cnstr_21(m, i, a1, a1_1, XR) $(WV(m,i,a1) and (ord(a1_1) = ord(a1)-1))..P_X(m, i, a1, XR) =e= P_X(m,i,a1_1,XR);
+ 250   
+ 251  *******************************************************************************************************************************************************************************************
+ 252  ****Conflict Free Constraints
+ 253  *cnstr_22(m,i,n,j) $(c(m,i) and c(n,j)).. U_AGV(m,i,'a4',n,j,'a1') =g= sum(li, z(m,i,n,j,li));
+ 254  ** wt(a1_1) and wt(a2_1) are computed here!
+ 255  *cnstr_23(m,i,a1,n,j,a2,YR,XR,a1_1,a2_1)$((ord(a1_1) = ord(a1) - 1) and (ord(a2_1) =  ord(a2) - 1) and WH(m,i,a1) and WH(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2)))..U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) + 3 - P_Y(m,i,a1,YR) - P_Y(n,j,a2, YR) -(sum(XR1 $(XR1.val <= XR.val), P_X(m,i,a1_1,XR1) + P_X(n,j,a2,XR1) - P_X(m,i,a1,XR1) - P_X(n,j,a2_1,XR1))) =g= 0;
+ 256  **
+ 257  *cnstr_24(m,i,n,j,a) $(C(m,i) and WH(n,j,a)).. T_Q(m,i) + G_Q(m,i) + Mnum*(1 - U_QC(m,i,n,j,a)) =g= T_start(n,j,a);
+ 258  *cnstr_25(m,i,n,j,a1, a1_1) $(C(m,i) and WH(n,j,a1) and (ord(a1_1)=ord(a1)-1)).. T_Start(n,j,a1) + t_AGV(n,j,a1_1,n,j,a1) + Mnum*(1 - U_QC(m,i,n,j,a1) ) =g= T_Q(m,i);
+ 259  **
+ 260  **!! YS is used in here!
+ 261  *cnstr_26(n,j,a2,YS,m,i,a1,a2_1) $( ( (sameas(a1, 'a0') and D(m,i)) or (sameas(a1, 'a3') and L(m,i)) ) and wh(n,j,a2) and (ord(a2_1)=ord(a2)-1))..(3 - U_QC(m,i,n,j,a2) - P_Y(m,i,a1,YS) - P_Y(n,j,a2,YS) +abs(sum(XR $(XR.val <= o1(m,i)), P_x(n,j,a2,XR)) - sum(XR $(XR.val > o1(m,i)), P_X(n,j,a2_1,XR)))) * Mnum +T_start(n,j,a2) + t_agv(n,j,a2_1,m,i,a1) =g= T_Q(m,i) + G_Q(m,i);
+ 262  *cnstr_27(m,i,a1,n,j,a2,XR) $(Wv(m,i,a1) and Wv(n,j,a2) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2))).. U_AGV(m,i,a1,n,j,a2) + U_AGV(n,j,a2,m,i,a1) =g= P_X(m,i,a1,XR) + P_X(n,j,a2,XR) - 1;
+ 263  *cnstr_28(m,i,a1, a1_1) $(C(m,i) and (sameas(a1,'a2') or sameas(a1,'a3') or sameas(a1,'a4')) and (ord(a1_1) = ord(a1) - 1)).. U_AGV(m,i,a1_1,m,i,a1) =e= 1;
+ 264   
+ 265  *******************************************************************************************************************************************************************************************
+ 266  ***Time Constraints
+ 267  cnstr_29(m,i,i1) $(c(m,i) and (ord(i1)=ord(i)+1) and c(m,i1)).. T_Q(m,i1) - T_Q(m,i) - G_Q(m,i) - S_Q=g= 0;
+ 268  *cnstr_30(m,i,n,j) $(psi_1(m,i,n,j)).. T_Q(n,j) =g= T_Q(m,i) + G_Q(m,i);
+ 269  *cnstr_31(m,i,n,j) $(psi_2(m,i,n,j)).. T_Y(n,j) =g= T_Y(m,i) +G_Y(m,i);
+ 270   
+ 271  cnstr_32(m,i) $(D(m,i)).. T_y(m,i) =g= T_start(m,i,'a3') + t_AGV(m,i,'a2',m,i,'a3');
+ 272  cnstr_33(m,i) $(L(m,i)).. T_Q(m,i) =g= T_start(m,i,'a3') + t_agv(m,i,'a2',m,i,'a3');
+ 273   
+ 274  cnstr_34(m,i,n,j) $(D(m,i) and L(n,j))..T_y(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 275  cnstr_35(m,i,n,j) $(L(m,i) and D(n,j))..T_Q(n,j) + Mnum*(1 - sum(li, z(m,i,n,j,li))) =g= T_start(m,i,'a4') + t_agv(m,i,'a3',m,i,'a4');
+ 276   
+ 277  *cnstr_36(m,i,a) $( (D(m,i) and sameas(a,'a4')) or (L(m,i) and sameas(a,'a1')) )..T_start(m,i,a) =g= t_y(m,i) + G_y(m,i);
+ 278  *cnstr_37(m,i,a) $( (D(m,i) and sameas(a,'a1')) or (L(m,i) and sameas(a,'a4')) )..T_start(m,i,a) =g= t_Q(m,i) + G_Q(m,i);
+ 279  *cnstr_38(m,i,a1,a1_1,n,j,a2) $(WT(m,i,a1) and wt(n,j,a2) and (ord(a1_1) = ord(a1)-1) and (not sameas(m,n) or not sameas(i,j) or not sameas(a1,a2))).. T_start(n,j,a2) + Mnum*(1-U_AGV(m,i,a1,n,j,a2)) =g= T_start(m,i,a1) + t_AGV(m,i,a1_1,m,i,a1);
+ 280  *
+ 281  ** THE BIG-M TRICK FOR IF-CONDITIONAL
+ 282  *cnstr_39(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val - Mnum *abs(1-P_X(m,i,a,XR)) =l= 0;
+ 283  *cnstr_39_1(m,i,a,XR) $(C(m,i)).. x_position(m,i,a) - XR.val + Mnum *abs(1-P_X(m,i,a,XR)) =g= 0;
+ 284  *cnstr_40(m,i,a,YR) $(C(m,i)).. y_position(m,i,a) - YR.val  -Mnum *abs(1-P_Y(m,i,a,YR)) =l= 0;
+ 285  *cnstr_40_1(m,i,a,YR) $(C(m,i))..  y_position(m,i,a) - YR.val  +Mnum *abs(1-P_Y(m,i,a,YR)) =g= 0;
+ 286  *****************************************
+ 287  ** Just writing the switch time between actions according the position of the start and finish locaiton of the action and AGVs next aciton
+ 288  **and the speed of the vehicle which is constant. Which might be bad!!
+ 289  *cnstr_41(m,i,a1,n,j,a2) $(c(m,i) and c(n,j)).. t_agv(m,i,a1,n,j,a2) - (abs(x_position(m,i,a1) - x_position(n,j,a2)) + abs(Y_position(m,i,a1) - y_position(n,j,a2)))/v =e= 0;
+ 290  ****************************************
+ 291   
+ 292  Model ConflictFreeSch /all/ ;
+ 293  option SOLVER = Xpress;
+ 294   
+ 295  * This is for detecting a set of Irredicuible Infeasible Solutions; Gurobi-specific:
+ 296  *$onEcho > CFS.opt
+ 297  *iis 1
+ 298  *indic cnstr_8(m,i,n,j,XR)$slack(m,i,n,j) 1
+ 299  *$offEcho
+ 300  *ConflictFreeSch.Optfile = 1;
+ 301  solve conflictfreesch using MINLP min obj;
+ 302   
+ 303   
+ 304   
+ 305   
+ 306   
+ 307   
+ 308   
+ 309   
+ 310   
+ 311   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  48.6.1 67fbb04b WEX-WEI
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/10/25 20:14:08 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE ConflictFreeSch Using MINLP From line 301
+
+
+---- ADRP  =E=  AGV Dispatching and Routing Problem
+
+ADRP..  (0)*CT(m1,i2) + (0)*CT(m2,i2) + (0)*CT(m3,i3) + obj =E= 0 ; (LHS = 0)
+     
+
+---- LJob  =E=  
+
+LJob(m1,i2)..  - (1)*T_Q(m1,i2) + (0)*T_Y(m1,i2) + CT(m1,i2) =E= 0 ; (LHS = -62.01341169, INFES = 62.01341169 ****)
+     
+LJob(m2,i2)..  - (1)*T_Q(m2,i2) + (0)*T_Y(m2,i2) + CT(m2,i2) =E= 0 ; (LHS = -63.92077449, INFES = 63.92077449 ****)
+     
+LJob(m3,i3)..  - (1)*T_Q(m3,i3) + (0)*T_Y(m3,i3) + CT(m3,i3) =E= 0 ; (LHS = -70.54324104, INFES = 70.54324104 ****)
+     
+
+---- cnstr_29  =G=  C,C
+
+cnstr_29(m1,i1,i2)..  - T_Q(m1,i1) + T_Q(m1,i2) =G= 385.68811041 ; (LHS = 0, INFES = 385.68811041 ****)
+     
+cnstr_29(m1,i2,i3)..  - T_Q(m1,i2) + T_Q(m1,i3) =G= 362.01341169 ; (LHS = 0, INFES = 362.01341169 ****)
+     
+cnstr_29(m2,i1,i2)..  - T_Q(m2,i1) + T_Q(m2,i2) =G= 382.86751401 ; (LHS = 0, INFES = 382.86751401 ****)
+     
+REMAINING 7 ENTRIES SKIPPED
+
+
+---- cnstr_32  =G=  D
+
+cnstr_32(m1,i1)..  T_Y(m1,i1) - T_start(m1,i1,a3) - t_AGV(m1,i1,a2,m1,i1,a3) =G= 0 ; (LHS = 0)
+     
+cnstr_32(m2,i1)..  T_Y(m2,i1) - T_start(m2,i1,a3) - t_AGV(m2,i1,a2,m2,i1,a3) =G= 0 ; (LHS = 0)
+     
+cnstr_32(m2,i3)..  T_Y(m2,i3) - T_start(m2,i3,a3) - t_AGV(m2,i3,a2,m2,i3,a3) =G= 0 ; (LHS = 0)
+     
+REMAINING 4 ENTRIES SKIPPED
+
+
+---- cnstr_33  =G=  L
+
+cnstr_33(m1,i2)..  T_Q(m1,i2) - T_start(m1,i2,a3) - t_AGV(m1,i2,a2,m1,i2,a3) =G= 0 ; (LHS = 0)
+     
+cnstr_33(m1,i3)..  T_Q(m1,i3) - T_start(m1,i3,a3) - t_AGV(m1,i3,a2,m1,i3,a3) =G= 0 ; (LHS = 0)
+     
+cnstr_33(m2,i2)..  T_Q(m2,i2) - T_start(m2,i2,a3) - t_AGV(m2,i2,a2,m2,i2,a3) =G= 0 ; (LHS = 0)
+     
+REMAINING 3 ENTRIES SKIPPED
+
+
+---- cnstr_34  =G=  D,L
+
+cnstr_34(m1,i1,m1,i2)..  - 100000000*z(m1,i1,m1,i2,l1) - 100000000*z(m1,i1,m1,i2,l2) - 100000000*z(m1,i1,m1,i2,l3) - 100000000*z(m1,i1,m1,i2,l4) + T_Y(m1,i2) - T_start(m1,i1,a4) - t_AGV(m1,i1,a3,m1,i1,a4) =G= -100000000 ; (LHS = 0)
+     
+cnstr_34(m1,i1,m1,i3)..  - 100000000*z(m1,i1,m1,i3,l1) - 100000000*z(m1,i1,m1,i3,l2) - 100000000*z(m1,i1,m1,i3,l3) - 100000000*z(m1,i1,m1,i3,l4) + T_Y(m1,i3) - T_start(m1,i1,a4) - t_AGV(m1,i1,a3,m1,i1,a4) =G= -100000000 ; (LHS = 0)
+     
+cnstr_34(m1,i1,m2,i2)..  - 100000000*z(m1,i1,m2,i2,l1) - 100000000*z(m1,i1,m2,i2,l2) - 100000000*z(m1,i1,m2,i2,l3) - 100000000*z(m1,i1,m2,i2,l4) + T_Y(m2,i2) - T_start(m1,i1,a4) - t_AGV(m1,i1,a3,m1,i1,a4) =G= -100000000 ; (LHS = 0)
+     
+REMAINING 39 ENTRIES SKIPPED
+
+
+---- cnstr_35  =G=  L,D
+
+cnstr_35(m1,i2,m1,i1)..  - 100000000*z(m1,i2,m1,i1,l1) - 100000000*z(m1,i2,m1,i1,l2) - 100000000*z(m1,i2,m1,i1,l3) - 100000000*z(m1,i2,m1,i1,l4) + T_Q(m1,i1) - T_start(m1,i2,a4) - t_AGV(m1,i2,a3,m1,i2,a4) =G= -100000000 ; (LHS = 0)
+     
+cnstr_35(m1,i2,m2,i1)..  - 100000000*z(m1,i2,m2,i1,l1) - 100000000*z(m1,i2,m2,i1,l2) - 100000000*z(m1,i2,m2,i1,l3) - 100000000*z(m1,i2,m2,i1,l4) + T_Q(m2,i1) - T_start(m1,i2,a4) - t_AGV(m1,i2,a3,m1,i2,a4) =G= -100000000 ; (LHS = 0)
+     
+cnstr_35(m1,i2,m2,i3)..  - 100000000*z(m1,i2,m2,i3,l1) - 100000000*z(m1,i2,m2,i3,l2) - 100000000*z(m1,i2,m2,i3,l3) - 100000000*z(m1,i2,m2,i3,l4) + T_Q(m2,i3) - T_start(m1,i2,a4) - t_AGV(m1,i2,a3,m1,i2,a4) =G= -100000000 ; (LHS = 0)
+     
+REMAINING 39 ENTRIES SKIPPED
+
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/10/25 20:14:08 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE ConflictFreeSch Using MINLP From line 301
+
+
+---- z  used mainly for handling QC double cycling, it consists of 0 virtual point!
+
+z(m1,i1,m1,i2,l1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+8  cnstr_34(m1,i1,m1,i2)
+
+z(m1,i1,m1,i2,l2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+8  cnstr_34(m1,i1,m1,i2)
+
+z(m1,i1,m1,i2,l3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+8  cnstr_34(m1,i1,m1,i2)
+
+REMAINING 333 ENTRIES SKIPPED
+
+---- T_Q  start time of QC
+
+T_Q(m1,i1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       cnstr_29(m1,i1,i2)
+        1       cnstr_35(m1,i2,m1,i1)
+        1       cnstr_35(m1,i3,m1,i1)
+        1       cnstr_35(m2,i2,m1,i1)
+        1       cnstr_35(m2,i4,m1,i1)
+        1       cnstr_35(m3,i2,m1,i1)
+        1       cnstr_35(m3,i4,m1,i1)
+
+T_Q(m1,i2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      (-1)      LJob(m1,i2)
+        1       cnstr_29(m1,i1,i2)
+       -1       cnstr_29(m1,i2,i3)
+        1       cnstr_33(m1,i2)
+
+T_Q(m1,i3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       cnstr_29(m1,i2,i3)
+        1       cnstr_33(m1,i3)
+
+REMAINING 10 ENTRIES SKIPPED
+
+---- T_Y  Start time of agv putting cont on ASC
+
+T_Y(m1,i1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       cnstr_32(m1,i1)
+
+T_Y(m1,i2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       (0)      LJob(m1,i2)
+        1       cnstr_34(m1,i1,m1,i2)
+        1       cnstr_34(m2,i1,m1,i2)
+        1       cnstr_34(m2,i3,m1,i2)
+        1       cnstr_34(m2,i5,m1,i2)
+        1       cnstr_34(m3,i1,m1,i2)
+        1       cnstr_34(m3,i3,m1,i2)
+        1       cnstr_34(m3,i5,m1,i2)
+
+T_Y(m1,i3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       cnstr_34(m1,i1,m1,i3)
+        1       cnstr_34(m2,i1,m1,i3)
+        1       cnstr_34(m2,i3,m1,i3)
+        1       cnstr_34(m2,i5,m1,i3)
+        1       cnstr_34(m3,i1,m1,i3)
+        1       cnstr_34(m3,i3,m1,i3)
+        1       cnstr_34(m3,i5,m1,i3)
+
+REMAINING 10 ENTRIES SKIPPED
+
+---- T_start  Start of agv for action (m,i,a)
+
+T_start(m1,i1,a3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       cnstr_32(m1,i1)
+
+T_start(m1,i1,a4)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       cnstr_34(m1,i1,m1,i2)
+       -1       cnstr_34(m1,i1,m1,i3)
+       -1       cnstr_34(m1,i1,m2,i2)
+       -1       cnstr_34(m1,i1,m2,i4)
+       -1       cnstr_34(m1,i1,m3,i2)
+       -1       cnstr_34(m1,i1,m3,i4)
+
+T_start(m1,i2,a3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       cnstr_33(m1,i2)
+
+REMAINING 23 ENTRIES SKIPPED
+
+---- CT  Op. completion time of for each QC m
+
+CT(m1,i2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       (0)      ADRP
+        1       LJob(m1,i2)
+
+CT(m2,i2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       (0)      ADRP
+        1       LJob(m2,i2)
+
+CT(m3,i3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       (0)      ADRP
+        1       LJob(m3,i3)
+
+
+---- t_AGV  t_AGV(WT_1,WT_2
+
+t_AGV(m1,i1,a2,m1,i1,a3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       cnstr_32(m1,i1)
+
+t_AGV(m1,i1,a3,m1,i1,a4)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       cnstr_34(m1,i1,m1,i2)
+       -1       cnstr_34(m1,i1,m1,i3)
+       -1       cnstr_34(m1,i1,m2,i2)
+       -1       cnstr_34(m1,i1,m2,i4)
+       -1       cnstr_34(m1,i1,m3,i2)
+       -1       cnstr_34(m1,i1,m3,i4)
+
+t_AGV(m1,i2,a2,m1,i2,a3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       cnstr_33(m1,i2)
+
+REMAINING 23 ENTRIES SKIPPED
+
+---- obj  objective function
+
+obj
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       ADRP
+
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/10/25 20:14:08 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 301
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 3.620E+02, 1.000E+08] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.000E+08] - Zero values observed as well
+
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/10/25 20:14:08 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 301
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           7     SINGLE EQUATIONS          111
+BLOCKS OF VARIABLES           7     SINGLE VARIABLES          418
+NON ZERO ELEMENTS           660     NON LINEAR N-Z              9
+CODE LENGTH                  34     CONSTANT POOL              22     DISCRETE VARIABLES        336
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  48.6.1 67fbb04b WEX-WEI
+GAMS 48.6.1  67fbb04b Jan 23, 2025          WEX-WEI x86 64bit/MS Windows - 02/10/25 20:14:08 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE ConflictFreeSch Using MINLP From line 301
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   ConflictFreeSch     OBJECTIVE  obj
+     TYPE    MINLP               DIRECTION  MINIMIZE
+     SOLVER  XPRESS              FROM LINE  301
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      8 Integer Solution
+**** OBJECTIVE VALUE              814.3949
+
+ RESOURCE USAGE, LIMIT          0.063 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+ EVALUATION ERRORS              0             0
+
+FICO-Xpress      48.6.1 67fbb04b Jan 23, 2025          WEI x86 64bit/MS Window
+
+*** This solver runs with a demo license. No commercial use.
+Xpress Optimizer 43.01
+Xpress Solver 64bit v9.4.0 Apr 16 2024
+--- GMO Q Extraction (ThreePass): 0.00s
+--- GMO setup time: 0.00s
+
+?1032 Warning: No variables fixed (integer solution unavailable)
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU ADRP                .              .              .             EPS         
+
+  ADRP  AGV Dispatching and Routing Problem
+
+---- EQU LJob  
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i2          .              .              .             EPS         
+m2.i2          .              .              .             EPS         
+m3.i3          .              .              .             EPS         
+
+---- EQU cnstr_29  C,C
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i1.i2       385.6881       752.3815        +INF             .          
+m1.i2.i3       362.0134       362.0134        +INF            EPS         
+m2.i1.i2       382.8675       750.4742        +INF             .          
+m2.i2.i3       363.9208       363.9208        +INF            EPS         
+m2.i3.i4       379.1916       379.1916        +INF            EPS         
+m2.i4.i5       364.7855       364.7855        +INF            EPS         
+m3.i1.i2       373.0607       373.0607        +INF            EPS         
+m3.i2.i3       370.7910       370.7910        +INF            EPS         
+m3.i3.i4       370.5432       370.5432        +INF            EPS         
+m3.i4.i5       363.9447       363.9447        +INF            EPS         
+
+---- EQU cnstr_32  D
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i1          .              .            +INF            EPS         
+m2.i1          .              .            +INF            EPS         
+m2.i3          .              .            +INF            EPS         
+m2.i5          .              .            +INF            EPS         
+m3.i1          .              .            +INF            EPS         
+m3.i3          .              .            +INF            EPS         
+m3.i5          .              .            +INF            EPS         
+
+---- EQU cnstr_33  L
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i2          .              .            +INF            EPS         
+m1.i3          .              .            +INF            EPS         
+m2.i2          .              .            +INF            EPS         
+m2.i4          .              .            +INF            EPS         
+m3.i2          .              .            +INF            EPS         
+m3.i4          .              .            +INF            EPS         
+
+---- EQU cnstr_34  D,L
+
+                   LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i1.m1.i2   -1.000000E+8       792.7932        +INF             .          
+m1.i1.m1.i3   -1.000000E+8          .            +INF             .          
+m1.i1.m2.i2   -1.000000E+8       788.1125        +INF             .          
+m1.i1.m2.i4   -1.000000E+8          .            +INF             .          
+m1.i1.m3.i2   -1.000000E+8          .            +INF             .          
+m1.i1.m3.i4   -1.000000E+8          .            +INF             .          
+m2.i1.m1.i2   -1.000000E+8       792.7932        +INF             .          
+m2.i1.m1.i3   -1.000000E+8          .            +INF             .          
+m2.i1.m2.i2   -1.000000E+8       788.1125        +INF             .          
+m2.i1.m2.i4   -1.000000E+8          .            +INF             .          
+m2.i1.m3.i2   -1.000000E+8          .            +INF             .          
+m2.i1.m3.i4   -1.000000E+8          .            +INF             .          
+m2.i3.m1.i2   -1.000000E+8       792.7932        +INF             .          
+m2.i3.m1.i3   -1.000000E+8          .            +INF             .          
+m2.i3.m2.i2   -1.000000E+8       788.1125        +INF             .          
+m2.i3.m2.i4   -1.000000E+8          .            +INF             .          
+m2.i3.m3.i2   -1.000000E+8          .            +INF             .          
+m2.i3.m3.i4   -1.000000E+8          .            +INF             .          
+m2.i5.m1.i2   -1.000000E+8       792.7932        +INF             .          
+m2.i5.m1.i3   -1.000000E+8          .            +INF             .          
+m2.i5.m2.i2   -1.000000E+8       788.1125        +INF             .          
+m2.i5.m2.i4   -1.000000E+8          .            +INF             .          
+m2.i5.m3.i2   -1.000000E+8          .            +INF             .          
+m2.i5.m3.i4   -1.000000E+8          .            +INF             .          
+m3.i1.m1.i2   -1.000000E+8       792.7932        +INF             .          
+m3.i1.m1.i3   -1.000000E+8          .            +INF             .          
+m3.i1.m2.i2   -1.000000E+8       788.1125        +INF             .          
+m3.i1.m2.i4   -1.000000E+8          .            +INF             .          
+m3.i1.m3.i2   -1.000000E+8          .            +INF             .          
+m3.i1.m3.i4   -1.000000E+8          .            +INF             .          
+m3.i3.m1.i2   -1.000000E+8       792.7932        +INF             .          
+m3.i3.m1.i3   -1.000000E+8          .            +INF             .          
+m3.i3.m2.i2   -1.000000E+8       788.1125        +INF             .          
+m3.i3.m2.i4   -1.000000E+8          .            +INF             .          
+m3.i3.m3.i2   -1.000000E+8          .            +INF             .          
+m3.i3.m3.i4   -1.000000E+8          .            +INF             .          
+m3.i5.m1.i2   -1.000000E+8       792.7932        +INF             .          
+m3.i5.m1.i3   -1.000000E+8          .            +INF             .          
+m3.i5.m2.i2   -1.000000E+8       788.1125        +INF             .          
+m3.i5.m2.i4   -1.000000E+8          .            +INF             .          
+m3.i5.m3.i2   -1.000000E+8          .            +INF             .          
+m3.i5.m3.i4   -1.000000E+8          .            +INF             .          
+
+---- EQU cnstr_35  L,D
+
+                   LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i2.m1.i1   -1.000000E+8          .            +INF             .          
+m1.i2.m2.i1   -1.000000E+8          .            +INF             .          
+m1.i2.m2.i3   -1.000000E+8      1114.3949        +INF             .          
+m1.i2.m2.i5   -1.000000E+8      1858.3720        +INF             .          
+m1.i2.m3.i1   -1.000000E+8          .            +INF             .          
+m1.i2.m3.i3   -1.000000E+8       743.8517        +INF             .          
+m1.i2.m3.i5   -1.000000E+8      1478.3397        +INF             .          
+m1.i3.m1.i1   -1.000000E+8          .            +INF             .          
+m1.i3.m2.i1   -1.000000E+8          .            +INF             .          
+m1.i3.m2.i3   -1.000000E+8      1114.3949        +INF             .          
+m1.i3.m2.i5   -1.000000E+8      1858.3720        +INF             .          
+m1.i3.m3.i1   -1.000000E+8          .            +INF             .          
+m1.i3.m3.i3   -1.000000E+8       743.8517        +INF             .          
+m1.i3.m3.i5   -1.000000E+8      1478.3397        +INF             .          
+m2.i2.m1.i1   -1.000000E+8          .            +INF             .          
+m2.i2.m2.i1   -1.000000E+8          .            +INF             .          
+m2.i2.m2.i3   -1.000000E+8      1114.3949        +INF             .          
+m2.i2.m2.i5   -1.000000E+8      1858.3720        +INF             .          
+m2.i2.m3.i1   -1.000000E+8          .            +INF             .          
+m2.i2.m3.i3   -1.000000E+8       743.8517        +INF             .          
+m2.i2.m3.i5   -1.000000E+8      1478.3397        +INF             .          
+m2.i4.m1.i1   -1.000000E+8          .            +INF             .          
+m2.i4.m2.i1   -1.000000E+8          .            +INF             .          
+m2.i4.m2.i3   -1.000000E+8      1114.3949        +INF             .          
+m2.i4.m2.i5   -1.000000E+8      1858.3720        +INF             .          
+m2.i4.m3.i1   -1.000000E+8          .            +INF             .          
+m2.i4.m3.i3   -1.000000E+8       743.8517        +INF             .          
+m2.i4.m3.i5   -1.000000E+8      1478.3397        +INF             .          
+m3.i2.m1.i1   -1.000000E+8          .            +INF             .          
+m3.i2.m2.i1   -1.000000E+8          .            +INF             .          
+m3.i2.m2.i3   -1.000000E+8      1114.3949        +INF             .          
+m3.i2.m2.i5   -1.000000E+8      1858.3720        +INF             .          
+m3.i2.m3.i1   -1.000000E+8          .            +INF             .          
+m3.i2.m3.i3   -1.000000E+8       743.8517        +INF             .          
+m3.i2.m3.i5   -1.000000E+8      1478.3397        +INF             .          
+m3.i4.m1.i1   -1.000000E+8          .            +INF             .          
+m3.i4.m2.i1   -1.000000E+8          .            +INF             .          
+m3.i4.m2.i3   -1.000000E+8      1114.3949        +INF             .          
+m3.i4.m2.i5   -1.000000E+8      1858.3720        +INF             .          
+m3.i4.m3.i1   -1.000000E+8          .            +INF             .          
+m3.i4.m3.i3   -1.000000E+8       743.8517        +INF             .          
+m3.i4.m3.i5   -1.000000E+8      1478.3397        +INF             .          
+
+---- VAR z  used mainly for handling QC double cycling, it consists of 0 virtual point!
+
+                      LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i1.m1.i2.l1          .              .             1.0000         EPS         
+m1.i1.m1.i2.l2          .              .             1.0000         EPS         
+m1.i1.m1.i2.l3          .              .             1.0000         EPS         
+m1.i1.m1.i2.l4          .              .             1.0000         EPS         
+m1.i1.m1.i3.l1          .              .             1.0000         EPS         
+m1.i1.m1.i3.l2          .              .             1.0000         EPS         
+m1.i1.m1.i3.l3          .              .             1.0000         EPS         
+m1.i1.m1.i3.l4          .              .             1.0000         EPS         
+m1.i1.m2.i2.l1          .              .             1.0000         EPS         
+m1.i1.m2.i2.l2          .              .             1.0000         EPS         
+m1.i1.m2.i2.l3          .              .             1.0000         EPS         
+m1.i1.m2.i2.l4          .              .             1.0000         EPS         
+m1.i1.m2.i4.l1          .              .             1.0000         EPS         
+m1.i1.m2.i4.l2          .              .             1.0000         EPS         
+m1.i1.m2.i4.l3          .              .             1.0000         EPS         
+m1.i1.m2.i4.l4          .              .             1.0000         EPS         
+m1.i1.m3.i2.l1          .              .             1.0000         EPS         
+m1.i1.m3.i2.l2          .              .             1.0000         EPS         
+m1.i1.m3.i2.l3          .              .             1.0000         EPS         
+m1.i1.m3.i2.l4          .              .             1.0000         EPS         
+m1.i1.m3.i4.l1          .              .             1.0000         EPS         
+m1.i1.m3.i4.l2          .              .             1.0000         EPS         
+m1.i1.m3.i4.l3          .              .             1.0000         EPS         
+m1.i1.m3.i4.l4          .              .             1.0000         EPS         
+m1.i2.m1.i1.l1          .              .             1.0000         EPS         
+m1.i2.m1.i1.l2          .              .             1.0000         EPS         
+m1.i2.m1.i1.l3          .              .             1.0000         EPS         
+m1.i2.m1.i1.l4          .              .             1.0000         EPS         
+m1.i2.m2.i1.l1          .              .             1.0000         EPS         
+m1.i2.m2.i1.l2          .              .             1.0000         EPS         
+m1.i2.m2.i1.l3          .              .             1.0000         EPS         
+m1.i2.m2.i1.l4          .              .             1.0000         EPS         
+m1.i2.m2.i3.l1          .              .             1.0000         EPS         
+m1.i2.m2.i3.l2          .              .             1.0000         EPS         
+m1.i2.m2.i3.l3          .              .             1.0000         EPS         
+m1.i2.m2.i3.l4          .              .             1.0000         EPS         
+m1.i2.m2.i5.l1          .              .             1.0000         EPS         
+m1.i2.m2.i5.l2          .              .             1.0000         EPS         
+m1.i2.m2.i5.l3          .              .             1.0000         EPS         
+m1.i2.m2.i5.l4          .              .             1.0000         EPS         
+m1.i2.m3.i1.l1          .              .             1.0000         EPS         
+m1.i2.m3.i1.l2          .              .             1.0000         EPS         
+m1.i2.m3.i1.l3          .              .             1.0000         EPS         
+m1.i2.m3.i1.l4          .              .             1.0000         EPS         
+m1.i2.m3.i3.l1          .              .             1.0000         EPS         
+m1.i2.m3.i3.l2          .              .             1.0000         EPS         
+m1.i2.m3.i3.l3          .              .             1.0000         EPS         
+m1.i2.m3.i3.l4          .              .             1.0000         EPS         
+m1.i2.m3.i5.l1          .              .             1.0000         EPS         
+m1.i2.m3.i5.l2          .              .             1.0000         EPS         
+m1.i2.m3.i5.l3          .              .             1.0000         EPS         
+m1.i2.m3.i5.l4          .              .             1.0000         EPS         
+m1.i3.m1.i1.l1          .              .             1.0000         EPS         
+m1.i3.m1.i1.l2          .              .             1.0000         EPS         
+m1.i3.m1.i1.l3          .              .             1.0000         EPS         
+m1.i3.m1.i1.l4          .              .             1.0000         EPS         
+m1.i3.m2.i1.l1          .              .             1.0000         EPS         
+m1.i3.m2.i1.l2          .              .             1.0000         EPS         
+m1.i3.m2.i1.l3          .              .             1.0000         EPS         
+m1.i3.m2.i1.l4          .              .             1.0000         EPS         
+m1.i3.m2.i3.l1          .              .             1.0000         EPS         
+m1.i3.m2.i3.l2          .              .             1.0000         EPS         
+m1.i3.m2.i3.l3          .              .             1.0000         EPS         
+m1.i3.m2.i3.l4          .              .             1.0000         EPS         
+m1.i3.m2.i5.l1          .              .             1.0000         EPS         
+m1.i3.m2.i5.l2          .              .             1.0000         EPS         
+m1.i3.m2.i5.l3          .              .             1.0000         EPS         
+m1.i3.m2.i5.l4          .              .             1.0000         EPS         
+m1.i3.m3.i1.l1          .              .             1.0000         EPS         
+m1.i3.m3.i1.l2          .              .             1.0000         EPS         
+m1.i3.m3.i1.l3          .              .             1.0000         EPS         
+m1.i3.m3.i1.l4          .              .             1.0000         EPS         
+m1.i3.m3.i3.l1          .              .             1.0000         EPS         
+m1.i3.m3.i3.l2          .              .             1.0000         EPS         
+m1.i3.m3.i3.l3          .              .             1.0000         EPS         
+m1.i3.m3.i3.l4          .              .             1.0000         EPS         
+m1.i3.m3.i5.l1          .              .             1.0000         EPS         
+m1.i3.m3.i5.l2          .              .             1.0000         EPS         
+m1.i3.m3.i5.l3          .              .             1.0000         EPS         
+m1.i3.m3.i5.l4          .              .             1.0000         EPS         
+m2.i1.m1.i2.l1          .              .             1.0000         EPS         
+m2.i1.m1.i2.l2          .              .             1.0000         EPS         
+m2.i1.m1.i2.l3          .              .             1.0000         EPS         
+m2.i1.m1.i2.l4          .              .             1.0000         EPS         
+m2.i1.m1.i3.l1          .              .             1.0000         EPS         
+m2.i1.m1.i3.l2          .              .             1.0000         EPS         
+m2.i1.m1.i3.l3          .              .             1.0000         EPS         
+m2.i1.m1.i3.l4          .              .             1.0000         EPS         
+m2.i1.m2.i2.l1          .              .             1.0000         EPS         
+m2.i1.m2.i2.l2          .              .             1.0000         EPS         
+m2.i1.m2.i2.l3          .              .             1.0000         EPS         
+m2.i1.m2.i2.l4          .              .             1.0000         EPS         
+m2.i1.m2.i4.l1          .              .             1.0000         EPS         
+m2.i1.m2.i4.l2          .              .             1.0000         EPS         
+m2.i1.m2.i4.l3          .              .             1.0000         EPS         
+m2.i1.m2.i4.l4          .              .             1.0000         EPS         
+m2.i1.m3.i2.l1          .              .             1.0000         EPS         
+m2.i1.m3.i2.l2          .              .             1.0000         EPS         
+m2.i1.m3.i2.l3          .              .             1.0000         EPS         
+m2.i1.m3.i2.l4          .              .             1.0000         EPS         
+m2.i1.m3.i4.l1          .              .             1.0000         EPS         
+m2.i1.m3.i4.l2          .              .             1.0000         EPS         
+m2.i1.m3.i4.l3          .              .             1.0000         EPS         
+m2.i1.m3.i4.l4          .              .             1.0000         EPS         
+m2.i2.m1.i1.l1          .              .             1.0000         EPS         
+m2.i2.m1.i1.l2          .              .             1.0000         EPS         
+m2.i2.m1.i1.l3          .              .             1.0000         EPS         
+m2.i2.m1.i1.l4          .              .             1.0000         EPS         
+m2.i2.m2.i1.l1          .              .             1.0000         EPS         
+m2.i2.m2.i1.l2          .              .             1.0000         EPS         
+m2.i2.m2.i1.l3          .              .             1.0000         EPS         
+m2.i2.m2.i1.l4          .              .             1.0000         EPS         
+m2.i2.m2.i3.l1          .              .             1.0000         EPS         
+m2.i2.m2.i3.l2          .              .             1.0000         EPS         
+m2.i2.m2.i3.l3          .              .             1.0000         EPS         
+m2.i2.m2.i3.l4          .              .             1.0000         EPS         
+m2.i2.m2.i5.l1          .              .             1.0000         EPS         
+m2.i2.m2.i5.l2          .              .             1.0000         EPS         
+m2.i2.m2.i5.l3          .              .             1.0000         EPS         
+m2.i2.m2.i5.l4          .              .             1.0000         EPS         
+m2.i2.m3.i1.l1          .              .             1.0000         EPS         
+m2.i2.m3.i1.l2          .              .             1.0000         EPS         
+m2.i2.m3.i1.l3          .              .             1.0000         EPS         
+m2.i2.m3.i1.l4          .              .             1.0000         EPS         
+m2.i2.m3.i3.l1          .              .             1.0000         EPS         
+m2.i2.m3.i3.l2          .              .             1.0000         EPS         
+m2.i2.m3.i3.l3          .              .             1.0000         EPS         
+m2.i2.m3.i3.l4          .              .             1.0000         EPS         
+m2.i2.m3.i5.l1          .              .             1.0000         EPS         
+m2.i2.m3.i5.l2          .              .             1.0000         EPS         
+m2.i2.m3.i5.l3          .              .             1.0000         EPS         
+m2.i2.m3.i5.l4          .              .             1.0000         EPS         
+m2.i3.m1.i2.l1          .              .             1.0000         EPS         
+m2.i3.m1.i2.l2          .              .             1.0000         EPS         
+m2.i3.m1.i2.l3          .              .             1.0000         EPS         
+m2.i3.m1.i2.l4          .              .             1.0000         EPS         
+m2.i3.m1.i3.l1          .              .             1.0000         EPS         
+m2.i3.m1.i3.l2          .              .             1.0000         EPS         
+m2.i3.m1.i3.l3          .              .             1.0000         EPS         
+m2.i3.m1.i3.l4          .              .             1.0000         EPS         
+m2.i3.m2.i2.l1          .              .             1.0000         EPS         
+m2.i3.m2.i2.l2          .              .             1.0000         EPS         
+m2.i3.m2.i2.l3          .              .             1.0000         EPS         
+m2.i3.m2.i2.l4          .              .             1.0000         EPS         
+m2.i3.m2.i4.l1          .              .             1.0000         EPS         
+m2.i3.m2.i4.l2          .              .             1.0000         EPS         
+m2.i3.m2.i4.l3          .              .             1.0000         EPS         
+m2.i3.m2.i4.l4          .              .             1.0000         EPS         
+m2.i3.m3.i2.l1          .              .             1.0000         EPS         
+m2.i3.m3.i2.l2          .              .             1.0000         EPS         
+m2.i3.m3.i2.l3          .              .             1.0000         EPS         
+m2.i3.m3.i2.l4          .              .             1.0000         EPS         
+m2.i3.m3.i4.l1          .              .             1.0000         EPS         
+m2.i3.m3.i4.l2          .              .             1.0000         EPS         
+m2.i3.m3.i4.l3          .              .             1.0000         EPS         
+m2.i3.m3.i4.l4          .              .             1.0000         EPS         
+m2.i4.m1.i1.l1          .              .             1.0000         EPS         
+m2.i4.m1.i1.l2          .              .             1.0000         EPS         
+m2.i4.m1.i1.l3          .              .             1.0000         EPS         
+m2.i4.m1.i1.l4          .              .             1.0000         EPS         
+m2.i4.m2.i1.l1          .              .             1.0000         EPS         
+m2.i4.m2.i1.l2          .              .             1.0000         EPS         
+m2.i4.m2.i1.l3          .              .             1.0000         EPS         
+m2.i4.m2.i1.l4          .              .             1.0000         EPS         
+m2.i4.m2.i3.l1          .              .             1.0000         EPS         
+m2.i4.m2.i3.l2          .              .             1.0000         EPS         
+m2.i4.m2.i3.l3          .              .             1.0000         EPS         
+m2.i4.m2.i3.l4          .              .             1.0000         EPS         
+m2.i4.m2.i5.l1          .              .             1.0000         EPS         
+m2.i4.m2.i5.l2          .              .             1.0000         EPS         
+m2.i4.m2.i5.l3          .              .             1.0000         EPS         
+m2.i4.m2.i5.l4          .              .             1.0000         EPS         
+m2.i4.m3.i1.l1          .              .             1.0000         EPS         
+m2.i4.m3.i1.l2          .              .             1.0000         EPS         
+m2.i4.m3.i1.l3          .              .             1.0000         EPS         
+m2.i4.m3.i1.l4          .              .             1.0000         EPS         
+m2.i4.m3.i3.l1          .              .             1.0000         EPS         
+m2.i4.m3.i3.l2          .              .             1.0000         EPS         
+m2.i4.m3.i3.l3          .              .             1.0000         EPS         
+m2.i4.m3.i3.l4          .              .             1.0000         EPS         
+m2.i4.m3.i5.l1          .              .             1.0000         EPS         
+m2.i4.m3.i5.l2          .              .             1.0000         EPS         
+m2.i4.m3.i5.l3          .              .             1.0000         EPS         
+m2.i4.m3.i5.l4          .              .             1.0000         EPS         
+m2.i5.m1.i2.l1          .              .             1.0000         EPS         
+m2.i5.m1.i2.l2          .              .             1.0000         EPS         
+m2.i5.m1.i2.l3          .              .             1.0000         EPS         
+m2.i5.m1.i2.l4          .              .             1.0000         EPS         
+m2.i5.m1.i3.l1          .              .             1.0000         EPS         
+m2.i5.m1.i3.l2          .              .             1.0000         EPS         
+m2.i5.m1.i3.l3          .              .             1.0000         EPS         
+m2.i5.m1.i3.l4          .              .             1.0000         EPS         
+m2.i5.m2.i2.l1          .              .             1.0000         EPS         
+m2.i5.m2.i2.l2          .              .             1.0000         EPS         
+m2.i5.m2.i2.l3          .              .             1.0000         EPS         
+m2.i5.m2.i2.l4          .              .             1.0000         EPS         
+m2.i5.m2.i4.l1          .              .             1.0000         EPS         
+m2.i5.m2.i4.l2          .              .             1.0000         EPS         
+m2.i5.m2.i4.l3          .              .             1.0000         EPS         
+m2.i5.m2.i4.l4          .              .             1.0000         EPS         
+m2.i5.m3.i2.l1          .              .             1.0000         EPS         
+m2.i5.m3.i2.l2          .              .             1.0000         EPS         
+m2.i5.m3.i2.l3          .              .             1.0000         EPS         
+m2.i5.m3.i2.l4          .              .             1.0000         EPS         
+m2.i5.m3.i4.l1          .              .             1.0000         EPS         
+m2.i5.m3.i4.l2          .              .             1.0000         EPS         
+m2.i5.m3.i4.l3          .              .             1.0000         EPS         
+m2.i5.m3.i4.l4          .              .             1.0000         EPS         
+m3.i1.m1.i2.l1          .              .             1.0000         EPS         
+m3.i1.m1.i2.l2          .              .             1.0000         EPS         
+m3.i1.m1.i2.l3          .              .             1.0000         EPS         
+m3.i1.m1.i2.l4          .              .             1.0000         EPS         
+m3.i1.m1.i3.l1          .              .             1.0000         EPS         
+m3.i1.m1.i3.l2          .              .             1.0000         EPS         
+m3.i1.m1.i3.l3          .              .             1.0000         EPS         
+m3.i1.m1.i3.l4          .              .             1.0000         EPS         
+m3.i1.m2.i2.l1          .              .             1.0000         EPS         
+m3.i1.m2.i2.l2          .              .             1.0000         EPS         
+m3.i1.m2.i2.l3          .              .             1.0000         EPS         
+m3.i1.m2.i2.l4          .              .             1.0000         EPS         
+m3.i1.m2.i4.l1          .              .             1.0000         EPS         
+m3.i1.m2.i4.l2          .              .             1.0000         EPS         
+m3.i1.m2.i4.l3          .              .             1.0000         EPS         
+m3.i1.m2.i4.l4          .              .             1.0000         EPS         
+m3.i1.m3.i2.l1          .              .             1.0000         EPS         
+m3.i1.m3.i2.l2          .              .             1.0000         EPS         
+m3.i1.m3.i2.l3          .              .             1.0000         EPS         
+m3.i1.m3.i2.l4          .              .             1.0000         EPS         
+m3.i1.m3.i4.l1          .              .             1.0000         EPS         
+m3.i1.m3.i4.l2          .              .             1.0000         EPS         
+m3.i1.m3.i4.l3          .              .             1.0000         EPS         
+m3.i1.m3.i4.l4          .              .             1.0000         EPS         
+m3.i2.m1.i1.l1          .              .             1.0000         EPS         
+m3.i2.m1.i1.l2          .              .             1.0000         EPS         
+m3.i2.m1.i1.l3          .              .             1.0000         EPS         
+m3.i2.m1.i1.l4          .              .             1.0000         EPS         
+m3.i2.m2.i1.l1          .              .             1.0000         EPS         
+m3.i2.m2.i1.l2          .              .             1.0000         EPS         
+m3.i2.m2.i1.l3          .              .             1.0000         EPS         
+m3.i2.m2.i1.l4          .              .             1.0000         EPS         
+m3.i2.m2.i3.l1          .              .             1.0000         EPS         
+m3.i2.m2.i3.l2          .              .             1.0000         EPS         
+m3.i2.m2.i3.l3          .              .             1.0000         EPS         
+m3.i2.m2.i3.l4          .              .             1.0000         EPS         
+m3.i2.m2.i5.l1          .              .             1.0000         EPS         
+m3.i2.m2.i5.l2          .              .             1.0000         EPS         
+m3.i2.m2.i5.l3          .              .             1.0000         EPS         
+m3.i2.m2.i5.l4          .              .             1.0000         EPS         
+m3.i2.m3.i1.l1          .              .             1.0000         EPS         
+m3.i2.m3.i1.l2          .              .             1.0000         EPS         
+m3.i2.m3.i1.l3          .              .             1.0000         EPS         
+m3.i2.m3.i1.l4          .              .             1.0000         EPS         
+m3.i2.m3.i3.l1          .              .             1.0000         EPS         
+m3.i2.m3.i3.l2          .              .             1.0000         EPS         
+m3.i2.m3.i3.l3          .              .             1.0000         EPS         
+m3.i2.m3.i3.l4          .              .             1.0000         EPS         
+m3.i2.m3.i5.l1          .              .             1.0000         EPS         
+m3.i2.m3.i5.l2          .              .             1.0000         EPS         
+m3.i2.m3.i5.l3          .              .             1.0000         EPS         
+m3.i2.m3.i5.l4          .              .             1.0000         EPS         
+m3.i3.m1.i2.l1          .              .             1.0000         EPS         
+m3.i3.m1.i2.l2          .              .             1.0000         EPS         
+m3.i3.m1.i2.l3          .              .             1.0000         EPS         
+m3.i3.m1.i2.l4          .              .             1.0000         EPS         
+m3.i3.m1.i3.l1          .              .             1.0000         EPS         
+m3.i3.m1.i3.l2          .              .             1.0000         EPS         
+m3.i3.m1.i3.l3          .              .             1.0000         EPS         
+m3.i3.m1.i3.l4          .              .             1.0000         EPS         
+m3.i3.m2.i2.l1          .              .             1.0000         EPS         
+m3.i3.m2.i2.l2          .              .             1.0000         EPS         
+m3.i3.m2.i2.l3          .              .             1.0000         EPS         
+m3.i3.m2.i2.l4          .              .             1.0000         EPS         
+m3.i3.m2.i4.l1          .              .             1.0000         EPS         
+m3.i3.m2.i4.l2          .              .             1.0000         EPS         
+m3.i3.m2.i4.l3          .              .             1.0000         EPS         
+m3.i3.m2.i4.l4          .              .             1.0000         EPS         
+m3.i3.m3.i2.l1          .              .             1.0000         EPS         
+m3.i3.m3.i2.l2          .              .             1.0000         EPS         
+m3.i3.m3.i2.l3          .              .             1.0000         EPS         
+m3.i3.m3.i2.l4          .              .             1.0000         EPS         
+m3.i3.m3.i4.l1          .              .             1.0000         EPS         
+m3.i3.m3.i4.l2          .              .             1.0000         EPS         
+m3.i3.m3.i4.l3          .              .             1.0000         EPS         
+m3.i3.m3.i4.l4          .              .             1.0000         EPS         
+m3.i4.m1.i1.l1          .              .             1.0000         EPS         
+m3.i4.m1.i1.l2          .              .             1.0000         EPS         
+m3.i4.m1.i1.l3          .              .             1.0000         EPS         
+m3.i4.m1.i1.l4          .              .             1.0000         EPS         
+m3.i4.m2.i1.l1          .              .             1.0000         EPS         
+m3.i4.m2.i1.l2          .              .             1.0000         EPS         
+m3.i4.m2.i1.l3          .              .             1.0000         EPS         
+m3.i4.m2.i1.l4          .              .             1.0000         EPS         
+m3.i4.m2.i3.l1          .              .             1.0000         EPS         
+m3.i4.m2.i3.l2          .              .             1.0000         EPS         
+m3.i4.m2.i3.l3          .              .             1.0000         EPS         
+m3.i4.m2.i3.l4          .              .             1.0000         EPS         
+m3.i4.m2.i5.l1          .              .             1.0000         EPS         
+m3.i4.m2.i5.l2          .              .             1.0000         EPS         
+m3.i4.m2.i5.l3          .              .             1.0000         EPS         
+m3.i4.m2.i5.l4          .              .             1.0000         EPS         
+m3.i4.m3.i1.l1          .              .             1.0000         EPS         
+m3.i4.m3.i1.l2          .              .             1.0000         EPS         
+m3.i4.m3.i1.l3          .              .             1.0000         EPS         
+m3.i4.m3.i1.l4          .              .             1.0000         EPS         
+m3.i4.m3.i3.l1          .              .             1.0000         EPS         
+m3.i4.m3.i3.l2          .              .             1.0000         EPS         
+m3.i4.m3.i3.l3          .              .             1.0000         EPS         
+m3.i4.m3.i3.l4          .              .             1.0000         EPS         
+m3.i4.m3.i5.l1          .              .             1.0000         EPS         
+m3.i4.m3.i5.l2          .              .             1.0000         EPS         
+m3.i4.m3.i5.l3          .              .             1.0000         EPS         
+m3.i4.m3.i5.l4          .              .             1.0000         EPS         
+m3.i5.m1.i2.l1          .              .             1.0000         EPS         
+m3.i5.m1.i2.l2          .              .             1.0000         EPS         
+m3.i5.m1.i2.l3          .              .             1.0000         EPS         
+m3.i5.m1.i2.l4          .              .             1.0000         EPS         
+m3.i5.m1.i3.l1          .              .             1.0000         EPS         
+m3.i5.m1.i3.l2          .              .             1.0000         EPS         
+m3.i5.m1.i3.l3          .              .             1.0000         EPS         
+m3.i5.m1.i3.l4          .              .             1.0000         EPS         
+m3.i5.m2.i2.l1          .              .             1.0000         EPS         
+m3.i5.m2.i2.l2          .              .             1.0000         EPS         
+m3.i5.m2.i2.l3          .              .             1.0000         EPS         
+m3.i5.m2.i2.l4          .              .             1.0000         EPS         
+m3.i5.m2.i4.l1          .              .             1.0000         EPS         
+m3.i5.m2.i4.l2          .              .             1.0000         EPS         
+m3.i5.m2.i4.l3          .              .             1.0000         EPS         
+m3.i5.m2.i4.l4          .              .             1.0000         EPS         
+m3.i5.m3.i2.l1          .              .             1.0000         EPS         
+m3.i5.m3.i2.l2          .              .             1.0000         EPS         
+m3.i5.m3.i2.l3          .              .             1.0000         EPS         
+m3.i5.m3.i2.l4          .              .             1.0000         EPS         
+m3.i5.m3.i4.l1          .              .             1.0000         EPS         
+m3.i5.m3.i4.l2          .              .             1.0000         EPS         
+m3.i5.m3.i4.l3          .              .             1.0000         EPS         
+m3.i5.m3.i4.l4          .              .             1.0000         EPS         
+
+---- VAR T_Q  start time of QC
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i1          .              .            +INF            EPS         
+m1.i2          .           752.3815        +INF             .          
+m1.i3          .          1114.3949        +INF             .          
+m2.i1          .              .            +INF            EPS         
+m2.i2          .           750.4742        +INF             .          
+m2.i3          .          1114.3949        +INF             .          
+m2.i4          .          1493.5865        +INF             .          
+m2.i5          .          1858.3720        +INF             .          
+m3.i1          .              .            +INF            EPS         
+m3.i2          .           373.0607        +INF             .          
+m3.i3          .           743.8517        +INF             .          
+m3.i4          .          1114.3949        +INF             .          
+m3.i5          .          1478.3397        +INF             .          
+
+---- VAR T_Y  Start time of agv putting cont on ASC
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i1          .              .            +INF            EPS         
+m1.i2          .           792.7932        +INF             .          
+m1.i3          .              .            +INF            EPS         
+m2.i1          .              .            +INF            EPS         
+m2.i2          .           788.1125        +INF             .          
+m2.i3          .              .            +INF            EPS         
+m2.i4          .              .            +INF            EPS         
+m2.i5          .              .            +INF            EPS         
+m3.i1          .              .            +INF            EPS         
+m3.i2          .              .            +INF            EPS         
+m3.i3          .           792.5739        +INF             .          
+m3.i4          .              .            +INF            EPS         
+m3.i5          .              .            +INF            EPS         
+
+---- VAR T_start  Start of agv for action (m,i,a)
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i1.a3          .              .            +INF            EPS         
+m1.i1.a4          .              .            +INF            EPS         
+m1.i2.a3          .              .            +INF            EPS         
+m1.i2.a4          .              .            +INF            EPS         
+m1.i3.a3          .              .            +INF            EPS         
+m1.i3.a4          .              .            +INF            EPS         
+m2.i1.a3          .              .            +INF            EPS         
+m2.i1.a4          .              .            +INF            EPS         
+m2.i2.a3          .              .            +INF            EPS         
+m2.i2.a4          .              .            +INF            EPS         
+m2.i3.a3          .              .            +INF            EPS         
+m2.i3.a4          .              .            +INF            EPS         
+m2.i4.a3          .              .            +INF            EPS         
+m2.i4.a4          .              .            +INF            EPS         
+m2.i5.a3          .              .            +INF            EPS         
+m2.i5.a4          .              .            +INF            EPS         
+m3.i1.a3          .              .            +INF            EPS         
+m3.i1.a4          .              .            +INF            EPS         
+m3.i2.a3          .              .            +INF            EPS         
+m3.i2.a4          .              .            +INF            EPS         
+m3.i3.a3          .              .            +INF            EPS         
+m3.i3.a4          .              .            +INF            EPS         
+m3.i4.a3          .              .            +INF            EPS         
+m3.i4.a4          .              .            +INF            EPS         
+m3.i5.a3          .              .            +INF            EPS         
+m3.i5.a4          .              .            +INF            EPS         
+
+---- VAR CT  Op. completion time of for each QC m
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i2          .           814.3949        +INF             .          
+m2.i2          .           814.3949        +INF             .          
+m3.i3          .           814.3949        +INF             .          
+
+---- VAR t_AGV  t_AGV(WT_1,WT_2
+
+                         LOWER          LEVEL          UPPER         MARGINAL
+
+m1.i1.a2.m1.i1.a3          .              .            +INF            EPS         
+m1.i1.a3.m1.i1.a4          .              .            +INF            EPS         
+m1.i2.a2.m1.i2.a3          .           752.3815        +INF             .          
+m1.i2.a3.m1.i2.a4          .              .            +INF            EPS         
+m1.i3.a2.m1.i3.a3          .          1114.3949        +INF             .          
+m1.i3.a3.m1.i3.a4          .              .            +INF            EPS         
+m2.i1.a2.m2.i1.a3          .              .            +INF            EPS         
+m2.i1.a3.m2.i1.a4          .              .            +INF            EPS         
+m2.i2.a2.m2.i2.a3          .           750.4742        +INF             .          
+m2.i2.a3.m2.i2.a4          .              .            +INF            EPS         
+m2.i3.a2.m2.i3.a3          .              .            +INF            EPS         
+m2.i3.a3.m2.i3.a4          .              .            +INF            EPS         
+m2.i4.a2.m2.i4.a3          .          1493.5865        +INF             .          
+m2.i4.a3.m2.i4.a4          .              .            +INF            EPS         
+m2.i5.a2.m2.i5.a3          .              .            +INF            EPS         
+m2.i5.a3.m2.i5.a4          .              .            +INF            EPS         
+m3.i1.a2.m3.i1.a3          .              .            +INF            EPS         
+m3.i1.a3.m3.i1.a4          .              .            +INF            EPS         
+m3.i2.a2.m3.i2.a3          .           373.0607        +INF             .          
+m3.i2.a3.m3.i2.a4          .              .            +INF            EPS         
+m3.i3.a2.m3.i3.a3          .           792.5739        +INF             .          
+m3.i3.a3.m3.i3.a4          .              .            +INF            EPS         
+m3.i4.a2.m3.i4.a3          .          1114.3949        +INF             .          
+m3.i4.a3.m3.i4.a4          .              .            +INF            EPS         
+m3.i5.a2.m3.i5.a3          .              .            +INF            EPS         
+m3.i5.a3.m3.i5.a4          .              .            +INF            EPS         
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR obj               -INF          814.3949        +INF             .          
+
+  obj  objective function
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                             0     ERRORS
+
+
+EXECUTION TIME       =        0.078 SECONDS      4 MB  48.6.1 67fbb04b WEX-WEI
+
+
+USER: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
+      https://www.gams.com/latest/docs/UG%5FLicense.html         DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\LowerBound.gms
+Output     C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\LowerBound.lst

@@ -32,9 +32,12 @@ struct container {
 };
 struct Block{
     QVector<container> requestedContainers;  // this could be used for creating set \psi_2
+    int AL_location;
     QVector<std::map<container,int>> AL;
+    int AR_location;
     QVector<std::map<container,int>> AR;
-
+    Block(){}
+    Block(QVector<std::map<container,int>> _AL, int _AlL, QVector<std::map<container,int>> _AR, int _ArL): AL(_AL), AL_location(_AlL), AR(_AR), AR_location(_ArL) {}
 };
 
 struct AGV {

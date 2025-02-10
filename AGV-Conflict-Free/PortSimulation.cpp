@@ -5,7 +5,12 @@ PortSimulation::PortSimulation(int _CNumber,int _AGVNumber) :CNumber(_CNumber), 
     QCs[0] = QuayCrane(1,{},{4,8,12});
     QCs[1] = QuayCrane(2,{},{16,20,24});
     QCs[3] = QuayCrane(3,{},{28,32});
-    // blocks[0] = BLock
+    blocks[0] = Block({},1,{},5);
+    blocks[1] = Block({},7,{},11);
+    blocks[2] = Block({},13,{},17);
+    blocks[3] = Block({},19,{},23);
+    blocks[4] = Block({},25,{},29);
+    blocks[5] = Block({},31,{},35);
     JobGenerator();
 }
 
@@ -24,6 +29,11 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     int randomBlockPicker ;
     while(++DCIterator <= NDLoadC){
         randomQCPicker = rand.generate()%3;
+        if(randomQCPicker <= 1){ //QC[0] or QC[1] is selected
+
+        }else{ //QC[2] is selected
+
+        }
     }
     while(++LCIterator <= NLoadC){
         randomBlockPicker = rand.generate()%6;

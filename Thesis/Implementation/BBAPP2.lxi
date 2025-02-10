@@ -26,14 +26,39 @@ D 628 cnstr_20
 D 639 cnstr_21
 D 650 cnstr_22
 D 661 cnstr_23
-D 673 cnstr_24
-B 679 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 306
-E 682 z
-E 701 U_AGV
-E 2814 P_X
-E 80422 P_Y
-E 80513 T_Q
-E 80528 T_Y
-E 80543 CT
-E 80561 obj
-B 80569 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 306
+D 672 cnstr_24
+D 683 cnstr_25
+D 694 cnstr_26
+D 705 cnstr_27
+D 716 cnstr_28
+D 727 cnstr_29
+D 738 cnstr_30
+D 749 cnstr_31
+D 754 cnstr_32
+D 765 cnstr_33
+D 776 cnstr_34
+D 787 cnstr_35
+D 798 cnstr_36
+D 809 cnstr_37
+D 820 cnstr_38
+D 831 cnstr_39
+D 842 cnstr_39_1
+D 853 cnstr_40
+D 864 cnstr_40_1
+D 875 cnstr_41
+B 887 Column Listing      SOLVE ConflictFreeSch Using MINLP From line 306
+E 890 z
+E 909 U_AGV
+E 2326 U_QC
+E 2360 P_X
+E 79974 P_Y
+E 80071 T_Q
+E 80923 T_Y
+E 80956 T_start
+E 81459 CT
+E 81477 t_AGV
+E 81562 X_position
+E 82169 Y_position
+E 82626 obj
+B 82634 Range Statistics    SOLVE ConflictFreeSch Using MINLP From line 306
+B 82645 Model Statistics    SOLVE ConflictFreeSch Using MINLP From line 306

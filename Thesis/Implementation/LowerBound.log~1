@@ -1,0 +1,234 @@
+
+--- Job LowerBound.gms Start 02/10/25 20:13:15 48.6.1 67fbb04b WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\48\gmsprmNT.txt
+    C:\Users\Asus\Documents\GAMS\gamsconfig.yaml
+--- GAMS Parameters defined
+    Input C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\LowerBound.gms
+    PageSize 0
+    ScrDir C:\Users\Asus\Projects\FrequentlyUsedRepos\AGV-Project\Thesis\Implementation\225a\
+    SysDir C:\GAMS\48\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo, for EULA and demo limitations see   G241001/0001CB-GEN
+          https://www.gams.com/latest/docs/UG%5FLicense.html         DC0000
+          C:\GAMS\48\gamslice.txt
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 14 core(s), and 20 thread(s) available
+GAMS 48.6.1   Copyright (C) 1987-2025 GAMS Development. All rights reserved
+--- Starting compilation
+--- LowerBound.gms(311) 3 Mb
+--- Starting execution: elapsed 0:00:00.004
+--- LowerBound.gms(293) 4 Mb
+--- Generating MINLP model ConflictFreeSch
+--- LowerBound.gms(301) 6 Mb
+---   111 rows  418 columns  660 non-zeroes
+---   34 nl-code  9 nl-non-zeroes
+---   336 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 3.620E+02, 1.000E+08] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E+00, 1.000E+08] - Zero values observed as well
+--- LowerBound.gms(301) 4 Mb
+--- Executing XPRESS (Solvelink=2): elapsed 0:00:00.007
+
+FICO-Xpress      48.6.1 67fbb04b Jan 23, 2025          WEI x86 64bit/MS Window
+
+*** This solver runs with a demo license. No commercial use.
+Xpress Optimizer 43.01
+Xpress Solver 64bit v9.4.0 Apr 16 2024
+(c) Copyright Fair Isaac Corporation 1983-2024. All rights reserved
+Licensed for use by: GAMS Development Corp. for GAMS
+
+--- GMO Q Extraction (ThreePass): 0.00s
+--- GMO setup time: 0.00s
+ 
+Reading Problem ConflictFreeSch
+Problem Statistics
+         111 (      0 spare) rows
+         419 (      0 spare) structural columns
+         651 (      0 spare) non-zero elements
+MIP Entity Statistics
+         336 entities        0 sets        0 set members
+Original problem size
+   linear:    111 rows, 419 columns, 651 linear coefficients
+   nonlinear: 4 coefficients, 41 tokens
+              4 mul             0 div         0 sqrt
+              0 exp             0 log         1 pow
+              5 minmax          0 pwl         0 ufun
+Nonlinear presolve
+   simplify removed 2 tokens
+   converted 5 MIN/MAX to optimizer MIP constructs
+   linearizations will be solved as a MIP
+   converted 10 formulas to linear constraints
+   converted objective transfer row to linear objective
+Presolved problem size
+   linear:    146 rows, 445 columns, 725 linear coefficients
+Problem is nonlinear presolved
+Minimizing problem using Xpress-Optimizer
+FICO Xpress v9.4.0, Hyper, solve started 20:13:15, Feb 10, 2025
+Heap usage: 2109KB (peak 2266KB, 313KB system)
+Minimizing MILP ConflictFreeSch using up to 20 threads and up to 31GB memory, with these control settings:
+LPITERLIMIT = 2147483647
+IFCHECKCONVEXITY = 0
+MIPADDCUTOFF = 0
+MIPRELCUTOFF = 0
+MIPABSSTOP = 0
+MIPRELSTOP = .0001
+LOCALSOLVER = 0
+MULTISTART_THREADS = -1
+NLPMAXTIME = 0
+XSLP_ECHOXPRSMESSAGES = 1
+NLPCALCTHREADS = -1
+NLPTHREADS = -1
+XSLP_OBJSENSE = 1
+Original problem has:
+       146 rows          445 cols          725 elements       341 entities
+        10 inds
+Presolved problem has:
+         0 rows           15 cols            0 elements         5 entities
+        10 inds
+Presolve finished in 0 seconds
+Heap usage: 2133KB (peak 2435KB, 313KB system)
+Coefficient range                    original                 solved        
+  Coefficients   [min,max] : [ 1.00e+00,  1.00e+08] / [      0.0,       0.0]
+  RHS and bounds [min,max] : [ 1.00e+00,  1.00e+08] / [ 1.00e+00,  1.00e+00]
+  Objective      [min,max] : [ 1.00e+00,  1.00e+00] / [      0.0,       0.0]
+Autoscaling applied standard scaling
+Will try to keep branch and bound tree memory usage below 25.3GB
+Starting concurrent solve with dual (1 thread)
+ Concurrent-Solve,   0s
+            Dual        
+    objective   dual inf
+ D  814.39494   .0000000
+                        
+------- optimal --------
+Concurrent statistics:
+           Dual: 0 simplex iterations, 0.00s
+Optimal solution found
+ 
+   Its         Obj Value      S   Ninf  Nneg   Sum Dual Inf  Time
+     0        814.394940      D      0     0        .000000     0
+Dual solved problem
+  0 simplex iterations in 0.00 seconds at time 0
+Final objective                       : 8.143949404500000e+02
+  Max primal violation      (abs/rel) :       0.0 /       0.0
+  Max dual violation        (abs/rel) :       0.0 /       0.0
+  Max complementarity viol. (abs/rel) :       0.0 /       0.0
+Starting root cutting & heuristics
+Deterministic mode with up to 4 additional threads
+ 
+ Its Type    BestSoln    BestBound   Sols    Add    Del     Gap     GInf   Time
+k          814.394940   814.394940      1                  0.00%       0      0
+ *** Search completed ***
+Uncrunching matrix
+Final MIP objective                   : 8.143949404500000e+02
+Final MIP bound                       : 8.143949404500000e+02
+  Solution time / primaldual integral :      0.01s/ 78.801800%
+  Number of solutions found / nodes   :         1 /         1
+  Max primal violation      (abs/rel) :       0.0 /       0.0
+  Max integer violation     (abs    ) :       0.0
+Problem is nonlinear postsolved
+Heap usage: 982KB (peak 5806KB, 91KB system)
+Final NLP objective (global optimum)    : 8.143949404500000e+02
+  Max validation error      (abs/rel) :      .000 /      .000
+  Observed primal integral :  100.000%
+  Total time :              6.99E-03s 
+  Time checks (ticks) :        38 
+*** Search completed ***
+
+--- Fixing discrete variables...
+
+?1032 Warning: No variables fixed (integer solution unavailable)
+Original problem size
+   linear:    111 rows, 419 columns, 651 linear coefficients
+   nonlinear: 4 coefficients, 41 tokens
+              4 mul             0 div         0 sqrt
+              0 exp             0 log         1 pow
+              5 minmax          0 pwl         0 ufun
+Nonlinear presolve
+   simplify removed 2 tokens
+   converted 5 MIN/MAX to optimizer MIP constructs
+   linearizations will be solved as a MIP
+   converted 10 formulas to linear constraints
+   converted objective transfer row to linear objective
+Presolved problem size
+   linear:    146 rows, 445 columns, 725 linear coefficients
+Problem is nonlinear presolved
+Minimizing problem using Xpress-Optimizer
+FICO Xpress v9.4.0, Hyper, solve started 20:13:15, Feb 10, 2025
+Heap usage: 2294KB (peak 5806KB, 320KB system)
+Minimizing MILP ConflictFreeSch using up to 20 threads and up to 31GB memory, with these control settings:
+LPITERLIMIT = 2147483647
+IFCHECKCONVEXITY = 0
+MIPADDCUTOFF = 0
+MIPRELCUTOFF = 0
+MIPABSSTOP = 0
+MIPRELSTOP = .0001
+LOCALSOLVER = 0
+MULTISTART_THREADS = -1
+NLPMAXTIME = 0
+XSLP_ECHOXPRSMESSAGES = 1
+NLPCALCTHREADS = -1
+NLPTHREADS = -1
+XSLP_OBJSENSE = 1
+Original problem has:
+       146 rows          445 cols          725 elements       341 entities
+        10 inds
+Presolved problem has:
+         0 rows           15 cols            0 elements         5 entities
+        10 inds
+Presolve finished in 0 seconds
+Heap usage: 2318KB (peak 5806KB, 320KB system)
+Coefficient range                    original                 solved        
+  Coefficients   [min,max] : [ 1.00e+00,  1.00e+08] / [      0.0,       0.0]
+  RHS and bounds [min,max] : [ 1.00e+00,  1.00e+08] / [ 1.00e+00,  1.00e+00]
+  Objective      [min,max] : [ 1.00e+00,  1.00e+00] / [      0.0,       0.0]
+Autoscaling applied standard scaling
+Will try to keep branch and bound tree memory usage below 25.2GB
+Starting concurrent solve with dual (1 thread)
+ Concurrent-Solve,   0s
+            Dual        
+    objective   dual inf
+ D  814.39494   .0000000
+                        
+------- optimal --------
+Concurrent statistics:
+           Dual: 0 simplex iterations, 0.00s
+Optimal solution found
+ 
+   Its         Obj Value      S   Ninf  Nneg   Sum Dual Inf  Time
+     0        814.394940      D      0     0        .000000     0
+Dual solved problem
+  0 simplex iterations in 0.00 seconds at time 0
+Final objective                       : 8.143949404500000e+02
+  Max primal violation      (abs/rel) :       0.0 /       0.0
+  Max dual violation        (abs/rel) :       0.0 /       0.0
+  Max complementarity viol. (abs/rel) :       0.0 /       0.0
+Starting root cutting & heuristics
+Deterministic mode with up to 4 additional threads
+ 
+ Its Type    BestSoln    BestBound   Sols    Add    Del     Gap     GInf   Time
+k          814.394940   814.394940      1                  0.00%       0      0
+ *** Search completed ***
+Uncrunching matrix
+Final MIP objective                   : 8.143949404500000e+02
+Final MIP bound                       : 8.143949404500000e+02
+  Solution time / primaldual integral :      0.00s/ 81.572762%
+  Number of solutions found / nodes   :         1 /         1
+  Max primal violation      (abs/rel) :       0.0 /       0.0
+  Max integer violation     (abs    ) :       0.0
+Problem is nonlinear postsolved
+Heap usage: 987KB (peak 5806KB, 93KB system)
+Final NLP objective (global optimum)    : 8.143949404500000e+02
+  Max validation error      (abs/rel) :      .000 /      .000
+  Observed primal integral :  100.000%
+  Total time :              4.00E-03s 
+  Time checks (ticks) :        76 
+*** Search completed ***
+--- Reading solution for model ConflictFreeSch
+*** Status: Normal completion
+--- Job LowerBound.gms Stop 02/10/25 20:13:15 elapsed 0:00:00.075
