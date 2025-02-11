@@ -15,8 +15,17 @@ PortSimulation::PortSimulation(int _CNumber,int _AGVNumber) :CNumber(_CNumber), 
     JobGenerator();
 }
 
+bool PortSimulation::BelongToSameBlock(container c1, container c2){
+    for(int i = 0; i<6; i++){
+        if(c1.verticalLocation>=blocks[i].AL_location && c1.verticalLocation<=blocks[i].AR_location && c2.verticalLocation >= blocks[i].AL_location && c2.verticalLocation <= blocks[i].AR_location )
+            return true;
+    }
+    return false;
+}
+
 void PortSimulation::JobGenerator(){//this method should also initialize decision variables after the parameters of the model are built
 
+    //important case not dealt with: what if two containers situated in
     int numOfAGVs = 4;
 
     int numOfContainers = 10;
@@ -82,7 +91,20 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
         }
     }
     //psi_2 determines two container belonging to the same block, be executed according to their location!
-
+    foreach(container c1, containers.allC){
+        if(c1.isLoading){
+            foreach(container c2, containers.allC){
+                if(c2.isLoading){
+                    if (BelongToSameBlock(c1,c2))
+                        if(c1.verticalLocation < c2.verticalLocation){
+                            psi1.append({c1,c2});
+                        }else if(c1.verticalLocation > c2.verticalLocation){
+                            psi1.append({c2,c1});
+                        }
+                }
+            }
+        }
+    }
     //o_(m,i) is jost cont.verticalLoc!
 }
 

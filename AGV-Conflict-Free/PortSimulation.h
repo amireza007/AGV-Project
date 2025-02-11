@@ -3,6 +3,7 @@
 #include <QQueue>
 #include <tuple>
 #include <map>
+#include <QList>
 #include "DecisionVariables.h"
 //set of QCs should be called QCBuffer,
 //set of AGVs shold be called AGVBuffer
@@ -40,6 +41,8 @@ public:
     QVector<std::pair<container,container>> psi1;
     QVector<std::pair<container,container>> psi2;
     ModelVariables modelVariables = ModelVariables();
+
+    bool BelongToSameBlock(container c1, container c2);
     void JobGenerator();
     bool FeasibilityChecker();
     //job assignment and AGV scheme constraints
