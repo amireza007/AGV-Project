@@ -37,8 +37,8 @@ public:
     //QC vertical path
     QVector<std::map<container,int>> O_Container; //deteremined by someone or randomly. int = container.verticalLocation
     //sequence of QCS and ASCs
-    QVector<std::tuple<container,container>> psi1;
-    QVector<std::tuple<container,container>> psi2;
+    QVector<std::pair<container,container>> psi1;
+    QVector<std::pair<container,container>> psi2;
     ModelVariables modelVariables = ModelVariables();
     void JobGenerator();
     bool FeasibilityChecker();

@@ -4,9 +4,9 @@ $ONEMPTY
 *cnstr_15 and cnstr_19 are infeasible and I hypothesize it's due to not setting initial virtual positions!
 
 !!longest qc operation (or job in the problem)
-$set d1 2
-$set d2 2
-$set d3 3
+$set d1 3
+$set d2 5
+$set d3 5
 $set agvs 4
 $set lngstJob 5
 $set qcs 3

@@ -30,24 +30,60 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     int randomBlockPicker ;
     int randomVertLoc;
     container randCont;
-    while(++DCIterator <= NDLoadC){
-        randomQCPicker = rand.bounded(0,3);
-        QCs[randomQCPicker].m = randomQCPicker +1;
-        QCs[randomQCPicker].jobs.append(QCs[randomQCPicker].jobs.last() + 1);
-        if(randomQCPicker <= 1){ //QC[0] or QC[1] is selected, because these two have 3 vertical locations
-            randomVertLoc = rand.bounded(0,3);
-            randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
-        }else{ //QC[2] is selected
-            randomVertLoc = rand.bounded(0,2);
-            randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
+    int i = 0;
+    //why these whiles not concurrent or random?? but random is not cool for double cycling of QCs
+    while(i<numOfContainers)
+    {
+        if(++DCIterator <= NDLoadC){
+            randomQCPicker = rand.bounded(0,3);
+            QCs[randomQCPicker].m = randomQCPicker +1;
+            QCs[randomQCPicker].jobs.append(QCs[randomQCPicker].jobs.last() + 1);
+            if(randomQCPicker <= 1){ //QC[0] or QC[1] is selected, because these two have 3 vertical locations
+                randomVertLoc = rand.bounded(0,3);
+                randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
+                containers.allC.append(randCont);
+            }else{ //QC[2] is selected
+                randomVertLoc = rand.bounded(0,2);
+                randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
+                containers.allC.append(randCont);
+            }
+            i++;
+        }
+        if(++LCIterator <= NLoadC){
+            randomBlockPicker = rand.bounded(0,6);
+            randomQCPicker = rand.bounded(0,3);
+            randomVertLoc = rand.bounded(blocks[randomBlockPicker].AL_location, blocks[randomBlockPicker].AR_location+1);//randomVertical suddenly becomes the actual member of XR, not an index variable!
+            QCs[randomQCPicker].m = randomQCPicker + 1;
+            QCs[randomQCPicker].jobs.append(QCs[randomQCPicker].jobs.last() + 1);
+            randCont = container(randomQCPicker + 1, QCs[randomQCPicker].jobs.last(),true,randomVertLoc);
+            containers.allC.append(randCont);
+            i++;
         }
     }
-    while(++LCIterator <= NLoadC){
-        randomBlockPicker = rand.bounded(0,6);
 
+    //building psi_1, psi_2 and o_{(m,i)}
+
+    //psi_1 determines m1,i1,m1,i3 both being DLoadCont
+    //For this: iterate over all containers, compare each two of them and check: 1. they belong to the same QC 2. compare their vertical loc is
+    foreach(container c1, containers.allC){
+        if(!c1.isLoading)
+        {
+            foreach(container c2, containers.allC){
+                if(!c2.isLoading){
+                    if(std::get<0>(c1.c) == std::get<0>(c2.c)){
+                        if(std::get<1>(c1.c) < std::get<1>(c2.c)){
+                            psi1.append({c1,c2});
+                        }else if(std::get<1>(c1.c) > std::get<1>(c2.c)){
+                            psi1.append({c2,c1});
+                        }
+                    }
+                }
+            }
+        }
     }
+    //psi_2 determines two container belonging to the same block, be executed according to their location!
 
-    //updating psi_1, psi_2 and o_{(m,i)}
+    //o_(m,i) is jost cont.verticalLoc!
 }
 
 bool PortSimulation::cnstr_2(){
