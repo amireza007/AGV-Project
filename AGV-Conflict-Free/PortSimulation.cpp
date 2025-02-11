@@ -1,10 +1,11 @@
 #include "PortSimulation.h"
 #include <memory>
 #include <QRandomGenerator>
+#include <ctime>
 PortSimulation::PortSimulation(int _CNumber,int _AGVNumber) :CNumber(_CNumber), AGVNumber(_AGVNumber) {
-    QCs[0] = QuayCrane(1,{},{4,8,12});
-    QCs[1] = QuayCrane(2,{},{16,20,24});
-    QCs[3] = QuayCrane(3,{},{28,32});
+    QCs[0] = QuayCrane(1,{0},{4,8,12});
+    QCs[1] = QuayCrane(2,{0},{16,20,24});
+    QCs[3] = QuayCrane(3,{0},{28,32});
     blocks[0] = Block({},1,{},5);
     blocks[1] = Block({},7,{},11);
     blocks[2] = Block({},13,{},17);
@@ -19,83 +20,34 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     int numOfAGVs = 4;
 
     int numOfContainers = 10;
-    QRandomGenerator rand = QRandomGenerator();
-    int NLoadC = (rand.generate() % 10)+ 1;
+    QRandomGenerator rand = QRandomGenerator(time(NULL));//the seed
+    int NLoadC = rand.bounded(1,11);
     int NDLoadC = numOfContainers - NLoadC;
     //start of job generation
     int LCIterator = 0;
     int DCIterator = 0;
     int randomQCPicker ;
     int randomBlockPicker ;
+    int randomVertLoc;
+    container randCont;
     while(++DCIterator <= NDLoadC){
-        randomQCPicker = rand.generate()%3;
-        if(randomQCPicker <= 1){ //QC[0] or QC[1] is selected
-
+        randomQCPicker = rand.bounded(0,3);
+        QCs[randomQCPicker].m = randomQCPicker +1;
+        QCs[randomQCPicker].jobs.append(QCs[randomQCPicker].jobs.last() + 1);
+        if(randomQCPicker <= 1){ //QC[0] or QC[1] is selected, because these two have 3 vertical locations
+            randomVertLoc = rand.bounded(0,3);
+            randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
         }else{ //QC[2] is selected
-
+            randomVertLoc = rand.bounded(0,2);
+            randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
         }
     }
     while(++LCIterator <= NLoadC){
-        randomBlockPicker = rand.generate()%6;
+        randomBlockPicker = rand.bounded(0,6);
 
     }
-    // // Generate Jobs and Schedule (Static fashion )
-    // int i,i1,i2,r;
-    // if( b == false)
-    //     for(i=1; i<=StrToInt(Edit1->Text);i++) //number of Total container jobs specified
-    //     {
-    //         r = 3 + random(2); // 4 if we like four cases // ditributing unloading and loading jobs randomly
-    //             // 3 because we like to have only Yard to berth and vice versa
-    //         switch(r)
-    //         {
-    //         case 3: // Yard to Berth
-    //             // if(MCFAlgorithmForm->CheckBox1->Checked )
-    //             //    srand(2); // 30/04/04
-    //             // else
-    //             //   randomize();
-    //             i1 = 1+ random(StrToInt(MCFAlgorithmForm->Edit3->Text)); //number of blocks
-    //             if (MCFAlgorithmForm->RadioButton8->Checked == true ) //single loaded QC
-    //                 i2 = 1;
-    //             else if (MCFAlgorithmForm->RadioButton9->Checked == true )//multiple loaded QCs
-    //                 i2 = 1+ random(StrToInt(MCFAlgorithmForm->Edit12->Text)); number of w/p (QCs) in dynamic fashion
-    //             else
-    //             {
-    //                 i2 = Next_Quay_Crane;
-    //                 if(++Next_Quay_Crane > Number_Of_Cranes ) Next_Quay_Crane = 1;
-    //             }
-    //             BlockStrS = "Block "; BlockStrS = BlockStrS + i1;
-    //             BlockStrD = "W/P "; BlockStrD = BlockStrD + i2;
-    //             break;
-    //         case 4: // Berth to Yard
-    //             //   if(MCFAlgorithmForm->CheckBox1->Checked )
-    //             //      srand(3); // 30/04/04
-    //             //   else
-    //             //      randomize();
-    //             if (MCFAlgorithmForm->RadioButton8->Checked == true )
-    //                 i2 = 1;
-    //             else if (MCFAlgorithmForm->RadioButton9->Checked == true ) //if multiple cranes (random) in static is chosen
-    //                 i2 = 1+ random(StrToInt(->Edit12->Text));// number of w/ps (QCs) in dynamic??
-    //             elseMCFAlgorithmForm
-    //             {
-    //                 i2 = Next_Quay_Crane;
-    //                 if(++Next_Quay_Crane > Number_Of_Cranes ) Next_Quay_Crane = 1;
-    //             }
-    //             i1 = 1+ random(StrToInt(MCFAlgorithmForm->Edit3->Text)); //number of blocks
-    //             BlockStrS = "W/P "; BlockStrS = BlockStrS + i2;
-    //             BlockStrD = "Block "; BlockStrD = BlockStrD + i1;
-    //             break;
-    //         }
-    //         PortContainerForm->Table1->Append();
 
-    //         AnsiString ContainerIDStrS = "C-BS-";
-    //         ContainerIDStrS = ContainerIDStrS + IntToStr(i);
-
-    //         PortContainerForm->Table1->FieldValues["ContainerID"]= ContainerIDStrS;
-    //         PortContainerForm->Table1->FieldValues["Portname"]   = ListBox1->Items->Strings[ListBox1->ItemIndex];
-
-    //         PortContainerForm->Table1->FieldValues["SourcePoint"]= BlockStrS;
-    //         PortContainerForm->Table1->FieldValues["DestPoint"]  = BlockStrD;
-
+    //updating psi_1, psi_2 and o_{(m,i)}
 }
 
 bool PortSimulation::cnstr_2(){

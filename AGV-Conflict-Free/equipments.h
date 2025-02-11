@@ -17,9 +17,9 @@ struct QuayCrane {
 enum action {a0 ,a1, a2, a3, a4};
 
 struct container {
-    std::tuple<QuayCrane, int> c;
+    std::tuple<int, int> c;//first int is QuayCrane.m
     container(){}
-    container(QuayCrane m, int j, bool _Loading, int _InitLoc) : c(m,j), isLoading(_Loading), verticalLocation(_InitLoc)
+    container(int m, int j, bool _Loading, int _InitLoc) : c(m,j), isLoading(_Loading), verticalLocation(_InitLoc)
     {
         // c = {m,i};
     }
