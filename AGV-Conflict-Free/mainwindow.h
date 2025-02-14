@@ -17,10 +17,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-public slots:
-    void on_spinBox_valueChanged(int arg1);
-signals:
-    void valueChanged(int i);
 
 private:
     Ui::MainWindow *ui;

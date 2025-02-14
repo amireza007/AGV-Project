@@ -6,13 +6,13 @@ PortSimulation::PortSimulation(int _CNumber,int _AGVNumber) :CNumber(_CNumber), 
     QCs[0] = QuayCrane(1,{0},{4,8,12});
     QCs[1] = QuayCrane(2,{0},{16,20,24});
     QCs[3] = QuayCrane(3,{0},{28,32});
-    blocks[0] = Block({},1,{},5);
-    blocks[1] = Block({},7,{},11);
-    blocks[2] = Block({},13,{},17);
-    blocks[3] = Block({},19,{},23);
-    blocks[4] = Block({},25,{},29);
-    blocks[5] = Block({},31,{},35);
-    JobGenerator();
+    // blocks[0] = Block({},1,{},5);
+    // blocks[1] = Block({},7,{},11);
+    // blocks[2] = Block({},13,{},17);
+    // blocks[3] = Block({},19,{},23);
+    // blocks[4] = Block({},25,{},29);
+    // blocks[5] = Block({},31,{},35);
+    //JobGenerator();
 }
 
 bool PortSimulation::BelongToSameBlock(container c1, container c2){
@@ -25,7 +25,7 @@ bool PortSimulation::BelongToSameBlock(container c1, container c2){
 
 void PortSimulation::JobGenerator(){//this method should also initialize decision variables after the parameters of the model are built
 
-    //important case not dealt with: what if two containers situated in
+    //important case not dealt with: what if two containers situated in one vertical path!
     int numOfAGVs = 4;
 
     int numOfContainers = 10;

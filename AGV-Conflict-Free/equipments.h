@@ -17,7 +17,7 @@ struct QuayCrane {
 enum action {a0 ,a1, a2, a3, a4};
 
 struct container {
-    std::tuple<int, int> c;//first int is QuayCrane.m
+    std::tuple<int, int> c;//first int is QuayCrane.m! WHAT A BEAUTIFUL TUPLE!
     container(){}
     container(int m, int j, bool _Loading, int _InitLoc) : c(m,j), isLoading(_Loading), verticalLocation(_InitLoc)
     {
@@ -50,6 +50,7 @@ struct AGV {
 };
 
 typedef std::tuple<container,action> W; //set of actions on each container
-
+typedef std::tuple<container,action> WH;
+typedef std::tuple<container,action> WV;
 
 #endif // EQUIPMENTS_H

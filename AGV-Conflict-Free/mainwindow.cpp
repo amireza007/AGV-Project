@@ -12,10 +12,3 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-void MainWindow::on_spinBox_valueChanged(int arg1)
-{
-
-    emit valueChanged(arg1);
-}
-

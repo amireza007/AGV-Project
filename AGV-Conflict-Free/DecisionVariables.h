@@ -14,29 +14,37 @@ struct z_op{
     z_op(container _c1, container _c2, AGV _l, int _index): c1(_c1), c2(_c2), l(_l),
         index(_index){}
 };
+
+//This is what is refered to as "Functor"
 struct cmp{
     bool operator()(const struct z_op& o1, const struct z_op& o2) const{
         return o1.index != o2.index;//
     }
 };
+struct cmp1{
+    bool operator()(const std::tuple<W,int>& t1, const std::tuple<W,int>& t2);
+};
+
+static bool compareTwoW(W& W1, W& W2);
 
 struct ModelVariables {
     std::map<struct z_op, int, cmp> z;
-    QVector<std::map<std::tuple<W,W>, int>> UAGV;
+    std::map<std::tuple<W,W>, int> UAGV;
 
     // AGV locations
-    QVector<std::map<std::tuple<W,int>,int>> PX;
-    QVector<std::map<std::tuple<W,int>,int>> PY;
-    QVector<std::map<std::tuple<W,int>,int>> PX0;
-    QVector<std::map<std::tuple<W,int>,int>> PY0;
+  //std::map<std::tuple<W,XR>,int> PX;
+    std::map<std::tuple<W,int>,int, cmp1> PX;
+    std::map<std::tuple<W,int>,int, cmp1> PY;
+    std::map<std::tuple<W,int>,int, cmp1> PX0;
+    std::map<std::tuple<W,int>,int, cmp1> PY0;
 
     // AGV time related decision variable
-    QVector<std::map<container, double>> TQ;
-    QVector<std::map<container, double>> TY;
-    QVector<std::map<W, double>> Tstart;
-    QVector<std::map<std::tuple<W,W>, double>> tAGV;
-    QVector<std::map<W,int>> X_Postion; //Can be used in R(m,i)
-    QVector<std::map<W,int>> Y_Postion;
+    std::map<container, double> TQ;
+    std::map<container, double> TY;
+    std::map<W, double> Tstart;
+    std::map<std::tuple<W,W>, double> tAGV;
+    std::map<W,int> X_Postion; //Can be used in R(m,i)
+    std::map<W,int> Y_Postion;
     ModelVariables();
 
 };
