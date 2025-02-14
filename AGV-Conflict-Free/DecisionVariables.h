@@ -15,7 +15,7 @@ struct z_op{
         index(_index){}
 };
 
-//This is what is refered to as "Functor"
+//This is what is referred to as "Functor"
 struct cmp{
     bool operator()(const struct z_op& o1, const struct z_op& o2) const{
         return o1.index != o2.index;//
@@ -25,11 +25,23 @@ struct cmp1{
     bool operator()(const std::tuple<W,int>& t1, const std::tuple<W,int>& t2);
 };
 
-static bool compareTwoW(W& W1, W& W2);
+struct cmp2{
+    bool operator()(const std::tuple<W,W>& t1, const std::tuple<W,W>& t2);
+};
+
+struct cmp3{
+    bool operator()(const W& w1, const W& w2);
+};
+
+struct cmp4{
+    bool operator()(const container& c1, const container& c2);
+};
+
+static bool compareWs(QVector<W> v1, QVector<W> v2);
 
 struct ModelVariables {
     std::map<struct z_op, int, cmp> z;
-    std::map<std::tuple<W,W>, int> UAGV;
+    std::map<std::tuple<W,W>, int,cmp2> UAGV;
 
     // AGV locations
   //std::map<std::tuple<W,XR>,int> PX;
@@ -39,12 +51,12 @@ struct ModelVariables {
     std::map<std::tuple<W,int>,int, cmp1> PY0;
 
     // AGV time related decision variable
-    std::map<container, double> TQ;
-    std::map<container, double> TY;
-    std::map<W, double> Tstart;
-    std::map<std::tuple<W,W>, double> tAGV;
-    std::map<W,int> X_Postion; //Can be used in R(m,i)
-    std::map<W,int> Y_Postion;
+    std::map<container, double, cmp4> TQ;
+    std::map<container, double, cmp4> TY;
+    std::map<W, double, cmp3> Tstart;
+    std::map<std::tuple<W,W>, double, cmp2> tAGV;
+    std::map<W,int, cmp3> X_Postion; //Can be used in R(m,i)
+    std::map<W,int, cmp3> Y_Postion;
     ModelVariables();
 
 };
