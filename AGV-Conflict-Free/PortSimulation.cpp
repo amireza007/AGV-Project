@@ -2,17 +2,18 @@
 #include <memory>
 #include <QRandomGenerator>
 #include <ctime>
-PortSimulation::PortSimulation(int _CNumber,int _AGVNumber) :CNumber(_CNumber), AGVNumber(_AGVNumber) {
+PortSimulation::PortSimulation(int _CNumber,int _AGVNumber): AGVNumber(_AGVNumber), CNumber(_CNumber){
     QCs[0] = QuayCrane(1,{0},{4,8,12});
     QCs[1] = QuayCrane(2,{0},{16,20,24});
-    QCs[3] = QuayCrane(3,{0},{28,32});
-    // blocks[0] = Block({},1,{},5);
-    // blocks[1] = Block({},7,{},11);
-    // blocks[2] = Block({},13,{},17);
-    // blocks[3] = Block({},19,{},23);
-    // blocks[4] = Block({},25,{},29);
-    // blocks[5] = Block({},31,{},35);
-    //JobGenerator();
+    QCs[2] = QuayCrane(3,{0},{28,32});
+    B.resize(AGVNumber);
+    blocks[0] = Block({},1,{},5);
+    blocks[1] = Block({},7,{},11);
+    blocks[2] = Block({},13,{},17);
+    blocks[3] = Block({},19,{},23);
+    blocks[4] = Block({},25,{},29);
+    blocks[5] = Block({},31,{},35);
+    JobGenerator();
 }
 
 bool PortSimulation::BelongToSameBlock(container c1, container c2){
@@ -27,7 +28,6 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
 
     //important case not dealt with: what if two containers situated in one vertical path!
     int numOfAGVs = 4;
-
     int numOfContainers = 10;
     QRandomGenerator rand = QRandomGenerator(time(NULL));//the seed
     int NLoadC = rand.bounded(1,11);
@@ -74,8 +74,7 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
 
     //psi_1 determines m1,i1,m1,i3 both being DLoadCont
     //For this: iterate over all containers, compare each two of them and check: 1. they belong to the same QC 2. compare their vertical loc is
-    foreach(container c1, containers.allC){
-        if(!c1.isLoading)
+    foreach(container c1, containers.allC){ if(!c1.isLoading)
         {
             foreach(container c2, containers.allC){
                 if(!c2.isLoading){
@@ -105,7 +104,7 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
             }
         }
     }
-    //o_(m,i) is jost cont.verticalLoc!
+    //o_(m,i) is just cont.verticalLoc!
 }
 
 bool PortSimulation::cnstr_2(){
@@ -212,8 +211,6 @@ bool PortSimulation::cnstr_6_7(){
 bool PortSimulation::FeasibilityChecker(){
     bool isSolFeas;
 
-
-//////////////////////////////////////////////////
     return true;
 }
 

@@ -6,6 +6,7 @@
 #include <tuple>
 #include <map>
 #include "portlayout.h"
+
 struct QuayCrane {
     int m; // the index
     QList<int> jobs;
@@ -30,14 +31,17 @@ struct container {
     //according to QC m location and the block
     int verticalLocation;
 };
+struct cmp5{
+    bool operator()(const container& c1, const container& c2);
+};
 struct Block{
     QVector<container> requestedContainers;  // this could be used for creating set \psi_2
     int AL_location;
-    QVector<std::map<container,int>> AL;
+    QVector<std::map<container,int, cmp5>> AL;
     int AR_location;
-    QVector<std::map<container,int>> AR;
+    QVector<std::map<container,int, cmp5>> AR;
     Block(){}
-    Block(QVector<std::map<container,int>> _AL, int _AlL, QVector<std::map<container,int>> _AR, int _ArL): AL(_AL), AL_location(_AlL), AR(_AR), AR_location(_ArL) {}
+    Block(QVector<std::map<container,int,cmp5>> _AL, int  _AlL, QVector<std::map<container,int,cmp5>> _AR, int _ArL): AL(_AL), AL_location(_AlL), AR(_AR), AR_location(_ArL) {}
 };
 
 struct AGV {
@@ -47,6 +51,7 @@ struct AGV {
     int num; //number of assigned containers to an AGV
     // int q = T_UB / tMin;  //maximumNumberOfContainers conducted by each AGV
     AGV(int _l, QVector<container> _AC, int _CT, int _num): l(_l), assignedContainers(_AC), num(_num){}
+    AGV(){}
 };
 
 typedef std::tuple<container,action> W; //set of actions on each container

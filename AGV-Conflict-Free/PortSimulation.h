@@ -20,18 +20,17 @@ struct AllContainers{//these don't contain virtual containers
 
 class PortSimulation{
 public:
-    QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> BuildR(container &c);
     PortSimulation(int _CNumber,int _AGVNumber);
+    QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> BuildR(container &c);
     int CNumber;
     int AGVNumber;
 
     //Main equipments
     AllContainers containers;
     QuayCrane QCs[3];
-    QVector<AGV> B;
+    QList<AGV> B{};
     Block blocks[6];
     ///////////////////////////
-
     QVector<std::map<container, double>> G_Q;//uniform(60,90)
     QVector<std::map<container, double>> G_Y;//uniform(20,30)
 
