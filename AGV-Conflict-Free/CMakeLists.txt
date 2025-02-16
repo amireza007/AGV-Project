@@ -35,6 +35,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         equipments.h equipments.cpp
         portlayout.h portlayout.cpp
         DecisionVariables.cpp
+        containerjobs.h containerjobs.cpp containerjobs.ui
 
 
 

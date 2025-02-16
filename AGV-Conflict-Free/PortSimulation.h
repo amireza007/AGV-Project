@@ -20,7 +20,9 @@ struct AllContainers{//these don't contain virtual containers
 
 class PortSimulation{
 public:
+
     PortSimulation(int _CNumber,int _AGVNumber);
+    PortSimulation(){}
     QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> BuildR(container &c);
     int CNumber;
     int AGVNumber;

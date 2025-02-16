@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "PortSimulation.h"
+#include "containerjobs.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,7 +18,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    PortSimulation port;
+    ContainerJobs* containerJobsUi;
 
+private slots:
+
+    void on_pushButton_pressed();
 
 private:
     Ui::MainWindow *ui;

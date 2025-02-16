@@ -27,8 +27,7 @@ bool PortSimulation::BelongToSameBlock(container c1, container c2){
 void PortSimulation::JobGenerator(){//this method should also initialize decision variables after the parameters of the model are built
 
     //important case not dealt with: what if two containers situated in one vertical path!
-    int numOfAGVs = 4;
-    int numOfContainers = 10;
+    int numOfContainers = CNumber;
     QRandomGenerator rand = QRandomGenerator(time(NULL));//the seed
     int NLoadC = rand.bounded(1,11);
     int NDLoadC = numOfContainers - NLoadC;
