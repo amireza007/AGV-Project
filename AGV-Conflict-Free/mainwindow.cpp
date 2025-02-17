@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+
+//for running the bbapproach, use bbapproach::bbapproach(port)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -14,11 +16,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_pressed()
 {
-    int Cnumber = ui->spinBox->value();
-    int AGVNumber = ui->spinBox_2->value();
+    int AGVNumber = ui->spinBox->value();
+    int Cnumber = ui->spinBox_2->value();
     port = PortSimulation(Cnumber, AGVNumber);
     containerJobsUi = new ContainerJobs();
-    close();
+
+    this->close();
     containerJobsUi->show();
 
 }

@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "PortSimulation.h"
+// #include "PortSimulation.h"
 #include "containerjobs.h"
+#include "bbapproach.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,7 +21,6 @@ public:
     ~MainWindow();
     PortSimulation port;
     ContainerJobs* containerJobsUi;
-
 private slots:
 
     void on_pushButton_pressed();

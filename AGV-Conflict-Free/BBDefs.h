@@ -4,7 +4,7 @@
 #include <map>
 //Branch and bound approach simulation data
 //BFS strategy is used
-QVector<QVector<int>> schemes;
+typedef QVector<QVector<int>> schemes;
 
 // auto route = {};
 typedef struct v* v_p;

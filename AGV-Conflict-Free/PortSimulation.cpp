@@ -50,9 +50,11 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
                 randomVertLoc = rand.bounded(0,3);
                 randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
                 containers.allC.append(randCont);
+                randCont.index = i;
             }else{ //QC[2] is selected
                 randomVertLoc = rand.bounded(0,2);
                 randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
+                randCont.index = i;
                 containers.allC.append(randCont);
             }
             i++;
@@ -63,7 +65,9 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
             randomVertLoc = rand.bounded(blocks[randomBlockPicker].AL_location, blocks[randomBlockPicker].AR_location+1);//randomVertical suddenly becomes the actual member of XR, not an index variable!
             QCs[randomQCPicker].m = randomQCPicker + 1;
             QCs[randomQCPicker].jobs.append(QCs[randomQCPicker].jobs.last() + 1);
+
             randCont = container(randomQCPicker + 1, QCs[randomQCPicker].jobs.last(),true,randomVertLoc);
+            randCont.index = i;
             containers.allC.append(randCont);
             i++;
         }
@@ -104,6 +108,12 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
         }
     }
     //o_(m,i) is just cont.verticalLoc!
+    for(const auto &c: containers.allC){
+        O_Container.append({{c,c.verticalLocation}});
+    }
+    //////////////////////////////////////////////////////////
+
+    /// building the database
 }
 
 bool PortSimulation::cnstr_2(){

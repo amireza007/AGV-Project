@@ -25,7 +25,6 @@ struct container {
         // c = {m,i};
     }
     ~container(){}
-    int i; // which is jobs[i]
     int index; //container number
     bool  isLoading; //This determines if container is loading or not!
     //according to QC m location and the block

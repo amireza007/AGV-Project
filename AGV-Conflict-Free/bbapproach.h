@@ -3,10 +3,11 @@
 #include "BBDefs.h"
 #include <tuple>
 #include <iostream>
+
 class BBApproach
 {
 public:
-    BBApproach();
+    BBApproach(PortSimulation &port);
     ~BBApproach();
     void InitialSoltuion();
 private:

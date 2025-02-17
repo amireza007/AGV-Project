@@ -22,19 +22,19 @@ struct cmp{
     }
 };
 struct cmp1{
-    bool operator()(const std::tuple<W,int>& t1, const std::tuple<W,int>& t2);
+    bool operator()(const std::tuple<W,int>& t1, const std::tuple<W,int>& t2) const;
 };
 
 struct cmp2{
-    bool operator()(const std::tuple<W,W>& t1, const std::tuple<W,W>& t2);
+    bool operator()(const std::tuple<W,W>& t1, const std::tuple<W,W>& t2)const;
 };
 
 struct cmp3{
-    bool operator()(const W& w1, const W& w2);
+    bool operator()(const W& w1, const W& w2)const;
 };
 
 struct cmp4{
-    bool operator()(const container& c1, const container& c2);
+    bool operator()(const container& c1, const container& c2) const;
 };
 
 static bool compareWs(QVector<W> v1, QVector<W> v2);
@@ -57,6 +57,7 @@ struct ModelVariables {
     std::map<std::tuple<W,W>, double, cmp2> tAGV;
     std::map<W,int, cmp3> X_Postion; //Can be used in R(m,i)
     std::map<W,int, cmp3> Y_Postion;
+    //This could be used for the first basis maybe?
     ModelVariables();
 
 };

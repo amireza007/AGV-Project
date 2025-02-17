@@ -14,6 +14,8 @@ struct AllContainers{//these don't contain virtual containers
     double tMin;                //minimum operation time for containers without considering conflict, used for computing AGV scheme
 
     ////////////// possibly bad!
+    /// TODO compare
+
     QVector<std::map<container, QVector<std::tuple<container, double>>>> S;//list of container op time
     QVector<std::map<container, QVector<std::tuple<double, QVector<W>>>>> R;// R(s(m,i), [routes])
 };
@@ -33,12 +35,13 @@ public:
     QList<AGV> B{};
     Block blocks[6];
     ///////////////////////////
-    QVector<std::map<container, double>> G_Q;//uniform(60,90)
-    QVector<std::map<container, double>> G_Y;//uniform(20,30)
+    QVector<std::map<container, double, cmp4>> G_Q;//uniform(60,90)
+    QVector<std::map<container, double, cmp4>> G_Y;//uniform(20,30)
 
     //QC vertical path
-    QVector<std::map<container,int>> O_Container; //deteremined by someone or randomly. int = container.verticalLocation
+    QVector<std::map<container,int, cmp4>> O_Container; //deteremined by someone or randomly. int = container.verticalLocation
     //sequence of QCS and ASCs
+    //
     QVector<std::pair<container,container>> psi1;
     QVector<std::pair<container,container>> psi2;
     ModelVariables modelVariables = ModelVariables();
