@@ -16,7 +16,7 @@ PortSimulation::PortSimulation(int _CNumber,int _AGVNumber): AGVNumber(_AGVNumbe
     JobGenerator();
 }
 
-bool PortSimulation::BelongToSameBlock(container c1, container c2){
+bool PortSimulation::BelongToSameBlock(container &c1, container &c2){
     for(int i = 0; i<6; i++){
         if(c1.verticalLocation>=blocks[i].AL_location && c1.verticalLocation<=blocks[i].AR_location && c2.verticalLocation >= blocks[i].AL_location && c2.verticalLocation <= blocks[i].AR_location )
             return true;
@@ -77,9 +77,9 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
 
     //psi_1 determines m1,i1,m1,i3 both being DLoadCont
     //For this: iterate over all containers, compare each two of them and check: 1. they belong to the same QC 2. compare their vertical loc is
-    foreach(container c1, containers.allC){ if(!c1.isLoading)
+    for(auto &c1: containers.allC){ if(!c1.isLoading)
         {
-            foreach(container c2, containers.allC){
+            for(auto &c2: containers.allC){
                 if(!c2.isLoading){
                     if(std::get<0>(c1.c) == std::get<0>(c2.c)){
                         if(std::get<1>(c1.c) < std::get<1>(c2.c)){
@@ -93,9 +93,9 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
         }
     }
     //psi_2 determines two container belonging to the same block, be executed according to their location!
-    foreach(container c1, containers.allC){
+    for(auto& c1: containers.allC){
         if(c1.isLoading){
-            foreach(container c2, containers.allC){
+            for(auto& c2: containers.allC){
                 if(c2.isLoading){
                     if (BelongToSameBlock(c1,c2))
                         if(c1.verticalLocation < c2.verticalLocation){

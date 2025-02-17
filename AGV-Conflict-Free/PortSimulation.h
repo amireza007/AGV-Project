@@ -46,7 +46,7 @@ public:
     QVector<std::pair<container,container>> psi2;
     ModelVariables modelVariables = ModelVariables();
 
-    bool BelongToSameBlock(container c1, container c2);
+    bool BelongToSameBlock(container &c1, container &c2);
     void JobGenerator();
     bool FeasibilityChecker();
     //job assignment and AGV scheme constraints
