@@ -1,24 +1,28 @@
 #ifndef CONTAINERJOBS_H
 #define CONTAINERJOBS_H
+#include "ui_containerjobs.h"
 
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QTableView>
 
+QT_BEGIN_NAMESPACE
 namespace Ui {
 class ContainerJobs;
 }
+QT_END_NAMESPACE
 
 class ContainerJobs : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ContainerJobs(QWidget *parent = nullptr);
+    ContainerJobs(QWidget *parent = nullptr);
     ~ContainerJobs();
-    Ui::ContainerJobs *ui;
     QSqlTableModel *model;
-    QTableView *table;
+
+    Ui::ContainerJobs *ui;
+
 
 };
 

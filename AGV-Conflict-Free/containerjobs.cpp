@@ -1,5 +1,4 @@
 #include "containerjobs.h"
-#include "ui_containerjobs.h"
 #include "equipments.h"
 ContainerJobs::ContainerJobs(QWidget *parent)
     : QWidget(parent)
@@ -7,7 +6,6 @@ ContainerJobs::ContainerJobs(QWidget *parent)
 {
     model = new QSqlTableModel(this, GlobalData::appdb);
     ui->setupUi(this);
-    table = ui->tableView;
     // ui->
 }
 

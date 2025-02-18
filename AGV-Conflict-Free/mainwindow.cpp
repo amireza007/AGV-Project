@@ -22,7 +22,10 @@ void MainWindow::on_pushButton_pressed()
     containerJobsUi = new ContainerJobs();
     containerJobsUi->model->setTable("ContainerJobs");
     containerJobsUi->model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    containerJobsUi->table->setModel(containerJobsUi->model);
+    containerJobsUi->model->select();
+    containerJobsUi->ui->tableView->setModel(containerJobsUi->model);
+    // containerJobsUi->ui->tableView;
+    // QTableView t = containerJobsUi->ui-;
     // containerJobsUi->model->setHeaderData()
     this->close();
     containerJobsUi->show();
