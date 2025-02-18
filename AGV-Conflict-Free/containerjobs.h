@@ -2,6 +2,8 @@
 #define CONTAINERJOBS_H
 
 #include <QWidget>
+#include <QSqlTableModel>
+#include <QTableView>
 
 namespace Ui {
 class ContainerJobs;
@@ -14,9 +16,10 @@ class ContainerJobs : public QWidget
 public:
     explicit ContainerJobs(QWidget *parent = nullptr);
     ~ContainerJobs();
-
-private:
     Ui::ContainerJobs *ui;
+    QSqlTableModel *model;
+    QTableView *table;
+
 };
 
 #endif // CONTAINERJOBS_H

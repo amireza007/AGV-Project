@@ -6,6 +6,11 @@
 #include <tuple>
 #include <map>
 #include "portlayout.h"
+#include <QSqlDatabase>
+
+namespace GlobalData{
+    extern QSqlDatabase appdb;
+}
 
 struct QuayCrane {
     int m; // the index
@@ -31,7 +36,7 @@ struct container {
     int verticalLocation;
 };
 struct cmp5{
-    bool operator()(const container& c1, const container& c2);
+    bool operator()(const container& c1, const container& c2) const;
 };
 struct Block{
     QVector<container> requestedContainers;  // this could be used for creating set \psi_2

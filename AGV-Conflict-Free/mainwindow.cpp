@@ -20,7 +20,10 @@ void MainWindow::on_pushButton_pressed()
     int Cnumber = ui->spinBox_2->value();
     port = PortSimulation(Cnumber, AGVNumber);
     containerJobsUi = new ContainerJobs();
-
+    containerJobsUi->model->setTable("ContainerJobs");
+    containerJobsUi->model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    containerJobsUi->table->setModel(containerJobsUi->model);
+    // containerJobsUi->model->setHeaderData()
     this->close();
     containerJobsUi->show();
 
