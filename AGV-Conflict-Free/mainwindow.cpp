@@ -31,8 +31,6 @@ void MainWindow::on_pushButton_pressed()
     //an array of records SQlRecord should be setValue d in the model of ContainerJobsUi
     for(auto& rec: port.records){
         containerJobsUi->model->insertRecord(++counter,rec);
-        containerJobsUi->model->database().transaction();
-        containerJobsUi->model->submitAll();
     }
 
     containerJobsUi->ui->tableView->setModel(containerJobsUi->model);

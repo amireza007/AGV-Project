@@ -32,7 +32,8 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     //important case not dealt with: what if two containers situated in one vertical path!
     int numOfContainers = CNumber;
     QRandomGenerator rand = QRandomGenerator(time(NULL));//the seed
-    int NLoadC = rand.bounded(1,11);
+    int NLoadC = rand.bounded(1,numOfContainers);
+    qDebug() << NLoadC;
     int NDLoadC = numOfContainers - NLoadC;
     //start of job generation
     int LCIterator = 0;
@@ -53,7 +54,10 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
         if(++DCIterator <= NDLoadC){
             randomQCPicker = rand.bounded(0,3);
             QCs[randomQCPicker].m = randomQCPicker +1;
+
+            rec.setValue(0,"m"+QString::number(QCs[randomQCPicker].m));
             QCs[randomQCPicker].jobs.append(QCs[randomQCPicker].jobs.last() + 1);
+            rec.setValue(1,"i" + QString::number(QCs[randomQCPicker].jobs.last()) );
             if(randomQCPicker <= 1){ //QC[0] or QC[1] is selected, because these two have 3 vertical locations
                 randomVertLoc = rand.bounded(0,3);
                 randCont = container(randomQCPicker+1, QCs[randomQCPicker].jobs.last(),false,QCs[randomQCPicker].locations[randomVertLoc]);
@@ -65,18 +69,30 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
                 randCont.index = i;
                 containers.allC.append(randCont);
             }
+            rec.setValue(2,QString::number(QCs[randomQCPicker].locations[randomVertLoc]));
+            rec.setValue(3,"D");
+            records.append(rec);
+            rec.clearValues();
             i++;
         }
         if(++LCIterator <= NLoadC){
+            //column for AL and AR should be added in the db
             randomBlockPicker = rand.bounded(0,6);
+
             randomQCPicker = rand.bounded(0,3);
             randomVertLoc = rand.bounded(blocks[randomBlockPicker].AL_location, blocks[randomBlockPicker].AR_location+1);//randomVertical suddenly becomes the actual member of XR, not an index variable!
             QCs[randomQCPicker].m = randomQCPicker + 1;
-            QCs[randomQCPicker].jobs.append(QCs[randomQCPicker].jobs.last() + 1);
+            rec.setValue(0,"m"+QString::number(QCs[randomQCPicker].m));
 
+            QCs[randomQCPicker].jobs.append(QCs[randomQCPicker].jobs.last() + 1);
+            rec.setValue(1,"i" + QString::number(QCs[randomQCPicker].jobs.last()) );
             randCont = container(randomQCPicker + 1, QCs[randomQCPicker].jobs.last(),true,randomVertLoc);
             randCont.index = i;
             containers.allC.append(randCont);
+            rec.setValue(2,QString::number(randomVertLoc));
+            rec.setValue(3,"L");
+            records.append(rec);
+            rec.clearValues();
             i++;
         }
     }
@@ -122,17 +138,6 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     //////////////////////////////////////////////////////////
 
     /// building the database
-    rec.setValue(0,"ib3");
-    rec.setValue(1,22);
-    rec.setValue(2,32);
-    rec.setValue(3, "D");
-    records.append(rec);
-    rec.clearValues();
-    rec.setValue(0,"ib3");
-    rec.setValue(1,2);
-    rec.setValue(2,32);
-    rec.setValue(3, "D");
-    records.append(rec);
 }
 
 bool PortSimulation::cnstr_2(){

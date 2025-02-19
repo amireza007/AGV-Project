@@ -50,7 +50,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Process</string>
+     <string>Generate Jobs</string>
     </property>
    </widget>
    <widget class="QSpinBox" name="spinBox">
@@ -58,9 +58,18 @@
      <rect>
       <x>190</x>
       <y>30</y>
-      <width>88</width>
+      <width>51</width>
       <height>29</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>6</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="spinBox_2">
@@ -68,9 +77,15 @@
      <rect>
       <x>190</x>
       <y>60</y>
-      <width>88</width>
+      <width>51</width>
       <height>29</height>
      </rect>
+    </property>
+    <property name="minimum">
+     <number>2</number>
+    </property>
+    <property name="maximum">
+     <number>40</number>
     </property>
    </widget>
   </widget>
@@ -80,7 +95,7 @@
      <x>0</x>
      <y>0</y>
      <width>287</width>
-     <height>33</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
