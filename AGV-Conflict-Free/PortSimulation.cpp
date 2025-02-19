@@ -2,6 +2,9 @@
 #include <memory>
 #include <QRandomGenerator>
 #include <ctime>
+#include <QSqlRecord>
+#include <QSqlField>
+#include <QString>
 PortSimulation::PortSimulation(int _CNumber,int _AGVNumber): AGVNumber(_AGVNumber), CNumber(_CNumber){
     QCs[0] = QuayCrane(1,{0},{4,8,12});
     QCs[1] = QuayCrane(2,{0},{16,20,24});
@@ -39,7 +42,12 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     int randomVertLoc;
     container randCont;
     int i = 0;
-    //why these whiles not concurrent or random?? but random is not cool for double cycling of QCs
+    QSqlRecord rec;
+    //building containers and allC set
+    rec.append(QSqlField("QC", QMetaType::fromType<QString>()));
+    rec.append(QSqlField("indx", QMetaType::fromType<int>()));
+    rec.append(QSqlField("verticalLoc", QMetaType::fromType<int>()));
+    rec.append(QSqlField("Type", QMetaType::fromType<QString>()));
     while(i<numOfContainers)
     {
         if(++DCIterator <= NDLoadC){
@@ -114,6 +122,17 @@ void PortSimulation::JobGenerator(){//this method should also initialize decisio
     //////////////////////////////////////////////////////////
 
     /// building the database
+    rec.setValue(0,"ib3");
+    rec.setValue(1,22);
+    rec.setValue(2,32);
+    rec.setValue(3, "D");
+    records.append(rec);
+    rec.clearValues();
+    rec.setValue(0,"ib3");
+    rec.setValue(1,2);
+    rec.setValue(2,32);
+    rec.setValue(3, "D");
+    records.append(rec);
 }
 
 bool PortSimulation::cnstr_2(){

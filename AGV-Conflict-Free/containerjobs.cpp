@@ -6,7 +6,6 @@ ContainerJobs::ContainerJobs(QWidget *parent)
 {
     model = new QSqlTableModel(this, GlobalData::appdb);
     ui->setupUi(this);
-    // ui->
 }
 
 ContainerJobs::~ContainerJobs()

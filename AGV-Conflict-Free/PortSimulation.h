@@ -4,6 +4,8 @@
 #include <tuple>
 #include <map>
 #include <QList>
+#include <QSqlTableModel>
+#include <QSqlRecord>
 #include "DecisionVariables.h"
 //set of QCs should be called QCBuffer,
 //set of AGVs shold be called AGVBuffer
@@ -29,6 +31,7 @@ public:
     int CNumber;
     int AGVNumber;
 
+    QList<QSqlRecord> records{};
     //Main equipments
     AllContainers containers;
     QuayCrane QCs[3];
