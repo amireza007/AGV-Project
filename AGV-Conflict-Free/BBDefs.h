@@ -1,6 +1,6 @@
 #ifndef BBDEFS_H
 #define BBDEFS_H
-#include "PortSimulation.h"
+#include "equipments.h"
 #include <map>
 //Branch and bound approach simulation data
 //BFS strategy is used

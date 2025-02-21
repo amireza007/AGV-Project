@@ -1,4 +1,5 @@
-#include "equipments.h"
+// #pragma once
+
 #include <QVector>
 #include <QQueue>
 #include <tuple>
@@ -32,6 +33,7 @@ public:
     int AGVNumber;
 
     QList<QSqlRecord> records{};
+
     //Main equipments
     AllContainers containers;
     QuayCrane QCs[3];

@@ -1,3 +1,4 @@
 #include "bbapproach.h"
+#include "BBDefs.h"
 
-BBApproach::BBApproach(PortSimulation &port) {}
+BBApproach::BBApproach() {}

@@ -1,7 +1,9 @@
-//#include "PortSimulation.h"
+// #pragma once
+#include "PortSimulation.h"
 
-class Experiment{
+class Datafile{
 public:
-    Experiment();
+    inline static PortSimulation* port;
 
+    //other static things!
 };

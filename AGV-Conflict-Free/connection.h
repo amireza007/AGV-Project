@@ -1,4 +1,4 @@
-
+#pragma once
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QStandardPaths>

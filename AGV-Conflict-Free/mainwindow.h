@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 // #include "PortSimulation.h"
-#include "containerjobs.h"
-#include "bbapproach.h"
+// #include "bbapproach.h"
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,11 +19,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    PortSimulation port;
-    ContainerJobs* containerJobsUi;
+
+    QPushButton* GetGenButton();
 private slots:
 
-    void on_pushButton_pressed();
+    void on_GenButton_pressed();
 
 private:
     Ui::MainWindow *ui;
